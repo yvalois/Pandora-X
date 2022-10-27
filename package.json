@@ -2,6 +2,9 @@
   "name": "Criptic",
   "version": "1.4.0",
   "private": true,
+  "engines": {
+    "node": "16.13.1"
+  },
   "scripts": {
     "clean": "rimraf \"{node_modules,.next,out.cache}\"",
     "dev": "next dev",
