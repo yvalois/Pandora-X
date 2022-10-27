@@ -12,7 +12,7 @@ var _ethers = require("ethers");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var NFTROL = new _ethers.ethers.Contract("0x6Fc013a37f2450bb05085270C189F2859F8D3338", _NftsRol["default"].abi);
+var NFTROL = new _ethers.ethers.Contract("0xb029ac7caf182421dbb72ac6645fbbb499020bfc", _NftsRol["default"].abi);
 exports.NFTROL = NFTROL;
 var provider;
 
