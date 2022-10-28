@@ -4,11 +4,18 @@ import { NextSeo } from 'next-seo';
 import DashboardLayout from '@/layouts/_dashboard';
 import { useState } from 'react';
 import { getRange, mint, getType } from '@/NFTROL';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 // static data
+export const getStaticProps: GetStaticProps = async () => {
+    return {
+      props: {},
+    };
+  };
 
-
-const CreateUser: NextPageWithLayout = () => {
+const CreateUser:NextPageWithLayout<
+InferGetStaticPropsType<typeof getStaticProps>
+> = () => {
 
     const tiempoTranscurrido = Date.now();
     const hoy = new Date(tiempoTranscurrido);
