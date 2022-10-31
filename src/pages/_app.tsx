@@ -17,7 +17,7 @@ import '@/assets/css/scrollbar.css';
 import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
 import { Provider } from 'react-redux';
-import store from '../redux/store';
+import store from '@/redux/store';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
