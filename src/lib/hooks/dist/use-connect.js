@@ -253,7 +253,7 @@ exports.WalletProvider = function (_a) {
   var conectar = function (_address) {
     return __awaiter(void 0, void 0, void 0, function () {
       return __generator(this, function (_a) {
-        fetch('http://localhost:8000/api/login/' + _address, {
+        fetch('https://pandoraxapi1.herokuapp.com/api/login/' + _address, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

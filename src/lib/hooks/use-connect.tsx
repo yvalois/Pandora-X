@@ -79,7 +79,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const conectar = async (_address: string) => {
-    fetch(`http://localhost:8000/api/login/${_address}`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/login/${_address}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -236,7 +236,7 @@ var CreateUser = function () {
             console.log(b);
             console.log(txResult.status);
             if (txResult.status === 1) {
-              fetch('http://localhost:8000/api/CrearUsuario', {
+              fetch('https://pandoraxapi1.herokuapp.com/api/CrearUsuario', {
                 method: 'POST',
                 body: JSON.stringify(value),
                 headers: {
@@ -278,22 +278,22 @@ var CreateUser = function () {
       'div',
       {
         className:
-          'mx-auto w-full max-w-[1160px] text-sm md:pt-14 4xl:pt-24 justify-center self-center ',
+          'mx-auto w-full max-w-[1160px] justify-center self-center text-sm md:pt-14 4xl:pt-24 ',
       },
       React.createElement(
         'div',
         {
           className:
-            'grid grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3 w-full ',
+            'grid w-full grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3 ',
         },
         React.createElement(
           'div',
-          { className: 'w-full max-w-xs ml-60 ' },
+          { className: 'ml-60 w-full max-w-xs ' },
           React.createElement(
             'form',
             {
               className:
-                'bg-white dark:bg-dark  shadow-md rounded px-8 pt-6 pb-8 mb-4  ',
+                'mb-4 rounded  bg-white px-8 pt-6 pb-8 shadow-md dark:bg-dark  ',
             },
             React.createElement(
               'div',
@@ -302,7 +302,7 @@ var CreateUser = function () {
                 'label',
                 {
                   className:
-                    'block text-gray-700 dark:text-white text-sm font-bold mb-2',
+                    'mb-2 block text-sm font-bold text-gray-700 dark:text-white',
                 },
                 'Name'
               ),
@@ -311,7 +311,7 @@ var CreateUser = function () {
                   return ChangeInfo('Nombre', e.target.value);
                 },
                 className:
-                  'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                  'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
                 id: 'username',
                 type: 'text',
                 placeholder: 'Name',
@@ -324,7 +324,7 @@ var CreateUser = function () {
                 'label',
                 {
                   className:
-                    'block text-gray-700 text-sm font-bold mb-2 dark:text-white',
+                    'mb-2 block text-sm font-bold text-gray-700 dark:text-white',
                 },
                 'Correo'
               ),
@@ -333,7 +333,7 @@ var CreateUser = function () {
                   return ChangeInfo('Correo', e.target.value);
                 },
                 className:
-                  'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline',
+                  'focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
                 type: 'text',
                 id: 'Correo',
                 placeholder: 'Correo',
@@ -346,7 +346,7 @@ var CreateUser = function () {
                 'label',
                 {
                   className:
-                    'block text-gray-700 text-sm font-bold mb-2 dark:text-white',
+                    'mb-2 block text-sm font-bold text-gray-700 dark:text-white',
                 },
                 'Address Wallet'
               ),
@@ -355,7 +355,7 @@ var CreateUser = function () {
                   return ChangeInfo('Address', e.target.value);
                 },
                 className:
-                  'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline',
+                  'focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
                 type: 'text',
                 id: 'wallet',
                 placeholder: 'Address Wallet',
@@ -368,7 +368,7 @@ var CreateUser = function () {
                 'label',
                 {
                   className:
-                    'block text-gray-700 text-sm font-bold mb-2 dark:text-white',
+                    'mb-2 block text-sm font-bold text-gray-700 dark:text-white',
                 },
                 'Categoria NFT'
               ),
@@ -380,7 +380,7 @@ var CreateUser = function () {
                   },
                   name: 'select',
                   className:
-                    'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline',
+                    'focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
                   id: 'wallet',
                 },
                 React.createElement(
@@ -402,7 +402,7 @@ var CreateUser = function () {
                 'label',
                 {
                   className:
-                    'block text-gray-700 text-sm font-bold mb-2 dark:text-white',
+                    'mb-2 block text-sm font-bold text-gray-700 dark:text-white',
                 },
                 'Rango NFT'
               ),
@@ -414,7 +414,7 @@ var CreateUser = function () {
                   },
                   name: 'select',
                   className:
-                    'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline',
+                    'focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
                   id: 'wallet',
                 },
                 React.createElement('option', { value: 'Peerx' }, 'Peerx'),
@@ -445,7 +445,7 @@ var CreateUser = function () {
                     return CrearUsuario();
                   },
                   className:
-                    'bg-dark  text-white dark:text-dark dark:bg-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline',
+                    'focus:shadow-outline  rounded bg-dark py-2 px-4 font-bold text-white focus:outline-none dark:bg-white dark:text-dark',
                   type: 'button',
                 },
                 'Crear Usuario'
