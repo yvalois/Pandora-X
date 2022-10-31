@@ -6,6 +6,7 @@ import { useContext, useEffect } from 'react';
 
 export default function SelectWallet({ ...props }) {
   const { address, connectToWallet, error } = useContext(WalletContext);
+
   const { closeModal } = useModal();
   useEffect(() => {
     if (address) closeModal();

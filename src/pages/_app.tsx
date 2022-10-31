@@ -16,6 +16,8 @@ import 'swiper/css';
 import '@/assets/css/scrollbar.css';
 import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
+import { Provider } from 'react-redux';
+import store from '../redux/store';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -34,24 +36,26 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
           content="width=device-width, initial-scale=1 maximum-scale=1"
         />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <ThemeProvider
-            attribute="class"
-            enableSystem={false}
-            defaultTheme="light"
-          >
-            <WalletProvider>
-              {getLayout(<Component {...pageProps} />)}
-              <SettingsButton />
-              <SettingsDrawer />
-              <ModalsContainer />
-              <DrawersContainer />
-            </WalletProvider>
-          </ThemeProvider>
-        </Hydrate>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-      </QueryClientProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <ThemeProvider
+              attribute="class"
+              enableSystem={false}
+              defaultTheme="light"
+            >
+              <WalletProvider>
+                {getLayout(<Component {...pageProps} />)}
+                <SettingsButton />
+                <SettingsDrawer />
+                <ModalsContainer />
+                <DrawersContainer />
+              </WalletProvider>
+            </ThemeProvider>
+          </Hydrate>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+        </QueryClientProvider>
+      </Provider>
     </>
   );
 }

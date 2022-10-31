@@ -1,30 +1,44 @@
 import { useEffect, useState, createContext, ReactNode } from 'react';
 import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
-import {setProvider} from "../../NFTROL"
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import { setProvider } from '../../NFTROL';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  connectRequest,
+  connectSuccess,
+  disconectWallet,
+  connectSuccessToMongo,
+} from '../../redux/Usuario/UsuarioActions';
 
 const web3modalStorageKey = 'WEB3_CONNECT_CACHED_PROVIDER';
 
 export const WalletContext = createContext<any>({});
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
-  const [address, setAddress] = useState<string | undefined>(undefined);
-  const [balance, setBalance] = useState<string | undefined>(undefined);
+  const [address, setAddress] = useState<string>('');
+  const [balance, setBalance] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [rol, setRol] = useState<string>('');
+  const [nombre, setNombre] = useState<string>('');
+
+  const dispatch = useDispatch();
+
+  const Usuario = useSelector((state: any) => state.Usuario);
 
   const providerOptions = {
     walletconnect: {
       package: WalletConnectProvider, // required
       options: {
-        chainId: 31337
+        chainId: 31337,
       },
-    }
+    },
   };
 
   const web3Modal =
-    typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true, providerOptions }); //agregar provider options
+    typeof window !== 'undefined' &&
+    new Web3Modal({ cacheProvider: true, providerOptions }); //agregar provider options
 
   /* This effect will fetch wallet address if user has already connected his/her wallet */
   useEffect(() => {
@@ -52,6 +66,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       if (signer) {
         const web3Address = await signer.getAddress();
         setAddress(web3Address);
+        console.log(address);
+        await conectar(web3Address);
+
         getBalance(provider, web3Address);
       }
     } catch (error) {
@@ -61,6 +78,48 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const conectar = async (_address: string) => {
+    fetch(`http://localhost:8000/api/login/${_address}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);
+          connectToMongo(response.Rol, response.Nombre);
+        } else {
+          connectToMongo('usuario', 'usuario');
+        }
+      });
+  };
+
+  const disconect = () => {
+    dispatch(disconectWallet());
+  };
+
+  const connect = (cuenta: string) => {
+    dispatch(
+      connectSuccess({
+        account: cuenta,
+        //web3: web3Modal,
+      })
+    );
+
+    Usuario.account;
+  };
+
+  const connectToMongo = (_rol: string, _nombre: string) => {
+    dispatch(
+      connectSuccessToMongo({
+        rol: _rol,
+        nombre: _nombre,
+      })
+    );
+  };
+
   const getBalance = async (provider: any, walletAddress: string) => {
     const walletBalance = await provider.getBalance(walletAddress);
     const balanceInEth = ethers.utils.formatEther(walletBalance);
@@ -68,8 +127,13 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const disconnectWallet = () => {
-    setAddress(undefined);
+    setAddress('');
     web3Modal && web3Modal.clearCachedProvider();
+    disconect();
+  };
+
+  const request = () => {
+    dispatch(connectRequest());
   };
 
   const checkIfExtensionIsAvailable = () => {
@@ -81,17 +145,19 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       web3Modal && web3Modal.toggleModal();
     }
   };
-    // seteamos el provider 
+  // seteamos el provider
   const connectToWallet = async () => {
+    request();
     try {
       setLoading(true);
       checkIfExtensionIsAvailable();
       const connection = web3Modal && (await web3Modal.connect());
       const provider = new ethers.providers.Web3Provider(connection);
       await subscribeProvider(connection);
-      setProvider(provider)
+      setProvider(provider);
       setWalletAddress(provider);
       setLoading(false);
+      connect(address);
     } catch (error) {
       setLoading(false);
       console.log(
@@ -110,6 +176,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setAddress(accounts[0]);
         const provider = new ethers.providers.Web3Provider(connection);
         getBalance(provider, accounts[0]);
+        connect(accounts[0]);
       } else {
         disconnectWallet();
       }
@@ -131,3 +198,5 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     </WalletContext.Provider>
   );
 };
+
+WalletContext.displayName = 'use-connect';

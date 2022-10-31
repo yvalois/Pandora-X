@@ -17,9 +17,11 @@ import { Close } from '@/components/icons/close';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import { CompassIcon } from '@/components/icons/compass';
 import { InfoCircle } from '@/components/icons/info-circle';
+import { useDispatch, useSelector } from 'react-redux';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
+import { useEffect } from 'react';
 
 export const menuItems = [
   {
@@ -112,7 +114,9 @@ type SidebarProps = {
 };
 
 export default function Sidebar({ className }: SidebarProps) {
+  const Usuario = useSelector((state: any) => state.Usuario.rol);
   const { closeDrawer } = useDrawer();
+
   return (
     <aside
       className={cn(
@@ -120,7 +124,7 @@ export default function Sidebar({ className }: SidebarProps) {
         className
       )}
     >
-      <div className="relative w-full flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
+      <div className="relative flex h-24 w-full items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
         <Logo />
         <div className="md:hidden">
           <Button
@@ -138,22 +142,22 @@ export default function Sidebar({ className }: SidebarProps) {
 
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-5 2xl:px-8">
-          <AuthorCard
-            image={AuthorImage}
-            name="Root"
-            role="admin"
-          />
+          <AuthorCard image={AuthorImage} name="Root" role="admin" />
 
           <div className="mt-12">
-            {menuItems.map((item, index) => (
-              <MenuItem
-                key={index}
-                name={item.name}
-                href={item.href}
-                icon={item.icon}
-                dropdownItems={item.dropdownItems}
-              />
-            ))}
+            {menuItems.map((item, index) =>
+              Usuario !== 'Admin' && item.name == 'Crear Usuario' ? (
+                <div key={index}></div>
+              ) : (
+                <MenuItem
+                  key={index}
+                  name={item.name}
+                  href={item.href}
+                  icon={item.icon}
+                  //dropdownItems={item.dropdownItems}
+                />
+              )
+            )}
           </div>
         </div>
       </Scrollbar>
