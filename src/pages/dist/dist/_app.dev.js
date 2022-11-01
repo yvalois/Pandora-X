@@ -1,40 +1,64 @@
 'use strict';
+
 var __assign =
-  (this && this.__assign) ||
+  (void 0 && (void 0).__assign) ||
   function () {
     __assign =
       Object.assign ||
       function (t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
           s = arguments[i];
-          for (var p in s)
+
+          for (var p in s) {
             if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+          }
         }
+
         return t;
       };
+
     return __assign.apply(this, arguments);
   };
+
 exports.__esModule = true;
+
 var react_1 = require('react');
+
 var head_1 = require('next/head');
+
 var react_query_1 = require('react-query');
+
 var devtools_1 = require('react-query/devtools');
+
 var next_themes_1 = require('next-themes');
+
 var container_1 = require('@/components/modal-views/container');
+
 var container_2 = require('@/components/drawer-views/container');
+
 var settings_button_1 = require('@/components/settings/settings-button');
+
 var settings_drawer_1 = require('@/components/settings/settings-drawer');
+
 var use_connect_1 = require('@/lib/hooks/use-connect');
-require('overlayscrollbars/css/OverlayScrollbars.css');
-// base css file
+
+require('overlayscrollbars/css/OverlayScrollbars.css'); // base css file
+
 require('swiper/css');
-require('../assets/css/scrollbar.css');
-require('../assets/css/globals.css');
-require('../assets/css/range-slider.css');
+
+require('@/assets/css/scrollbar.css');
+
+require('@/assets/css/globals.css');
+
+require('@/assets/css/range-slider.css');
+
 var react_redux_1 = require('react-redux');
+
 var store_1 = require('@/redux/store');
+
 function CustomApp(_a) {
   var _b;
+
   var Component = _a.Component,
     pageProps = _a.pageProps;
   var queryClient = react_1.useState(function () {
@@ -45,8 +69,8 @@ function CustomApp(_a) {
       ? _b
       : function (page) {
           return page;
-        };
-  //could remove this if you don't need to page level layout
+        }; //could remove this if you don't need to page level layout
+
   return React.createElement(
     React.Fragment,
     null,
@@ -60,16 +84,26 @@ function CustomApp(_a) {
     ),
     React.createElement(
       react_redux_1.Provider,
-      { store: store_1['default'] },
+      {
+        store: store_1['default'],
+      },
       React.createElement(
         react_query_1.QueryClientProvider,
-        { client: queryClient },
+        {
+          client: queryClient,
+        },
         React.createElement(
           react_query_1.Hydrate,
-          { state: pageProps.dehydratedState },
+          {
+            state: pageProps.dehydratedState,
+          },
           React.createElement(
             next_themes_1.ThemeProvider,
-            { attribute: 'class', enableSystem: false, defaultTheme: 'light' },
+            {
+              attribute: 'class',
+              enableSystem: false,
+              defaultTheme: 'light',
+            },
             React.createElement(
               use_connect_1.WalletProvider,
               null,
@@ -91,4 +125,5 @@ function CustomApp(_a) {
     )
   );
 }
+
 exports['default'] = CustomApp;
