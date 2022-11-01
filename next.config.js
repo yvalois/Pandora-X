@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-const withCSS = require('@zeit/next-css');
 
 const runtimeCaching = require('next-pwa/cache');
 const withPWA = require('next-pwa')({
@@ -8,7 +7,7 @@ const withPWA = require('next-pwa')({
   runtimeCaching,
 });
 
-const nextConfig = withPWA({
+module.exports = withPWA({
   reactStrictMode: true,
   ...(process.env.NODE_ENV === 'production' && {
     typescript: {
@@ -19,6 +18,3 @@ const nextConfig = withPWA({
     },
   }),
 });
-
-module.exports = withCSS({ cssModules: true });
-module.exports = nextConfig;

@@ -50,8 +50,6 @@ function _defineProperty(obj, key, value) {
 }
 
 /** @type {import('next').NextConfig} */
-var withCSS = require('@zeit/next-css');
-
 var runtimeCaching = require('next-pwa/cache');
 
 var withPWA = require('next-pwa')({
@@ -60,7 +58,7 @@ var withPWA = require('next-pwa')({
   runtimeCaching: runtimeCaching,
 });
 
-var nextConfig = withPWA(
+module.exports = withPWA(
   _objectSpread(
     {
       reactStrictMode: true,
@@ -75,7 +73,3 @@ var nextConfig = withPWA(
     }
   )
 );
-module.exports = withCSS({
-  cssModules: true,
-});
-module.exports = nextConfig;
