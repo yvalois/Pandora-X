@@ -32,7 +32,7 @@ require('@/assets/css/scrollbar.css');
 require('@/assets/css/globals.css');
 require('@/assets/css/range-slider.css');
 var react_redux_1 = require('react-redux');
-var store_1 = require('../redux/store');
+var store_1 = require('@/redux/store');
 function CustomApp(_a) {
   var _b;
   var Component = _a.Component,
