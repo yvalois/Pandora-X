@@ -4,7 +4,7 @@ import {
   createStore,
   combineReducers,
 } from 'react-redux';
-import thunk from 'redux-thunk';
+//import thunk from 'redux-thunk';
 import UsuarioReducer from './Usuario/UsuarioReducers';
 
 const rootReducer = combineReducers({
@@ -12,10 +12,10 @@ const rootReducer = combineReducers({
 });
 
 const middleware = [thunk];
-const composeEnhancers = compose(applyMiddleware(...middleware));
+//const composeEnhancers = compose(applyMiddleware(...middleware));
 
 const configureStore = () => {
-  return createStore(rootReducer, composeEnhancers);
+  return createStore(rootReducer /* composeEnhancers*/);
 };
 
 const store = configureStore();
