@@ -13,9 +13,9 @@ import { WalletProvider } from '@/lib/hooks/use-connect';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 // base css file
 import 'swiper/css';
-import '@/assets/css/scrollbar.css';
-import '@/assets/css/globals.css';
-import '@/assets/css/range-slider.css';
+import '@/assets/css/scrollbar.module.css';
+import '@/assets/css/globals.module.css';
+import '@/assets/css/range-slider.module.css';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
 

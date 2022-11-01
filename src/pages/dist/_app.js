@@ -28,9 +28,9 @@ var use_connect_1 = require('@/lib/hooks/use-connect');
 require('overlayscrollbars/css/OverlayScrollbars.css');
 // base css file
 require('swiper/css');
-require('@/assets/css/scrollbar.css');
-require('@/assets/css/globals.css');
-require('@/assets/css/range-slider.css');
+require('@/assets/css/scrollbar.module.css');
+require('@/assets/css/globals.module.css');
+require('@/assets/css/range-slider.module.css');
 var react_redux_1 = require('react-redux');
 var store_1 = require('@/redux/store');
 function CustomApp(_a) {
