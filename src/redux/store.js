@@ -1,9 +1,4 @@
-import {
-  applyMiddleware,
-  compose,
-  createStore,
-  combineReducers,
-} from 'react-redux';
+import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 //import thunk from 'redux-thunk';
 import UsuarioReducer from './Usuario/UsuarioReducers';
 
@@ -11,7 +6,7 @@ const rootReducer = combineReducers({
   Usuario: UsuarioReducer,
 });
 
-const middleware = [thunk];
+//const middleware = [thunk];
 //const composeEnhancers = compose(applyMiddleware(...middleware));
 
 const configureStore = () => {

@@ -1,5 +1,5 @@
-import type { AppProps } from 'next/app';
-import type { NextPageWithLayout } from '@/types';
+// import type { AppProps } from 'next/app';
+// import type { NextPageWithLayout } from '@/types';
 import { useState } from 'react';
 import Head from 'next/head';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
@@ -13,17 +13,17 @@ import { WalletProvider } from '@/lib/hooks/use-connect';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 // base css file
 import 'swiper/css';
-import '@/assets/css/scrollbar.module.css';
-import '@/assets/css/globals.module.css';
-import '@/assets/css/range-slider.module.css';
+import '@/assets/css/scrollbar.css';
+import '@/assets/css/globals.css';
+import '@/assets/css/range-slider.css';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
 
-type AppPropsWithLayout = AppProps & {
+/*type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
-};
+};*/
 
-function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
+function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [queryClient] = useState(() => new QueryClient());
   const getLayout = Component.getLayout ?? ((page) => page);
   //could remove this if you don't need to page level layout

@@ -8,7 +8,7 @@ const withPWA = require('next-pwa')({
 });
 
 module.exports = withPWA({
-  reactStrictMode: true,
+  reactStrictMode: false,
   ...(process.env.NODE_ENV === 'production' && {
     typescript: {
       ignoreBuildErrors: true,

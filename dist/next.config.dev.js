@@ -61,7 +61,7 @@ var withPWA = require('next-pwa')({
 module.exports = withPWA(
   _objectSpread(
     {
-      reactStrictMode: true,
+      reactStrictMode: false,
     },
     process.env.NODE_ENV === 'production' && {
       typescript: {
