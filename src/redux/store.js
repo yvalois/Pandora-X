@@ -1,4 +1,9 @@
-import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
+import {
+  applyMiddleware,
+  compose,
+  createStore,
+  combineReducers,
+} from 'react-redux';
 import thunk from 'redux-thunk';
 import UsuarioReducer from './Usuario/UsuarioReducers';
 

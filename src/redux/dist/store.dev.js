@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = void 0;
 
-var _redux = require('redux');
+var _reactRedux = require('react-redux');
 
 var _reduxThunk = _interopRequireDefault(require('redux-thunk'));
 
@@ -17,16 +17,16 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-var rootReducer = (0, _redux.combineReducers)({
+var rootReducer = (0, _reactRedux.combineReducers)({
   Usuario: _UsuarioReducers['default'],
 });
 var middleware = [_reduxThunk['default']];
-var composeEnhancers = (0, _redux.compose)(
-  _redux.applyMiddleware.apply(void 0, middleware)
+var composeEnhancers = (0, _reactRedux.compose)(
+  _reactRedux.applyMiddleware.apply(void 0, middleware)
 );
 
 var configureStore = function configureStore() {
-  return (0, _redux.createStore)(rootReducer, composeEnhancers);
+  return (0, _reactRedux.createStore)(rootReducer, composeEnhancers);
 };
 
 var store = configureStore();
