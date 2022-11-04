@@ -4,7 +4,12 @@ Object.defineProperty(exports, '__esModule', {
   value: true,
 });
 exports.setProvider = setProvider;
-exports.getRange = exports.getType = exports.mint = exports.NFTROL = void 0;
+exports.getRange =
+  exports.getType =
+  exports.mint =
+  exports.provider =
+  exports.NFTROL =
+    void 0;
 
 var _NftsRol = _interopRequireDefault(require('./NftsRol.json'));
 
@@ -15,14 +20,15 @@ function _interopRequireDefault(obj) {
 }
 
 var NFTROL = new _ethers.ethers.Contract(
-  '0x02572290e78A7D14a9797b1686d8c14EAcee5a64',
+  '0x8dC17b67Ec22f23F1Ca97a1B7aF3a5e398F0D1aa',
   _NftsRol['default'].abi
 );
 exports.NFTROL = NFTROL;
 var provider;
+exports.provider = provider;
 
 function setProvider(_provider) {
-  provider = _provider;
+  exports.provider = provider = _provider;
 }
 
 var mint = function mint(address, type, range) {

@@ -10,7 +10,6 @@ import {
   disconectWallet,
   connectSuccessToMongo,
 } from '../../redux/Usuario/UsuarioActions';
-
 const web3modalStorageKey = 'WEB3_CONNECT_CACHED_PROVIDER';
 
 export const WalletContext = createContext<any>({});
@@ -23,7 +22,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [rol, setRol] = useState<string>('');
   const [nombre, setNombre] = useState<string>('');
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const Usuario = useSelector((state: any) => state.Usuario);
 
@@ -100,6 +99,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     dispatch(disconectWallet());
   };
 
+  const connectBLockchain = (p) => {
+    dispatch(connectBLockchain(p));
+    console.log('e');
+  };
+
   const connect = (cuenta: string) => {
     dispatch(
       connectSuccess({
@@ -154,6 +158,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       const connection = web3Modal && (await web3Modal.connect());
       const provider = new ethers.providers.Web3Provider(connection);
       await subscribeProvider(connection);
+
       setProvider(provider);
       setWalletAddress(provider);
       setLoading(false);

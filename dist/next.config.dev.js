@@ -70,6 +70,11 @@ module.exports = withPWA(
       eslint: {
         ignoreDuringBuilds: true,
       },
+    },
+    {
+      images: {
+        domains: ['gateway.pinata.cloud'],
+      },
     }
   )
 );

@@ -277,6 +277,10 @@ exports.WalletProvider = function (_a) {
   var disconect = function () {
     dispatch(UsuarioActions_1.disconectWallet());
   };
+  var connectBLockchain = function (p) {
+    dispatch(connectBLockchain(p));
+    console.log('e');
+  };
   var connect = function (cuenta) {
     dispatch(
       UsuarioActions_1.connectSuccess({

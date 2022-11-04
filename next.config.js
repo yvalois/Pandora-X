@@ -17,4 +17,7 @@ module.exports = withPWA({
       ignoreDuringBuilds: true,
     },
   }),
+  images: {
+    domains: ['gateway.pinata.cloud'],
+  },
 });

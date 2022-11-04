@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { atom, useAtom } from 'jotai';
 import { NextSeo } from 'next-seo';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -20,6 +20,8 @@ import Scrollbar from '@/components/ui/scrollbar';
 import Button from '@/components/ui/button';
 import { Close } from '@/components/icons/close';
 import { NFTList } from '@/data/static/nft-list';
+import { useSelector, useDispatch } from 'react-redux';
+import { getMintedNft } from '../redux/Minted/MintedAction';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -294,6 +296,25 @@ const SearchPage: NextPageWithLayout<
 > = () => {
   const { isGridCompact } = useGridSwitcher();
   const { openDrawer } = useDrawer();
+  const dispatch = useDispatch<AppDispatch>();
+  const [currentItems, setCurrentItems] = useState([]);
+  const { dataloaded, disponibleNft, priceFormat, MintedNft } = useSelector(
+    (state: any) => state.minted
+  );
+
+  const getNft = async () => {
+    await dispatch(getMintedNft());
+  };
+
+  useEffect(() => {
+    const fetchItems = () => {
+      getNft();
+      //const itemsPerPage = 6
+      //const start = (currentPage - 1) * itemsPerPage
+      setCurrentItems(disponibleNft);
+    };
+    fetchItems();
+  }, [currentItems, dataloaded]);
   return (
     <>
       <NextSeo
@@ -336,15 +357,13 @@ const SearchPage: NextPageWithLayout<
                 : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
             }
           >
-            {NFTList.map((nft) => (
+            {currentItems.map((nft) => (
               <NFTGrid
-                key={nft.id}
+                key={nft.name}
                 name={nft.name}
                 image={nft.image}
-                author={nft.author}
-                authorImage={nft.authorImage}
-                price={nft.price}
-                collection={nft.collection}
+                price={priceFormat}
+                number={nft.number}
               />
             ))}
           </div>
