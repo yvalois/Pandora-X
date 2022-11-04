@@ -1,13 +1,11 @@
 'use strict';
-import thunk from 'redux-thunk';
+
 Object.defineProperty(exports, '__esModule', {
   value: true,
 });
 exports['default'] = void 0;
 
 var _redux = require('redux');
-
-var _reduxThunk = _interopRequireDefault(require(thunk));
 
 var _UsuarioReducers = _interopRequireDefault(
   require('./Usuario/UsuarioReducers')
@@ -23,18 +21,19 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
+//import thunk from 'redux-thunk';
 var rootReducer = (0, _redux.combineReducers)({
   Usuario: _UsuarioReducers['default'],
   blockchain: _blockchainReducer['default'],
   minted: _MintedReducer['default'],
-});
-var middleware = [_reduxThunk['default']];
-var composeEnhancers = (0, _redux.compose)(
-  _redux.applyMiddleware.apply(void 0, middleware)
-);
+}); //const middleware = [thunk];
+//const composeEnhancers = compose(applyMiddleware(...middleware));
 
 var configureStore = function configureStore() {
-  return (0, _redux.createStore)(rootReducer, composeEnhancers);
+  return (0, _redux.createStore)(
+    rootReducer
+    /*, composeEnhancers*/
+  );
 };
 
 var store = configureStore();
