@@ -2,7 +2,7 @@ import NftsRol from './NftsRol.json';
 import { ethers } from 'ethers';
 
 export const NFTROL = new ethers.Contract(
-  '0x75d5Fb26ACe0b373DC38273E7441370a3BB0f81a',
+  '0x02572290e78A7D14a9797b1686d8c14EAcee5a64',
   NftsRol.abi
 );
 
