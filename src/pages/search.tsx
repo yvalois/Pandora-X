@@ -21,7 +21,8 @@ import Button from '@/components/ui/button';
 import { Close } from '@/components/icons/close';
 import { NFTList } from '@/data/static/nft-list';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMintedNft } from '../redux/Minted/MintedAction';
+import { getMintedNftProducts } from '../redux/Minted/MintedAction';
+import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -141,7 +142,6 @@ function PriceRange() {
     });
   }
 
-  console.log(range);
   return (
     <div className="p-5">
       <div className="mb-4 grid grid-cols-2 gap-2">
@@ -175,7 +175,6 @@ function PriceRange() {
 
 function Status() {
   let [plan, setPlan] = useState('buy-now');
-  console.log(plan);
   return (
     <RadioGroup
       value={plan}
@@ -298,20 +297,21 @@ const SearchPage: NextPageWithLayout<
   const { openDrawer } = useDrawer();
   const dispatch = useDispatch<AppDispatch>();
   const [currentItems, setCurrentItems] = useState([]);
-  const { dataloaded, disponibleNft, priceFormat, MintedNft } = useSelector(
-    (state: any) => state.minted
-  );
+  const [currentInv, setCurrentInv] = useState([]);
+  const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
+    useSelector((state: any) => state.minted);
 
   const getNft = async () => {
-    await dispatch(getMintedNft());
+    await dispatch(getMintedNftProducts());
   };
 
   useEffect(() => {
-    const fetchItems = () => {
-      getNft();
+    const fetchItems = async () => {
+      await getNft();
       //const itemsPerPage = 6
       //const start = (currentPage - 1) * itemsPerPage
-      setCurrentItems(disponibleNft);
+      setCurrentItems(disponibleNftp);
+      setCurrentInv(disponibleNfti);
     };
     fetchItems();
   }, [currentItems, dataloaded]);
@@ -321,13 +321,13 @@ const SearchPage: NextPageWithLayout<
         title="Explore NTF"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="grid sm:pt-5 2xl:grid-cols-[280px_minmax(auto,_1fr)] 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
-        <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block">
+      <div className="2xl:grid-cols-78 grid sm:pt-5 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
+        {/*<div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block">
           <Filters />
-        </div>
+        </div>*/}
 
         <div className="2xl:ltr:pl-10 2xl:rtl:pr-10 4xl:ltr:pl-12 4xl:rtl:pr-12">
-          <div className="relative z-10 mb-6 flex items-center justify-between">
+          {/*<div className="relative z-10 mb-6 flex items-center justify-between">
             <span className="text-xs font-medium text-gray-900 dark:text-white sm:text-sm">
               5,686,066 items
             </span>
@@ -349,24 +349,63 @@ const SearchPage: NextPageWithLayout<
                 </Button>
               </div>
             </div>
-          </div>
-          <div
-            className={
-              isGridCompact
-                ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
-            }
+  </div>*/}
+          <ParamTab
+            tabMenu={[
+              {
+                title: 'Productos',
+                path: 'productos',
+              },
+              {
+                title: 'Inversiones',
+                path: 'inversiones',
+              },
+            ]}
           >
-            {currentItems.map((nft) => (
-              <NFTGrid
-                key={nft.name}
-                name={nft.name}
-                image={nft.image}
-                price={priceFormat}
-                number={nft.number}
-              />
-            ))}
-          </div>
+            <TabPanel className="focus:outline-none">
+              <div
+                className={
+                  isGridCompact
+                    ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
+                    : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
+                }
+              >
+                {currentItems?.map((nft) => (
+                  <NFTGrid
+                    key={nft.name}
+                    name={nft.name}
+                    image={nft.image}
+                    price={priceFormat}
+                    number={nft.number}
+                    alldata={true}
+                    type={'producto'}
+                  />
+                ))}
+              </div>
+            </TabPanel>
+
+            <TabPanel className="focus:outline-none">
+              <div
+                className={
+                  isGridCompact
+                    ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
+                    : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
+                }
+              >
+                {currentInv?.map((nft) => (
+                  <NFTGrid
+                    key={nft.name}
+                    name={nft.name}
+                    image={nft.image}
+                    price={priceFormat}
+                    number={nft.number}
+                    alldata={true}
+                    type={'inversion'}
+                  />
+                ))}
+              </div>
+            </TabPanel>
+          </ParamTab>
         </div>
 
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">

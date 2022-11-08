@@ -10,6 +10,9 @@ import { useModal, MODAL_VIEW } from '@/components/modal-views/context';
 const SearchView = dynamic(() => import('@/components/search/view'));
 const ShareView = dynamic(() => import('@/components/nft/share-view'));
 const SelectWallet = dynamic(() => import('@/components/nft/select-wallet'));
+const Register = dynamic(
+  () => import('@/components/modal-Register/ModalRegister')
+);
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
@@ -19,6 +22,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <ShareView />;
     case 'WALLET_CONNECT_VIEW':
       return <SelectWallet />;
+    case 'REGISTER_VIEW':
+      return <Register />;
     default:
       return null;
   }
@@ -40,7 +45,11 @@ export default function ModalContainer() {
       <Dialog
         as="div"
         className="fixed inset-0 z-50 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12"
-        onClose={closeModal}
+        onClose={() => {
+          if (view && view !== 'REGISTER_VIEW') {
+            closeModal();
+          }
+        }}
       >
         <Transition.Child
           as={Fragment}

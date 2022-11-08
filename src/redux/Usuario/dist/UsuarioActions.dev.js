@@ -132,23 +132,22 @@ var connect = function connect() {
               _context2.prev = 1;
 
               if (!(1 == 1)) {
-                _context2.next = 10;
+                _context2.next = 9;
                 break;
               }
 
-              console.log('a');
-              _context2.next = 6;
+              _context2.next = 5;
               return regeneratorRuntime.awrap(connectToWallet());
 
-            case 6:
-              _context2.next = 8;
+            case 5:
+              _context2.next = 7;
               return regeneratorRuntime.awrap(
                 window.ethereum.request({
                   method: 'eth_requestAccounts',
                 })
               );
 
-            case 8:
+            case 7:
               accounts = _context2.sent;
               //dispatch(connectToMongo(accounts[0]));
               dispatch(
@@ -158,16 +157,16 @@ var connect = function connect() {
                 })
               );
 
-            case 10:
-              _context2.next = 15;
+            case 9:
+              _context2.next = 14;
               break;
 
-            case 12:
-              _context2.prev = 12;
+            case 11:
+              _context2.prev = 11;
               _context2.t0 = _context2['catch'](1);
               dispatch(connectFailed(_context2.t0));
 
-            case 15:
+            case 14:
             case 'end':
               return _context2.stop();
           }
@@ -175,7 +174,7 @@ var connect = function connect() {
       },
       null,
       null,
-      [[1, 12]]
+      [[1, 11]]
     );
   };
 };

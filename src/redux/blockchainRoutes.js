@@ -5,8 +5,11 @@ export const contract = () => {
       usdcContract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
       busdContract: '0xdAb529f40E671A1D4bF91361c21bf9f0C9712ab7',
       daiContract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-      nudaraMinter: '0xE27BF39A8BfE3755b5d4C52FC28eba5ADC2d3218',
-      RPC_URL: 'https://rpc-mumbai.maticvigil.com/',
+      productoMinter: '0x02d87E80F288353D8e4AaCE36202caB4017dc5A0',
+      inversionMinter: '0x9595fAaC6D9da7759DD41B5bBD8C1aB236409381',
+      RPC_URL:
+        'https://eth-goerli.g.alchemy.com/v2/6Cz9qwj5jNWtAYbDl84MK1Z9XR05MjXV',
+      tokenPrueba: '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
     };
   }
 

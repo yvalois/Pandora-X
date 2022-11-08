@@ -1,12 +1,15 @@
 import { ethers } from 'ethers';
-import nudaraMinterAbi from '../../abi/nudaraMinter.json'; //Buscar
+import productoMinterAbi from '../../abi/productoMinter.json'; //Buscar
+import inversionMinterAbi from '../../abi/inversionMinter.json'; //Buscar
 import { contract } from '../blockchainRoutes';
 import { items } from '../../utils/constant'; //Buscar
+import { provider } from '@/NFTROL';
 //import {provider} from "../../NFTROL"
 
 const ROUTER = contract();
 const RPC_URL = ROUTER.RPC_URL;
-const NUDARA_MINTER_ADDRESS = ROUTER.nudaraMinter;
+const PRODUCTOS_MINTER_ADDRESS = ROUTER.productoMinter;
+const INVERSION_MINTER_ADDRESS = ROUTER.inversionMinter;
 
 const mintedLoading = () => ({
   type: 'MINTED_LOADING',
@@ -22,38 +25,186 @@ const mintedError = (payload) => ({
   payload,
 });
 
-export const getMintedNft = () => async (dispatch) => {
+let Productos = [];
+let Inversiones = [];
+
+/*export const CrearProducto = async(objeto)=>{
+    fetch(`${process.env.BACKEND_API}/api/CrearNftProducto`, {
+      method: 'POST',
+      body: JSON.stringify(objeto),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then(() => {
+        alert('listo Producto');
+        console.log(value);
+      })
+      .catch((error) => console.error('Error:', error));
+  } 
+
+export const CrearInversion = async(objeto)=>{
+    fetch(`${process.env.BACKEND_API}/api/CrearNftInversion`, {
+      method: 'POST',
+      body: JSON.stringify(objeto),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then(() => {
+        alert('listo Producto');
+        console.log(value);
+      })
+      .catch((error) => console.error('Error:', error));
+  } 
+
+  const getProductos = async()=>{
+    fetch(`${process.env.BACKEND_API}/api/getProducto`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        Productos = response
+      })
+      .catch((error) => console.error('Error:', error));
+  }*/
+
+const getProductos = async () => {
+  fetch(`${process.env.BACKEND_API}/getProducto`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      Productos = data;
+    });
+};
+
+const getInversiones = async () => {
+  fetch(`${process.env.BACKEND_API}/getInversion`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      Inversiones = response;
+    })
+    .catch((error) => console.error('Error:', error));
+};
+
+export const getMintedNftProducts = () => async (dispatch) => {
   dispatch(mintedLoading());
 
   try {
-    const provider = new ethers.providers.JsonRpcProvider(
-      'https://eth-goerli.g.alchemy.com/v2/6Cz9qwj5jNWtAYbDl84MK1Z9XR05MjXV'
-    ); //cambiar provider que se obtiene en NFTRO
-    const nudaraMinter = new ethers.Contract(
-      '0x6BB9547894806539C1465AeBafb3018adB0a313E',
-      nudaraMinterAbi,
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL); //cambiar provider que se obtiene en NFTRO
+    const productosMinter = new ethers.Contract(
+      PRODUCTOS_MINTER_ADDRESS,
+      productoMinterAbi,
       provider
     ); //Contracto del marketPlace
-    const mintedNft = await nudaraMinter.getNftInContract();
-    const disponibleNft = [];
-    const mintedNftArray = [];
-    mintedNft.map((item) => {
-      mintedNftArray.push(parseInt(item));
+    const inversionesMinter = new ethers.Contract(
+      INVERSION_MINTER_ADDRESS,
+      inversionMinterAbi,
+      provider
+    ); //Contracto del marketPlace
+    const mintedNftProductos = await productosMinter.getNftInContract();
+    const mintedNftInversiones = await inversionesMinter.getNftInContract();
+
+    const disponibleNftp = [];
+    const mintedNftpArray = [];
+    const disponibleNfti = [];
+    const mintedNftiArray = [];
+
+    await getProductos();
+    await getInversiones();
+
+    mintedNftProductos.map((item) => {
+      mintedNftpArray.push(parseInt(item));
     });
-    console.log(mintedNftArray);
-    items.map((item) => {
-      if (mintedNftArray.includes(item.number)) {
+
+    mintedNftInversiones.map((item) => {
+      mintedNftiArray.push(parseInt(item));
+    });
+
+    Productos.map((item) => {
+      if (mintedNftpArray.includes(item.number)) {
         //si no lo tiene los manda
-        disponibleNft.push(item);
+        disponibleNftp.push(item);
       }
     });
-    const nftPrice = await nudaraMinter.getPricePlusFee();
+
+    Inversiones.map((item) => {
+      if (mintedNftiArray.includes(item.number)) {
+        //si no lo tiene los manda
+        disponibleNfti.push(item);
+      }
+    });
+
+    const nftPrice = await productosMinter.getPricePlusFee();
     const priceFormat = parseFloat(
       ethers.utils.formatUnits(nftPrice, 18)
     ).toFixed(2);
-    console.log(priceFormat);
-    console.log('a');
-    dispatch(mintedLoaded({ disponibleNft, mintedNft, priceFormat }));
+    dispatch(
+      mintedLoaded({
+        disponibleNftp,
+        mintedNftProductos,
+        disponibleNfti,
+        mintedNftInversiones,
+        priceFormat,
+      })
+    );
+  } catch (error) {
+    dispatch(mintedError(error.message));
+  }
+};
+
+export const MintProducts = (supply) => async (dispatch) => {
+  dispatch(mintedLoading());
+  dispatch(mintedLoading());
+
+  try {
+    /*const provider = new ethers.providers.JsonRpcProvider(
+      RPC_URL
+    );*/ //cambiar provider que se obtiene en NFTRO
+
+    const signer = provider.getSigner();
+
+    const productoMinter = new ethers.Contract(
+      PRODUCTOS_MINTER_ADDRESS,
+      productoMinterAbi,
+      signer
+    );
+
+    const tx = await productoMinter.Mint(supply);
+  } catch (error) {
+    dispatch(mintedError(error.message));
+  }
+};
+
+export const MintInversion = (supply) => async (dispatch) => {
+  dispatch(mintedLoading());
+  dispatch(mintedLoading());
+
+  try {
+    /*const provider = new ethers.providers.JsonRpcProvider(
+      RPC_URL
+    );*/ //cambiar provider que se obtiene en NFTRO
+    const signer = provider.getSigner();
+    const inversionMinter = new ethers.Contract(
+      INVERSION_MINTER_ADDRESS,
+      inversionMinterAbi,
+      signer
+    );
+    const tx = await inversionMinter.Mint(supply);
   } catch (error) {
     dispatch(mintedError(error.message));
   }

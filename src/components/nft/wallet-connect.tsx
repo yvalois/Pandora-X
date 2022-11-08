@@ -6,15 +6,29 @@ import ActiveLink from '@/components/ui/links/active-link';
 import { ChevronForward } from '@/components/icons/chevron-forward';
 import { PowerIcon } from '@/components/icons/power';
 import { useModal } from '@/components/modal-views/context';
-import { useContext } from 'react';
-
+import { useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function WalletConnect() {
-  const { openModal } = useModal();
-  const { address, disconnectWallet, balance } = useContext(WalletContext);
+  const { openModal, closeModal } = useModal();
+
+  const { disconnectWallet, balance } = useContext(WalletContext);
+
+  const { accountAddress, isUser } = useSelector(
+    (state: any) => state.blockchain
+  );
+
+  useEffect(() => {
+    if (isUser == false) {
+      openModal('REGISTER_VIEW');
+    } else if (isUser == true) {
+      closeModal();
+    }
+  }, [isUser]);
+
   return (
     <>
-      {address ? (
+      {accountAddress !== '' ? (
         <div className="flex items-center gap-3 sm:gap-6 lg:gap-8">
           <div className="relative">
             <Menu>
@@ -50,9 +64,9 @@ export default function WalletConnect() {
                             Balance
                           </span>
                           <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
-                            {address.slice(0, 6)}
+                            {/*{address.slice(0, 6)}
                             {'...'}
-                            {address.slice(address.length - 6)}
+      {address.slice(address.length - 6)}*/}
                           </span>
                         </div>
                         <div className="mt-3 font-medium uppercase tracking-wider text-gray-900 dark:text-white">

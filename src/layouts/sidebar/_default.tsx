@@ -67,16 +67,16 @@ export const menuItems = [
     icon: <CompassIcon />,
     href: routes.search,
   },
-  {
+  /*{
     name: 'Staking',
     icon: <PlusCircle />,
     href: routes.createNft,
-  },
-  {
+  },*/
+  /*{
     name: 'NFT Details',
     icon: <DiskIcon />,
     href: routes.nftDetails,
-  },
+  },*/
   {
     name: 'Profile',
     icon: <ProfileIcon />,
@@ -107,6 +107,11 @@ export const menuItems = [
     icon: <PlusCircle />,
     href: routes.createuser,
   },
+  {
+    name: 'Crear NFT',
+    icon: <PlusCircle />,
+    href: routes.createNft,
+  },
 ];
 
 type SidebarProps = {
@@ -114,7 +119,7 @@ type SidebarProps = {
 };
 
 export default function Sidebar({ className }: SidebarProps) {
-  const Usuario = useSelector((state: any) => state.Usuario.rol);
+  const Usuario = useSelector((state: any) => state.blockchain.rol);
   const { closeDrawer } = useDrawer();
 
   return (
@@ -146,7 +151,12 @@ export default function Sidebar({ className }: SidebarProps) {
 
           <div className="mt-12">
             {menuItems.map((item, index) =>
-              Usuario !== 'Admin' && item.name == 'Crear Usuario' ? (
+              (Usuario !== 'Admin' && item.name == 'Crear Usuario') ||
+              (Usuario !== 'Admin' && item.name == 'Crear NFT') ||
+              (Usuario !== 'Admin' &&
+                Usuario !== 'usuario' &&
+                Usuario !== 'cliente' &&
+                item.name == 'Profile') ? (
                 <div key={index}></div>
               ) : (
                 <MenuItem

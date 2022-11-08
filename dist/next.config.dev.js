@@ -52,6 +52,8 @@ function _defineProperty(obj, key, value) {
 /** @type {import('next').NextConfig} */
 var runtimeCaching = require('next-pwa/cache');
 
+require('dotenv').config();
+
 var withPWA = require('next-pwa')({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
@@ -61,7 +63,7 @@ var withPWA = require('next-pwa')({
 module.exports = withPWA(
   _objectSpread(
     {
-      reactStrictMode: false,
+      reactStrictMode: true,
     },
     process.env.NODE_ENV === 'production' && {
       typescript: {
@@ -73,8 +75,18 @@ module.exports = withPWA(
     },
     {
       images: {
-        domains: ['gateway.pinata.cloud'],
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: '**',
+          },
+        ],
       },
+      env: {
+        BACKEND_API: process.env.BACKEND_API,
+      },
+      sass: true,
+      modules: true,
     }
   )
 );

@@ -42,7 +42,8 @@ function SelectWallet(_a) {
   var _b = react_1.useContext(use_connect_1.WalletContext),
     address = _b.address,
     connectToWallet = _b.connectToWallet,
-    error = _b.error;
+    error = _b.error,
+    isUser = _b.isUser;
   var closeModal = context_1.useModal().closeModal;
   react_1.useEffect(
     function () {
@@ -51,53 +52,57 @@ function SelectWallet(_a) {
     [address, closeModal]
   );
   return React.createElement(
-    'div',
-    __assign(
-      {
-        className:
-          'relative z-50 mx-auto w-[440px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark',
-      },
-      props
-    ),
-    React.createElement(
-      'h2',
-      {
-        className:
-          'mb-4 text-center text-2xl font-medium uppercase text-gray-900 dark:text-white',
-      },
-      'Connect Wallet'
-    ),
-    React.createElement(
-      'p',
-      {
-        className:
-          'text-center text-sm leading-loose tracking-tight text-gray-600 dark:text-gray-400',
-      },
-      'By connecting your wallet, you agree to our Terms of Service and our Privacy Policy.'
-    ),
+    React.Fragment,
+    null,
     React.createElement(
       'div',
-      {
-        className:
-          'mt-12 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5',
-        onClick: connectToWallet,
-      },
-      React.createElement('span', null, 'MetaMask'),
+      __assign(
+        {
+          className:
+            'relative z-50 mx-auto w-[440px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark',
+        },
+        props
+      ),
       React.createElement(
-        'span',
-        { className: 'h-auto w-9' },
-        React.createElement(image_1['default'], {
-          src: metamask_svg_1['default'],
-          alt: 'metamask',
-        })
-      )
-    ),
-    error &&
+        'h2',
+        {
+          className:
+            'mb-4 text-center text-2xl font-medium uppercase text-gray-900 dark:text-white',
+        },
+        'Connect Wallet'
+      ),
       React.createElement(
         'p',
-        { className: 'mt-3 text-center text-xs text-red-500' },
-        'Please install Metamask plugin in your browser in order to connect wallet.'
-      )
+        {
+          className:
+            'text-center text-sm leading-loose tracking-tight text-gray-600 dark:text-gray-400',
+        },
+        'By connecting your wallet, you agree to our Terms of Service and our Privacy Policy.'
+      ),
+      React.createElement(
+        'div',
+        {
+          className:
+            'mt-12 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5',
+          onClick: connectToWallet,
+        },
+        React.createElement('span', null, 'MetaMask'),
+        React.createElement(
+          'span',
+          { className: 'h-auto w-9' },
+          React.createElement(image_1['default'], {
+            src: metamask_svg_1['default'],
+            alt: 'metamask',
+          })
+        )
+      ),
+      error &&
+        React.createElement(
+          'p',
+          { className: 'mt-3 text-center text-xs text-red-500' },
+          'Please install Metamask plugin in your browser in order to connect wallet.'
+        )
+    )
   );
 }
 exports['default'] = SelectWallet;

@@ -2,6 +2,7 @@
   "_format": "hh-sol-artifact-1",
   "contractName": "AccessNFTs",
   "sourceName": "contracts/AccessNFTs.sol",
+  "address":"0x02572290e78A7D14a9797b1686d8c14EAcee5a64",
   "abi": [
     {
       "inputs": [

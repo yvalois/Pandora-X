@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 
 const runtimeCaching = require('next-pwa/cache');
+require('dotenv').config();
+
 const withPWA = require('next-pwa')({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
@@ -8,7 +10,7 @@ const withPWA = require('next-pwa')({
 });
 
 module.exports = withPWA({
-  reactStrictMode: false,
+  reactStrictMode: true,
   ...(process.env.NODE_ENV === 'production' && {
     typescript: {
       ignoreBuildErrors: true,
@@ -18,6 +20,16 @@ module.exports = withPWA({
     },
   }),
   images: {
-    domains: ['gateway.pinata.cloud'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
+  env: {
+    BACKEND_API: process.env.BACKEND_API,
+  },
+  sass: true,
+  modules: true,
 });

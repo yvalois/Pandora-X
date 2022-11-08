@@ -3,16 +3,16 @@ import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { contract } from '../blockchainRoutes';
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
-import nudaraMinterAbi from '../../abi/nudaraMinter.json'; //Buscar
+import productoMinterAbi from '../../abi/productoMinter.json'; //Buscar
+import inversionMinterAbi from '../../abi/inversionMinter.json';
 import { items } from '../../utils/constant'; //Buscar
-
+import { setProvider } from '../../NFTROL';
 const router = contract();
 
-const BUSD_ADDRESS = router.busdContract;
 const USDT_ADDRESS = router.usdtContract;
-const USDC_ADDRESS = router.usdcContract;
-const DAI_ADDRESS = router.daiContract;
-const NUDARA_MINTER_ADDRESS = router.nudaraMinter;
+const TokenPrueba_ADDRESS = router.tokenPrueba;
+const PRODUCTOS_MINTER_ADDRESS = router.productoMinter;
+const INVERSION_MINTER_ADDRESS = router.inversionMinter;
 const RPC_URL = router.RPC_URL;
 
 const providerOptions = {
@@ -26,11 +26,8 @@ const providerOptions = {
   },
 };
 
-/*const web3Modal = new Web3Modal({
-    disableInjectedProvider: false,
-    cacheProvider: true,
-    providerOptions
-});*/
+let Productos = [];
+let Inversiones = [];
 
 const loading = () => ({
   type: 'LOADING',
@@ -59,70 +56,239 @@ const adminChange = () => ({
   type: 'ADMIN_CHANGE',
 });
 
-export const connectWalletToBLock = () => async (dispatch, _provider) => {
-  dispatch(loading());
-  try {
-    //const instance = await web3Modal.connect(providerOptions);
-    //const provider = new ethers.providers.Web3Provider(instance);
-    console.log(_provider);
-    const signer = _provider.getSigner();
+export const connectSuccessToMongo = (payload) => {
+  return {
+    type: 'CONNECT_TO_MONGO',
+    payload: payload,
+  };
+};
+export const disconectWallet = () => {
+  return {
+    type: 'DISCONECT_WALLET',
+  };
+};
 
-    const accounts = await _provider.listAccounts();
+export const register = () => {
+  return {
+    type: 'REGISTER',
+  };
+};
 
-    const networkId = await _provider.getNetwork();
+const subscribeProvider = (connection) => async (dispatch) => {
+  connection.on('close', () => {
+    dispatch(disconectWallet());
+  });
 
-    console.log(accounts[0], networkId);
+  connection.on('accountsChanged', async (accounts) => {
+    if (accounts?.length) {
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      //const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
+      //const tokenContract = new ethers.Contract(TokenPrueba_ADDRESS, abiErc20, signer);
+      const productoMinterContract = new ethers.Contract(
+        PRODUCTOS_MINTER_ADDRESS,
+        productoMinterAbi,
+        signer
+      );
+      const inversionMinterContract = new ethers.Contract(
+        INVERSION_MINTER_ADDRESS,
+        inversionMinterAbi,
+        signer
+      );
 
-    const busdContract = new ethers.Contract(BUSD_ADDRESS, abiErc20, signer);
-    const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
-    const usdcContract = new ethers.Contract(USDC_ADDRESS, abiErc20, signer);
-    const daiContract = new ethers.Contract(DAI_ADDRESS, abiErc20, signer);
-    const nudaraMinterContract = new ethers.Contract(
-      NUDARA_MINTER_ADDRESS,
-      nudaraMinterAbi,
-      signer
-    );
-    const nftBalance = await nudaraMinterContract.getMyInventory(accounts[0]);
-    const inventory = [];
-    nftBalance.map((item) => {
-      // if inventory id in items push to inventory
-      if (items[item]) {
-        inventory.push(items[item.id]);
+      const nftpBalance = await productoMinterContract.getMyInventory(
+        accounts[0]
+      );
+      const nftiBalance = await inversionMinterContract.getMyInventory(
+        accounts[0]
+      );
+
+      const inventoryp = [];
+      const inventoryi = [];
+
+      nftpBalance.map((item) => {
+        // if inventory id in items push to inventory
+        if (items[item]) {
+          inventoryp.push(items[item.id]);
+        }
+      });
+
+      nftiBalance.map((item) => {
+        // if inventory id in items push to inventory
+        if (items[item]) {
+          inventoryi.push(items[item.id]);
+        }
+      });
+
+      const accountAddress = accounts[0];
+
+      dispatch(
+        updateBalance({
+          accountAddress: accountAddress,
+          //busdBalance: balanceFormat,
+          //usdtBalance: balanceFormat2,
+          inventoryp,
+          inventoryi,
+        })
+      );
+      dispatch(userChange());
+      dispatch(adminChange());
+    } else {
+      dispatch(disconectWallet());
+    }
+  });
+};
+
+const getProductos = async () => {
+  fetch(`${process.env.BACKEND_API}/getProducto`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      Productos = response;
+    })
+    .catch((error) => console.error('Error:', error));
+};
+
+const getInversiones = async () => {
+  fetch(`${process.env.BACKEND_API}/getInversion`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      Inversiones = response;
+    })
+    .catch((error) => console.error('Error:', error));
+};
+
+const conectar = (accountAddress) => async (dispatch) => {
+  fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      if (response !== null) {
+        dispatch(
+          connectSuccessToMongo({
+            rol: response.Rol,
+            nombre: response.Nombre,
+          })
+        );
+      } else {
+        dispatch(register());
       }
     });
-    console.log(inventory);
+};
 
-    const busdBalance = await busdContract.balanceOf(accounts[0]);
-    const usdtBalance = await usdtContract.balanceOf(accounts[0]);
-    const usdcBalance = await usdcContract.balanceOf(accounts[0]);
-    const daiBalance = await daiContract.balanceOf(accounts[0]);
+export const connectWallet = () => async (dispatch) => {
+  dispatch(loading());
+  try {
+    const web3Modal =
+      typeof window !== 'undefined' &&
+      new Web3Modal({ cacheProvider: true, providerOptions });
 
-    const balanceFormat = ethers.utils.formatUnits(busdBalance, 18);
-    const balanceFormat2 = ethers.utils.formatUnits(usdtBalance, 6);
-    const balanceFormat3 = ethers.utils.formatUnits(usdcBalance, 6);
-    const balanceFormat4 = ethers.utils.formatUnits(daiBalance, 18);
+    const instance = await web3Modal.connect(providerOptions);
+    const provider = new ethers.providers.Web3Provider(instance);
+    setProvider(provider);
+    const signer = provider.getSigner();
 
-    dispatch(
-      dataLoaded({
-        usdtContract,
-        busdContract,
-        usdcContract,
-        daiContract,
-        nudaraMinter: nudaraMinterContract,
-        accountAddress: accounts[0],
-        busdBalance: balanceFormat,
-        usdtBalance: balanceFormat2,
-        usdcBalance: balanceFormat3,
-        daiBalance: balanceFormat4,
-        inventory,
-      })
-    );
+    const accounts = await provider.listAccounts();
 
-    instance.on('accountsChanged', async (accounts) => {
-      const busdBalance = await busdContract.balanceOf(accounts[0]);
-      const usdtBalance = await usdtContract.balanceOf(accounts[0]);
-      const usdcBalance = await usdcContract.balanceOf(accounts[0]);
-      const daiBalance = await daiContract.balanceOf(accounts[0]);
+    const networkId = await provider.getNetwork();
+
+    if (
+      (process.env.NODE_ENV === 'production' && networkId.chainId === 137) ||
+      (process.env.NODE_ENV === 'development' && networkId.chainId === 5)
+    ) {
+      const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
+      const tokenContract = new ethers.Contract(
+        TokenPrueba_ADDRESS,
+        abiErc20,
+        signer
+      );
+
+      const productoMinterContract = new ethers.Contract(
+        PRODUCTOS_MINTER_ADDRESS,
+        productoMinterAbi,
+        signer
+      );
+
+      const inversionMinterContract = new ethers.Contract(
+        INVERSION_MINTER_ADDRESS,
+        inversionMinterAbi,
+        signer
+      );
+
+      await getProductos();
+      await getInversiones();
+
+      const nftpBalance = await productoMinterContract.getMyInventory(
+        accounts[0]
+      );
+      const nftiBalance = await inversionMinterContract.getMyInventory(
+        accounts[0]
+      );
+
+      const inventoryp = [];
+      const inventoryi = [];
+
+      nftpBalance.map((item) => {
+        // if inventory id in items push to inventory
+        if (Productos[item]) {
+          inventoryp.push(items[item]);
+        }
+      });
+
+      nftiBalance.map((item) => {
+        // if inventory id in items push to inventory
+        if (Inversiones[item]) {
+          inventoryi.push(items[item]);
+        }
+      });
+
+      //const usdtBalance = await usdtContract.balanceOf(accounts[0]);
+      //const tokenBalance = await tokenContract.balanceOf(accounts[0]);
+
+      //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
+      //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 18);
+
+      dispatch(subscribeProvider(instance));
+      await dispatch(
+        dataLoaded({
+          usdtContract,
+          tokenContract,
+          productoMinter: productoMinterContract,
+          inversionMinter: inversionMinterContract,
+          accountAddress: accounts[0],
+          //usdtBalance: balanceFormat,
+          //tokenBalance: balanceFormat2,
+          inventoryp: inventoryp,
+          inventoryi: inventoryi,
+          instance: instance,
+        })
+      );
+      dispatch(conectar(accounts[0]));
+
+      /*instance.on('close',() => {
+      web3Modal && web3Modal.clearCachedProvider();
+      dispatch(disconectWallet())
+  });*/
+
+      //esto se llama desde el use-connect
+
+      /* instance.on('accountsChanged', async (accounts) => {
+
+     // const usdtBalance = await usdtContract.balanceOf(accounts[0]);
+      //const tokenBalance = await tokenContract.balanceOf(accounts[0]);
       const nftBalance = await nudaraMinterContract.getMyInventory(accounts[0]);
       const inventory = [];
       nftBalance.map((item) => {
@@ -134,84 +300,84 @@ export const connectWalletToBLock = () => async (dispatch, _provider) => {
 
       const accountAddress = accounts[0];
 
-      const balanceFormat = ethers.utils.formatUnits(busdBalance, 18);
-      const balanceFormat2 = ethers.utils.formatUnits(usdtBalance, 6);
-      const balanceFormat3 = ethers.utils.formatUnits(usdcBalance, 6);
-      const balanceFormat4 = ethers.utils.formatUnits(daiBalance, 18);
+      //const balanceFormat = ethers.utils.formatUnits(tokenBalance, 18);
+      //const balanceFormat2 = ethers.utils.formatUnits(usdtBalance, 6);
 
       dispatch(
         updateBalance({
-          accountAddress,
-          busdBalance: balanceFormat,
-          usdtBalance: balanceFormat2,
-          usdcBalance: balanceFormat3,
-          daiBalance: balanceFormat4,
+          accountAddress:accountAddress ,
+          //busdBalance: balanceFormat,
+          //usdtBalance: balanceFormat2,
           inventory,
         })
       );
       dispatch(userChange());
       dispatch(adminChange());
-    });
-    /*else {
-            if (process.env.NODE_ENV === 'production') {
-                try {
-                    await provider.provider.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: `0x${Number(137).toString(16)}` }],
-                    })
-                } catch (switchError) {
-                    if (switchError.code === 4902) {
-                        try {
-                            await provider.provider.request({
-                                method: 'wallet_addEthereumChain',
-                                params: [{
-                                    chainId: `0x${Number(137).toString(16)}`,
-                                    chainName: 'Matic Mainnet',
-                                    nativeCurrency: {
-                                        name: 'Matic',
-                                        symbol: 'MATIC',
-                                        decimals: 18,
-                                    },
-                                    rpcUrls: [RPC_URL],
-                                    blockExplorerUrls: ['https://polygonscan.com/'],
-                                }],
-                            })
-                        } catch (addError) {
-                            console.log(addError)
-                        }
-                    }
-                }
+    });*/
+    } else {
+      if (process.env.NODE_ENV === 'production') {
+        try {
+          await provider.provider.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: `0x${Number(137).toString(16)}` }],
+          });
+        } catch (switchError) {
+          if (switchError.code === 4902) {
+            try {
+              await provider.provider.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: `0x${Number(137).toString(16)}`,
+                    chainName: 'Matic Mainnet',
+                    nativeCurrency: {
+                      name: 'Matic',
+                      symbol: 'MATIC',
+                      decimals: 18,
+                    },
+                    rpcUrls: [RPC_URL],
+                    blockExplorerUrls: ['https://polygonscan.com/'],
+                  },
+                ],
+              });
+            } catch (addError) {
+              console.log(addError);
             }
-            if (process.env.NODE_ENV === 'development') {
-                try {
-                    await provider.provider.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: `0x${Number(80001).toString(16)}` }],
-                    })
-                } catch (switchError) {
-                    if (switchError.code === 4902) {
-                        try {
-                            await provider.provider.request({
-                                method: 'wallet_addEthereumChain',
-                                params: [{
-                                    chainId: `0x${Number(80001).toString(16)}`,
-                                    chainName: 'Matic Testnet Mumbai',
-                                    nativeCurrency: {
-                                        name: 'Matic',
-                                        symbol: 'MATIC',
-                                        decimals: 18,
-                                    },
-                                    rpcUrls: [RPC_URL],
-                                    blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
-                                }],
-                            })
-                        } catch (addError) {
-                            console.log(addError)
-                        }
-                    }
-                }
+          }
+        }
+      }
+      if (process.env.NODE_ENV === 'development') {
+        try {
+          await provider.provider.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: `0x${Number(5).toString(16)}` }],
+          });
+        } catch (switchError) {
+          if (switchError.code === 4902) {
+            try {
+              await provider.provider.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: `0x${Number(5).toString(16)}`,
+                    chainName: 'Red de prueba Goerli',
+                    nativeCurrency: {
+                      name: 'Red de prueba Goerli',
+                      symbol: 'GoerliETH',
+                      decimals: 18,
+                    },
+                    rpcUrls: [RPC_URL],
+                    blockExplorerUrls: ['https://goerli.etherscan.io/'],
+                  },
+                ],
+              });
+            } catch (addError) {
+              console.log(addError);
             }
-        }*/
+          }
+        }
+      }
+    }
   } catch (err) {
     dispatch(error(err));
   }

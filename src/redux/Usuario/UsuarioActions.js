@@ -62,7 +62,6 @@ export const connect = () => {
     dispatch(connectRequest());
     try {
       if (1 == 1) {
-        console.log('a');
         await connectToWallet();
         const accounts = await window.ethereum.request({
           method: 'eth_requestAccounts',

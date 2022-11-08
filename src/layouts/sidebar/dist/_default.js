@@ -11,7 +11,6 @@ var routes_1 = require('@/config/routes');
 var context_1 = require('@/components/drawer-views/context');
 var home_1 = require('@/components/icons/home');
 var profile_1 = require('@/components/icons/profile');
-var disk_1 = require('@/components/icons/disk');
 var close_1 = require('@/components/icons/close');
 var plus_circle_1 = require('@/components/icons/plus-circle');
 var compass_1 = require('@/components/icons/compass');
@@ -44,16 +43,16 @@ exports.menuItems = [
     icon: React.createElement(compass_1.CompassIcon, null),
     href: routes_1['default'].search,
   },
-  {
-    name: 'Staking',
-    icon: React.createElement(plus_circle_1.PlusCircle, null),
-    href: routes_1['default'].createNft,
-  },
-  {
-    name: 'NFT Details',
-    icon: React.createElement(disk_1.DiskIcon, null),
-    href: routes_1['default'].nftDetails,
-  },
+  /*{
+      name: 'Staking',
+      icon: <PlusCircle />,
+      href: routes.createNft,
+    },*/
+  /*{
+      name: 'NFT Details',
+      icon: <DiskIcon />,
+      href: routes.nftDetails,
+    },*/
   {
     name: 'Profile',
     icon: React.createElement(profile_1.ProfileIcon, null),
@@ -84,11 +83,16 @@ exports.menuItems = [
     icon: React.createElement(plus_circle_1.PlusCircle, null),
     href: routes_1['default'].createuser,
   },
+  {
+    name: 'Crear NFT',
+    icon: React.createElement(plus_circle_1.PlusCircle, null),
+    href: routes_1['default'].createNft,
+  },
 ];
 function Sidebar(_a) {
   var className = _a.className;
   var Usuario = react_redux_1.useSelector(function (state) {
-    return state.Usuario.rol;
+    return state.blockchain.rol;
   });
   var closeDrawer = context_1.useDrawer().closeDrawer;
   return React.createElement(
@@ -103,7 +107,7 @@ function Sidebar(_a) {
       'div',
       {
         className:
-          'relative w-full flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8',
+          'relative flex h-24 w-full items-center justify-between overflow-hidden px-6 py-4 2xl:px-8',
       },
       React.createElement(logo_1['default'], null),
       React.createElement(
@@ -138,7 +142,12 @@ function Sidebar(_a) {
           'div',
           { className: 'mt-12' },
           exports.menuItems.map(function (item, index) {
-            return Usuario !== 'Admin' && item.name == 'Crear Usuario'
+            return (Usuario !== 'Admin' && item.name == 'Crear Usuario') ||
+              (Usuario !== 'Admin' && item.name == 'Crear NFT') ||
+              (Usuario !== 'Admin' &&
+                Usuario !== 'usuario' &&
+                Usuario !== 'cliente' &&
+                item.name == 'Profile')
               ? React.createElement('div', { key: index })
               : React.createElement(collapsible_menu_1.MenuItem, {
                   key: index,

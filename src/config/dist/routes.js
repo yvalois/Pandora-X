@@ -1,4 +1,6 @@
-const routes = {
+'use strict';
+exports.__esModule = true;
+var routes = {
   home: '/',
   minimal: '/minimal',
   retro: '/retro',
@@ -21,5 +23,4 @@ const routes = {
   classic: '/classic',
   createuser: '/createuser',
 };
-
-export default routes;
+exports['default'] = routes;

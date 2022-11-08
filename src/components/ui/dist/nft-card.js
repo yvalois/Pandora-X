@@ -151,9 +151,7 @@ var react_1 = require('react');
 var react_redux_1 = require('react-redux');
 var ethers_1 = require('ethers');
 var react_2 = require('react');
-var NFTROL_1 = require('../../NFTROL');
-var abiERC20_json_1 = require('../../abi/abiERC20.json'); //Buscar
-var nudaraMinter_json_1 = require('../../abi/nudaraMinter.json');
+var blockchainAction_1 = require('../../redux/Blockchain/blockchainAction');
 function NFTGrid(_a) {
   var _this = this;
   var //author,
@@ -161,28 +159,32 @@ function NFTGrid(_a) {
     image = _a.image,
     name = _a.name,
     number = _a.number,
-    price = _a.price;
+    price = _a.price,
+    alldata = _a.alldata,
+    type = _a.type;
+  //const { isConnect, account } = useSelector((state) => state.Usuario);
   var _b = react_redux_1.useSelector(function (state) {
-      return state.Usuario;
+      return state.blockchain;
     }),
+    productoMinter = _b.productoMinter,
+    inversionMinter = _b.inversionMinter,
     isConnect = _b.isConnect,
-    account = _b.account;
-  var signer =
-    NFTROL_1.provider === null || NFTROL_1.provider === void 0
-      ? void 0
-      : NFTROL_1.provider.getSigner();
-  console.log(signer);
-  var usdtContract = new ethers_1.ethers.Contract(
-    '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
-    abiERC20_json_1['default'],
-    signer
-  ); //token Cambiar ABi solo con fines de prueba
-  var nudaraMinter = new ethers_1.ethers.Contract(
-    '0x6BB9547894806539C1465AeBafb3018adB0a313E',
-    nudaraMinter_json_1['default'],
-    signer
-  ); //Contracto del marketplace
-  console.log(usdtContract);
+    accountAddress = _b.accountAddress,
+    usdtContract = _b.usdtContract,
+    tokenContract = _b.tokenContract;
+  /*const signer = provider?.getSigner();
+    console.log(signer);
+    const tokenContract = new ethers.Contract(
+      '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
+      abiErc20,
+      signer
+    );*/
+  //token Cambiar ABi solo con fines de prueba
+  /*const nudaraMinter = new ethers.Contract(
+      '0x6BB9547894806539C1465AeBafb3018adB0a313E',
+      nudaraMinterAbi,
+      signer
+    );*/ //Contracto del marketplace
   var _c = react_1.useState(''),
     tokenAddress = _c[0],
     setTokenAddress = _c[1];
@@ -192,18 +194,13 @@ function NFTGrid(_a) {
   var _e = react_1.useState(''),
     cuenta = _e[0],
     setCuenta = _e[1];
-  var _f = react_1.useState(false),
+  var _f = react_1.useState(0),
     approvedUsdt = _f[0],
     setApprovedUsdt = _f[1];
   var _g = react_1.useState(0),
-    approvedBusd = _g[0],
-    setApprovedBusd = _g[1];
-  var _h = react_1.useState(0),
-    approvedUsdc = _h[0],
-    setApprovedUsdc = _h[1];
-  var _j = react_1.useState(0),
-    approvedDai = _j[0],
-    setApprovedDai = _j[1];
+    approvedToken = _g[0],
+    setApprovedToken = _g[1];
+  var dispatch = react_redux_1.useDispatch();
   var GlassCard = styled_components_1['default'].div(
     templateObject_1 ||
       (templateObject_1 = __makeTemplateObject(
@@ -230,10 +227,10 @@ function NFTGrid(_a) {
     templateObject_3 ||
       (templateObject_3 = __makeTemplateObject(
         [
-          '\n  background: #000;\n  border: none;\n  border-radius: 16px;\n  color: #fff;\n  font-size: 14px;\n  font-weight: 600;\n  padding: 5px 20px;\n  text-transform: uppercase;\n  transition: all 0.1s ease-in-out;\n  width:55%\n',
+          '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    width: 55%;\n  ',
         ],
         [
-          '\n  background: #000;\n  border: none;\n  border-radius: 16px;\n  color: #fff;\n  font-size: 14px;\n  font-weight: 600;\n  padding: 5px 20px;\n  text-transform: uppercase;\n  transition: all 0.1s ease-in-out;\n  width:55%\n',
+          '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    width: 55%;\n  ',
         ]
       ))
   );
@@ -261,35 +258,48 @@ function NFTGrid(_a) {
   );
   var buyNft = function (id) {
     return __awaiter(_this, void 0, void 0, function () {
-      var tx, err_1;
+      var tx, tx, err_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
             setLoading(true);
             _a.label = 1;
           case 1:
-            _a.trys.push([1, 4, , 5]);
-            console.log('a');
+            _a.trys.push([1, 8, , 9]);
+            if (!(type == 'producto')) return [3 /*break*/, 4];
             return [
               4 /*yield*/,
-              nudaraMinter.buyToken(
-                id.toString(),
-                '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'
-              ),
+              productoMinter.buyToken(id.toString(), tokenAddress),
             ];
           case 2:
             tx = _a.sent();
-            console.log('3');
             return [4 /*yield*/, tx.wait()];
           case 3:
             _a.sent();
             setLoading(false);
-            return [3 /*break*/, 5];
+            setApprovedToken(0);
+            return [3 /*break*/, 7];
           case 4:
+            if (!(type == 'inversion')) return [3 /*break*/, 7];
+            return [
+              4 /*yield*/,
+              inversionMinter.buyToken(id.toString(), tokenAddress),
+            ];
+          case 5:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 6:
+            _a.sent();
+            setLoading(false);
+            setApprovedToken(0);
+            _a.label = 7;
+          case 7:
+            return [3 /*break*/, 9];
+          case 8:
             err_1 = _a.sent();
             setLoading(false);
-            return [3 /*break*/, 5];
-          case 5:
+            return [3 /*break*/, 9];
+          case 9:
             return [2 /*return*/];
         }
       });
@@ -297,28 +307,40 @@ function NFTGrid(_a) {
   };
   var verifyApprove = function () {
     return __awaiter(_this, void 0, void 0, function () {
-      var usdt, e_1;
+      var usdt, usdt, e_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
-            _a.trys.push([0, 2, , 3]);
+            _a.trys.push([0, 5, , 6]);
+            if (!(type == 'producto')) return [3 /*break*/, 2];
             return [
               4 /*yield*/,
-              usdtContract.allowance(
-                account,
-                '0x6BB9547894806539C1465AeBafb3018adB0a313E'
-              ),
+              tokenContract.allowance(accountAddress, productoMinter.address),
             ];
           case 1:
             usdt = _a.sent();
-            console.log(ethers_1.ethers.utils.formatUnits(usdt, 18));
-            setApprovedUsdt(ethers_1.ethers.utils.formatUnits(usdt, 18));
-            return [3 /*break*/, 3];
+            //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            return [3 /*break*/, 4];
           case 2:
+            if (!(type == 'inversion')) return [3 /*break*/, 4];
+            alert(inversionMinter.address);
+            return [
+              4 /*yield*/,
+              tokenContract.allowance(accountAddress, inversionMinter.address),
+            ];
+          case 3:
+            usdt = _a.sent();
+            //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            _a.label = 4;
+          case 4:
+            return [3 /*break*/, 6];
+          case 5:
             e_1 = _a.sent();
             console.log(e_1);
-            return [3 /*break*/, 3];
-          case 3:
+            return [3 /*break*/, 6];
+          case 6:
             return [2 /*return*/];
         }
       });
@@ -326,21 +348,24 @@ function NFTGrid(_a) {
   };
   var approve = function () {
     return __awaiter(_this, void 0, void 0, function () {
-      var contract, decimals, tx, e_2;
+      var decimals, tx, decimals, tx, e_2;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
             setLoading(true);
             _a.label = 1;
           case 1:
-            _a.trys.push([1, 4, , 5]);
-            contract = usdtContract;
+            _a.trys.push([1, 10, , 11]);
+            if (!(type == 'producto')) return [3 /*break*/, 5];
+            alert(productoMinter.address);
+            setTokenAddress(tokenContract.address);
             decimals = 18;
+            console.log(tokenContract);
             return [
               4 /*yield*/,
-              contract.approve(
-                '0x6BB9547894806539C1465AeBafb3018adB0a313E',
-                ethers_1.ethers.utils.parseUnits('1', decimals)
+              tokenContract.approve(
+                productoMinter.address,
+                ethers_1.ethers.utils.parseUnits('130', decimals)
               ),
             ];
           case 2:
@@ -348,14 +373,39 @@ function NFTGrid(_a) {
             return [4 /*yield*/, tx.wait()];
           case 3:
             _a.sent();
-            setLoading(false);
-            setApprovedUsdt(true);
-            return [3 /*break*/, 5];
+            return [4 /*yield*/, verifyApprove()];
           case 4:
+            _a.sent();
+            setLoading(false);
+            return [3 /*break*/, 9];
+          case 5:
+            if (!(type == 'inversion')) return [3 /*break*/, 9];
+            setTokenAddress(tokenContract.address);
+            decimals = 18;
+            return [
+              4 /*yield*/,
+              tokenContract.approve(
+                inversionMinter.address,
+                ethers_1.ethers.utils.parseUnits('130', decimals)
+              ),
+            ];
+          case 6:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 7:
+            _a.sent();
+            return [4 /*yield*/, verifyApprove()];
+          case 8:
+            _a.sent();
+            setLoading(false);
+            _a.label = 9;
+          case 9:
+            return [3 /*break*/, 11];
+          case 10:
             e_2 = _a.sent();
             setLoading(false);
-            return [3 /*break*/, 5];
-          case 5:
+            return [3 /*break*/, 11];
+          case 11:
             return [2 /*return*/];
         }
       });
@@ -364,10 +414,10 @@ function NFTGrid(_a) {
   react_2.useEffect(
     function () {
       if (isConnect) {
-        setCuenta(account);
+        setCuenta(accountAddress);
       }
     },
-    [isConnect, loading]
+    [isConnect]
   );
   return React.createElement(
     'div',
@@ -416,17 +466,20 @@ function NFTGrid(_a) {
             className:
               'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
           },
-          number,
+          number + 1,
           React.createElement(verified_1.Verified, {
             className: 'ltr:ml-1 rtl:mr-1',
           })
         )
       ),
-      React.createElement(
-        'div',
-        { className: 'mt-4 text-lg font-medium text-gray-900 dark:text-white' },
-        price
-      ),
+      alldata &&
+        React.createElement(
+          'div',
+          {
+            className: 'mt-4 text-lg font-medium text-gray-900 dark:text-white',
+          },
+          price
+        ),
       React.createElement(
         'div',
         null,
@@ -441,16 +494,27 @@ function NFTGrid(_a) {
             }),
             'Loading...'
           ),
-        !loading &&
+        alldata &&
+          !loading &&
           !isConnect &&
-          React.createElement(CBuyButton, null, 'Connect Wallet'),
-        isConnect &&
+          React.createElement(
+            BuyButton,
+            {
+              onClick: function () {
+                dispatch(blockchainAction_1.connectWallet());
+              },
+            },
+            'Connect Wallet'
+          ),
+        alldata &&
+          isConnect &&
           !loading &&
-          price > approvedUsdt &&
+          price > approvedToken &&
           React.createElement(BuyButton, { onClick: approve }, 'Approve'),
-        isConnect &&
-          !loading &&
-          approvedUsdt &&
+        alldata &&
+          isConnect &&
+          !loading /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/ &&
+          price <= approvedToken &&
           React.createElement(
             BuyButton,
             {

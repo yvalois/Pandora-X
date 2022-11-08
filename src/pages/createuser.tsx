@@ -62,12 +62,9 @@ const CreateUser: NextPageWithLayout<
       const txResult = await mint(address, categoria, rango);
       const a = await getType(address);
       const b = await getRange(address);
-      console.log(a);
-      console.log(b);
-      console.log(txResult.status);
 
       if (txResult.status === 1) {
-        fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
+        fetch(`${process.env.BACKEND_API}/CrearUsuario`, {
           method: 'POST',
           body: JSON.stringify(value),
           headers: {
@@ -75,10 +72,7 @@ const CreateUser: NextPageWithLayout<
           },
         })
           .then((res) => res.json())
-          .then(() => {
-            alert('listo');
-            console.log(value);
-          })
+          .then(() => {})
           .catch((error) => console.error('Error:', error));
       } else {
         alert('Transaccion fracaso');

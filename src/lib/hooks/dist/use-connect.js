@@ -136,11 +136,10 @@ exports.__esModule = true;
 exports.WalletProvider = exports.WalletContext = void 0;
 var react_1 = require('react');
 var web3modal_1 = require('web3modal');
-var ethers_1 = require('ethers');
-var NFTROL_1 = require('../../NFTROL');
+//import { setProvider } from '../../NFTROL';
 var web3_provider_1 = require('@walletconnect/web3-provider');
 var react_redux_1 = require('react-redux');
-var UsuarioActions_1 = require('../../redux/Usuario/UsuarioActions');
+var blockchainAction_1 = require('../../redux/Blockchain/blockchainAction');
 var web3modalStorageKey = 'WEB3_CONNECT_CACHED_PROVIDER';
 exports.WalletContext = react_1.createContext({});
 exports.WalletProvider = function (_a) {
@@ -164,9 +163,7 @@ exports.WalletProvider = function (_a) {
     nombre = _g[0],
     setNombre = _g[1];
   var dispatch = react_redux_1.useDispatch();
-  var Usuario = react_redux_1.useSelector(function (state) {
-    return state.Usuario;
-  });
+  //const Usuario = useSelector((state: any) => state.Usuario);
   var providerOptions = {
     walletconnect: {
       package: web3_provider_1['default'],
@@ -181,145 +178,101 @@ exports.WalletProvider = function (_a) {
       cacheProvider: true,
       providerOptions: providerOptions,
     }); //agregar provider options
+  var _h = react_redux_1.useSelector(function (state) {
+      return state.blockchain;
+    }),
+    accountAddress = _h.accountAddress,
+    isUSer = _h.isUSer;
   /* This effect will fetch wallet address if user has already connected his/her wallet */
-  react_1.useEffect(function () {
-    function checkConnection() {
-      return __awaiter(this, void 0, void 0, function () {
-        var error_1;
-        return __generator(this, function (_a) {
-          switch (_a.label) {
-            case 0:
-              _a.trys.push([0, 5, , 6]);
-              if (!(window && window.ethereum)) return [3 /*break*/, 3];
-              if (!localStorage.getItem(web3modalStorageKey))
-                return [3 /*break*/, 2];
-              return [4 /*yield*/, connectToWallet()];
-            case 1:
-              _a.sent();
-              _a.label = 2;
-            case 2:
-              return [3 /*break*/, 4];
-            case 3:
-              console.log('window or window.ethereum is not available');
-              _a.label = 4;
-            case 4:
-              return [3 /*break*/, 6];
-            case 5:
-              error_1 = _a.sent();
-              console.log(error_1, 'Catch error Account is not connected');
-              return [3 /*break*/, 6];
-            case 6:
-              return [2 /*return*/];
+  /*useEffect(() => {
+      async function checkConnection() {
+        try {
+          if (window && window.ethereum) {
+            // Check if web3modal wallet connection is available on storage
+            if (localStorage.getItem(web3modalStorageKey)) {
+              await connectToWallet();
+            }
+          } else {
+            console.log('window or window.ethereum is not available');
+          }
+        } catch (error) {
+          console.log(error, 'Catch error Account is not connected');
+        }
+      }
+      checkConnection();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);*/
+  /*const setWalletAddress = async (provider: any) => {
+      try {
+        const signer = provider.getSigner();
+        if (signer) {
+          const web3Address = await signer.getAddress();
+          setAddress(web3Address);
+          console.log(address);
+          await conectar(web3Address);
+  
+          getBalance(provider, web3Address);
+        }
+      } catch (error) {
+        console.log(
+          'Account not connected; logged from setWalletAddress function'
+        );
+      }
+    };*/
+  //wallet address saldra
+  /*const conectar = async () => {
+      fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          if (response !== null) {
+            console.log(response);
+            connectToMongo(response.Rol, response.Nombre);
+          } else {
+            connectToMongo('usuario', 'usuario');
           }
         });
-      });
-    }
-    checkConnection();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  var setWalletAddress = function (provider) {
-    return __awaiter(void 0, void 0, void 0, function () {
-      var signer, web3Address, error_2;
-      return __generator(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            _a.trys.push([0, 4, , 5]);
-            signer = provider.getSigner();
-            if (!signer) return [3 /*break*/, 3];
-            return [4 /*yield*/, signer.getAddress()];
-          case 1:
-            web3Address = _a.sent();
-            setAddress(web3Address);
-            console.log(address);
-            return [4 /*yield*/, conectar(web3Address)];
-          case 2:
-            _a.sent();
-            getBalance(provider, web3Address);
-            _a.label = 3;
-          case 3:
-            return [3 /*break*/, 5];
-          case 4:
-            error_2 = _a.sent();
-            console.log(
-              'Account not connected; logged from setWalletAddress function'
-            );
-            return [3 /*break*/, 5];
-          case 5:
-            return [2 /*return*/];
-        }
-      });
-    });
-  };
-  var conectar = function (_address) {
-    return __awaiter(void 0, void 0, void 0, function () {
-      return __generator(this, function (_a) {
-        fetch('https://pandoraxapi1.herokuapp.com/api/login/' + _address, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+    };*/
+  /*const disconect = () => {
+      dispatch(disconectWallet());
+    };*/
+  /*const connectBLockchain = (p) => {
+      dispatch(connectBLockchain(p));
+      console.log('e');
+    };*/
+  /*const connect = (cuenta: string) => {
+      dispatch(
+        connectSuccess({
+          account: cuenta,
+          //web3: web3Modal,
         })
-          .then(function (res) {
-            return res.json();
-          })
-          .then(function (response) {
-            if (response !== null) {
-              console.log(response);
-              connectToMongo(response.Rol, response.Nombre);
-            } else {
-              connectToMongo('usuario', 'usuario');
-            }
-          });
-        return [2 /*return*/];
-      });
-    });
-  };
-  var disconect = function () {
-    dispatch(UsuarioActions_1.disconectWallet());
-  };
-  var connectBLockchain = function (p) {
-    dispatch(connectBLockchain(p));
-    console.log('e');
-  };
-  var connect = function (cuenta) {
-    dispatch(
-      UsuarioActions_1.connectSuccess({
-        account: cuenta,
-      })
-    );
-    Usuario.account;
-  };
-  var connectToMongo = function (_rol, _nombre) {
-    dispatch(
-      UsuarioActions_1.connectSuccessToMongo({
-        rol: _rol,
-        nombre: _nombre,
-      })
-    );
-  };
-  var getBalance = function (provider, walletAddress) {
-    return __awaiter(void 0, void 0, void 0, function () {
-      var walletBalance, balanceInEth;
-      return __generator(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            return [4 /*yield*/, provider.getBalance(walletAddress)];
-          case 1:
-            walletBalance = _a.sent();
-            balanceInEth = ethers_1.ethers.utils.formatEther(walletBalance);
-            setBalance(balanceInEth);
-            return [2 /*return*/];
-        }
-      });
-    });
-  };
+      );
+  
+      Usuario.account;
+    };*/
+  /* const connectToMongo = (_rol: string, _nombre: string) => {
+       dispatch(
+         connectSuccessToMongo({
+           rol: _rol,
+           nombre: _nombre,
+         })
+       );
+     };*/
+  /*const getBalance = async (provider: any, walletAddress: string) => {
+      const walletBalance = await provider.getBalance(walletAddress);
+      const balanceInEth = ethers.utils.formatEther(walletBalance);
+      setBalance(balanceInEth);
+    };*/
   var disconnectWallet = function () {
-    setAddress('');
+    //setAddress('');
     web3Modal && web3Modal.clearCachedProvider();
-    disconect();
-  };
-  var request = function () {
-    dispatch(UsuarioActions_1.connectRequest());
+    dispatch(blockchainAction_1.disconectWallet());
+    setAddress('');
+    //disconect();
   };
   var checkIfExtensionIsAvailable = function () {
     if (
@@ -333,89 +286,58 @@ exports.WalletProvider = function (_a) {
   // seteamos el provider
   var connectToWallet = function () {
     return __awaiter(void 0, void 0, void 0, function () {
-      var connection, _a, provider, error_3;
-      return __generator(this, function (_b) {
-        switch (_b.label) {
+      var error_1;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
           case 0:
-            request();
-            _b.label = 1;
-          case 1:
-            _b.trys.push([1, 5, , 6]);
+            _a.trys.push([0, 2, , 3]);
             setLoading(true);
             checkIfExtensionIsAvailable();
-            _a = web3Modal;
-            if (!_a) return [3 /*break*/, 3];
-            return [4 /*yield*/, web3Modal.connect()];
-          case 2:
-            _a = _b.sent();
-            _b.label = 3;
-          case 3:
-            connection = _a;
-            provider = new ethers_1.ethers.providers.Web3Provider(connection);
-            return [4 /*yield*/, subscribeProvider(connection)];
-          case 4:
-            _b.sent();
-            NFTROL_1.setProvider(provider);
-            setWalletAddress(provider);
+            return [4 /*yield*/, dispatch(blockchainAction_1.connectWallet())];
+          case 1:
+            _a.sent();
             setLoading(false);
-            connect(address);
-            return [3 /*break*/, 6];
-          case 5:
-            error_3 = _b.sent();
+            setAddress(accountAddress);
+            return [3 /*break*/, 3];
+          case 2:
+            error_1 = _a.sent();
             setLoading(false);
             console.log(
-              error_3,
+              error_1,
               'got this error on connectToWallet catch block while connecting the wallet'
             );
-            return [3 /*break*/, 6];
-          case 6:
+            return [3 /*break*/, 3];
+          case 3:
             return [2 /*return*/];
         }
       });
     });
   };
-  var subscribeProvider = function (connection) {
-    return __awaiter(void 0, void 0, void 0, function () {
-      return __generator(this, function (_a) {
-        connection.on('close', function () {
-          disconnectWallet();
-        });
-        connection.on('accountsChanged', function (accounts) {
-          return __awaiter(void 0, void 0, void 0, function () {
-            var provider;
-            return __generator(this, function (_a) {
-              if (
-                accounts === null || accounts === void 0
-                  ? void 0
-                  : accounts.length
-              ) {
-                setAddress(accounts[0]);
-                provider = new ethers_1.ethers.providers.Web3Provider(
-                  connection
-                );
-                getBalance(provider, accounts[0]);
-                connect(accounts[0]);
-              } else {
-                disconnectWallet();
-              }
-              return [2 /*return*/];
-            });
-          });
-        });
-        return [2 /*return*/];
+  /*const subscribeProvider = async (connection: any) => {
+      connection.on('close', () => {
+        disconnectWallet();
       });
-    });
-  };
+      connection.on('accountsChanged', async (accounts: string[]) => {
+        if (accounts?.length) {
+          setAddress(accounts[0]);
+          const provider = new ethers.providers.Web3Provider(connection);
+          getBalance(provider, accounts[0]);
+          connect(accounts[0]);
+        } else {
+          disconnectWallet();
+        }
+      });
+    };*/
   return React.createElement(
     exports.WalletContext.Provider,
     {
       value: {
-        address: address,
         balance: balance,
         loading: loading,
         error: error,
         connectToWallet: connectToWallet,
         disconnectWallet: disconnectWallet,
+        isUSer: isUSer,
       },
     },
     children

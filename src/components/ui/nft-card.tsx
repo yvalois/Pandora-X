@@ -6,19 +6,23 @@ import { StaticImageData } from 'next/image';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { tokens } from '../../utils/constant';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { provider } from '../../NFTROL';
 
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
-import nudaraMinterAbi from '../../abi/nudaraMinter.json';
+import productoMinterAbi from '../../abi/productoMinter.json';
+import inversionMinterAbi from '../../abi/inversionMinter.json';
+import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 
 type NFTGridProps = {
   image: StaticImageData;
   name: string;
   number: number;
-  price: string;
+  price: number;
+  alldata: boolean;
+  type: string;
 };
 
 export default function NFTGrid({
@@ -28,28 +32,40 @@ export default function NFTGrid({
   name,
   number,
   price,
+  alldata,
+  type,
 }: NFTGridProps) {
-  const { isConnect, account } = useSelector((state) => state.Usuario);
-  const signer = provider?.getSigner();
+  //const { isConnect, account } = useSelector((state) => state.Usuario);
+  const {
+    productoMinter,
+    inversionMinter,
+    isConnect,
+    accountAddress,
+    usdtContract,
+    tokenContract,
+  } = useSelector((state) => state.blockchain);
+
+  /*const signer = provider?.getSigner();
   console.log(signer);
-  const usdtContract = new ethers.Contract(
+  const tokenContract = new ethers.Contract(
     '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
     abiErc20,
     signer
-  ); //token Cambiar ABi solo con fines de prueba
-  const nudaraMinter = new ethers.Contract(
+  );*/
+  //token Cambiar ABi solo con fines de prueba
+  /*const nudaraMinter = new ethers.Contract(
     '0x6BB9547894806539C1465AeBafb3018adB0a313E',
     nudaraMinterAbi,
     signer
-  ); //Contracto del marketplace
-  console.log(usdtContract);
+  );*/ //Contracto del marketplace
+
   const [tokenAddress, setTokenAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [cuenta, setCuenta] = useState('');
-  const [approvedUsdt, setApprovedUsdt] = useState(false);
-  const [approvedBusd, setApprovedBusd] = useState(0);
-  const [approvedUsdc, setApprovedUsdc] = useState(0);
-  const [approvedDai, setApprovedDai] = useState(0);
+  const [approvedUsdt, setApprovedUsdt] = useState(0);
+  const [approvedToken, setApprovedToken] = useState(0);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const GlassCard = styled.div`
     background: rgba(255, 255, 255, 0.093);
@@ -120,14 +136,18 @@ export default function NFTGrid({
   const buyNft = async (id: number) => {
     setLoading(true);
     try {
-      console.log('a');
-      const tx = await nudaraMinter.buyToken(
-        id.toString(),
-        '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'
-      );
-      console.log('3');
-      await tx.wait();
-      setLoading(false);
+      if (type == 'producto') {
+        const tx = await productoMinter.buyToken(id.toString(), tokenAddress);
+        await tx.wait();
+        setLoading(false);
+        setApprovedToken(0);
+      } else if (type == 'inversion') {
+        const tx = await inversionMinter.buyToken(id.toString(), tokenAddress);
+
+        await tx.wait();
+        setLoading(false);
+        setApprovedToken(0);
+      }
     } catch (err) {
       setLoading(false);
     }
@@ -135,12 +155,22 @@ export default function NFTGrid({
 
   const verifyApprove = async () => {
     try {
-      const usdt = await usdtContract.allowance(
-        account,
-        '0x6BB9547894806539C1465AeBafb3018adB0a313E'
-      ); //MarketPlace
-      console.log(ethers.utils.formatUnits(usdt, 18));
-      setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+      if (type == 'producto') {
+        const usdt = await tokenContract.allowance(
+          accountAddress,
+          productoMinter.address
+        ); //MarketPlace
+        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+      } else if (type == 'inversion') {
+        alert(inversionMinter.address);
+        const usdt = await tokenContract.allowance(
+          accountAddress,
+          inversionMinter.address
+        ); //MarketPlace
+        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+      }
     } catch (e) {
       console.log(e);
     }
@@ -150,15 +180,31 @@ export default function NFTGrid({
     setLoading(true);
 
     try {
-      let contract = usdtContract;
-      const decimals = 18;
-      const tx = await contract.approve(
-        '0x6BB9547894806539C1465AeBafb3018adB0a313E',
-        ethers.utils.parseUnits('1', decimals)
-      );
-      await tx.wait();
-      setLoading(false);
-      setApprovedUsdt(true);
+      if (type == 'producto') {
+        alert(productoMinter.address);
+        setTokenAddress(tokenContract.address);
+        const decimals = 18;
+        console.log(tokenContract);
+        const tx = await tokenContract.approve(
+          productoMinter.address,
+          ethers.utils.parseUnits('130', decimals)
+        );
+
+        await tx.wait();
+        await verifyApprove();
+        setLoading(false);
+      } else if (type == 'inversion') {
+        setTokenAddress(tokenContract.address);
+        const decimals = 18;
+        const tx = await tokenContract.approve(
+          inversionMinter.address,
+          ethers.utils.parseUnits('130', decimals)
+        );
+
+        await tx.wait();
+        await verifyApprove();
+        setLoading(false);
+      }
     } catch (e) {
       setLoading(false);
     }
@@ -166,9 +212,9 @@ export default function NFTGrid({
 
   useEffect(() => {
     if (isConnect) {
-      setCuenta(account);
+      setCuenta(accountAddress);
     }
-  }, [isConnect, loading]);
+  }, [isConnect]);
 
   return (
     <div className="relative overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
@@ -208,13 +254,15 @@ export default function NFTGrid({
             href="/"
             className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
           >
-            {number}
+            {number + 1}
             <Verified className="ltr:ml-1 rtl:mr-1" />
           </AnchorLink>
         </div>
-        <div className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-          {price}
-        </div>
+        {alldata && (
+          <div className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+            {price}
+          </div>
+        )}
         <div>
           {loading && (
             <BuyButton type="button" disabled>
@@ -226,15 +274,26 @@ export default function NFTGrid({
               Loading...
             </BuyButton>
           )}
-          {!loading && !isConnect && <CBuyButton>Connect Wallet</CBuyButton>}
+          {alldata && !loading && !isConnect && (
+            <BuyButton
+              onClick={() => {
+                dispatch(connectWallet());
+              }}
+            >
+              Connect Wallet
+            </BuyButton>
+          )}
 
-          {isConnect && !loading && price > approvedUsdt && (
+          {alldata && isConnect && !loading && price > approvedToken && (
             <BuyButton onClick={approve}>Approve</BuyButton>
           )}
 
-          {isConnect && !loading && approvedUsdt && (
-            <BuyButton onClick={() => buyNft(number)}>Buy</BuyButton>
-          )}
+          {alldata &&
+            isConnect &&
+            !loading /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/ &&
+            price <= approvedToken && (
+              <BuyButton onClick={() => buyNft(number)}>Buy</BuyButton>
+            )}
         </div>
       </div>
     </div>
