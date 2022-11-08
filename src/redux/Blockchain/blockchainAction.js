@@ -3,8 +3,8 @@ import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { contract } from '../blockchainRoutes';
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
-import productoMinterAbi from '../../abi/productoMinter.json'; //Buscar
-import inversionMinterAbi from '../../abi/inversionMinter.json';
+import productoMinterAbi from '../../abi/ProductoMinter.json'; //Buscar
+import inversionMinterAbi from '../../abi/InversionMinter.json';
 import { items } from '../../utils/constant'; //Buscar
 import { setProvider } from '../../NFTROL';
 const router = contract();

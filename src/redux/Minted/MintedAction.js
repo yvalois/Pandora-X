@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
-import productoMinterAbi from '../../abi/productoMinter.json'; //Buscar
-import inversionMinterAbi from '../../abi/inversionMinter.json'; //Buscar
+import productoMinterAbi from '../../abi/ProductoMinter.json'; //Buscar
+import inversionMinterAbi from '../../abi/InversionMinter.json'; //Buscar
 import { contract } from '../blockchainRoutes';
 import { items } from '../../utils/constant'; //Buscar
 import { provider } from '@/NFTROL';
