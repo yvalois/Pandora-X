@@ -39,8 +39,8 @@ const AuthorProfilePage: NextPageWithLayout<
 
   useEffect(() => {
     if (
-      Usuario.rol !== 'Admin' ||
-      Usuario.rol !== 'usuario' ||
+      Usuario.rol !== 'Admin' &&
+      Usuario.rol !== 'usuario' &&
       Usuario.rol !== 'cliente'
     ) {
       window.location.href = '/';

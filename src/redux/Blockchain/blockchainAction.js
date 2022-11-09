@@ -196,6 +196,7 @@ export const connectWallet = () => async (dispatch) => {
       typeof window !== 'undefined' &&
       new Web3Modal({
         cacheProvider: true,
+        providerOptions,
       });
 
     const instance = await web3Modal.connect();
