@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rimraf \"{node_modules,.next,out.cache}\"",
     "dev": "set NODE_ENV=development && next dev ",
-    "build": "next build",
+    "build": "set NODE_ENV=development && next build",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install"

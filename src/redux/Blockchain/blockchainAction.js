@@ -195,12 +195,10 @@ export const connectWallet = () => async (dispatch) => {
     const web3Modal =
       typeof window !== 'undefined' &&
       new Web3Modal({
-        disableInjectedProvider: false,
-        cacheProvider: false,
-        providerOptions,
+        cacheProvider: true,
       });
 
-    const instance = await web3Modal.connect(providerOptions);
+    const instance = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(instance);
     setProvider(provider);
     const signer = provider.getSigner();
@@ -209,87 +207,87 @@ export const connectWallet = () => async (dispatch) => {
 
     const networkId = await provider.getNetwork();
 
-    /*if (
+    if (
       (process.env.NODE_ENV === 'production' && networkId.chainId === 137) ||
       (process.env.NODE_ENV === 'development' && networkId.chainId === 5)
-    ) {*/
-    const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
-    const tokenContract = new ethers.Contract(
-      TokenPrueba_ADDRESS,
-      abiErc20,
-      signer
-    );
-    alert('a');
-    const productoMinterContract = new ethers.Contract(
-      PRODUCTOS_MINTER_ADDRESS,
-      productoMinterAbi,
-      signer
-    );
+    ) {
+      const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
+      const tokenContract = new ethers.Contract(
+        TokenPrueba_ADDRESS,
+        abiErc20,
+        signer
+      );
 
-    const inversionMinterContract = new ethers.Contract(
-      INVERSION_MINTER_ADDRESS,
-      inversionMinterAbi,
-      signer
-    );
+      const productoMinterContract = new ethers.Contract(
+        PRODUCTOS_MINTER_ADDRESS,
+        productoMinterAbi,
+        signer
+      );
 
-    await getProductos();
-    await getInversiones();
+      const inversionMinterContract = new ethers.Contract(
+        INVERSION_MINTER_ADDRESS,
+        inversionMinterAbi,
+        signer
+      );
 
-    const nftpBalance = await productoMinterContract.getMyInventory(
-      accounts[0]
-    );
-    const nftiBalance = await inversionMinterContract.getMyInventory(
-      accounts[0]
-    );
+      await getProductos();
+      await getInversiones();
 
-    const inventoryp = [];
-    const inventoryi = [];
+      const nftpBalance = await productoMinterContract.getMyInventory(
+        accounts[0]
+      );
+      const nftiBalance = await inversionMinterContract.getMyInventory(
+        accounts[0]
+      );
 
-    nftpBalance.map((item) => {
-      // if inventory id in items push to inventory
-      if (Productos[item]) {
-        inventoryp.push(items[item]);
-      }
-    });
+      const inventoryp = [];
+      const inventoryi = [];
 
-    nftiBalance.map((item) => {
-      // if inventory id in items push to inventory
-      if (Inversiones[item]) {
-        inventoryi.push(items[item]);
-      }
-    });
+      nftpBalance.map((item) => {
+        // if inventory id in items push to inventory
+        if (Productos[item]) {
+          inventoryp.push(items[item]);
+        }
+      });
 
-    //const usdtBalance = await usdtContract.balanceOf(accounts[0]);
-    //const tokenBalance = await tokenContract.balanceOf(accounts[0]);
+      nftiBalance.map((item) => {
+        // if inventory id in items push to inventory
+        if (Inversiones[item]) {
+          inventoryi.push(items[item]);
+        }
+      });
 
-    //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
-    //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 18);
+      //const usdtBalance = await usdtContract.balanceOf(accounts[0]);
+      //const tokenBalance = await tokenContract.balanceOf(accounts[0]);
 
-    dispatch(subscribeProvider(instance));
-    await dispatch(
-      dataLoaded({
-        usdtContract,
-        tokenContract,
-        productoMinter: productoMinterContract,
-        inversionMinter: inversionMinterContract,
-        accountAddress: accounts[0],
-        //usdtBalance: balanceFormat,
-        //tokenBalance: balanceFormat2,
-        inventoryp: inventoryp,
-        inventoryi: inventoryi,
-        instance: instance,
-      })
-    );
-    dispatch(conectar(accounts[0]));
+      //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
+      //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 18);
 
-    /*instance.on('close',() => {
+      dispatch(subscribeProvider(instance));
+      await dispatch(
+        dataLoaded({
+          usdtContract,
+          tokenContract,
+          productoMinter: productoMinterContract,
+          inversionMinter: inversionMinterContract,
+          accountAddress: accounts[0],
+          //usdtBalance: balanceFormat,
+          //tokenBalance: balanceFormat2,
+          inventoryp: inventoryp,
+          inventoryi: inventoryi,
+          instance: instance,
+        })
+      );
+      dispatch(conectar(accounts[0]));
+
+      /*instance.on('close',() => {
       web3Modal && web3Modal.clearCachedProvider();
       dispatch(disconectWallet())
   });*/
 
-    //esto se llama desde el use-connect
+      //esto se llama desde el use-connect
 
-    /* instance.on('accountsChanged', async (accounts) => {
+      /* instance.on('accountsChanged', async (accounts) => {
 
      // const usdtBalance = await usdtContract.balanceOf(accounts[0]);
       //const tokenBalance = await tokenContract.balanceOf(accounts[0]);
@@ -318,8 +316,7 @@ export const connectWallet = () => async (dispatch) => {
       dispatch(userChange());
       dispatch(adminChange());
     });*/
-    //}
-    /*else {
+    } else {
       if (process.env.NODE_ENV === 'production') {
         try {
           await provider.provider.request({
@@ -386,7 +383,7 @@ export const connectWallet = () => async (dispatch) => {
           }
         }
       }
-    }*/
+    }
   } catch (err) {
     dispatch(error(err));
   }
