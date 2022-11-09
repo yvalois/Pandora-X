@@ -36,7 +36,7 @@ const blockchainReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         dataloaded: true,
-        usdtContract: action.payload.usdtContract,
+        //usdtContract: action.payload.usdtContract,
         tokenContract: action.payload.tokenContract,
         //busdContract: action.payload.busdContract,
         //usdcContract: action.payload.usdcContract,

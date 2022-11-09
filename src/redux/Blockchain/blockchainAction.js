@@ -211,7 +211,7 @@ export const connectWallet = () => async (dispatch) => {
       (process.env.NODE_ENV === 'production' && networkId.chainId === 137) ||
       (process.env.NODE_ENV === 'development' && networkId.chainId === 5)
     ) {
-      const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
+      //const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
       const tokenContract = new ethers.Contract(
         TokenPrueba_ADDRESS,
         abiErc20,
@@ -266,7 +266,7 @@ export const connectWallet = () => async (dispatch) => {
       dispatch(subscribeProvider(instance));
       await dispatch(
         dataLoaded({
-          usdtContract,
+          //usdtContract,
           tokenContract,
           productoMinter: productoMinterContract,
           inversionMinter: inversionMinterContract,
@@ -321,7 +321,7 @@ export const connectWallet = () => async (dispatch) => {
         try {
           await provider.provider.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: `0x${Number(137).toString(16)}` }],
+            params: [{ chainId: `0x${Number(5).toString(16)}` }],
           });
         } catch (switchError) {
           if (switchError.code === 4902) {
@@ -330,15 +330,17 @@ export const connectWallet = () => async (dispatch) => {
                 method: 'wallet_addEthereumChain',
                 params: [
                   {
-                    chainId: `0x${Number(137).toString(16)}`,
-                    chainName: 'Matic Mainnet',
+                    chainId: `0x${Number(5).toString(16)}`,
+                    chainName: 'Red de prueba Goerli',
                     nativeCurrency: {
-                      name: 'Matic',
-                      symbol: 'MATIC',
+                      name: 'Red de prueba Goerli',
+                      symbol: 'GoerliETH',
                       decimals: 18,
                     },
                     rpcUrls: [RPC_URL],
-                    blockExplorerUrls: ['https://polygonscan.com/'],
+                    blockExplorerUrls: [
+                      'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
+                    ],
                   },
                 ],
               });
@@ -369,7 +371,9 @@ export const connectWallet = () => async (dispatch) => {
                       decimals: 18,
                     },
                     rpcUrls: [RPC_URL],
-                    blockExplorerUrls: ['https://goerli.etherscan.io/'],
+                    blockExplorerUrls: [
+                      'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
+                    ],
                   },
                 ],
               });
