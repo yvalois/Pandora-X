@@ -140,7 +140,7 @@ const subscribeProvider = (connection) => async (dispatch) => {
 };
 
 const getProductos = async () => {
-  fetch(`${process.env.BACKEND_API}/getProducto`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api}/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ const getProductos = async () => {
 };
 
 const getInversiones = async () => {
-  fetch(`${process.env.BACKEND_API}/getInversion`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api}/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const getInversiones = async () => {
 };
 
 const conectar = (accountAddress) => async (dispatch) => {
-  fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api}/login/${accountAddress}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -196,10 +196,9 @@ export const connectWallet = () => async (dispatch) => {
       typeof window !== 'undefined' &&
       new Web3Modal({
         cacheProvider: true,
-        providerOptions,
       });
 
-    const instance = await web3Modal.connect();
+    const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
     setProvider(provider);
     const signer = provider.getSigner();
