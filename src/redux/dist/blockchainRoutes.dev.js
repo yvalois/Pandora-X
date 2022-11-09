@@ -1,4 +1,11 @@
-export const contract = () => {
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+});
+exports.contract = void 0;
+
+var contract = function contract() {
   //if (process.env.NODE_ENV === 'development') {
   return {
     usdtContract: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
@@ -10,8 +17,7 @@ export const contract = () => {
     RPC_URL:
       'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
     tokenPrueba: '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
-  };
-  // }
+  }; // }
 
   /*if (process.env.NODE_ENV === 'production') {
     return {
@@ -27,3 +33,5 @@ export const contract = () => {
     };
   }*/
 };
+
+exports.contract = contract;
