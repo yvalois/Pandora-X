@@ -33,16 +33,23 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const providerOptions = {
     walletconnect: {
-      package: WalletConnectProvider, // required
+      package: WalletConnectProvider,
       options: {
-        chainId: 31337,
+        rpc: {
+          5: 'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
+        },
       },
     },
   };
 
   const web3Modal =
     typeof window !== 'undefined' &&
-    new Web3Modal({ cacheProvider: true, providerOptions }); //agregar provider options
+    new Web3Modal({
+      disableInjectedProvider: false,
+      cacheProvider: false,
+      providerOptions,
+    });
+  //agregar provider options
 
   const { accountAddress, isUSer } = useSelector((state) => state.blockchain);
 

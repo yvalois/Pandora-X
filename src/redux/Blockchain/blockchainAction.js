@@ -195,7 +195,8 @@ export const connectWallet = () => async (dispatch) => {
     const web3Modal =
       typeof window !== 'undefined' &&
       new Web3Modal({
-        cacheProvider: true,
+        disableInjectedProvider: false,
+        cacheProvider: false,
         providerOptions,
       });
 
@@ -218,7 +219,7 @@ export const connectWallet = () => async (dispatch) => {
         abiErc20,
         signer
       );
-
+      alert('a');
       const productoMinterContract = new ethers.Contract(
         PRODUCTOS_MINTER_ADDRESS,
         productoMinterAbi,
