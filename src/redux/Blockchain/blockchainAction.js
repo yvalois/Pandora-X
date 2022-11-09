@@ -196,9 +196,10 @@ export const connectWallet = () => async (dispatch) => {
       typeof window !== 'undefined' &&
       new Web3Modal({
         cacheProvider: true,
+        providerOptions,
       });
 
-    const instance = await web3Modal.connect();
+    const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
     setProvider(provider);
     const signer = provider.getSigner();
@@ -211,7 +212,7 @@ export const connectWallet = () => async (dispatch) => {
       (process.env.NODE_ENV === 'production' && networkId.chainId === 137) ||
       (process.env.NODE_ENV === 'development' && networkId.chainId === 5)
     ) {
-      //const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
+      const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
       const tokenContract = new ethers.Contract(
         TokenPrueba_ADDRESS,
         abiErc20,
@@ -266,7 +267,7 @@ export const connectWallet = () => async (dispatch) => {
       dispatch(subscribeProvider(instance));
       await dispatch(
         dataLoaded({
-          //usdtContract,
+          usdtContract,
           tokenContract,
           productoMinter: productoMinterContract,
           inversionMinter: inversionMinterContract,
