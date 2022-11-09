@@ -88,7 +88,7 @@ export default function ModalRegister() {
     walletconnect: {
       package: WalletConnectProvider, // required
       options: {
-        chainId: 31337,
+        chainId: 5,
       },
     },
   };

@@ -1,4 +1,11 @@
-export const contract = () => {
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+});
+exports.contract = void 0;
+
+var contract = function contract() {
   if (process.env.NODE_ENV === 'development') {
     return {
       usdtContract: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
@@ -25,3 +32,5 @@ export const contract = () => {
     };
   }
 };
+
+exports.contract = contract;

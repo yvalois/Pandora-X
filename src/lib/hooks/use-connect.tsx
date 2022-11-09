@@ -35,7 +35,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     walletconnect: {
       package: WalletConnectProvider, // required
       options: {
-        chainId: 31337,
+        chainId: 5,
       },
     },
   };

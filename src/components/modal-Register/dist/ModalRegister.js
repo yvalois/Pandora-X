@@ -248,7 +248,7 @@ function ModalRegister() {
     walletconnect: {
       package: web3_provider_1['default'],
       options: {
-        chainId: 31337,
+        chainId: 5,
       },
     },
   };
@@ -283,7 +283,7 @@ function ModalRegister() {
         'button',
         {
           className:
-            'mb-4 flex text-center text-2xl font-medium uppercase w-[40px] h-[40px] items-center justify-center bg-black rounded-[50%]   dark:text-white absolute right-[25px] top-[25px]',
+            'absolute right-[25px] top-[25px] mb-4 flex h-[40px] w-[40px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white',
           onClick: function () {
             return disconnectWallet();
           },
@@ -292,7 +292,7 @@ function ModalRegister() {
           'span',
           {
             className:
-              'bg-transparent text-white h-6 w-6 text-2xl block outline-none focus:outline-none',
+              'block h-6 w-6 bg-transparent text-2xl text-white outline-none focus:outline-none',
           },
           'X'
         )
@@ -309,7 +309,7 @@ function ModalRegister() {
         'label',
         {
           className:
-            'mb-2 block text-sm font-bold text-gray-700 dark:text-white mt-[40px]',
+            'mb-2 mt-[40px] block text-sm font-bold text-gray-700 dark:text-white',
         },
         'Nombre'
       ),
@@ -327,7 +327,7 @@ function ModalRegister() {
         'label',
         {
           className:
-            'mb-2 block text-sm font-bold text-gray-700 dark:text-white mt-[20px]',
+            'mb-2 mt-[20px] block text-sm font-bold text-gray-700 dark:text-white',
         },
         'Correo'
       ),
@@ -345,7 +345,7 @@ function ModalRegister() {
         'label',
         {
           className:
-            'mb-2 block text-sm font-bold text-gray-700 dark:text-white mt-[20px]',
+            'mb-2 mt-[20px] block text-sm font-bold text-gray-700 dark:text-white',
         },
         'Numero'
       ),
@@ -366,7 +366,7 @@ function ModalRegister() {
             return Registrar();
           },
           className:
-            ' flex h-14 w-full cursor-pointer items-center justify-center rounded-lg mt-[70px] bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5',
+            ' mt-[70px] flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5',
         },
         react_1['default'].createElement('span', null, 'Registrarse'),
         react_1['default'].createElement('span', { className: 'h-auto w-9' })

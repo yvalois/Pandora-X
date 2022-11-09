@@ -168,7 +168,7 @@ exports.WalletProvider = function (_a) {
     walletconnect: {
       package: web3_provider_1['default'],
       options: {
-        chainId: 31337,
+        chainId: 5,
       },
     },
   };
@@ -255,13 +255,13 @@ exports.WalletProvider = function (_a) {
       Usuario.account;
     };*/
   /* const connectToMongo = (_rol: string, _nombre: string) => {
-       dispatch(
-         connectSuccessToMongo({
-           rol: _rol,
-           nombre: _nombre,
-         })
-       );
-     };*/
+      dispatch(
+        connectSuccessToMongo({
+          rol: _rol,
+          nombre: _nombre,
+        })
+      );
+    };*/
   /*const getBalance = async (provider: any, walletAddress: string) => {
       const walletBalance = await provider.getBalance(walletAddress);
       const balanceInEth = ethers.utils.formatEther(walletBalance);
