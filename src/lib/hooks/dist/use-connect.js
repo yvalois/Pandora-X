@@ -168,7 +168,7 @@ exports.WalletProvider = function (_a) {
     walletconnect: {
       package: web3_provider_1['default'],
       options: {
-        chainId: 31337,
+        chainId: 5,
       },
     },
   };
