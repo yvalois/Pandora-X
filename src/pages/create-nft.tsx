@@ -122,7 +122,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   let Productos = 0;
 
   const getProductos = async () => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/getProducto`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const getInversiones = async () => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/getInversion`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearProducto = async (objeto) => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/CrearNftProducto`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/CrearNftProducto`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -163,7 +163,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearInversion = async (objeto) => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/CrearNftInversion`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/CrearNftInversion`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {

@@ -64,7 +64,7 @@ const CreateUser: NextPageWithLayout<
       const b = await getRange(address);
 
       if (txResult.status === 1) {
-        fetch(`https://pandoraxapi1.herokuapp.com/api}/CrearUsuario`, {
+        fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
           method: 'POST',
           body: JSON.stringify(value),
           headers: {

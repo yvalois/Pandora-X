@@ -29,7 +29,7 @@ let Productos = [];
 let Inversiones = [];
 
 /*export const CrearProducto = async(objeto)=>{
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/api/CrearNftProducto`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/api/CrearNftProducto`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -45,7 +45,7 @@ let Inversiones = [];
   } 
 
 export const CrearInversion = async(objeto)=>{
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/api/CrearNftInversion`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/api/CrearNftInversion`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -61,7 +61,7 @@ export const CrearInversion = async(objeto)=>{
   } 
 
   const getProductos = async()=>{
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/api/getProducto`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/api/getProducto`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const CrearInversion = async(objeto)=>{
   }*/
 
 const getProductos = async () => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api}/getProducto`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const getProductos = async () => {
 };
 
 const getInversiones = async () => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api}/getInversion`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

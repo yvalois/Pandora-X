@@ -41,7 +41,7 @@ export default function ModalRegister() {
   const Registrar = async () => {
     alert(accountAddress);
     try {
-      fetch(`https://pandoraxapi1.herokuapp.com/api}/CrearUsuario`, {
+      fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
         method: 'POST',
         body: JSON.stringify(value),
         headers: {
@@ -59,7 +59,7 @@ export default function ModalRegister() {
   };
 
   /*const conectar = (accountAddress) => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api}/login/${accountAddress}`, {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

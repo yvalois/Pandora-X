@@ -140,7 +140,7 @@ const subscribeProvider = (connection) => async (dispatch) => {
 };
 
 const getProductos = async () => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api}/getProducto`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ const getProductos = async () => {
 };
 
 const getInversiones = async () => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api}/getInversion`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const getInversiones = async () => {
 };
 
 const conectar = (accountAddress) => async (dispatch) => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api}/login/${accountAddress}`, {
+  fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
