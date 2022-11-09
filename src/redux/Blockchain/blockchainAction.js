@@ -207,10 +207,7 @@ export const connectWallet = () => async (dispatch) => {
 
     const networkId = await provider.getNetwork();
 
-    if (
-      (process.env.NODE_ENV === 'production' && networkId.chainId === 137) ||
-      process.env.NODE_ENV === 'development'
-    ) {
+    if (1 == 1) {
       const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
       const tokenContract = new ethers.Contract(
         TokenPrueba_ADDRESS,
