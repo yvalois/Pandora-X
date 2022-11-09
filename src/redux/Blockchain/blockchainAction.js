@@ -20,7 +20,7 @@ const providerOptions = {
     package: WalletConnectProvider,
     options: {
       rpc: {
-        5: RPC_URL,
+        137: RPC_URL,
       },
     },
   },
