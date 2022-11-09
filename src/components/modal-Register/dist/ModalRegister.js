@@ -248,7 +248,7 @@ function ModalRegister() {
     walletconnect: {
       package: web3_provider_1['default'],
       options: {
-        chainId: 5,
+        chainId: 31337,
       },
     },
   };
