@@ -20,7 +20,7 @@ const providerOptions = {
     package: WalletConnectProvider,
     options: {
       rpc: {
-        5: RPC_URL,
+        137: RPC_URL,
       },
     },
   },
@@ -192,13 +192,9 @@ const conectar = (accountAddress) => async (dispatch) => {
 export const connectWallet = () => async (dispatch) => {
   dispatch(loading());
   try {
-    const web3Modal = new Web3Modal({
-      disableInjectedProvider: false,
-      cacheProvider: true,
-      providerOptions,
-    });
+    const web3Modal = new Web3Modal({ cacheProvider: true, providerOptions });
 
-    const instance = new web3Modal.connect({ providerOptions });
+    const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
     setProvider(provider);
     const signer = provider.getSigner();
