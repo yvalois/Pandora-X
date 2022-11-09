@@ -19,8 +19,8 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      rpc: {
-        137: RPC_URL,
+      options: {
+        chainId: 5,
       },
     },
   },
