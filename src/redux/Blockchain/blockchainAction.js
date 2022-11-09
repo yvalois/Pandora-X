@@ -194,9 +194,13 @@ export const connectWallet = () => async (dispatch) => {
   try {
     const web3Modal =
       typeof window !== 'undefined' &&
-      new Web3Modal({ cacheProvider: false, providerOptions });
+      new Web3Modal({
+        disableInjectedProvider: false,
+        cacheProvider: false,
+        providerOptions,
+      });
 
-    const instance = await web3Modal.connect();
+    const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
     setProvider(provider);
     const signer = provider.getSigner();
