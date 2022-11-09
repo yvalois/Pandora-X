@@ -188,24 +188,41 @@ exports.WalletProvider = function (_a) {
     accountAddress = _h.accountAddress,
     isUSer = _h.isUSer;
   /* This effect will fetch wallet address if user has already connected his/her wallet */
-  /*useEffect(() => {
-      async function checkConnection() {
-        try {
-          if (window && window.ethereum) {
-            // Check if web3modal wallet connection is available on storage
-            if (localStorage.getItem(web3modalStorageKey)) {
-              await connectToWallet();
-            }
-          } else {
-            console.log('window or window.ethereum is not available');
+  react_1.useEffect(function () {
+    function checkConnection() {
+      return __awaiter(this, void 0, void 0, function () {
+        var error_1;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              _a.trys.push([0, 5, , 6]);
+              if (!(window && window.ethereum)) return [3 /*break*/, 3];
+              if (!localStorage.getItem(web3modalStorageKey))
+                return [3 /*break*/, 2];
+              return [4 /*yield*/, connectToWallet()];
+            case 1:
+              _a.sent();
+              _a.label = 2;
+            case 2:
+              return [3 /*break*/, 4];
+            case 3:
+              console.log('window or window.ethereum is not available');
+              _a.label = 4;
+            case 4:
+              return [3 /*break*/, 6];
+            case 5:
+              error_1 = _a.sent();
+              console.log(error_1, 'Catch error Account is not connected');
+              return [3 /*break*/, 6];
+            case 6:
+              return [2 /*return*/];
           }
-        } catch (error) {
-          console.log(error, 'Catch error Account is not connected');
-        }
-      }
-      checkConnection();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);*/
+        });
+      });
+    }
+    checkConnection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   /*const setWalletAddress = async (provider: any) => {
       try {
         const signer = provider.getSigner();
@@ -290,7 +307,7 @@ exports.WalletProvider = function (_a) {
   // seteamos el provider
   var connectToWallet = function () {
     return __awaiter(void 0, void 0, void 0, function () {
-      var error_1;
+      var error_2;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -304,10 +321,10 @@ exports.WalletProvider = function (_a) {
             setAddress(accountAddress);
             return [3 /*break*/, 3];
           case 2:
-            error_1 = _a.sent();
+            error_2 = _a.sent();
             setLoading(false);
             console.log(
-              error_1,
+              error_2,
               'got this error on connectToWallet catch block while connecting the wallet'
             );
             return [3 /*break*/, 3];

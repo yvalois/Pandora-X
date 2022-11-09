@@ -230,8 +230,11 @@ export const connectWallet = () => async (dispatch) => {
         signer
       );
 
+      alert('a');
+
       await getProductos();
       await getInversiones();
+      alert('e');
 
       const nftpBalance = await productoMinterContract.getMyInventory(
         accounts[0]
@@ -239,7 +242,7 @@ export const connectWallet = () => async (dispatch) => {
       const nftiBalance = await inversionMinterContract.getMyInventory(
         accounts[0]
       );
-
+      alert('i');
       const inventoryp = [];
       const inventoryi = [];
 
@@ -278,6 +281,7 @@ export const connectWallet = () => async (dispatch) => {
           instance: instance,
         })
       );
+      alert('o');
       dispatch(conectar(accounts[0]));
 
       /*instance.on('close',() => {

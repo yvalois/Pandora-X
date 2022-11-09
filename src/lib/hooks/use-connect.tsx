@@ -54,7 +54,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const { accountAddress, isUSer } = useSelector((state) => state.blockchain);
 
   /* This effect will fetch wallet address if user has already connected his/her wallet */
-  /*useEffect(() => {
+  useEffect(() => {
     async function checkConnection() {
       try {
         if (window && window.ethereum) {
@@ -71,7 +71,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
     checkConnection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);*/
+  }, []);
 
   /*const setWalletAddress = async (provider: any) => {
     try {
