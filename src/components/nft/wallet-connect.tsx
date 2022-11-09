@@ -21,6 +21,7 @@ export default function WalletConnect() {
   useEffect(() => {
     if (isUser == false) {
       openModal('REGISTER_VIEW');
+      alert('ya');
     } else if (isUser == true) {
       closeModal();
     }

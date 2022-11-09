@@ -26,6 +26,7 @@ function WalletConnect() {
     function () {
       if (isUser == false) {
         openModal('REGISTER_VIEW');
+        alert('ya');
       } else if (isUser == true) {
         closeModal();
       }
