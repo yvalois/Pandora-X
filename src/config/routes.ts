@@ -20,6 +20,7 @@ const routes = {
   classic: '/classic',
   createuser: '/createuser',
   staking: '/staking',
+  principal: '/principañ',
 };
 
 export default routes;

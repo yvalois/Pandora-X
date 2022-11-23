@@ -22,5 +22,6 @@ var routes = {
   classic: '/classic',
   createuser: '/createuser',
   staking: '/staking',
+  principal: '/principañ',
 };
 exports['default'] = routes;
