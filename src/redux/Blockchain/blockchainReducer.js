@@ -22,6 +22,7 @@ const initialState = {
   nombre: '',
   instance: null,
   isUser: null,
+  paid: [],
 };
 
 const blockchainReducer = (state = initialState, action) => {
@@ -92,6 +93,11 @@ const blockchainReducer = (state = initialState, action) => {
       return {
         ...state,
         isUser: false,
+      };
+    case 'ADD_PAID':
+      return {
+        ...state,
+        paid: action.payload.pagos,
       };
     default:
       return state;

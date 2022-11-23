@@ -154,7 +154,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     //disconect();
   };
 
-  const checkIfExtensionIsAvailable = () => {
+  /*const checkIfExtensionIsAvailable = () => {
     if (
       (window && window.web3 === undefined) ||
       (window && window.ethereum === undefined)
@@ -162,13 +162,13 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       setError(true);
       web3Modal && web3Modal.toggleModal();
     }
-  };
+  };*/
   // seteamos el provider
   const connectToWallet = async () => {
     //request();
     try {
       setLoading(true);
-      checkIfExtensionIsAvailable();
+      //checkIfExtensionIsAvailable();
       await dispatch(connectWallet());
       setLoading(false);
       setAddress(accountAddress);

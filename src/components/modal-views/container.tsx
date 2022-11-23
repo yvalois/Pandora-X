@@ -13,6 +13,9 @@ const SelectWallet = dynamic(() => import('@/components/nft/select-wallet'));
 const Register = dynamic(
   () => import('@/components/modal-Register/ModalRegister')
 );
+const Withdraw = dynamic(
+  () => import('@/components/modalWithdraw/modalWithdraw')
+);
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
@@ -24,6 +27,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <SelectWallet />;
     case 'REGISTER_VIEW':
       return <Register />;
+    case 'WITHDRAW_VIEW':
+      return <Withdraw />;
     default:
       return null;
   }

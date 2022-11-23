@@ -144,7 +144,6 @@ var __generator =
   };
 exports.__esModule = true;
 var image_1 = require('@/components/ui/image');
-var anchor_link_1 = require('@/components/ui/links/anchor-link');
 var verified_1 = require('@/components/icons/verified');
 var styled_components_1 = require('styled-components');
 var react_1 = require('react');
@@ -161,7 +160,9 @@ function NFTGrid(_a) {
     number = _a.number,
     price = _a.price,
     alldata = _a.alldata,
-    type = _a.type;
+    type = _a.type,
+    nftInfo = _a.nftInfo,
+    setNftInfo = _a.setNftInfo;
   //const { isConnect, account } = useSelector((state) => state.Usuario);
   var _b = react_redux_1.useSelector(function (state) {
       return state.blockchain;
@@ -172,6 +173,9 @@ function NFTGrid(_a) {
     accountAddress = _b.accountAddress,
     usdtContract = _b.usdtContract,
     tokenContract = _b.tokenContract;
+  var referidor = react_redux_1.useSelector(function (state) {
+    return state.Usuario;
+  }).referidor;
   /*const signer = provider?.getSigner();
     console.log(signer);
     const tokenContract = new ethers.Contract(
@@ -200,6 +204,9 @@ function NFTGrid(_a) {
   var _g = react_1.useState(0),
     approvedToken = _g[0],
     setApprovedToken = _g[1];
+  var Usuario = react_redux_1.useSelector(function (state) {
+    return state.Usuario;
+  });
   var dispatch = react_redux_1.useDispatch();
   var GlassCard = styled_components_1['default'].div(
     templateObject_1 ||
@@ -258,48 +265,79 @@ function NFTGrid(_a) {
   );
   var buyNft = function (id) {
     return __awaiter(_this, void 0, void 0, function () {
-      var tx, tx, err_1;
+      var porcentaje, tx, tx, tx, err_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
             setLoading(true);
             _a.label = 1;
           case 1:
-            _a.trys.push([1, 8, , 9]);
-            if (!(type == 'producto')) return [3 /*break*/, 4];
+            _a.trys.push([1, 12, , 13]);
+            if (!(type == 'producto')) return [3 /*break*/, 8];
+            if (!(!Usuario.isReferido && Usuario.type == 'Agente X'))
+              return [3 /*break*/, 4];
+            porcentaje = 0;
+            if (Usuario.range == 'peerx') {
+              porcentaje = 200;
+            } else if (Usuario.range == 'blockelite') {
+              porcentaje = 250;
+            } else if (Usuario.range == 'blockmaster') {
+              porcentaje = 350;
+            } else if (Usuario.range == 'blockcreator') {
+              porcentaje = 400;
+            }
             return [
               4 /*yield*/,
-              productoMinter.buyToken(id.toString(), tokenAddress),
+              productoMinter.buyTokenWithReferido(
+                id.toString(),
+                tokenContract.address,
+                referidor,
+                porcentaje
+              ),
             ];
           case 2:
             tx = _a.sent();
+            //referidos
             return [4 /*yield*/, tx.wait()];
           case 3:
+            //referidos
             _a.sent();
             setLoading(false);
             setApprovedToken(0);
             return [3 /*break*/, 7];
           case 4:
-            if (!(type == 'inversion')) return [3 /*break*/, 7];
             return [
               4 /*yield*/,
-              inversionMinter.buyToken(id.toString(), tokenAddress),
+              productoMinter.buyToken(id.toString(), tokenContract.address),
             ];
           case 5:
             tx = _a.sent();
             return [4 /*yield*/, tx.wait()];
           case 6:
-            _a.sent();
+            _a.sent(); //tener en cuenta para los proximos cambios
             setLoading(false);
             setApprovedToken(0);
             _a.label = 7;
           case 7:
-            return [3 /*break*/, 9];
+            return [3 /*break*/, 11];
           case 8:
+            if (!(type == 'inversion')) return [3 /*break*/, 11];
+            return [4 /*yield*/, inversionMinter.buyToken(id.toString())];
+          case 9:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 10:
+            _a.sent();
+            setLoading(false);
+            setApprovedToken(0);
+            _a.label = 11;
+          case 11:
+            return [3 /*break*/, 13];
+          case 12:
             err_1 = _a.sent();
             setLoading(false);
-            return [3 /*break*/, 9];
-          case 9:
+            return [3 /*break*/, 13];
+          case 13:
             return [2 /*return*/];
         }
       });
@@ -321,10 +359,10 @@ function NFTGrid(_a) {
             usdt = _a.sent();
             //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
             setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            alert(approvedToken);
             return [3 /*break*/, 4];
           case 2:
             if (!(type == 'inversion')) return [3 /*break*/, 4];
-            alert(inversionMinter.address);
             return [
               4 /*yield*/,
               tokenContract.allowance(accountAddress, inversionMinter.address),
@@ -357,7 +395,6 @@ function NFTGrid(_a) {
           case 1:
             _a.trys.push([1, 10, , 11]);
             if (!(type == 'producto')) return [3 /*break*/, 5];
-            alert(productoMinter.address);
             setTokenAddress(tokenContract.address);
             decimals = 18;
             console.log(tokenContract);
@@ -365,7 +402,7 @@ function NFTGrid(_a) {
               4 /*yield*/,
               tokenContract.approve(
                 productoMinter.address,
-                ethers_1.ethers.utils.parseUnits('130', decimals)
+                ethers_1.ethers.utils.parseUnits('999', decimals)
               ),
             ];
           case 2:
@@ -386,7 +423,7 @@ function NFTGrid(_a) {
               4 /*yield*/,
               tokenContract.approve(
                 inversionMinter.address,
-                ethers_1.ethers.utils.parseUnits('130', decimals)
+                ethers_1.ethers.utils.parseUnits('999', decimals)
               ),
             ];
           case 6:
@@ -428,15 +465,14 @@ function NFTGrid(_a) {
     React.createElement(
       'div',
       { className: 'p-4' },
-      React.createElement(anchor_link_1['default'], {
-        href: '/',
+      React.createElement('div', {
         className:
           'flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white',
       })
     ),
     React.createElement(
-      anchor_link_1['default'],
-      { href: '/nft-details', className: 'relative block w-full pb-full' },
+      'div',
+      { className: 'relative block w-full pb-full' },
       React.createElement(image_1['default'], {
         src: image,
         //placeholder="blur"
@@ -449,20 +485,16 @@ function NFTGrid(_a) {
       'div',
       { className: 'p-5' },
       React.createElement(
-        anchor_link_1['default'],
-        {
-          href: '/nft-details',
-          className: 'text-sm font-medium text-black dark:text-white',
-        },
+        'div',
+        { className: 'text-sm font-medium text-black dark:text-white' },
         name
       ),
       React.createElement(
         'div',
         { className: 'mt-1.5 flex' },
         React.createElement(
-          anchor_link_1['default'],
+          'div',
           {
-            href: '/',
             className:
               'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
           },
@@ -523,6 +555,16 @@ function NFTGrid(_a) {
               },
             },
             'Buy'
+          ),
+        type == 'staking' &&
+          React.createElement(
+            BuyButton,
+            {
+              onClick: function () {
+                return setNftInfo(name, image, price, number);
+              },
+            },
+            'Select'
           )
       )
     )

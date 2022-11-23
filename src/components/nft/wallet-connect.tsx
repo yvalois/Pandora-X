@@ -12,7 +12,8 @@ import { useSelector } from 'react-redux';
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
 
-  const { disconnectWallet, balance } = useContext(WalletContext);
+  const { disconnectWallet, balance, address, connectToWallet, error } =
+    useContext(WalletContext);
 
   const { accountAddress, isUser } = useSelector(
     (state: any) => state.blockchain
@@ -97,7 +98,7 @@ export default function WalletConnect() {
         </div>
       ) : (
         <Button
-          onClick={() => openModal('WALLET_CONNECT_VIEW')}
+          onClick={connectToWallet}
           className="shadow-main hover:shadow-large"
         >
           CONNECT

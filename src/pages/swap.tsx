@@ -26,7 +26,7 @@ const SwapPage: NextPageWithLayout = () => {
             )}
           >
             <CoinInput
-              label={'From'}
+              label={''}
               exchangeRate={0.0}
               defaultCoinIndex={0}
               getCoinValue={(data) => console.log('From coin value:', data)}

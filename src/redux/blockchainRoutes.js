@@ -5,11 +5,11 @@ export const contract = () => {
     usdcContract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
     busdContract: '0xdAb529f40E671A1D4bF91361c21bf9f0C9712ab7',
     daiContract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-    productoMinter: '0x02d87E80F288353D8e4AaCE36202caB4017dc5A0',
-    inversionMinter: '0x9595fAaC6D9da7759DD41B5bBD8C1aB236409381',
+    productoMinter: '0xA732AB31CfD411570143f9A3f51560C26F13357D',
+    inversionMinter: '0xf51A682929BAAACF695e4fb41F3cf66db17BB7c8',
     RPC_URL:
       'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
-    tokenPrueba: '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
+    tokenPrueba: '0x8aa436dFb04f325BBF191dAB9E557EB571DCA08F',
   };
   // }
 

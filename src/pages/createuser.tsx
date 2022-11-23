@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import { getRange, mint, getType } from '@/NFTROL';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useDispatch, useSelector } from 'react-redux';
+import Button from '@/components/ui/button';
+import validator from 'validator';
 
 // static data
 export const getStaticProps: GetStaticProps = async () => {
@@ -29,9 +31,18 @@ const CreateUser: NextPageWithLayout<
     Fecha: hoy.toLocaleDateString(),
     Rol: 'usuario',
   };
-  const [value, setValue] = useState(NewUser);
 
+  const Err = {
+    ErrNombre: '',
+    ErrCorreo: '',
+    ErrAddress: '',
+  };
+
+  const [value, setValue] = useState(NewUser);
   const Usuario = useSelector((state: any) => state.Usuario);
+  const [status, setStatus] = useState(0);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(Err);
 
   useEffect(() => {
     if (Usuario.rol !== 'Admin') {
@@ -53,34 +64,95 @@ const CreateUser: NextPageWithLayout<
     }
   };
 
-  async function CrearUsuario() {
+  const registerUser = async () => {
+    if (value.Nombre.length < 3) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrNombre: 'El nombre debe tener minimo 3 caracteres',
+      }));
+    } else if (!validator.isAlpha(value.Nombre)) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrNombre: 'solo se permiten letras',
+      }));
+    } else if (value.Nombre.length >= 3 && validator.isAlpha(value.Nombre)) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrNombre: '' }));
+    }
+
+    if (!validator.isEmail(value.Correo)) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrCorreo: 'Correo invalido',
+      }));
+    } else if (validator.isEmail(value.Correo)) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrCorreo: '' }));
+    }
+
+    if (!validator.isEthereumAddress(value.Address)) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrAddress: 'address invalidad',
+      }));
+    } else if (validator.isEthereumAddress(value.Address)) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrAddress: '' }));
+    }
+
+    if (
+      validator.isEmail(value.Correo) &&
+      value.Nombre.length >= 3 &&
+      validator.isAlpha(value.Nombre) &&
+      validator.isEthereumAddress(value.Address)
+    ) {
+      setError(false);
+      await CrearUsuario();
+    }
+  };
+
+  const registrar = async () => {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
+      method: 'POST',
+      body: JSON.stringify(value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        res.json();
+        setStatus(res.status);
+      })
+      .then(() => {})
+      .catch((error) => console.error('Error:', error));
+  };
+
+  const CrearUsuario = async () => {
     try {
       let address = value.Address;
       let categoria = value.Categoria;
       let rango = value.Rango;
 
       const txResult = await mint(address, categoria, rango);
-      const a = await getType(address);
-      const b = await getRange(address);
+      //const a = await getType(address);
+      //const b = await getRange(address);
 
       if (txResult.status === 1) {
-        fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
-          method: 'POST',
-          body: JSON.stringify(value),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((res) => res.json())
-          .then(() => {})
-          .catch((error) => console.error('Error:', error));
+        await registrar();
       } else {
-        alert('Transaccion fracaso');
+        setStatus(100);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStatus(0);
+    }, 5000);
+  }, [status]);
 
   return (
     <>
@@ -88,48 +160,101 @@ const CreateUser: NextPageWithLayout<
         title="Create new user"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="mx-auto w-full max-w-[1160px] justify-center self-center text-sm md:pt-14 4xl:pt-24 ">
-        <div className="grid w-full grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3 ">
-          <div className="ml-60 w-full max-w-xs ">
+      <div className="mx-auto ml-[320px] w-[1060px] justify-center self-center text-sm md:pt-14 4xl:pt-24 ">
+        <div className="grid w-full grid-cols-1 justify-center gap-6  xs:grid-cols-2 lg:grid-cols-3 ">
+          <div className="ml-60 w-full max-w-xs  justify-center">
             <form className="mb-4 rounded  bg-white px-8 pt-6 pb-8 shadow-md dark:bg-dark  ">
-              <div className="mb-4">
-                <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-white">
+              <div className="mb-3">
+                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
                   Name
                 </label>
-                <input
-                  onChange={(e) => ChangeInfo('Nombre', e.target.value)}
-                  className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                  id="username"
-                  type="text"
-                  placeholder="Name"
-                />
+                {errorMsg.ErrNombre.length == 0 ? (
+                  <input
+                    onChange={(e) => ChangeInfo('Nombre', e.target.value)}
+                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Name"
+                  />
+                ) : (
+                  <input
+                    onChange={(e) => ChangeInfo('Nombre', e.target.value)}
+                    className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Name"
+                  />
+                )}
               </div>
-              <div className="mb-6">
-                <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-white">
+
+              {error == true && errorMsg.ErrNombre.length > 0 && (
+                <span className="flex items-center text-xs font-medium tracking-wide text-red-500">
+                  {errorMsg.ErrNombre}
+                </span>
+              )}
+
+              <div className="mb-3">
+                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
                   Correo
                 </label>
-                <input
-                  onChange={(e) => ChangeInfo('Correo', e.target.value)}
-                  className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                  type="text"
-                  id="Correo"
-                  placeholder="Correo"
-                />
+
+                {errorMsg.ErrCorreo.length == 0 ? (
+                  <input
+                    onChange={(e) => ChangeInfo('Correo', e.target.value)}
+                    className="focus:shadow-outline  w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                    type="text"
+                    id="Correo"
+                    placeholder="Correo"
+                  />
+                ) : (
+                  <input
+                    onChange={(e) => ChangeInfo('Correo', e.target.value)}
+                    className="focus:shadow-outline  w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                    type="text"
+                    id="Correo"
+                    placeholder="Correo"
+                  />
+                )}
               </div>
-              <div className="mb-6">
-                <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-white">
+
+              {error == true && errorMsg.ErrCorreo.length > 0 && (
+                <span className="flex items-center text-xs font-medium tracking-wide text-red-500">
+                  {errorMsg.ErrCorreo}
+                </span>
+              )}
+
+              <div className="mb-3">
+                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
                   Address Wallet
                 </label>
-                <input
-                  onChange={(e) => ChangeInfo('Address', e.target.value)}
-                  className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                  type="text"
-                  id="wallet"
-                  placeholder="Address Wallet"
-                />
+
+                {errorMsg.ErrAddress.length == 0 ? (
+                  <input
+                    onChange={(e) => ChangeInfo('Address', e.target.value)}
+                    className="focus:shadow-outline  w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                    type="text"
+                    id="wallet"
+                    placeholder="Address Wallet"
+                  />
+                ) : (
+                  <input
+                    onChange={(e) => ChangeInfo('Address', e.target.value)}
+                    className="focus:shadow-outline  w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                    type="text"
+                    id="wallet"
+                    placeholder="Address Wallet"
+                  />
+                )}
               </div>
+
+              {error == true && errorMsg.ErrAddress.length > 0 && (
+                <span className="mt-0 flex items-center text-xs font-medium tracking-wide text-red-500">
+                  {errorMsg.ErrAddress}
+                </span>
+              )}
+
               <div className="mb-6">
-                <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-white">
+                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
                   Categoria NFT
                 </label>
                 <select
@@ -144,7 +269,7 @@ const CreateUser: NextPageWithLayout<
               </div>
 
               <div className="mb-6">
-                <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-white">
+                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
                   Rango NFT
                 </label>
                 <select
@@ -161,18 +286,36 @@ const CreateUser: NextPageWithLayout<
               </div>
 
               <div className="flex items-center justify-center">
-                <button
-                  onClick={() => CrearUsuario()}
-                  className="focus:shadow-outline  rounded bg-dark py-2 px-4 font-bold text-white focus:outline-none dark:bg-white dark:text-dark"
+                <Button
+                  onClick={() => registerUser()}
+                  className="focus:shadow-outline  rounded"
                   type="button"
                 >
                   Crear Usuario
-                </button>
+                </Button>
               </div>
             </form>
           </div>
         </div>
       </div>
+
+      {status == 200 && (
+        <div
+          className="mb-4 ml-[580px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">Usuario creado correctamente</span>
+        </div>
+      )}
+
+      {status == 100 && (
+        <div
+          className="mb-4 ml-[580px] mt-[30px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          role="alert"
+        >
+          <span className="font-medium">operacion fallo en el minteo</span>
+        </div>
+      )}
     </>
   );
 };

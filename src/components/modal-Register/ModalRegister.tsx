@@ -1,26 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import { disconectWallet } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch, useSelector } from 'react-redux';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
+import validator from 'validator';
+import Button from '@/components/ui/button';
+import { getType, getRange, exist } from '@/NFTROL';
 
 export default function ModalRegister() {
   const tiempoTranscurrido = Date.now();
   const hoy = new Date(tiempoTranscurrido);
   const { accountAddress } = useSelector((state) => state.blockchain);
+  const { rol } = useSelector((state) => state.Usuario);
 
   const NewUser = {
     Nombre: '',
+    Id: '',
     Correo: '',
     Address: accountAddress,
     Fecha: hoy.toLocaleDateString(),
     Rol: 'cliente',
-    Telefono: 0,
+    Telefono: '',
+    IsReferido: false,
+    Referidor: '',
+    Range: '',
+    Type: '',
+  };
+
+  const Err = {
+    ErrNombre: '',
+    ErrId: '',
+    ErrCorreo: '',
+    ErrTelefono: '',
   };
 
   const [value, setValue] = useState(NewUser);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(Err);
+  const [success, setSuccess] = useState(false);
+  const [status, setStatus] = useState(0);
+  const [referidor, setReferidor] = useState('');
+  const [tipo, setTipo] = useState('');
+  const [rango, setRango] = useState('');
 
   const { closeModal } = useModal();
 
@@ -35,11 +58,12 @@ export default function ModalRegister() {
       setValue((prevState) => ({ ...prevState, Correo: valor }));
     } else if (Dato == 'Telefono') {
       setValue((prevState) => ({ ...prevState, Telefono: valor }));
+    } else if (Dato == 'Id') {
+      setValue((prevState) => ({ ...prevState, Id: valor }));
     }
   };
 
-  const Registrar = async () => {
-    alert(accountAddress);
+  const RegistrarBD = async () => {
     try {
       fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
         method: 'POST',
@@ -48,13 +72,104 @@ export default function ModalRegister() {
           'Content-Type': 'application/json',
         },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          res.json();
+          if (res.status == 200) {
+            setStatus(res.status);
+          } else {
+            setStatus(100);
+          }
+        })
         .then(() => {
-          dispatch(connectWallet());
+          //ver posibilidad de que primero se mande un alert que diga usuario creado y 5 segundos despues en un timeout se llame esta funcion
+          setTimeout(() => {
+            dispatch(connectWallet());
+            setStatus(0);
+            window.localStorage.removeItem('Wallet');
+          }, 3000);
         })
         .catch((error) => console.error('Error:', error));
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const Registrar = async () => {
+    if (value.Nombre.length < 3) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrNombre: 'El nombre debe tener minimo 3 caracteres',
+      }));
+    } else if (!validator.isAlpha(value.Nombre)) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrNombre: 'solo se permiten letras',
+      }));
+    } else if (value.Nombre.length >= 3 && validator.isAlpha(value.Nombre)) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrNombre: '' }));
+    }
+
+    if (value.Id.length < 7) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrId: 'este campo debe tener minimo 7 caracteres',
+      }));
+    } else if (!validator.isNumeric(value.Id)) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrId: 'Solo se permiten numero',
+      }));
+    } else if (value.Id.length >= 7 && validator.isNumeric(value.Id)) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrId: '' }));
+    }
+
+    if (!validator.isEmail(value.Correo)) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrCorreo: 'Correo invalido',
+      }));
+    } else if (validator.isEmail(value.Correo)) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrCorreo: '' }));
+    }
+
+    if (value.Telefono.length < 10) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrTelefono: 'Este campo debe tener minimo 10 caracteres',
+      }));
+    } else if (!validator.isNumeric(value.Telefono)) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrTelefono: 'Solo se permiten numeros',
+      }));
+    } else if (
+      value.Telefono.length >= 10 &&
+      validator.isNumeric(value.Telefono)
+    ) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrTelefono: '' }));
+    }
+
+    if (referidor.length > 0) {
+    }
+
+    if (
+      value.Telefono.length >= 10 &&
+      validator.isNumeric(value.Telefono) &&
+      validator.isEmail(value.Correo) &&
+      value.Id.length >= 7 &&
+      validator.isNumeric(value.Id) &&
+      value.Nombre.length >= 3 &&
+      validator.isAlpha(value.Nombre)
+    ) {
+      setError(false);
+      await RegistrarBD();
     }
   };
 
@@ -105,15 +220,34 @@ export default function ModalRegister() {
     //disconect();
   };
 
+  useEffect(() => {
+    async function fetchData() {
+      const a = window.localStorage.getItem('Wallet');
+      let _exist = await exist(a);
+      //alert(_exist)
+      if (_exist == true) {
+        let type = await getType(a);
+        let range = await getRange(a);
+        setValue((prevState) => ({ ...prevState, Referidor: a }));
+        setValue((prevState) => ({ ...prevState, Range: range }));
+        setValue((prevState) => ({ ...prevState, Type: type }));
+        setValue((prevState) => ({ ...prevState, IsReferido: _exist }));
+      } else {
+        window.location.href = '/';
+      }
+    }
+    fetchData();
+  }, [referidor]);
+
   //botton y state
   return (
     <>
-      <div className="relative z-50 mx-auto h-[580px] w-[880px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark">
+      <div className="relative z-50 mx-auto h-[580px] w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark">
         <button
-          className="absolute right-[25px] top-[25px] mb-4 flex h-[40px] w-[40px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white"
+          className="absolute right-[25px] top-[25px] mb-2 flex h-[20px] w-[20px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white"
           onClick={() => disconnectWallet()}
         >
-          <span className="block h-6 w-6 bg-transparent text-2xl text-white outline-none focus:outline-none">
+          <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
             X
           </span>
         </button>
@@ -122,45 +256,144 @@ export default function ModalRegister() {
           Registrarse
         </h2>
 
-        <label className="mb-2 mt-[40px] block text-sm font-bold text-gray-700 dark:text-white">
+        <label className=" mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
           Nombre
         </label>
-        <input
-          onChange={(e) => ChangeInfo('Nombre', e.target.value)}
-          className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-          id="username"
-          type="text"
-          placeholder="Nombre"
-        />
-        <label className="mb-2 mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
+
+        {errorMsg.ErrNombre.length == 0 ? (
+          <input
+            onChange={(e) => ChangeInfo('Nombre', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Nombre"
+          />
+        ) : (
+          <input
+            onChange={(e) => ChangeInfo('Nombre', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Nombre"
+          />
+        )}
+
+        {error == true && errorMsg.ErrNombre.length > 0 && (
+          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+            {errorMsg.ErrNombre}
+          </span>
+        )}
+
+        <label className=" mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
+          Id
+        </label>
+
+        {errorMsg.ErrId.length == 0 ? (
+          <input
+            onChange={(e) => ChangeInfo('Id', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Identificacion"
+          />
+        ) : (
+          <input
+            onChange={(e) => ChangeInfo('Id', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Identificacion"
+          />
+        )}
+
+        {error == true && errorMsg.ErrId.length > 0 && (
+          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+            {errorMsg.ErrId}
+          </span>
+        )}
+
+        <label className=" mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
           Correo
         </label>
-        <input
-          onChange={(e) => ChangeInfo('Correo', e.target.value)}
-          className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-          id="username"
-          type="text"
-          placeholder="Correo"
-        />
-        <label className="mb-2 mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
-          Numero
-        </label>
-        <input
-          onChange={(e) => ChangeInfo('Telefono', e.target.value)}
-          className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-          id="username"
-          type="text"
-          placeholder="Numero"
-        />
 
-        <button
+        {errorMsg.ErrCorreo.length == 0 ? (
+          <input
+            onChange={(e) => ChangeInfo('Correo', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Correo"
+          />
+        ) : (
+          <input
+            onChange={(e) => ChangeInfo('Correo', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Correo"
+          />
+        )}
+
+        {error == true && errorMsg.ErrCorreo.length > 0 && (
+          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+            {errorMsg.ErrCorreo}
+          </span>
+        )}
+
+        <label className=" mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
+          Telefono
+        </label>
+
+        {errorMsg.ErrTelefono.length == 0 ? (
+          <input
+            onChange={(e) => ChangeInfo('Telefono', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Numero"
+          />
+        ) : (
+          <input
+            onChange={(e) => ChangeInfo('Telefono', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Numero"
+          />
+        )}
+
+        {errorMsg.ErrTelefono.length > 0 && (
+          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+            {errorMsg.ErrTelefono}
+          </span>
+        )}
+
+        <Button
           onClick={() => Registrar()}
-          className=" mt-[70px] flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
+          className=" color-primary mt-[35px] flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l"
         >
           <span>Registrarse</span>
           <span className="h-auto w-9"></span>
-        </button>
+        </Button>
       </div>
+
+      {status == 200 && (
+        <div
+          className="mb-4 ml-[60px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">Usuario creado correctamente</span>
+        </div>
+      )}
+
+      {status == 100 && (
+        <div
+          className="mb-4 ml-[60px] mt-[30px] w-[300px]  justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          role="alert"
+        >
+          <span className="font-medium">operacion fallo en el minteo</span>
+        </div>
+      )}
     </>
   );
 }

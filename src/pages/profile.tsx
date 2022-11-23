@@ -11,7 +11,9 @@ import { Copy } from '@/components/icons/copy';
 import { Check } from '@/components/icons/check';
 import AuthorInformation from '@/components/author/author-information';
 import ProfileTab from '@/components/profile/profile-tab';
+import ProfileTabUser from '@/components/profile/ProfileTabUser';
 import Avatar from '@/components/ui/avatar';
+import { LinkIcon } from '@/components/icons/link-icon';
 // static data
 import { authorData } from '@/data/static/author';
 import { useSelector } from 'react-redux';
@@ -36,6 +38,8 @@ const AuthorProfilePage: NextPageWithLayout<
   };
 
   const Usuario = useSelector((state: any) => state.Usuario);
+  const { accountAddress } = useSelector((state) => state.blockchain);
+  const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
     if (
@@ -46,6 +50,20 @@ const AuthorProfilePage: NextPageWithLayout<
       window.location.href = '/';
     }
   });
+
+  const copiar = () => {
+    navigator.clipboard.writeText(
+      `http://localhost:3000/principal/${accountAddress}`
+    );
+    setCopiado(true);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCopiado(false);
+      window.localStorage.removeItem('Wallet');
+    }, 2000);
+  }, [copiado]);
 
   return (
     <>
@@ -72,7 +90,17 @@ const AuthorProfilePage: NextPageWithLayout<
           image={authorData?.avatar?.thumbnail}
           alt="Author"
           className="z-10 mx-auto -mt-12 dark:border-gray-500 sm:-mt-14 md:mx-0 md:-mt-16 xl:mx-0 3xl:-mt-20"
-  />*/}
+  />*/}{' '}
+        {Usuario.rol == 'usuario' && (
+          <div className="">
+            <span className="row ml-[60px] mr-2 w-full justify-around">
+              Copiar link de referido
+            </span>
+            <button onClick={() => copiar()} className="h-[25px] w-[25px] ">
+              <LinkIcon className="h-[18px] w-[18px]" />
+            </button>
+          </div>
+        )}
         {/* Profile Info */}
         <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row xl:pt-12">
           {/*<div className="shrink-0 border-dashed border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
@@ -176,11 +204,23 @@ const AuthorProfilePage: NextPageWithLayout<
                 </div>*/}
 
           <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:ltr:pl-7 md:rtl:pr-7 lg:ltr:pl-10 lg:rtl:pr-10 xl:ltr:pl-14 xl:rtl:pr-14 3xl:ltr:pl-16 3xl:rtl:pr-16">
-            <ProfileTab />
+            {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (
+              <ProfileTabUser />
+            ) : (
+              <ProfileTab />
+            )}
           </div>
           <AuthorInformation data={authorData} />
         </div>
       </div>
+      {copiado && (
+        <div
+          className="absolute top-[60px] left-[685px] mb-4 ml-[60px] mt-[30px] flex w-[200px] justify-center self-center rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">Link copiado</span>
+        </div>
+      )}
     </>
   );
 };

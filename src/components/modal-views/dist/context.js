@@ -17,6 +17,7 @@ var __assign =
 exports.__esModule = true;
 exports.useModal = void 0;
 var jotai_1 = require('jotai');
+('WITHDRAW_VIEW');
 var modalAtom = jotai_1.atom({ isOpen: false, view: 'SEARCH_VIEW' });
 function useModal() {
   var _a = jotai_1.useAtom(modalAtom),

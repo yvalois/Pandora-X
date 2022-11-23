@@ -29,6 +29,11 @@ var Register = dynamic_1['default'](function () {
     return require('@/components/modal-Register/ModalRegister');
   });
 });
+var Withdraw = dynamic_1['default'](function () {
+  return Promise.resolve().then(function () {
+    return require('@/components/modalWithdraw/modalWithdraw');
+  });
+});
 function renderModalContent(view) {
   switch (view) {
     case 'SEARCH_VIEW':
@@ -39,6 +44,8 @@ function renderModalContent(view) {
       return React.createElement(SelectWallet, null);
     case 'REGISTER_VIEW':
       return React.createElement(Register, null);
+    case 'WITHDRAW_VIEW':
+      return React.createElement(Withdraw, null);
     default:
       return null;
   }

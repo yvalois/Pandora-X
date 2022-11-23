@@ -5,6 +5,7 @@ import TransactionHistory from '@/components/author/transaction-history';
 import CollectionCard from '@/components/ui/collection-card';
 import { useSelector } from 'react-redux';
 import NFTGrid from '@/components/ui/nft-card';
+import StakingTable from '@/components/transaction/stakingTable';
 // static data
 import { collections } from '@/data/static/collections';
 import {
@@ -73,10 +74,9 @@ export default function ProfileTab() {
         </div>
       </TabPanel>
       <TabPanel className="focus:outline-none">
-        {/*<div className="space-y-8 xl:space-y-9">
-          <TransactionSearchForm />
-          <TransactionHistory />
-          </div>*/}
+        <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
+          <StakingTable />
+        </div>
       </TabPanel>
     </ParamTab>
   );

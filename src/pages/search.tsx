@@ -23,6 +23,7 @@ import { NFTList } from '@/data/static/nft-list';
 import { useSelector, useDispatch } from 'react-redux';
 import { getMintedNftProducts } from '../redux/Minted/MintedAction';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
+import { number } from 'yup';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -293,6 +294,8 @@ export const getStaticProps: GetStaticProps = async () => {
 const SearchPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
+  const pricesP = [];
+  const pricesI = [];
   const { isGridCompact } = useGridSwitcher();
   const { openDrawer } = useDrawer();
   const dispatch = useDispatch<AppDispatch>();
@@ -301,13 +304,22 @@ const SearchPage: NextPageWithLayout<
   const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
     useSelector((state: any) => state.minted);
 
+  const {
+    productoMinter,
+    inversionMinter,
+    isConnect,
+    accountAddress,
+    usdtContract,
+    tokenContract,
+  } = useSelector((state) => state.blockchain);
+
   const getNft = async () => {
     await dispatch(getMintedNftProducts());
   };
 
   useEffect(() => {
     const fetchItems = async () => {
-      await getNft();
+      getNft();
       //const itemsPerPage = 6
       //const start = (currentPage - 1) * itemsPerPage
       setCurrentItems(disponibleNftp);

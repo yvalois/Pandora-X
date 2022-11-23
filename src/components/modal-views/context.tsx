@@ -5,6 +5,7 @@ export type MODAL_VIEW =
   | 'SHARE_VIEW'
   | 'WALLET_CONNECT_VIEW'
   | 'REGISTER_VIEW | "" ';
+('WITHDRAW_VIEW');
 const modalAtom = atom({ isOpen: false, view: 'SEARCH_VIEW' });
 
 export function useModal() {

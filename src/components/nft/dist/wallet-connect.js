@@ -16,7 +16,10 @@ function WalletConnect() {
     closeModal = _a.closeModal;
   var _b = react_1.useContext(use_connect_1.WalletContext),
     disconnectWallet = _b.disconnectWallet,
-    balance = _b.balance;
+    balance = _b.balance,
+    address = _b.address,
+    connectToWallet = _b.connectToWallet,
+    error = _b.error;
   var _c = react_redux_1.useSelector(function (state) {
       return state.blockchain;
     }),
@@ -179,9 +182,7 @@ function WalletConnect() {
       : React.createElement(
           button_1['default'],
           {
-            onClick: function () {
-              return openModal('WALLET_CONNECT_VIEW');
-            },
+            onClick: connectToWallet,
             className: 'shadow-main hover:shadow-large',
           },
           'CONNECT'

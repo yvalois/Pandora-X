@@ -63,25 +63,57 @@ export const menuItems = [
     href: routes.liquidity,
   },*/
   {
-    name: 'MarketPlace',
+    name: 'Profile',
+    icon: <ProfileIcon />,
+    href: routes.profile,
+  },
+  {
+    name: 'NFT Marketplace',
     icon: <CompassIcon />,
     href: routes.search,
   },
-  /*{
+  {
     name: 'Staking',
     icon: <PlusCircle />,
-    href: routes.createNft,
-  },*/
+    href: routes.staking,
+  },
+  {
+    name: 'Comunidad',
+    icon: <VoteIcon />,
+    href: '',
+    dropdownItems: [
+      {
+        name: 'Discord',
+        href: routes.vote,
+      },
+      {
+        name: 'Academia X',
+        href: routes.proposals,
+      },
+      {
+        name: 'Alpha Report',
+        href: routes.createProposal,
+      },
+      {
+        name: 'Investing Value',
+        href: routes.createProposal,
+      },
+      {
+        name: 'Coaching',
+        href: routes.createProposal,
+      },
+      {
+        name: 'Podcast',
+        href: routes.createProposal,
+      },
+    ],
+  },
   /*{
     name: 'NFT Details',
     icon: <DiskIcon />,
     href: routes.nftDetails,
   },*/
-  {
-    name: 'Profile',
-    icon: <ProfileIcon />,
-    href: routes.profile,
-  },
+
   /*{
     name: 'Vote',
     icon: <VoteIcon />,
@@ -102,15 +134,25 @@ export const menuItems = [
     ],
   
   },*/
-  {
+  /*{
     name: 'Crear Usuario',
     icon: <PlusCircle />,
     href: routes.createuser,
-  },
+  },*/
   {
     name: 'Crear NFT',
     icon: <PlusCircle />,
     href: routes.createNft,
+  },
+  {
+    name: 'Referidos',
+    icon: <PlusCircle />,
+    href: routes.createuser,
+  },
+  {
+    name: 'Configuracion',
+    icon: <PlusCircle />,
+    href: '',
   },
 ];
 
@@ -151,12 +193,16 @@ export default function Sidebar({ className }: SidebarProps) {
 
           <div className="mt-12">
             {menuItems.map((item, index) =>
-              (Usuario !== 'Admin' && item.name == 'Crear Usuario') ||
+              (Usuario !== 'Admin' && item.name == 'Referidos') ||
               (Usuario !== 'Admin' && item.name == 'Crear NFT') ||
               (Usuario !== 'Admin' &&
                 Usuario !== 'usuario' &&
                 Usuario !== 'cliente' &&
-                item.name == 'Profile') ? (
+                item.name == 'Profile') ||
+              (Usuario !== 'Admin' &&
+                Usuario !== 'usuario' &&
+                Usuario !== 'cliente' &&
+                item.name == 'Staking') ? (
                 <div key={index}></div>
               ) : (
                 <MenuItem
@@ -164,7 +210,7 @@ export default function Sidebar({ className }: SidebarProps) {
                   name={item.name}
                   href={item.href}
                   icon={item.icon}
-                  //dropdownItems={item.dropdownItems}
+                  dropdownItems={item.dropdownItems}
                 />
               )
             )}

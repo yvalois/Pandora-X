@@ -10,7 +10,6 @@ var routes = {
   farms: '/farms',
   farmsTwo: '/farms-2',
   createNft: '/create-nft',
-  nftDetails: '/nft-details',
   search: '/search',
   notification: '/notification',
   vote: '/vote',
@@ -22,5 +21,6 @@ var routes = {
   history: '/profile?view=staking',
   classic: '/classic',
   createuser: '/createuser',
+  staking: '/staking',
 };
 exports['default'] = routes;

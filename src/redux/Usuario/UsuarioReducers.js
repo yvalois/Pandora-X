@@ -5,6 +5,13 @@ const initialState = {
   rol: '',
   nombre: '',
   isConnect: false,
+  isReferido: false,
+  referidor: '',
+  range: '',
+  type: '',
+  categoria: '',
+  rango: '',
+  pagos: [],
 };
 
 const UsuariosReducer = (state = initialState, action) => {
@@ -46,6 +53,13 @@ const UsuariosReducer = (state = initialState, action) => {
         loading: false,
         rol: action.payload.rol,
         nombre: action.payload.nombre,
+        isreferido: action.payload.isreferido,
+        referidor: action.payload.referidor,
+        range: action.payload.range,
+        type: action.payload.type,
+        categoria: action.payload.categoria,
+        rango: action.payload.rango,
+        paid: action.payload.paid,
       };
     default:
       return state;

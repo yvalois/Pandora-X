@@ -32,3 +32,10 @@ export const getRange = async (address) => {
   const Range = await NFTROLPROVIDER.getRange(address);
   return Range;
 };
+
+export const exist = async (address) => {
+  const signer = provider.getSigner();
+  const NFTROLPROVIDER = NFTROL.connect(signer);
+  const _exist = await NFTROLPROVIDER.exist(address);
+  return _exist;
+};

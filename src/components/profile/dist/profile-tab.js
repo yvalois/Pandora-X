@@ -3,6 +3,7 @@ exports.__esModule = true;
 var param_tab_1 = require('@/components/ui/param-tab');
 var react_redux_1 = require('react-redux');
 var nft_card_1 = require('@/components/ui/nft-card');
+var stakingTable_1 = require('@/components/transaction/stakingTable');
 var react_1 = require('react');
 function ProfileTab() {
   var _a = react_1.useState([]),
@@ -87,9 +88,18 @@ function ProfileTab() {
             })
       )
     ),
-    React.createElement(param_tab_1.TabPanel, {
-      className: 'focus:outline-none',
-    })
+    React.createElement(
+      param_tab_1.TabPanel,
+      { className: 'focus:outline-none' },
+      React.createElement(
+        'div',
+        {
+          className:
+            'w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]',
+        },
+        React.createElement(stakingTable_1['default'], null)
+      )
+    )
   );
 }
 exports['default'] = ProfileTab;

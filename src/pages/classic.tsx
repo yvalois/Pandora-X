@@ -28,7 +28,7 @@ const ClassicPage: NextPageWithLayout<
   return (
     <>
       <NextSeo
-        title="Criptic Classic Demo"
+        title="Pandora Classic Demo"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
       <div className="flex flex-wrap">

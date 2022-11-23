@@ -149,10 +149,11 @@ export const getMintedNftProducts = () => async (dispatch) => {
       }
     });
 
-    const nftPrice = await productosMinter.getPricePlusFee();
+    const nftPrice = await productosMinter.getPricePlusFee(0);
     const priceFormat = parseFloat(
       ethers.utils.formatUnits(nftPrice, 18)
     ).toFixed(2);
+
     dispatch(
       mintedLoaded({
         disponibleNftp,

@@ -7,6 +7,7 @@ import productoMinterAbi from '../../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../../abi/InversionMinter.json';
 import { items } from '../../utils/constant'; //Buscar
 import { setProvider } from '../../NFTROL';
+
 const router = contract();
 
 const USDT_ADDRESS = router.usdtContract;
@@ -28,6 +29,7 @@ const providerOptions = {
 
 let Productos = [];
 let Inversiones = [];
+let Pagos = [];
 
 const loading = () => ({
   type: 'LOADING',
@@ -74,11 +76,18 @@ export const register = () => {
   };
 };
 
+export const addpaids = (payload) => {
+  return {
+    type: 'ADD_PAID',
+    payload: payload,
+  };
+};
+
 const subscribeProvider = (connection) => async (dispatch) => {
   connection.on('close', () => {
     dispatch(disconectWallet());
   });
-
+  window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER');
   connection.on('accountsChanged', async (accounts) => {
     if (accounts?.length) {
       const provider = new ethers.providers.Web3Provider(connection);
@@ -153,6 +162,44 @@ const getProductos = async () => {
     .catch((error) => console.error('Error:', error));
 };
 
+const infoPagos = async (productoMinter, rango, categoria) => {
+  const cant = await productoMinter.cantPagos();
+  let i;
+  if (Pagos.length < cant) {
+    for (i = 0; i < cant; i++) {
+      const paid = await productoMinter.getPagoUser(i + 1);
+      const wallet = await productoMinter.getWallet(i + 1);
+      const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(
+        2
+      );
+      //setInfor((prevState) => ({ ...prevState, pago: paidFormat }))
+      //setInfor((prevState) => ({ ...prevState, wallet: wallet }))
+      let tipo;
+      if (categoria == 'Agente X') {
+        tipo = 'Compra';
+      }
+      let porcentaje;
+      if (rango == 'peerx') {
+        porcentaje = '20%';
+      } else if (rango == 'blockelite') {
+        porcentaje = '25%';
+      } else if (rango == 'blockmaster') {
+        porcentaje = '35%';
+      } else if (rango == 'blockcreator') {
+        porcentaje = '40%';
+      }
+      const pago1 = {
+        pago: paidFormat,
+        wallet: wallet,
+        porcentaje: porcentaje,
+        tipo: tipo,
+      };
+
+      Pagos.push(pago1);
+    }
+  }
+};
+
 const getInversiones = async () => {
   fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
     method: 'GET',
@@ -167,42 +214,57 @@ const getInversiones = async () => {
     .catch((error) => console.error('Error:', error));
 };
 
-const conectar = (accountAddress) => async (dispatch) => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => res.json())
-    .then((response) => {
-      if (response !== null) {
-        dispatch(
-          connectSuccessToMongo({
-            rol: response.Rol,
-            nombre: response.Nombre,
-          })
-        );
-      } else {
-        dispatch(register());
-      }
-    });
-};
+const conectar =
+  (accountAddress, productoMinterContract) => async (dispatch) => {
+    fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response !== null) {
+          infoPagos(productoMinterContract, response.Rango, response.Categoria);
+
+          dispatch(
+            connectSuccessToMongo({
+              rol: response.Rol,
+              nombre: response.Nombre,
+              isreferido: response.IsReferido,
+              referidor: response.Referidor,
+              range: response.Range,
+              type: response.Type,
+              categoria: response.Categoria,
+              rango: response.Rango,
+              paid: Pagos,
+            })
+          );
+        } else {
+          dispatch(register());
+        }
+      });
+  };
 
 export const connectWallet = () => async (dispatch) => {
   dispatch(loading());
   try {
-    const web3Modal =
+    /*const web3Modal =
       typeof window !== 'undefined' &&
       new Web3Modal({
         cacheProvider: true,
-      });
+      });*/
+
+    const web3Modal = new Web3Modal({
+      cacheProvider: true,
+      // providerOptions // required
+    });
 
     const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
+
     setProvider(provider);
     const signer = provider.getSigner();
-
     const accounts = await provider.listAccounts();
 
     const networkId = await provider.getNetwork();
@@ -229,7 +291,7 @@ export const connectWallet = () => async (dispatch) => {
 
       await getProductos();
       await getInversiones();
-
+      console.log(signer);
       const nftpBalance = await productoMinterContract.getMyInventory(
         accounts[0]
       );
@@ -261,6 +323,7 @@ export const connectWallet = () => async (dispatch) => {
       //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 18);
 
       dispatch(subscribeProvider(instance));
+
       await dispatch(
         dataLoaded({
           usdtContract,
@@ -275,7 +338,8 @@ export const connectWallet = () => async (dispatch) => {
           instance: instance,
         })
       );
-      dispatch(conectar(accounts[0]));
+
+      dispatch(conectar(accounts[0], productoMinterContract));
 
       /*instance.on('close',() => {
       web3Modal && web3Modal.clearCachedProvider();

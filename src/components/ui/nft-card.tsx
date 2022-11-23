@@ -23,6 +23,7 @@ type NFTGridProps = {
   price: number;
   alldata: boolean;
   type: string;
+  nftInfo?: object;
 };
 
 export default function NFTGrid({
@@ -34,7 +35,9 @@ export default function NFTGrid({
   price,
   alldata,
   type,
-}: NFTGridProps) {
+  nftInfo,
+  setNftInfo,
+}) {
   //const { isConnect, account } = useSelector((state) => state.Usuario);
   const {
     productoMinter,
@@ -44,6 +47,8 @@ export default function NFTGrid({
     usdtContract,
     tokenContract,
   } = useSelector((state) => state.blockchain);
+
+  const { referidor } = useSelector((state) => state.Usuario);
 
   /*const signer = provider?.getSigner();
   console.log(signer);
@@ -65,6 +70,7 @@ export default function NFTGrid({
   const [approvedUsdt, setApprovedUsdt] = useState(0);
   const [approvedToken, setApprovedToken] = useState(0);
 
+  const Usuario = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
 
   const GlassCard = styled.div`
@@ -137,13 +143,40 @@ export default function NFTGrid({
     setLoading(true);
     try {
       if (type == 'producto') {
-        const tx = await productoMinter.buyToken(id.toString(), tokenAddress);
-        await tx.wait();
-        setLoading(false);
-        setApprovedToken(0);
-      } else if (type == 'inversion') {
-        const tx = await inversionMinter.buyToken(id.toString(), tokenAddress);
+        if (!Usuario.isReferido && Usuario.type == 'Agente X') {
+          let porcentaje = 0;
+          if (Usuario.range == 'peerx') {
+            porcentaje = 200;
+          } else if (Usuario.range == 'blockelite') {
+            porcentaje = 250;
+          } else if (Usuario.range == 'blockmaster') {
+            porcentaje = 350;
+          } else if (Usuario.range == 'blockcreator') {
+            porcentaje = 400;
+          }
 
+          const tx = await productoMinter.buyTokenWithReferido(
+            id.toString(),
+            tokenContract.address,
+            referidor,
+            porcentaje
+          );
+          //referidos
+          await tx.wait();
+          setLoading(false);
+          setApprovedToken(0);
+        } else {
+          const tx = await productoMinter.buyToken(
+            id.toString(),
+            tokenContract.address
+          );
+
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          setLoading(false);
+          setApprovedToken(0);
+        }
+      } else if (type == 'inversion') {
+        const tx = await inversionMinter.buyToken(id.toString());
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
@@ -162,8 +195,8 @@ export default function NFTGrid({
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
         setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+        alert(approvedToken);
       } else if (type == 'inversion') {
-        alert(inversionMinter.address);
         const usdt = await tokenContract.allowance(
           accountAddress,
           inversionMinter.address
@@ -181,13 +214,12 @@ export default function NFTGrid({
 
     try {
       if (type == 'producto') {
-        alert(productoMinter.address);
         setTokenAddress(tokenContract.address);
         const decimals = 18;
         console.log(tokenContract);
         const tx = await tokenContract.approve(
           productoMinter.address,
-          ethers.utils.parseUnits('130', decimals)
+          ethers.utils.parseUnits('999', decimals)
         );
 
         await tx.wait();
@@ -198,7 +230,7 @@ export default function NFTGrid({
         const decimals = 18;
         const tx = await tokenContract.approve(
           inversionMinter.address,
-          ethers.utils.parseUnits('130', decimals)
+          ethers.utils.parseUnits('999', decimals)
         );
 
         await tx.wait();
@@ -219,10 +251,7 @@ export default function NFTGrid({
   return (
     <div className="relative overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
       <div className="p-4">
-        <AnchorLink
-          href="/"
-          className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-        >
+        <div className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
           {/*<Avatar
             image={authorImage}
             alt={name}
@@ -230,9 +259,9 @@ export default function NFTGrid({
             className="text-ellipsis ltr:mr-3 rtl:ml-3 dark:border-gray-500"
           />*/}
           {/*<span className="overflow-hidden text-ellipsis">@{author}</span>*/}
-        </AnchorLink>
+        </div>
       </div>
-      <AnchorLink href="/nft-details" className="relative block w-full pb-full">
+      <div className="relative block w-full pb-full">
         <Image
           src={image}
           //placeholder="blur"
@@ -240,23 +269,17 @@ export default function NFTGrid({
           objectFit="cover"
           alt=""
         />
-      </AnchorLink>
+      </div>
 
       <div className="p-5">
-        <AnchorLink
-          href="/nft-details"
-          className="text-sm font-medium text-black dark:text-white"
-        >
+        <div className="text-sm font-medium text-black dark:text-white">
           {name}
-        </AnchorLink>
+        </div>
         <div className="mt-1.5 flex">
-          <AnchorLink
-            href="/"
-            className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
-          >
+          <div className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400">
             {number + 1}
             <Verified className="ltr:ml-1 rtl:mr-1" />
-          </AnchorLink>
+          </div>
         </div>
         {alldata && (
           <div className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
@@ -294,6 +317,12 @@ export default function NFTGrid({
             price <= approvedToken && (
               <BuyButton onClick={() => buyNft(number)}>Buy</BuyButton>
             )}
+
+          {type == 'staking' && (
+            <BuyButton onClick={() => setNftInfo(name, image, price, number)}>
+              Select
+            </BuyButton>
+          )}
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ var routes_1 = require('@/config/routes');
 var context_1 = require('@/components/drawer-views/context');
 var home_1 = require('@/components/icons/home');
 var profile_1 = require('@/components/icons/profile');
+var vote_icon_1 = require('@/components/icons/vote-icon');
 var close_1 = require('@/components/icons/close');
 var plus_circle_1 = require('@/components/icons/plus-circle');
 var compass_1 = require('@/components/icons/compass');
@@ -39,25 +40,56 @@ exports.menuItems = [
       href: routes.liquidity,
     },*/
   {
-    name: 'MarketPlace',
+    name: 'Profile',
+    icon: React.createElement(profile_1.ProfileIcon, null),
+    href: routes_1['default'].profile,
+  },
+  {
+    name: 'NFT Marketplace',
     icon: React.createElement(compass_1.CompassIcon, null),
     href: routes_1['default'].search,
   },
-  /*{
-      name: 'Staking',
-      icon: <PlusCircle />,
-      href: routes.createNft,
-    },*/
+  {
+    name: 'Staking',
+    icon: React.createElement(plus_circle_1.PlusCircle, null),
+    href: routes_1['default'].staking,
+  },
+  {
+    name: 'Comunidad',
+    icon: React.createElement(vote_icon_1.VoteIcon, null),
+    href: '',
+    dropdownItems: [
+      {
+        name: 'Discord',
+        href: routes_1['default'].vote,
+      },
+      {
+        name: 'Academia X',
+        href: routes_1['default'].proposals,
+      },
+      {
+        name: 'Alpha Report',
+        href: routes_1['default'].createProposal,
+      },
+      {
+        name: 'Investing Value',
+        href: routes_1['default'].createProposal,
+      },
+      {
+        name: 'Coaching',
+        href: routes_1['default'].createProposal,
+      },
+      {
+        name: 'Podcast',
+        href: routes_1['default'].createProposal,
+      },
+    ],
+  },
   /*{
       name: 'NFT Details',
       icon: <DiskIcon />,
       href: routes.nftDetails,
     },*/
-  {
-    name: 'Profile',
-    icon: React.createElement(profile_1.ProfileIcon, null),
-    href: routes_1['default'].profile,
-  },
   /*{
       name: 'Vote',
       icon: <VoteIcon />,
@@ -78,15 +110,25 @@ exports.menuItems = [
       ],
     
     },*/
-  {
-    name: 'Crear Usuario',
-    icon: React.createElement(plus_circle_1.PlusCircle, null),
-    href: routes_1['default'].createuser,
-  },
+  /*{
+      name: 'Crear Usuario',
+      icon: <PlusCircle />,
+      href: routes.createuser,
+    },*/
   {
     name: 'Crear NFT',
     icon: React.createElement(plus_circle_1.PlusCircle, null),
     href: routes_1['default'].createNft,
+  },
+  {
+    name: 'Referidos',
+    icon: React.createElement(plus_circle_1.PlusCircle, null),
+    href: routes_1['default'].createuser,
+  },
+  {
+    name: 'Configuracion',
+    icon: React.createElement(plus_circle_1.PlusCircle, null),
+    href: '',
   },
 ];
 function Sidebar(_a) {
@@ -142,18 +184,23 @@ function Sidebar(_a) {
           'div',
           { className: 'mt-12' },
           exports.menuItems.map(function (item, index) {
-            return (Usuario !== 'Admin' && item.name == 'Crear Usuario') ||
+            return (Usuario !== 'Admin' && item.name == 'Referidos') ||
               (Usuario !== 'Admin' && item.name == 'Crear NFT') ||
               (Usuario !== 'Admin' &&
                 Usuario !== 'usuario' &&
                 Usuario !== 'cliente' &&
-                item.name == 'Profile')
+                item.name == 'Profile') ||
+              (Usuario !== 'Admin' &&
+                Usuario !== 'usuario' &&
+                Usuario !== 'cliente' &&
+                item.name == 'Staking')
               ? React.createElement('div', { key: index })
               : React.createElement(collapsible_menu_1.MenuItem, {
                   key: index,
                   name: item.name,
                   href: item.href,
                   icon: item.icon,
+                  dropdownItems: item.dropdownItems,
                 });
           })
         )

@@ -62,6 +62,39 @@ const NftsOptions = [
   },
 ];
 
+const NftsInversionOptions = [
+  {
+    id: 1,
+    name: '1Y',
+    value: 1,
+    //icon: <Ethereum />,
+  },
+  {
+    id: 2,
+    name: '2Y',
+    value: 2,
+    //icon: <Flow />,
+  },
+  {
+    id: 3,
+    name: '3Y',
+    value: 3,
+    //icon: <Ethereum />,
+  },
+  {
+    id: 4,
+    name: '4Y',
+    value: 4,
+    //icon: <Flow />,
+  },
+  {
+    id: 5,
+    name: '5Y',
+    value: 5,
+    //icon: <Ethereum />,
+  },
+];
+
 type PriceTypeProps = {
   value: string;
   onChange: (value: string) => void;
@@ -108,6 +141,8 @@ const CreateNFTPage: NextPageWithLayout = () => {
   const [descripcion, setDescripcion] = useState('NFts Products');
   const [supply, setSupply] = useState(0);
   let [tipo, setTipo] = useState(NftsOptions[0]);
+  let [tipoInv, setTipoInv] = useState(NftsInversionOptions[0]);
+  let [price, setPrice] = useState(0);
   const {
     productoMinter,
     inversionMinter,
@@ -117,6 +152,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
     tokenContract,
   } = useSelector((state) => state.blockchain);
   const Usuario = useSelector((state: any) => state.Usuario);
+  const [status, setStatus] = useState(0);
 
   let Inversiones = 0;
   let Productos = 0;
@@ -157,7 +193,10 @@ const CreateNFTPage: NextPageWithLayout = () => {
         'Content-Type': 'application/json',
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        res.json();
+        setStatus(res.status);
+      })
       .then(() => {})
       .catch((error) => console.error('Error:', error));
   };
@@ -170,40 +209,58 @@ const CreateNFTPage: NextPageWithLayout = () => {
         'Content-Type': 'application/json',
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        res.json();
+        if (res.status == 200) {
+          setStatus(res.status);
+        } else {
+          setStatus(100);
+        }
+      })
       .then(() => {})
       .catch((error) => console.error('Error:', error));
   };
 
   const createNFTs = async () => {
-    alert(Productos);
     if (tipo.value == 'productos') {
       let i;
-      productoMinter.Mint(supply);
-      for (i = 0; i < supply; i++) {
-        const NFT = {
-          name: `${nombre} #${Productos + i + 1}`,
-          description: descripcion,
-          image: url,
-          dna: Productos + i,
-          edition: Productos + i,
-          number: Productos + i,
-        };
-        await CrearProducto(NFT);
+      const txResult = await productoMinter.Mint(supply, price);
+      console.log(txResult);
+      await txResult.wait();
+      console.log(txResult);
+      if (txResult.status == 1) {
+        for (i = 0; i < supply; i++) {
+          const NFT = {
+            name: `${nombre} #${Productos + i + 1}`,
+            description: descripcion,
+            image: url,
+            dna: Productos + i,
+            edition: Productos + i,
+            number: Productos + i,
+          };
+          await CrearProducto(NFT);
+        }
+      } else {
+        setStatus(100);
       }
     } else if (tipo.value === 'inversion') {
       let i;
-      inversionMinter.Mint(supply);
-      for (i = 1; i < supply; i++) {
-        const NFT = {
-          name: `${nombre} #${Inversiones + i + 1}`,
-          description: descripcion,
-          image: url,
-          dna: Inversiones + i,
-          edition: Inversiones + i,
-          number: Inversiones + i,
-        };
-        await CrearInversion(NFT);
+      const txResult = await inversionMinter.Mint(supply, price, tipoInv.value);
+      await txResult.wait();
+      if (txResult.status == 1) {
+        for (i = 0; i < supply; i++) {
+          const NFT = {
+            name: `${nombre} #${Inversiones + i + 1}`,
+            description: descripcion,
+            image: url,
+            dna: Inversiones + i,
+            edition: Inversiones + i,
+            number: Inversiones + i,
+          };
+          await CrearInversion(NFT);
+        }
+      } else {
+        setStatus(100);
       }
     }
   };
@@ -215,12 +272,18 @@ const CreateNFTPage: NextPageWithLayout = () => {
     getProductos();
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      setStatus(0);
+    }, 5000);
+  }, [status]);
+
   return (
     <>
-      {/*<NextSeo
+      <NextSeo
         title="Create NFT"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-  />*/}
+      />
       <div className="mx-auto w-full px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
         <h2 className="mb-6 text-lg font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-10 sm:text-2xl">
           Create New Item
@@ -302,12 +365,22 @@ const CreateNFTPage: NextPageWithLayout = () => {
                 title="Supply"
                 subTitle="The number of items that can be minted."
               />
+
               <Input
                 type="number"
                 placeholder="1"
                 onChange={(e) => setSupply(e.target.value)}
                 value={supply}
               />
+              <div className="mt-4">
+                <InputLabel title="Price" />
+                <Input
+                  type="number"
+                  placeholder="1"
+                  onChange={(e) => setPrice(e.target.value)}
+                  value={price}
+                />
+              </div>
 
               <div className="mb-8">
                 <InputLabel title="Tipo" />
@@ -349,6 +422,49 @@ const CreateNFTPage: NextPageWithLayout = () => {
                   </Listbox>
                 </div>
               </div>
+
+              {tipo.value == 'inversion' && (
+                <div className="mb-8">
+                  <InputLabel title="Tipo Inversion" />
+                  <div className="relative">
+                    <Listbox value={tipoInv} onChange={setTipoInv}>
+                      <Listbox.Button className="text-case-inherit letter-space-inherit flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-900 outline-none transition-shadow duration-200 hover:border-gray-900 hover:ring-1 hover:ring-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:hover:border-gray-600 dark:hover:ring-gray-600 sm:h-12 sm:px-5">
+                        <div className="flex items-center">
+                          {/*<span className="ltr:mr-2 rtl:ml-2">{tipo.icon}</span>*/}
+                          {tipoInv.name}
+                        </div>
+                        <ChevronDown />
+                      </Listbox.Button>
+                      <Transition
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options className="absolute left-0 z-10 mt-1 grid w-full origin-top-right gap-0.5 rounded-lg border border-gray-200 bg-white p-1 shadow-large outline-none dark:border-gray-700 dark:bg-gray-800 xs:p-2">
+                          {NftsInversionOptions.map((option) => (
+                            <Listbox.Option key={option.id} value={option}>
+                              {({ selected }) => (
+                                <div
+                                  className={`flex cursor-pointer items-center rounded-md px-3 py-2 text-sm text-gray-900 transition dark:text-gray-100  ${
+                                    selected
+                                      ? 'bg-gray-200/70 font-medium dark:bg-gray-600/60'
+                                      : 'hover:bg-gray-100 dark:hover:bg-gray-700/70'
+                                  }`}
+                                >
+                                  <span className="ltr:mr-2 rtl:ml-2">
+                                    {option.icon}
+                                  </span>
+                                  {option.name}
+                                </div>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </Listbox>
+                  </div>
+                </div>
+              )}
 
               <Button shape="rounded" onClick={() => createNFTs()}>
                 CREATE
@@ -505,6 +621,24 @@ const CreateNFTPage: NextPageWithLayout = () => {
 
         {/*<Button shape="rounded">CREATE</Button>*/}
       </div>
+
+      {status == 200 && (
+        <div
+          className="absolute top-24 right-[680px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">Nft creado correctamente</span>
+        </div>
+      )}
+
+      {status == 100 && (
+        <div
+          className="absolute top-24 right-[680px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          role="alert"
+        >
+          <span className="font-medium">operacion fallo en el minteo</span>
+        </div>
+      )}
     </>
   );
 };

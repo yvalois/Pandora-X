@@ -295,15 +295,15 @@ exports.WalletProvider = function (_a) {
     setAddress('');
     //disconect();
   };
-  var checkIfExtensionIsAvailable = function () {
-    if (
-      (window && window.web3 === undefined) ||
-      (window && window.ethereum === undefined)
-    ) {
-      setError(true);
-      web3Modal && web3Modal.toggleModal();
-    }
-  };
+  /*const checkIfExtensionIsAvailable = () => {
+      if (
+        (window && window.web3 === undefined) ||
+        (window && window.ethereum === undefined)
+      ) {
+        setError(true);
+        web3Modal && web3Modal.toggleModal();
+      }
+    };*/
   // seteamos el provider
   var connectToWallet = function () {
     return __awaiter(void 0, void 0, void 0, function () {
@@ -313,9 +313,10 @@ exports.WalletProvider = function (_a) {
           case 0:
             _a.trys.push([0, 2, , 3]);
             setLoading(true);
-            checkIfExtensionIsAvailable();
+            //checkIfExtensionIsAvailable();
             return [4 /*yield*/, dispatch(blockchainAction_1.connectWallet())];
           case 1:
+            //checkIfExtensionIsAvailable();
             _a.sent();
             setLoading(false);
             setAddress(accountAddress);

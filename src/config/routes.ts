@@ -8,7 +8,6 @@ const routes = {
   farms: '/farms',
   farmsTwo: '/farms-2',
   createNft: '/create-nft',
-  nftDetails: '/nft-details',
   search: '/search',
   notification: '/notification',
   vote: '/vote',
@@ -20,6 +19,7 @@ const routes = {
   history: '/profile?view=staking',
   classic: '/classic',
   createuser: '/createuser',
+  staking: '/staking',
 };
 
 export default routes;
