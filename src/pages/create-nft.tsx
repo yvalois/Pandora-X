@@ -336,7 +336,6 @@ const CreateNFTPage: NextPageWithLayout = () => {
     let i;
     for (i = 0; i < productosAR.length; i++) {
       await CrearProducto(productosAR[i]);
-      alert(i);
     }
 
     /*if (tipo.value == 'productos') {

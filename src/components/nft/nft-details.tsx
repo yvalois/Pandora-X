@@ -80,7 +80,7 @@ export default function NftDetails({ product, type }) {
 
   const approve = async () => {
     setLoading(true);
-    alert(type);
+
     try {
       if (type == 'producto') {
         setTokenAddress(tokenContract.address);

@@ -229,7 +229,6 @@ function NftDetails(_a) {
         switch (_a.label) {
           case 0:
             setLoading(true);
-            alert(type);
             _a.label = 1;
           case 1:
             _a.trys.push([1, 10, , 11]);
@@ -404,7 +403,7 @@ function NftDetails(_a) {
             'div',
             {
               className:
-                'relative w-full aspect-square max-h-full overflow-hidden rounded-lg',
+                'relative aspect-square max-h-full w-full overflow-hidden rounded-lg',
             },
             React.createElement(image_1['default'], {
               src: img,
@@ -421,7 +420,7 @@ function NftDetails(_a) {
         'div',
         {
           className:
-            'relative flex w-full mt-10 flex-grow flex-col justify-between ltr:md:ml-auto ltr:md:pl-8 rtl:md:mr-auto rtl:md:pr-8 lg:min-h-[calc(100vh-96px)] lg:w-[460px] ltr:lg:pl-12 rtl:lg:pr-12 xl:w-[592px] ltr:xl:pl-20 rtl:xl:pr-20',
+            'relative mt-10 flex w-full flex-grow flex-col justify-between ltr:md:ml-auto ltr:md:pl-8 rtl:md:mr-auto rtl:md:pr-8 lg:min-h-[calc(100vh-96px)] lg:w-[460px] ltr:lg:pl-12 rtl:lg:pr-12 xl:w-[592px] ltr:xl:pl-20 rtl:xl:pr-20',
         },
         React.createElement(
           'div',
@@ -443,7 +442,7 @@ function NftDetails(_a) {
             ),
             React.createElement(
               'h6',
-              { className: 'text-2xl  text-gray-900 dark:text-white  mt-2' },
+              { className: 'mt-2  text-2xl text-gray-900  dark:text-white' },
               React.createElement('span', null, precio, '$ USDT ')
             )
           ),

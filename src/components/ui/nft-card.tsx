@@ -196,7 +196,6 @@ export default function NFTGrid({
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
         setApprovedToken(ethers.utils.formatUnits(usdt, 18));
-        alert(approvedToken);
       } else if (type == 'inversion') {
         const usdt = await tokenContract.allowance(
           accountAddress,

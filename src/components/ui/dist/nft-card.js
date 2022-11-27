@@ -360,7 +360,6 @@ function NFTGrid(_a) {
             usdt = _a.sent();
             //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
             setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
-            alert(approvedToken);
             return [3 /*break*/, 4];
           case 2:
             if (!(type == 'inversion')) return [3 /*break*/, 4];
@@ -461,7 +460,7 @@ function NFTGrid(_a) {
     'div',
     {
       className:
-        'relative overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark w-[300px]',
+        'relative w-[300px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark',
     },
     React.createElement(
       'div',
@@ -560,7 +559,7 @@ function NFTGrid(_a) {
         type == 'staking' &&
           React.createElement(
             'div',
-            { className: ' flex row justify-evenly   ml-[-10px] mt-2' },
+            { className: ' row ml-[-10px] mt-2   flex justify-evenly' },
             React.createElement(
               active_link_1['default'],
               { href: '/staking/' + number },

@@ -542,7 +542,6 @@ const subscribeProvider = (connection) => async (dispatch) => {
         const price = await inversionMinterContract.buyPrice(tipo);
         //alert(price)
         const precio = ethers.utils.formatUnits(price, 18);
-        alert(item);
         if (inversionesAR[item].tipo == type) {
           const inv = {
             nombre: inversionesAR[item].nombre,
