@@ -43,32 +43,25 @@ interface Props {
   chartWrapperClass?: string;
 }
 
-export default function OverviewChart({ chartWrapperClass }: Props) {
+export default function OverviewChart({ chartWrapperClass, balance }) {
   return (
     <div className="rounded-lg bg-gray-900 p-6 text-white dark:bg-light-dark sm:p-8">
       <h3 className="text-xl font-medium tracking-tighter text-white sm:text-3xl">
-        74.8%
+        {balance} Usdt
       </h3>
       <p className="mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm">
-        Compare to $1,812 last week
+        Balance
       </p>
       <div className={cn('h-60 w-full', chartWrapperClass)}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            <Line
+            {/*<Line
               type="natural"
               dataKey="pv"
               stroke="#1E40AF"
               strokeWidth={4}
               dot={false}
-            />
-            <Line
-              type="natural"
-              dataKey="uv"
-              stroke="#374151"
-              strokeWidth={4}
-              dot={false}
-            />
+  />*/}
           </LineChart>
         </ResponsiveContainer>
       </div>

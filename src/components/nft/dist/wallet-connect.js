@@ -143,39 +143,37 @@ function WalletConnect() {
                       )
                     )
                   ),
-                  React.createElement(
-                    menu_1.Menu.Item,
-                    null,
-                    React.createElement(
-                      'div',
-                      { className: 'p-3' },
-                      React.createElement(
-                        'div',
-                        {
-                          className:
-                            'flex cursor-pointer items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800',
-                          onClick: disconnectWallet,
-                        },
-                        React.createElement(power_1.PowerIcon, null),
-                        React.createElement(
-                          'span',
-                          { className: 'grow uppercase' },
-                          'Disconnect'
-                        )
-                      )
-                    )
-                  )
+                  React.createElement(menu_1.Menu.Item, null)
                 )
               )
             )
           ),
           React.createElement(
-            active_link_1['default'],
-            { href: '/create-nft' },
+            'div',
+            { className: 'p-3' },
             React.createElement(
-              button_1['default'],
-              { className: 'shadow-main hover:shadow-large' },
-              'CREATE'
+              'div',
+              {
+                className:
+                  'flex cursor-pointer items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800',
+                onClick: disconnectWallet,
+              },
+              React.createElement(
+                'span',
+                {
+                  className:
+                    'rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800',
+                },
+                accountAddress.slice(0, 6),
+                '...',
+                accountAddress.slice(accountAddress.length - 6)
+              ),
+              React.createElement(power_1.PowerIcon, null),
+              React.createElement(
+                'span',
+                { className: 'grow uppercase' },
+                'Disconnect'
+              )
             )
           )
         )

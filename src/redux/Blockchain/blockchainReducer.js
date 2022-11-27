@@ -10,6 +10,7 @@ const initialState = {
   //daiContract: null,
   productoMinter: null,
   inversionMinter: null,
+  staking: null,
   accountAddress: '',
   //usdtBalance: null,
   //busdBalance: null,
@@ -17,12 +18,14 @@ const initialState = {
   //daiBalance: null,
   inventoryp: [],
   inventoryi: [],
+  inventorys: [],
   isConnect: false,
   rol: '',
   nombre: '',
   instance: null,
   isUser: null,
   paid: [],
+  balancep: 0,
 };
 
 const blockchainReducer = (state = initialState, action) => {
@@ -44,6 +47,7 @@ const blockchainReducer = (state = initialState, action) => {
         //daiContract: action.payload.daiContract,
         productoMinter: action.payload.productoMinter,
         inversionMinter: action.payload.inversionMinter,
+        staking: action.payload.staking,
         accountAddress: action.payload.accountAddress,
         //usdtBalance: action.payload.usdtBalance,
         //tokenBalance: action.payload.usdtBalance,
@@ -52,8 +56,10 @@ const blockchainReducer = (state = initialState, action) => {
         //daiBalance: action.payload.daiBalance,
         inventoryp: action.payload.inventoryp,
         inventoryi: action.payload.inventoryi,
+        inventorys: action.payload.inventorys,
         isConnect: true,
         isUser: true,
+        balancep: action.payload.balancep,
       };
     case 'ERROR':
       return {
@@ -75,6 +81,7 @@ const blockchainReducer = (state = initialState, action) => {
         //daiBalance: action.payload.daiBalance,
         inventoryp: action.payload.inventoryp,
         inventoryi: action.payload.inventoryi,
+        inventorys: action.payload.inventorys,
       };
     case 'LOGOUT':
       return {
@@ -98,6 +105,21 @@ const blockchainReducer = (state = initialState, action) => {
       return {
         ...state,
         paid: action.payload.pagos,
+      };
+    case 'UPDATE_PRODUCT':
+      return {
+        ...state,
+        inventoryp: action.payload.inventoryp,
+      };
+    case 'UPDATE_INVERTION':
+      return {
+        ...state,
+        inventoryi: action.payload.inventoryi,
+      };
+    case 'UPDATE_STAKING':
+      return {
+        ...state,
+        inventorys: action.payload.inventorys,
       };
     default:
       return state;

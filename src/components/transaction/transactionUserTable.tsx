@@ -30,7 +30,7 @@ const COLUMNS = [
 
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Porcentaje</div>,
-    accessor: 'porcentaje',
+    accessor: 'precio',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-right rtl:text-left">{value}</div>

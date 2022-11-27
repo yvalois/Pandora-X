@@ -57,16 +57,24 @@ const HomePage: NextPageWithLayout<
     //funcion que llame el tipo de staking
   };
 
+  const { inventoryp, inventoryi, productoMinter, accountAddress, balancep } =
+    useSelector((state: any) => state.blockchain);
+
+  const inventory = async () => {
+    if (accountAddress !== '') {
+      const tx = await productoMinter.getMyInventory(accountAddress);
+
+      return tx;
+    }
+
+    return 0;
+  };
+
   useEffect(() => {
-    const fetchItems = async () => {
-      await getNft();
-      //const itemsPerPage = 6
-      //const start = (currentPage - 1) * itemsPerPage
-      setCurrentItems(disponibleNftp);
-      setCurrentInv(disponibleNfti);
-    };
-    fetchItems();
-  }, [currentItems, dataloaded]);
+    setCurrentItems(inventoryp);
+    setCurrentInv(inventoryi);
+    //alert(balancep)
+  }, [inventoryp, inventoryi]);
 
   return (
     <>
@@ -77,7 +85,7 @@ const HomePage: NextPageWithLayout<
       <div className="flex ">
         <div className="mb-8 w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[calc(100%-358px)] lg:w-[calc(100%-358px)] 2xl:w-[calc(100%-358px)] 3xl:w-[calc(100%-358px)]">
           <NftSlider
-            nfts={currentInv}
+            nfts={currentItems}
             priceFormat={priceFormat}
             nftInfo={nftInfo}
             setNftInfo={setNftInfo}
@@ -85,7 +93,7 @@ const HomePage: NextPageWithLayout<
         </div>
 
         <div className=" mb-8 grid w-full grid-cols-1 gap-6 sm:mb-10 sm:w-1/2  sm:grid-cols-2 md:w-64 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
-          <OverviewChart />
+          <OverviewChart balance={balancep} />
         </div>
       </div>
 

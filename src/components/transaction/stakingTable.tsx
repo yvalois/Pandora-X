@@ -18,7 +18,8 @@ import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import ModalWithdraw from '../modalWithdraw/modalWithdraw';
 import { useModal } from '@/components/modal-views/context';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 
 export default function StakingTable() {
   const { inversionMinter } = useSelector((state) => state.blockchain);
@@ -37,6 +38,27 @@ export default function StakingTable() {
   const { openModal, closeModal } = useModal();
   const [stakes, setStakes] = useState(infoStakings);
 
+  const { inventorys, staking, tokenContract } = useSelector(
+    (state) => state.blockchain
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  const claim = async (value) => {
+    const tx = await staking.claimReward(value, tokenContract.address);
+    await tx.wait();
+
+    dispatch(uStaking());
+    dispatch(uInvertion());
+  };
+
+  const withdraw = async (value) => {
+    const tx = await staking.withdraw(value);
+    await tx.wait();
+
+    dispatch(uStaking());
+    dispatch(uInvertion());
+  };
+
   const COLUMNS = [
     {
       Header: 'ID',
@@ -46,10 +68,10 @@ export default function StakingTable() {
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Valor</div>,
-      accessor: 'dateOfPaid',
+      accessor: 'cantPago',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">$10000</div>
+        <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
       minWidth: 35,
       maxWidth: 45,
@@ -58,7 +80,7 @@ export default function StakingTable() {
       Header: () => (
         <div className="ltr:ml-auto rtl:mr-auto">Fecha de pago</div>
       ),
-      accessor: 'createdAt',
+      accessor: 'fechaPago',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}</div>
@@ -68,31 +90,34 @@ export default function StakingTable() {
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Apr</div>,
-      accessor: 'symbol',
+      accessor: 'Apr',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">10%</div>
+        <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
       minWidth: 80,
       maxWidth: 120,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Balance</div>,
-      accessor: 'status',
+      accessor: 'precio',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">$250</div>
+        <div className="ltr:text-right rtl:text-left">{value}USDT</div>
       ),
       minWidth: 100,
       maxWidth: 180,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
-      accessor: 'claim Reward',
+      accessor: 'idCR',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
         <div className="flex items-center justify-end">
-          <Button className="focus:shadow-outline  rounded">
+          <Button
+            onClick={() => claim(value)}
+            className="focus:shadow-outline  rounded"
+          >
             Claim Reward
           </Button>
         </div>
@@ -102,12 +127,12 @@ export default function StakingTable() {
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
-      accessor: 'withdraw',
+      accessor: 'idW',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
         <div className="-tracking-[1px] ltr:text-right rtl:text-left">
           <Button
-            onClick={() => openModal('WITHDRAW_VIEW')}
+            onClick={() => withdraw(value)} //onClick={() => openModal('WITHDRAW_VIEW')}
             className="focus:shadow-outline  rounded"
           >
             withdraw
@@ -119,7 +144,7 @@ export default function StakingTable() {
     },
   ];
 
-  const data = React.useMemo(() => TransactionData, []);
+  const data = inventorys;
   const columns = React.useMemo(() => COLUMNS, []);
 
   const {

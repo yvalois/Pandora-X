@@ -155,10 +155,10 @@ var scrollbar_1 = require('@/components/ui/scrollbar');
 var chevron_down_1 = require('@/components/icons/chevron-down');
 var long_arrow_right_1 = require('@/components/icons/long-arrow-right');
 var long_arrow_left_1 = require('@/components/icons/long-arrow-left');
-var transaction_data_1 = require('@/data/static/transaction-data');
 var modalWithdraw_1 = require('../modalWithdraw/modalWithdraw');
 var context_1 = require('@/components/modal-views/context');
 var react_redux_1 = require('react-redux');
+var blockchainAction_1 = require('../../redux/Blockchain/blockchainAction');
 function StakingTable() {
   var _this = this;
   var inversionMinter = react_redux_1.useSelector(function (state) {
@@ -181,6 +181,54 @@ function StakingTable() {
   var _c = react_1.useState(infoStakings),
     stakes = _c[0],
     setStakes = _c[1];
+  var _d = react_redux_1.useSelector(function (state) {
+      return state.blockchain;
+    }),
+    inventorys = _d.inventorys,
+    staking = _d.staking,
+    tokenContract = _d.tokenContract;
+  var dispatch = react_redux_1.useDispatch();
+  var claim = function (value) {
+    return __awaiter(_this, void 0, void 0, function () {
+      var tx;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [
+              4 /*yield*/,
+              staking.claimReward(value, tokenContract.address),
+            ];
+          case 1:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 2:
+            _a.sent();
+            dispatch(blockchainAction_1.uStaking());
+            dispatch(blockchainAction_1.uInvertion());
+            return [2 /*return*/];
+        }
+      });
+    });
+  };
+  var withdraw = function (value) {
+    return __awaiter(_this, void 0, void 0, function () {
+      var tx;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4 /*yield*/, staking.withdraw(value)];
+          case 1:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 2:
+            _a.sent();
+            dispatch(blockchainAction_1.uStaking());
+            dispatch(blockchainAction_1.uInvertion());
+            return [2 /*return*/];
+        }
+      });
+    });
+  };
   var COLUMNS = [
     {
       Header: 'ID',
@@ -196,14 +244,14 @@ function StakingTable() {
           'Valor'
         );
       },
-      accessor: 'dateOfPaid',
+      accessor: 'cantPago',
       // @ts-ignore
       Cell: function (_a) {
         var value = _a.cell.value;
         return react_1['default'].createElement(
           'div',
           { className: 'ltr:text-right rtl:text-left' },
-          '$10000'
+          value
         );
       },
       minWidth: 35,
@@ -217,7 +265,7 @@ function StakingTable() {
           'Fecha de pago'
         );
       },
-      accessor: 'createdAt',
+      accessor: 'fechaPago',
       // @ts-ignore
       Cell: function (_a) {
         var value = _a.cell.value;
@@ -238,14 +286,14 @@ function StakingTable() {
           'Apr'
         );
       },
-      accessor: 'symbol',
+      accessor: 'Apr',
       // @ts-ignore
       Cell: function (_a) {
         var value = _a.cell.value;
         return react_1['default'].createElement(
           'div',
           { className: 'ltr:text-right rtl:text-left' },
-          '10%'
+          value
         );
       },
       minWidth: 80,
@@ -259,14 +307,15 @@ function StakingTable() {
           'Balance'
         );
       },
-      accessor: 'status',
+      accessor: 'precio',
       // @ts-ignore
       Cell: function (_a) {
         var value = _a.cell.value;
         return react_1['default'].createElement(
           'div',
           { className: 'ltr:text-right rtl:text-left' },
-          '$250'
+          value,
+          'USDT'
         );
       },
       minWidth: 100,
@@ -278,7 +327,7 @@ function StakingTable() {
           className: 'ltr:ml-auto rtl:mr-auto',
         });
       },
-      accessor: 'claim Reward',
+      accessor: 'idCR',
       // @ts-ignore
       Cell: function (_a) {
         var value = _a.cell.value;
@@ -287,7 +336,12 @@ function StakingTable() {
           { className: 'flex items-center justify-end' },
           react_1['default'].createElement(
             button_1['default'],
-            { className: 'focus:shadow-outline  rounded' },
+            {
+              onClick: function () {
+                return claim(value);
+              },
+              className: 'focus:shadow-outline  rounded',
+            },
             'Claim Reward'
           )
         );
@@ -301,7 +355,7 @@ function StakingTable() {
           className: 'ltr:ml-auto rtl:mr-auto',
         });
       },
-      accessor: 'withdraw',
+      accessor: 'idW',
       // @ts-ignore
       Cell: function (_a) {
         var value = _a.cell.value;
@@ -312,7 +366,7 @@ function StakingTable() {
             button_1['default'],
             {
               onClick: function () {
-                return openModal('WITHDRAW_VIEW');
+                return withdraw(value);
               },
               className: 'focus:shadow-outline  rounded',
             },
@@ -324,13 +378,11 @@ function StakingTable() {
       maxWidth: 300,
     },
   ];
-  var data = react_1['default'].useMemo(function () {
-    return transaction_data_1.TransactionData;
-  }, []);
+  var data = inventorys;
   var columns = react_1['default'].useMemo(function () {
     return COLUMNS;
   }, []);
-  var _d = react_table_1.useTable(
+  var _e = react_table_1.useTable(
       {
         // @ts-ignore
         columns: columns,
@@ -342,17 +394,17 @@ function StakingTable() {
       react_table_1.useFlexLayout,
       react_table_1.usePagination
     ),
-    getTableProps = _d.getTableProps,
-    getTableBodyProps = _d.getTableBodyProps,
-    canPreviousPage = _d.canPreviousPage,
-    canNextPage = _d.canNextPage,
-    pageOptions = _d.pageOptions,
-    state = _d.state,
-    headerGroups = _d.headerGroups,
-    page = _d.page,
-    nextPage = _d.nextPage,
-    previousPage = _d.previousPage,
-    prepareRow = _d.prepareRow;
+    getTableProps = _e.getTableProps,
+    getTableBodyProps = _e.getTableBodyProps,
+    canPreviousPage = _e.canPreviousPage,
+    canNextPage = _e.canNextPage,
+    pageOptions = _e.pageOptions,
+    state = _e.state,
+    headerGroups = _e.headerGroups,
+    page = _e.page,
+    nextPage = _e.nextPage,
+    previousPage = _e.previousPage,
+    prepareRow = _e.prepareRow;
   var pageIndex = state.pageIndex;
   var setStakings = function () {
     return __awaiter(_this, void 0, void 0, function () {

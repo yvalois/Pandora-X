@@ -19,7 +19,7 @@ export default function ProfileTab() {
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
 
-  const { inventoryp, inventoryi } = useSelector(
+  const { inventoryp, inventoryi, producto } = useSelector(
     (state: any) => state.blockchain
   );
 
@@ -49,28 +49,38 @@ export default function ProfileTab() {
         <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentItems?.map((nft) => (
             <NFTGrid
-              key={nft.name}
-              name={nft.name}
-              image={nft.image}
-              price={82}
-              number={nft.number}
+              key={nft.nombre}
+              name={nft.nombre}
+              image={nft.img}
+              price={nft.precio}
+              number={nft.id}
               alldata={false}
+              type={'productos'}
             />
           ))}
         </div>
       </TabPanel>
       <TabPanel className="focus:outline-none">
-        <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
+        <div className="grid h-[100%] w-[100%] gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentInv?.map((nft) => (
             <NFTGrid
-              key={nft.name}
-              name={nft.name}
-              image={nft.image}
-              price={82}
-              number={nft.number}
+              key={nft.nombre}
+              name={nft.nombre}
+              image={nft.img}
+              price={nft.precio}
+              number={nft.id}
               alldata={false}
+              type={'staking'}
             />
           ))}
+
+          <div className="align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center">
+            <span>
+              <h1 className="w-[700px] text-lg text-gray-600">
+                Aun no realizas tu primer compra de Nft's de inversion
+              </h1>
+            </span>
+          </div>
         </div>
       </TabPanel>
       <TabPanel className="focus:outline-none">

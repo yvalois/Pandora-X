@@ -66,6 +66,7 @@ var initialState = {
   //daiContract: null,
   productoMinter: null,
   inversionMinter: null,
+  staking: null,
   accountAddress: '',
   //usdtBalance: null,
   //busdBalance: null,
@@ -73,12 +74,14 @@ var initialState = {
   //daiBalance: null,
   inventoryp: [],
   inventoryi: [],
+  inventorys: [],
   isConnect: false,
   rol: '',
   nombre: '',
   instance: null,
   isUser: null,
   paid: [],
+  balancep: 0,
 };
 
 var blockchainReducer = function blockchainReducer() {
@@ -105,6 +108,7 @@ var blockchainReducer = function blockchainReducer() {
         //daiContract: action.payload.daiContract,
         productoMinter: action.payload.productoMinter,
         inversionMinter: action.payload.inversionMinter,
+        staking: action.payload.staking,
         accountAddress: action.payload.accountAddress,
         //usdtBalance: action.payload.usdtBalance,
         //tokenBalance: action.payload.usdtBalance,
@@ -113,8 +117,10 @@ var blockchainReducer = function blockchainReducer() {
         //daiBalance: action.payload.daiBalance,
         inventoryp: action.payload.inventoryp,
         inventoryi: action.payload.inventoryi,
+        inventorys: action.payload.inventorys,
         isConnect: true,
         isUser: true,
+        balancep: action.payload.balancep,
       });
 
     case 'ERROR':
@@ -136,6 +142,7 @@ var blockchainReducer = function blockchainReducer() {
         //daiBalance: action.payload.daiBalance,
         inventoryp: action.payload.inventoryp,
         inventoryi: action.payload.inventoryi,
+        inventorys: action.payload.inventorys,
       });
 
     case 'LOGOUT':
@@ -161,6 +168,21 @@ var blockchainReducer = function blockchainReducer() {
     case 'ADD_PAID':
       return _objectSpread({}, state, {
         paid: action.payload.pagos,
+      });
+
+    case 'UPDATE_PRODUCT':
+      return _objectSpread({}, state, {
+        inventoryp: action.payload.inventoryp,
+      });
+
+    case 'UPDATE_INVERTION':
+      return _objectSpread({}, state, {
+        inventoryi: action.payload.inventoryi,
+      });
+
+    case 'UPDATE_STAKING':
+      return _objectSpread({}, state, {
+        inventorys: action.payload.inventorys,
       });
 
     default:

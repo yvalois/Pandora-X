@@ -16,7 +16,8 @@ function ProfileTab() {
       return state.blockchain;
     }),
     inventoryp = _c.inventoryp,
-    inventoryi = _c.inventoryi;
+    inventoryi = _c.inventoryi,
+    producto = _c.producto;
   react_1.useEffect(
     function () {
       setCurrentItems(inventoryp);
@@ -55,12 +56,13 @@ function ProfileTab() {
           ? void 0
           : currentItems.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.name,
-                name: nft.name,
-                image: nft.image,
-                price: 82,
-                number: nft.number,
+                key: nft.nombre,
+                name: nft.nombre,
+                image: nft.img,
+                price: nft.precio,
+                number: nft.id,
                 alldata: false,
+                type: 'productos',
               });
             })
       )
@@ -72,20 +74,37 @@ function ProfileTab() {
         'div',
         {
           className:
-            'grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4',
+            'grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4 w-[100%] h-[100%]',
         },
         currentInv === null || currentInv === void 0
           ? void 0
           : currentInv.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.name,
-                name: nft.name,
-                image: nft.image,
-                price: 82,
-                number: nft.number,
+                key: nft.nombre,
+                name: nft.nombre,
+                image: nft.img,
+                price: nft.precio,
+                number: nft.id,
                 alldata: false,
+                type: 'staking',
               });
-            })
+            }),
+        React.createElement(
+          'div',
+          {
+            className:
+              'flex justify-center align-self mt-[50%] ml-[100%] w-[100%] height-[100%]',
+          },
+          React.createElement(
+            'span',
+            null,
+            React.createElement(
+              'h1',
+              { className: 'text-lg text-gray-600 w-[700px]' },
+              "Aun no realizas tu primer compra de Nft's de inversion"
+            )
+          )
+        )
       )
     ),
     React.createElement(

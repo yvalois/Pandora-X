@@ -76,25 +76,26 @@ export default function WalletConnect() {
                       </div>
                     </Menu.Item>
                   </Menu.Item>
-                  <Menu.Item>
-                    <div className="p-3">
-                      <div
-                        className="flex cursor-pointer items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
-                        onClick={disconnectWallet}
-                      >
-                        <PowerIcon />
-                        <span className="grow uppercase">Disconnect</span>
-                      </div>
-                    </div>
-                  </Menu.Item>
+                  <Menu.Item></Menu.Item>
                 </Menu.Items>
               </Transition>
             </Menu>
           </div>
 
-          <ActiveLink href="/create-nft">
-            <Button className="shadow-main hover:shadow-large">CREATE</Button>
-          </ActiveLink>
+          <div className="p-3">
+            <div
+              className="flex cursor-pointer items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
+              onClick={disconnectWallet}
+            >
+              <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
+                {accountAddress.slice(0, 6)}
+                {'...'}
+                {accountAddress.slice(accountAddress.length - 6)}
+              </span>
+              <PowerIcon />
+              <span className="grow uppercase">Disconnect</span>
+            </div>
+          </div>
         </div>
       ) : (
         <Button

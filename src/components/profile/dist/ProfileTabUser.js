@@ -239,12 +239,13 @@ function ProfileTabUser() {
           ? void 0
           : currentItems.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.name,
-                name: nft.name,
-                image: nft.image,
-                price: 82,
-                number: nft.number,
+                key: nft.nombre,
+                name: nft.nombre,
+                image: nft.img,
+                price: 13,
+                number: nft.id,
                 alldata: false,
+                type: 'productos',
               });
             })
       )
@@ -262,12 +263,13 @@ function ProfileTabUser() {
           ? void 0
           : currentInv.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.name,
-                name: nft.name,
-                image: nft.image,
-                price: 82,
-                number: nft.number,
+                key: nft.nombre,
+                name: nft.nombre,
+                image: nft.img,
+                price: 13,
+                number: nft.id,
                 alldata: false,
+                type: 'staking',
               });
             })
       )

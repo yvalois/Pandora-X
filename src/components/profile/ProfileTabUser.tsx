@@ -71,12 +71,13 @@ export default function ProfileTabUser() {
         <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentItems?.map((nft) => (
             <NFTGrid
-              key={nft.name}
-              name={nft.name}
-              image={nft.image}
-              price={82}
-              number={nft.number}
+              key={nft.nombre}
+              name={nft.nombre}
+              image={nft.img}
+              price={13}
+              number={nft.id}
               alldata={false}
+              type={'productos'}
             />
           ))}
         </div>
@@ -85,12 +86,13 @@ export default function ProfileTabUser() {
         <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentInv?.map((nft) => (
             <NFTGrid
-              key={nft.name}
-              name={nft.name}
-              image={nft.image}
-              price={82}
-              number={nft.number}
+              key={nft.nombre}
+              name={nft.nombre}
+              image={nft.img}
+              price={13}
+              number={nft.id}
               alldata={false}
+              type={'staking'}
             />
           ))}
         </div>

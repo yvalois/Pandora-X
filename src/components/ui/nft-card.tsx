@@ -15,6 +15,7 @@ import abiErc20 from '../../abi/abiERC20.json'; //Buscar
 import productoMinterAbi from '../../abi/productoMinter.json';
 import inversionMinterAbi from '../../abi/inversionMinter.json';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
+import ActiveLink from './links/active-link';
 
 type NFTGridProps = {
   image: StaticImageData;
@@ -84,7 +85,7 @@ export default function NFTGrid({
     height: 350px;
     overflow: hidden;
   `;
-  const BuyButton = styled.button`
+  const Button = styled.button`
     background: #000;
     border: none;
     border-radius: 16px;
@@ -101,7 +102,7 @@ export default function NFTGrid({
     }
   `;
 
-  const CBuyButton = styled.div`
+  const CButton = styled.div`
     background: #000;
     border: none;
     border-radius: 16px;
@@ -249,7 +250,7 @@ export default function NFTGrid({
   }, [isConnect]);
 
   return (
-    <div className="relative overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
+    <div className="relative w-[300px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
       <div className="p-4">
         <div className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
           {/*<Avatar
@@ -277,7 +278,7 @@ export default function NFTGrid({
         </div>
         <div className="mt-1.5 flex">
           <div className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400">
-            {number + 1}
+            {parseInt(number) + 1}
             <Verified className="ltr:ml-1 rtl:mr-1" />
           </div>
         </div>
@@ -288,40 +289,51 @@ export default function NFTGrid({
         )}
         <div>
           {loading && (
-            <BuyButton type="button" disabled>
+            <Button type="button" disabled>
               <span
                 className="spinner-border spinner-border-sm"
                 role="status"
                 aria-hidden="true"
               ></span>
               Loading...
-            </BuyButton>
+            </Button>
           )}
           {alldata && !loading && !isConnect && (
-            <BuyButton
+            <Button
               onClick={() => {
                 dispatch(connectWallet());
               }}
             >
               Connect Wallet
-            </BuyButton>
+            </Button>
           )}
 
           {alldata && isConnect && !loading && price > approvedToken && (
-            <BuyButton onClick={approve}>Approve</BuyButton>
+            <Button onClick={approve}>Approve</Button>
           )}
 
           {alldata &&
             isConnect &&
             !loading /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/ &&
             price <= approvedToken && (
-              <BuyButton onClick={() => buyNft(number)}>Buy</BuyButton>
+              <Button onClick={() => buyNft(number)}>Buy</Button>
             )}
 
           {type == 'staking' && (
-            <BuyButton onClick={() => setNftInfo(name, image, price, number)}>
-              Select
-            </BuyButton>
+            <div className=" row ml-[-10px] mt-2   flex justify-evenly">
+              <ActiveLink href={`/staking/${number}`}>
+                <Button>Stake</Button>
+              </ActiveLink>
+              <ActiveLink href={`/infoinv/${number}`}>
+                <Button>Ver mas...</Button>
+              </ActiveLink>
+            </div>
+          )}
+
+          {type == 'productos' && (
+            <ActiveLink href={`/info/${number}`}>
+              <Button className="mt-2">Ver mas...</Button>
+            </ActiveLink>
           )}
         </div>
       </div>

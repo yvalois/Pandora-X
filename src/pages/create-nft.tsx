@@ -65,31 +65,31 @@ const NftsOptions = [
 const NftsInversionOptions = [
   {
     id: 1,
-    name: '1Y',
+    name: '1K',
     value: 1,
     //icon: <Ethereum />,
   },
   {
     id: 2,
-    name: '2Y',
+    name: '2K',
     value: 2,
     //icon: <Flow />,
   },
   {
     id: 3,
-    name: '3Y',
+    name: '3K',
     value: 3,
     //icon: <Ethereum />,
   },
   {
     id: 4,
-    name: '4Y',
+    name: '4K',
     value: 4,
     //icon: <Flow />,
   },
   {
     id: 5,
-    name: '5Y',
+    name: '5K',
     value: 5,
     //icon: <Ethereum />,
   },
@@ -157,6 +157,117 @@ const CreateNFTPage: NextPageWithLayout = () => {
   let Inversiones = 0;
   let Productos = 0;
 
+  const productosAR = [
+    {
+      nombre: 'Pandora X NFT - Podcast-Streaming',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Streaming%20%282%29.gif',
+      tipo: 'PS',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'Pandora X NFT - Podcast-Academia',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Academia%20%281%29.gif',
+      tipo: 'PA',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'Pandora X NFT - NFT Studio',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20NFT%20Studio%20%282%29.gif',
+      tipo: 'NS',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'Pandora X NFT - Investing Value',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Investing%20Value%20%282%29.gif',
+      tipo: 'IV',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'Pandora X NFT - Comunidad Privada',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Privada.gif',
+      tipo: 'CP',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'Pandora X NFT - Comunidad Gratuita',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Gratuita.gif',
+      tipo: 'CG',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'Pandora X NFT - Coaching',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Coaching.gif',
+      tipo: 'NC',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'Pandora X NFT - Alpha Report',
+      img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Alpha%20Report.gif',
+      tipo: 'AP',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+  ];
+
+  const inversionesAR = [
+    {
+      nombre: 'UBX Card 100',
+      img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100.gif',
+      tipo: '100',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'UBX Card 1K',
+      img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%201k%20%281%29.gif',
+      tipo: '1K',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'UBX Card 5K',
+      img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%205k.gif',
+      tipo: '5K',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'UBX Card 10K',
+      img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2010k.gif',
+      tipo: '10K',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'UBX Card 20K',
+      img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2020k.gif',
+      tipo: '20K',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'UBX Card 50K',
+      img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2050k.gif',
+      tipo: '50K',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+    {
+      nombre: 'UBX Card 100K',
+      img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100k.gif',
+      tipo: '100K',
+      descripcion:
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+    },
+  ];
+
   const getProductos = async () => {
     fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
       method: 'GET',
@@ -222,7 +333,13 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const createNFTs = async () => {
-    if (tipo.value == 'productos') {
+    let i;
+    for (i = 0; i < productosAR.length; i++) {
+      await CrearProducto(productosAR[i]);
+      alert(i);
+    }
+
+    /*if (tipo.value == 'productos') {
       let i;
       const txResult = await productoMinter.Mint(supply, price);
       console.log(txResult);
@@ -231,7 +348,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
       if (txResult.status == 1) {
         for (i = 0; i < supply; i++) {
           const NFT = {
-            name: `${nombre} #${Productos + i + 1}`,
+            name: `${nombre} #${ i + 1}`,
             description: descripcion,
             image: url,
             dna: Productos + i,
@@ -245,31 +362,32 @@ const CreateNFTPage: NextPageWithLayout = () => {
       }
     } else if (tipo.value === 'inversion') {
       let i;
-      const txResult = await inversionMinter.Mint(supply, price, tipoInv.value);
+      const txResult = await inversionMinter.Mint(supply, price);
       await txResult.wait();
       if (txResult.status == 1) {
         for (i = 0; i < supply; i++) {
           const NFT = {
-            name: `${nombre} #${Inversiones + i + 1}`,
+            name: `${nombre} #${i + 1}`,
             description: descripcion,
             image: url,
             dna: Inversiones + i,
             edition: Inversiones + i,
             number: Inversiones + i,
+            tipo: tipoInv
           };
           await CrearInversion(NFT);
         }
       } else {
         setStatus(100);
       }
-    }
+    }*/
   };
   useEffect(() => {
     if (Usuario.rol !== 'Admin') {
       window.location.href = '/';
     }
-    getInversiones();
-    getProductos();
+    /*getInversiones();
+    getProductos();*/
   });
 
   useEffect(() => {
@@ -425,7 +543,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
 
               {tipo.value == 'inversion' && (
                 <div className="mb-8">
-                  <InputLabel title="Tipo Inversion" />
+                  <InputLabel title="Categoria" />
                   <div className="relative">
                     <Listbox value={tipoInv} onChange={setTipoInv}>
                       <Listbox.Button className="text-case-inherit letter-space-inherit flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-900 outline-none transition-shadow duration-200 hover:border-gray-900 hover:ring-1 hover:ring-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:hover:border-gray-600 dark:hover:ring-gray-600 sm:h-12 sm:px-5">

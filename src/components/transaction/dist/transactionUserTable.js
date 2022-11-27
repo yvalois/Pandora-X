@@ -172,7 +172,7 @@ var COLUMNS = [
         'Porcentaje'
       );
     },
-    accessor: 'porcentaje',
+    accessor: 'precio',
     // @ts-ignore
     Cell: function (_a) {
       var value = _a.cell.value;
@@ -347,49 +347,49 @@ function TransactionUserTable() {
     });
   };
   /*const infoPagos = async()=>{
-        const cant = await productoMinter.cantPagos()
-        let i;
-        if(Pagos.length <  cant ){
-        for(i=0; i<cant;i++){
-            const paid = await productoMinter.getPagoUser(i+1)
-            const wallet = await productoMinter.getWallet(i+1)
-            const paidFormat =parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(2);
-            setInfor((prevState) => ({ ...prevState, pago: paidFormat }))
-            setInfor((prevState) => ({ ...prevState, wallet: wallet }))
-            let tipo;
-            if(Usuario.categoria == "Agente X"){
-                tipo= "Compra"
-            }
-            let porcentaje;
-            if(Usuario.rango == "peerx"){
-                porcentaje = "20%"
-            }else if(Usuario.tange == "blockelite"){
-                porcentaje ="25%"
-            }else if(Usuario.tange == "blockmaster"){
-                porcentaje = "35%"
-            }else if(Usuario.tange == "blockcreator"){
-                porcentaje = "40%"
-            }
-                const pago1 = {
-                    pago: paidFormat,
-                    wallet:wallet,
-                    porcentaje:porcentaje,
-                    tipo:tipo
-                }
-
-            Pagos.push(pago1)
-        }
-        }
-    }
-
-    useEffect(() => {
-
-        if(call == true){
-            infoPagos()
-            setCall(false)
-        }
-
-    }, [Pagos])*/
+              const cant = await productoMinter.cantPagos()
+              let i;
+              if(Pagos.length <  cant ){
+              for(i=0; i<cant;i++){
+                  const paid = await productoMinter.getPagoUser(i+1)
+                  const wallet = await productoMinter.getWallet(i+1)
+                  const paidFormat =parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(2);
+                  setInfor((prevState) => ({ ...prevState, pago: paidFormat }))
+                  setInfor((prevState) => ({ ...prevState, wallet: wallet }))
+                  let tipo;
+                  if(Usuario.categoria == "Agente X"){
+                      tipo= "Compra"
+                  }
+                  let porcentaje;
+                  if(Usuario.rango == "peerx"){
+                      porcentaje = "20%"
+                  }else if(Usuario.tange == "blockelite"){
+                      porcentaje ="25%"
+                  }else if(Usuario.tange == "blockmaster"){
+                      porcentaje = "35%"
+                  }else if(Usuario.tange == "blockcreator"){
+                      porcentaje = "40%"
+                  }
+                      const pago1 = {
+                          pago: paidFormat,
+                          wallet:wallet,
+                          porcentaje:porcentaje,
+                          tipo:tipo
+                      }
+  
+                  Pagos.push(pago1)
+              }
+              }
+          }
+  
+          useEffect(() => {
+  
+              if(call == true){
+                  infoPagos()
+                  setCall(false)
+              }
+  
+          }, [Pagos])*/
   var data = paid;
   var columns = COLUMNS;
   var _d = react_1.useState(infoUser),
