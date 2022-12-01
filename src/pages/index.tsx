@@ -18,6 +18,7 @@ import { getMintedNftProducts } from '../redux/Minted/MintedAction';
 //images
 import AuthorImage from '@/assets/images/author.jpg';
 import { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -40,6 +41,7 @@ const HomePage: NextPageWithLayout<
 
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
+  const [balance, setBalance] = useState(0);
   const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
     useSelector((state: any) => state.minted);
   const dispatch = useDispatch<AppDispatch>();
@@ -57,8 +59,15 @@ const HomePage: NextPageWithLayout<
     //funcion que llame el tipo de staking
   };
 
-  const { inventoryp, inventoryi, productoMinter, accountAddress, balancep } =
-    useSelector((state: any) => state.blockchain);
+  const {
+    inventoryp,
+    inventoryi,
+    productoMinter,
+    accountAddress,
+    balanceI,
+    isConnect,
+    inversionMinter,
+  } = useSelector((state: any) => state.blockchain);
 
   const inventory = async () => {
     if (accountAddress !== '') {
@@ -71,9 +80,11 @@ const HomePage: NextPageWithLayout<
   };
 
   useEffect(() => {
-    setCurrentItems(inventoryp);
-    setCurrentInv(inventoryi);
-    //alert(balancep)
+    if (isConnect) {
+      setCurrentItems(inventoryp);
+      setCurrentInv(inventoryi);
+      setBalance(balanceI);
+    }
   }, [inventoryp, inventoryi]);
 
   return (
@@ -85,7 +96,7 @@ const HomePage: NextPageWithLayout<
       <div className="flex ">
         <div className="mb-8 w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[calc(100%-358px)] lg:w-[calc(100%-358px)] 2xl:w-[calc(100%-358px)] 3xl:w-[calc(100%-358px)]">
           <NftSlider
-            nfts={currentItems}
+            nfts={currentInv}
             priceFormat={priceFormat}
             nftInfo={nftInfo}
             setNftInfo={setNftInfo}
@@ -93,7 +104,7 @@ const HomePage: NextPageWithLayout<
         </div>
 
         <div className=" mb-8 grid w-full grid-cols-1 gap-6 sm:mb-10 sm:w-1/2  sm:grid-cols-2 md:w-64 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
-          <OverviewChart balance={balancep} />
+          <OverviewChart balance={balance} />
         </div>
       </div>
 

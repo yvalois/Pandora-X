@@ -5,6 +5,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { StaticImageData } from 'next/image';
 import NFTGrid from '@/components/ui/nft-card';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { connectWallet } from '../../redux/Blockchain/blockchainAction';
+import styled from 'styled-components';
 
 type CoinCardProps = {
   id: string;
@@ -51,34 +54,67 @@ export default function NftSlider({
       spaceBetween: 24,
     },
   };
+  const Button = styled.button`
+    background: #000;
+    border: none;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 20px;
+    text-transform: uppercase;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+    &:hover {
+      background: #fff;
+      color: #000;
+    }
+  `;
+
+  const { isConnect } = useSelector((state) => state.blockchain);
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <div>
-      <Swiper
-        modules={[Scrollbar, A11y]}
-        spaceBetween={24}
-        slidesPerView={1}
-        scrollbar={{ draggable: true }}
-        breakpoints={sliderBreakPoints}
-        observer={true}
-        dir="ltr"
-      >
-        {nfts.map((nfts) => (
-          <SwiperSlide key={nfts.id}>
-            <NFTGrid
-              key={nfts.name}
-              name={nfts.name}
-              image={nfts.image}
-              price={priceFormat}
-              number={nfts.number}
-              alldata={false}
-              type={type}
-              nftInfo={nftInfo}
-              setNftInfo={setNftInfo}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      {isConnect && (
+        <Swiper
+          modules={[Scrollbar, A11y]}
+          spaceBetween={24}
+          slidesPerView={1}
+          scrollbar={{ draggable: true }}
+          breakpoints={sliderBreakPoints}
+          observer={true}
+          dir="ltr"
+        >
+          {nfts.map((nfts) => (
+            <SwiperSlide key={nfts.id}>
+              <NFTGrid
+                key={nfts.nombre}
+                name={nfts.nombre}
+                image={nfts.img}
+                price={nfts.precio}
+                number={nfts.id}
+                alldata={false}
+                type={type}
+                nftInfo={nftInfo}
+                setNftInfo={setNftInfo}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
+      {!isConnect && (
+        <div className="flex  h-[375px] w-full items-center  justify-center bg-gray-200">
+          <Button
+            className="self-center"
+            onClick={() => {
+              dispatch(connectWallet());
+            }}
+          >
+            Connect Wallet
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

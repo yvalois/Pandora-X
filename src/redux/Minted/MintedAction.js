@@ -11,6 +11,8 @@ const RPC_URL = ROUTER.RPC_URL;
 const PRODUCTOS_MINTER_ADDRESS = ROUTER.productoMinter;
 const INVERSION_MINTER_ADDRESS = ROUTER.inversionMinter;
 
+let Productos = [];
+let Inversiones = [];
 const mintedLoading = () => ({
   type: 'MINTED_LOADING',
 });
@@ -25,69 +27,40 @@ const mintedError = (payload) => ({
   payload,
 });
 
-let Productos = [];
-let Inversiones = [];
-
-/*export const CrearProducto = async(objeto)=>{
-    fetch(`https://pandoraxapi1.herokuapp.com/api/api/CrearNftProducto`, {
-      method: 'POST',
-      body: JSON.stringify(objeto),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then(() => {
-        alert('listo Producto');
-        console.log(value);
-      })
-      .catch((error) => console.error('Error:', error));
-  } 
-
-export const CrearInversion = async(objeto)=>{
-    fetch(`https://pandoraxapi1.herokuapp.com/api/api/CrearNftInversion`, {
-      method: 'POST',
-      body: JSON.stringify(objeto),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then(() => {
-        alert('listo Producto');
-        console.log(value);
-      })
-      .catch((error) => console.error('Error:', error));
-  } 
-
-  const getProductos = async()=>{
-    fetch(`https://pandoraxapi1.herokuapp.com/api/api/getProducto`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        Productos = response
-      })
-      .catch((error) => console.error('Error:', error));
-  }*/
-
 const getProductos = async () => {
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL); //cambiar provider que se obtiene en NFTRO
+  const productosMinter = new ethers.Contract(
+    PRODUCTOS_MINTER_ADDRESS,
+    productoMinterAbi,
+    provider
+  );
   fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      Productos = data;
-    });
+    .then((res) => res.json())
+    .then((response) => {
+      response.map(async (item) => {
+        Productos[item.tipoN - 1] = item;
+      });
+      Productos.map(async (item) => {
+        const precio = await productosMinter.buyPrice(item.tipoN);
+        const price = ethers.utils.formatUnits(precio, 18);
+        Productos[item.tipoN - 1].precio = parseInt(price);
+      });
+    })
+    .catch((error) => console.error('Error:', error));
 };
 
 const getInversiones = async () => {
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+  const inversionesMinter = new ethers.Contract(
+    INVERSION_MINTER_ADDRESS,
+    inversionMinterAbi,
+    provider
+  );
   fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
     method: 'GET',
     headers: {
@@ -96,7 +69,14 @@ const getInversiones = async () => {
   })
     .then((res) => res.json())
     .then((response) => {
-      Inversiones = response;
+      response.map(async (item) => {
+        Inversiones[item.tipoN - 1] = item;
+      });
+      Inversiones.map(async (item) => {
+        const precio = await inversionesMinter.buyPrice(item.tipoN);
+        const price = ethers.utils.formatUnits(precio, 18);
+        Inversiones[item.tipoN - 1].precio = parseInt(price);
+      });
     })
     .catch((error) => console.error('Error:', error));
 };
@@ -105,107 +85,18 @@ export const getMintedNftProducts = () => async (dispatch) => {
   dispatch(mintedLoading());
 
   try {
-    const provider = new ethers.providers.JsonRpcProvider(RPC_URL); //cambiar provider que se obtiene en NFTRO
-    const productosMinter = new ethers.Contract(
-      PRODUCTOS_MINTER_ADDRESS,
-      productoMinterAbi,
-      provider
-    ); //Contracto del marketPlace
-    const inversionesMinter = new ethers.Contract(
-      INVERSION_MINTER_ADDRESS,
-      inversionMinterAbi,
-      provider
-    ); //Contracto del marketPlace
-    const mintedNftProductos = await productosMinter.getNftInContract();
-    const mintedNftInversiones = await inversionesMinter.getNftInContract();
-
-    const disponibleNftp = [];
-    const mintedNftpArray = [];
-    const disponibleNfti = [];
-    const mintedNftiArray = [];
-
+    //Contracto del marketPlace
+    //Contracto del marketPlace
     await getProductos();
+
     await getInversiones();
 
-    mintedNftProductos.map((item) => {
-      mintedNftpArray.push(parseInt(item));
-    });
-
-    mintedNftInversiones.map((item) => {
-      mintedNftiArray.push(parseInt(item));
-    });
-
-    Productos.map((item) => {
-      if (mintedNftpArray.includes(item.number)) {
-        //si no lo tiene los manda
-        disponibleNftp.push(item);
-      }
-    });
-
-    Inversiones.map((item) => {
-      if (mintedNftiArray.includes(item.number)) {
-        //si no lo tiene los manda
-        disponibleNfti.push(item);
-      }
-    });
-
-    const nftPrice = await productosMinter.getPricePlusFee(0);
-    const priceFormat = parseFloat(
-      ethers.utils.formatUnits(nftPrice, 18)
-    ).toFixed(2);
-
-    dispatch(
+    await dispatch(
       mintedLoaded({
-        disponibleNftp,
-        mintedNftProductos,
-        disponibleNfti,
-        mintedNftInversiones,
-        priceFormat,
+        productos: Productos,
+        inversiones: Inversiones,
       })
     );
-  } catch (error) {
-    dispatch(mintedError(error.message));
-  }
-};
-
-export const MintProducts = (supply) => async (dispatch) => {
-  dispatch(mintedLoading());
-  dispatch(mintedLoading());
-
-  try {
-    /*const provider = new ethers.providers.JsonRpcProvider(
-      RPC_URL
-    );*/ //cambiar provider que se obtiene en NFTRO
-
-    const signer = provider.getSigner();
-
-    const productoMinter = new ethers.Contract(
-      PRODUCTOS_MINTER_ADDRESS,
-      productoMinterAbi,
-      signer
-    );
-
-    const tx = await productoMinter.Mint(supply);
-  } catch (error) {
-    dispatch(mintedError(error.message));
-  }
-};
-
-export const MintInversion = (supply) => async (dispatch) => {
-  dispatch(mintedLoading());
-  dispatch(mintedLoading());
-
-  try {
-    /*const provider = new ethers.providers.JsonRpcProvider(
-      RPC_URL
-    );*/ //cambiar provider que se obtiene en NFTRO
-    const signer = provider.getSigner();
-    const inversionMinter = new ethers.Contract(
-      INVERSION_MINTER_ADDRESS,
-      inversionMinterAbi,
-      signer
-    );
-    const tx = await inversionMinter.Mint(supply);
   } catch (error) {
     dispatch(mintedError(error.message));
   }

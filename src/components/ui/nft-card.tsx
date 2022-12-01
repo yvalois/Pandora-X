@@ -16,6 +16,7 @@ import productoMinterAbi from '../../abi/productoMinter.json';
 import inversionMinterAbi from '../../abi/inversionMinter.json';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import ActiveLink from './links/active-link';
+import Button from '@/components/ui/button';
 
 type NFTGridProps = {
   image: StaticImageData;
@@ -84,22 +85,6 @@ export default function NFTGrid({
     width: 250px;
     height: 350px;
     overflow: hidden;
-  `;
-  const Button = styled.button`
-    background: #000;
-    border: none;
-    border-radius: 16px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 5px 20px;
-    text-transform: uppercase;
-    transition: all 0.1s ease-in-out;
-    cursor: pointer;
-    &:hover {
-      background: #fff;
-      color: #000;
-    }
   `;
 
   const CButton = styled.div`
@@ -288,7 +273,7 @@ export default function NFTGrid({
         )}
         <div>
           {loading && (
-            <Button type="button" disabled>
+            <Button size="small" type="button" disabled>
               <span
                 className="spinner-border spinner-border-sm"
                 role="status"
@@ -299,6 +284,7 @@ export default function NFTGrid({
           )}
           {alldata && !loading && !isConnect && (
             <Button
+              size="small"
               onClick={() => {
                 dispatch(connectWallet());
               }}
@@ -308,30 +294,36 @@ export default function NFTGrid({
           )}
 
           {alldata && isConnect && !loading && price > approvedToken && (
-            <Button onClick={approve}>Approve</Button>
+            <Button size="small" onClick={approve}>
+              Approve
+            </Button>
           )}
 
           {alldata &&
             isConnect &&
             !loading /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/ &&
             price <= approvedToken && (
-              <Button onClick={() => buyNft(number)}>Buy</Button>
+              <Button size="small" onClick={() => buyNft(number)}>
+                Buy
+              </Button>
             )}
 
           {type == 'staking' && (
             <div className=" row ml-[-10px] mt-2   flex justify-evenly">
               <ActiveLink href={`/staking/${number}`}>
-                <Button>Stake</Button>
+                <Button size="small">Stake</Button>
               </ActiveLink>
               <ActiveLink href={`/infoinv/${number}`}>
-                <Button>Ver mas...</Button>
+                <Button size="small">Ver mas...</Button>
               </ActiveLink>
             </div>
           )}
 
           {type == 'productos' && (
             <ActiveLink href={`/info/${number}`}>
-              <Button className="mt-2">Ver mas...</Button>
+              <Button size="small" className="mt-2">
+                Ver mas...
+              </Button>
             </ActiveLink>
           )}
         </div>

@@ -8,6 +8,8 @@ import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import validator from 'validator';
 import Button from '@/components/ui/button';
 import { getType, getRange, exist } from '@/NFTROL';
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
 
 export default function ModalRegister() {
   const tiempoTranscurrido = Date.now();
@@ -44,6 +46,7 @@ export default function ModalRegister() {
   const [referidor, setReferidor] = useState('');
   const [tipo, setTipo] = useState('');
   const [rango, setRango] = useState('');
+  const [value1, setValue1] = useState('');
 
   const { closeModal } = useModal();
 
@@ -111,22 +114,6 @@ export default function ModalRegister() {
       setErrorMsg((prevState) => ({ ...prevState, ErrNombre: '' }));
     }
 
-    if (value.Id.length < 7) {
-      setError(true);
-      setErrorMsg((prevState) => ({
-        ...prevState,
-        ErrId: 'este campo debe tener minimo 7 caracteres',
-      }));
-    } else if (!validator.isNumeric(value.Id)) {
-      setError(true);
-      setErrorMsg((prevState) => ({
-        ...prevState,
-        ErrId: 'Solo se permiten numero',
-      }));
-    } else if (value.Id.length >= 7 && validator.isNumeric(value.Id)) {
-      setErrorMsg((prevState) => ({ ...prevState, ErrId: '' }));
-    }
-
     if (!validator.isEmail(value.Correo)) {
       setError(true);
       setErrorMsg((prevState) => ({
@@ -137,22 +124,19 @@ export default function ModalRegister() {
       setErrorMsg((prevState) => ({ ...prevState, ErrCorreo: '' }));
     }
 
-    if (value.Telefono.length < 10) {
+    if (value1.length < 10) {
       setError(true);
       setErrorMsg((prevState) => ({
         ...prevState,
         ErrTelefono: 'Este campo debe tener minimo 10 caracteres',
       }));
-    } else if (!validator.isNumeric(value.Telefono)) {
+    } else if (!validator.isNumeric(value1)) {
       setError(true);
       setErrorMsg((prevState) => ({
         ...prevState,
         ErrTelefono: 'Solo se permiten numeros',
       }));
-    } else if (
-      value.Telefono.length >= 10 &&
-      validator.isNumeric(value.Telefono)
-    ) {
+    } else if (value1.length >= 10 && validator.isNumeric(value1)) {
       setErrorMsg((prevState) => ({ ...prevState, ErrTelefono: '' }));
     }
 
@@ -160,14 +144,13 @@ export default function ModalRegister() {
     }
 
     if (
-      value.Telefono.length >= 10 &&
-      validator.isNumeric(value.Telefono) &&
+      value1 >= 10 &&
+      validator.isNumeric(value1) &&
       validator.isEmail(value.Correo) &&
-      value.Id.length >= 7 &&
-      validator.isNumeric(value.Id) &&
       value.Nombre.length >= 3 &&
       validator.isAlpha(value.Nombre)
     ) {
+      alert('a');
       setError(false);
       await RegistrarBD();
     }
@@ -242,7 +225,7 @@ export default function ModalRegister() {
   //botton y state
   return (
     <>
-      <div className="relative z-50 mx-auto h-[580px] w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark">
+      <div className="relative z-50 mx-auto h-[480px] w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark">
         <button
           className="absolute right-[25px] top-[25px] mb-2 flex h-[20px] w-[20px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white"
           onClick={() => disconnectWallet()}
@@ -284,28 +267,6 @@ export default function ModalRegister() {
           </span>
         )}
 
-        <label className=" mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
-          Id
-        </label>
-
-        {errorMsg.ErrId.length == 0 ? (
-          <input
-            onChange={(e) => ChangeInfo('Id', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-            id="username"
-            type="text"
-            placeholder="Identificacion"
-          />
-        ) : (
-          <input
-            onChange={(e) => ChangeInfo('Id', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-            id="username"
-            type="text"
-            placeholder="Identificacion"
-          />
-        )}
-
         {error == true && errorMsg.ErrId.length > 0 && (
           <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
             {errorMsg.ErrId}
@@ -345,16 +306,18 @@ export default function ModalRegister() {
         </label>
 
         {errorMsg.ErrTelefono.length == 0 ? (
-          <input
-            onChange={(e) => ChangeInfo('Telefono', e.target.value)}
+          <PhoneInput
+            onChange={setValue1}
+            value={value1}
             className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Numero"
           />
         ) : (
-          <input
-            onChange={(e) => ChangeInfo('Telefono', e.target.value)}
+          <PhoneInput
+            onChange={setValue1}
+            value={value1}
             className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"

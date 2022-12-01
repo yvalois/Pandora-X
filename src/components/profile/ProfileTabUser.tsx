@@ -76,6 +76,7 @@ export default function ProfileTabUser() {
               image={nft.img}
               price={13}
               number={nft.id}
+              tipo={nft.tipoN}
               alldata={false}
               type={'productos'}
             />

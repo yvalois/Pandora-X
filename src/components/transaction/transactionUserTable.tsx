@@ -30,7 +30,7 @@ const COLUMNS = [
 
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Porcentaje</div>,
-    accessor: 'precio',
+    accessor: 'porcentaje',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-right rtl:text-left">{value}</div>
@@ -195,6 +195,10 @@ export default function TransactionUserTable() {
   );
 
   const { pageIndex } = state;
+
+  useEffect(() => {
+    console.log(paid);
+  }, []);
 
   return (
     <div className="">

@@ -164,10 +164,11 @@ const NFTDetailsPage: NextPageWithLayout<
   );
 
   const nftdata = {
-    nombre: '',
+    Nombre: '',
     img: '',
     precio: 0,
     tipo: '',
+    tipoN: 0,
     descripcion: '',
     id: 0,
   };
@@ -184,6 +185,17 @@ const NFTDetailsPage: NextPageWithLayout<
       }
     });
   }, []);
+
+  const Usuario = useSelector((state: any) => state.Usuario);
+  useEffect(() => {
+    if (
+      Usuario.rol !== 'Admin' &&
+      Usuario.rol !== 'usuario' &&
+      Usuario.rol !== 'cliente'
+    ) {
+      window.location.href = '/';
+    }
+  });
 
   return (
     <>

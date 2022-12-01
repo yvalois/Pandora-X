@@ -14,7 +14,7 @@ import { useModal } from '@/components/modal-views/context';
 import { nftData } from '@/data/static/single-nft';
 import NftDropDown from './nft-dropdown';
 import Avatar from '@/components/ui/avatar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
@@ -35,13 +35,15 @@ type Avatar = {
 };
 
 export default function NftDetails({ product, type }) {
-  const { img, nombre, descripcion, precio, id, tipo, tipoN } = product;
+  const { img, Nombre, descripcion, precio, id, tipo, tipoN } = product;
 
   const [tokenAddress, setTokenAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [cuenta, setCuenta] = useState('');
   const [approvedUsdt, setApprovedUsdt] = useState(0);
   const [approvedToken, setApprovedToken] = useState(0);
+  const [status, setStatus] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
   const Usuario = useSelector((state) => state.Usuario);
 
   const {
@@ -118,7 +120,7 @@ export default function NftDetails({ product, type }) {
     setLoading(true);
     try {
       if (type == 'producto') {
-        if (!Usuario.isReferido && Usuario.type == 'Agente X') {
+        if (Usuario.isReferido && Usuario.type == 'Agente X') {
           let porcentaje = 0;
           if (Usuario.range == 'peerx') {
             porcentaje = 200;
@@ -141,6 +143,8 @@ export default function NftDetails({ product, type }) {
           setLoading(false);
           setApprovedToken(0);
           dispatch(uProduct());
+          setStatus(true);
+          setAlertMsg('Nft comprado exitosamente');
         } else {
           const tx = await productoMinter.buyToken(
             tipoN,
@@ -151,6 +155,8 @@ export default function NftDetails({ product, type }) {
           setLoading(false);
           setApprovedToken(0);
           dispatch(uProduct());
+          setStatus(true);
+          setAlertMsg('Nft comprado exitosamente');
         }
       } else if (type == 'inversion') {
         const tx = await inversionMinter.buyToken(tipoN, tokenContract.address);
@@ -158,11 +164,19 @@ export default function NftDetails({ product, type }) {
         setLoading(false);
         setApprovedToken(0);
         dispatch(uInvertion());
+        setStatus(true);
+        setAlertMsg('Nft comprado exitosamente');
       }
     } catch (err) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStatus(false);
+    }, 5000);
+  }, [status]);
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
@@ -186,7 +200,7 @@ export default function NftDetails({ product, type }) {
             <div className="block">
               <div className="flex justify-between">
                 <h2 className="text-xl font-medium leading-[1.45em] -tracking-wider text-gray-900 dark:text-white md:text-2xl xl:text-3xl">
-                  {nombre}
+                  {Nombre}
                 </h2>
               </div>
 
@@ -218,18 +232,33 @@ export default function NftDetails({ product, type }) {
                   <div className="mt-12 justify-evenly space-x-10">
                     {type !== 'invcomprado' &&
                       type !== 'pcomprado' &&
+                      !loading &&
                       product.precio > approvedToken && (
                         <Button onClick={approve}>Approve</Button>
                       )}
 
-                    {type !== 'pcomprado' && type !== 'invcomprado' && (
-                      <Button>Buy without cripto</Button>
+                    {loading && (
+                      <Button>
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Loading...
+                      </Button>
                     )}
 
                     {type !== 'invcomprado' &&
                       type !== 'pcomprado' &&
+                      !loading &&
                       product.precio <= approvedToken && (
                         <Button onClick={() => buyNft()}>Buy</Button>
+                      )}
+
+                    {type !== 'pcomprado' &&
+                      !loading &&
+                      type !== 'invcomprado' && (
+                        <Button>Buy without cripto</Button>
                       )}
 
                     {type == 'pcomprado' && type !== 'invcomprado' && (
@@ -237,10 +266,10 @@ export default function NftDetails({ product, type }) {
                     )}
 
                     {type == 'invcomprado' && (
-                      <Button onClick={() => buyNft()}>Stake</Button>
+                      <Button onClick={() => buyNft()}>Stake</Button> //anchor link
                     )}
                     {type == 'invcomprado' && (
-                      <Button onClick={() => buyNft()}>Transfer</Button>
+                      <Button onClick={() => buyNft()}>Transfer</Button> //Modal
                     )}
                   </div>
                 </TabPanel>
@@ -249,6 +278,14 @@ export default function NftDetails({ product, type }) {
           </div>
         </div>
       </div>
+      {status && (
+        <div
+          className="absolute top-[620px] right-[280px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">{alertMsg}</span>
+        </div>
+      )}
     </div>
   );
 }

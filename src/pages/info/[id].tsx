@@ -185,6 +185,17 @@ const NFTDetailsPage: NextPageWithLayout<
     });
   }, []);
 
+  const Usuario = useSelector((state: any) => state.Usuario);
+  useEffect(() => {
+    if (
+      Usuario.rol !== 'Admin' &&
+      Usuario.rol !== 'usuario' &&
+      Usuario.rol !== 'cliente'
+    ) {
+      window.location.href = '/';
+    }
+  });
+
   return (
     <>
       <NextSeo

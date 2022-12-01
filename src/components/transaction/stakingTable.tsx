@@ -23,6 +23,7 @@ import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 
 export default function StakingTable() {
   const { inversionMinter } = useSelector((state) => state.blockchain);
+  setStatusW;
 
   const stakings = [];
 
@@ -37,26 +38,49 @@ export default function StakingTable() {
   const [modal, setModal] = useState(false);
   const { openModal, closeModal } = useModal();
   const [stakes, setStakes] = useState(infoStakings);
-
+  const [loading, setLoading] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+  const [statusC, setStatusC] = useState(false);
+  const [statusW, setStatusW] = useState(false);
   const { inventorys, staking, tokenContract } = useSelector(
     (state) => state.blockchain
   );
+  const Usuario = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
 
   const claim = async (value) => {
-    const tx = await staking.claimReward(value, tokenContract.address);
-    await tx.wait();
+    if (Usuario.isReferido && Usuario.type == 'blockMaker') {
+      setLoading(true); //usarlos como alerts de cargando y otro de realizado
+      const tx = await staking.claimReward(value, tokenContract.address);
+      await tx.wait();
 
-    dispatch(uStaking());
-    dispatch(uInvertion());
+      setLoading(false);
+      setStatusC(true);
+      setAlertMsg('Transacion cumplida');
+    } else {
+      const tx = await staking.claimRewardWithReferido(
+        value,
+        Usuario.referidor,
+        tokenContract.address
+      );
+      await tx.wait();
+
+      setLoading(false);
+      setStatusC(true);
+      setAlertMsg('Transacion cumplida');
+    }
   };
 
   const withdraw = async (value) => {
+    setLoading(true);
     const tx = await staking.withdraw(value);
     await tx.wait();
 
     dispatch(uStaking());
     dispatch(uInvertion());
+    setLoading(false);
+    setStatusW(true);
+    setAlertMsg('Transacion cumplida');
   };
 
   const COLUMNS = [
@@ -115,6 +139,7 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="flex items-center justify-end">
           <Button
+            size="small"
             onClick={() => claim(value)}
             className="focus:shadow-outline  rounded"
           >
@@ -130,8 +155,9 @@ export default function StakingTable() {
       accessor: 'idW',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="-tracking-[1px] ltr:text-right rtl:text-left">
+        <div className="flex items-center justify-end">
           <Button
+            size="small"
             onClick={() => withdraw(value)} //onClick={() => openModal('WITHDRAW_VIEW')}
             className="focus:shadow-outline  rounded"
           >
@@ -194,6 +220,13 @@ export default function StakingTable() {
       setStakes(infoStakings);
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStatusC(false);
+      setStatusW(false);
+    }, 5000);
+  }, [statusC, statusW]);
 
   return (
     <div className="">
@@ -313,7 +346,32 @@ export default function StakingTable() {
         </div>
       </div>
 
-      {modal && <ModalWithdraw />}
+      {loading && (
+        <div
+          className="absolute top-[240px] right-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
+          role="alert"
+        >
+          <span className="self-center font-medium">Loading...</span>
+        </div>
+      )}
+
+      {statusC && (
+        <div
+          className="absolute top-[240px] right-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">{alertMsg}</span>
+        </div>
+      )}
+
+      {statusW && (
+        <div
+          className="absolute top-[240px] right-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">{alertMsg}</span>
+        </div>
+      )}
     </div>
   );
 }

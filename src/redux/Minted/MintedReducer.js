@@ -3,11 +3,8 @@ const initialState = {
   dataloaded: false,
   error: null,
   errorMsg: null,
-  disponibleNftp: [],
-  MintedNftp: [],
-  disponibleNfti: [],
-  MintedNfti: [],
-  priceFormat: 0,
+  inversiones: [],
+  productos: [],
 };
 
 const MintedReducer = (state = initialState, action) => {
@@ -22,11 +19,8 @@ const MintedReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         dataloaded: true,
-        disponibleNftp: action.payload.disponibleNftp,
-        MintedNftp: action.payload.MintedNftp,
-        disponibleNfti: action.payload.disponibleNfti,
-        MintedNfti: action.payload.MintedNfti,
-        priceFormat: action.payload.priceFormat,
+        inversiones: action.payload.inversiones,
+        productos: action.payload.productos,
       };
     case 'MINTED_ERROR':
       return {

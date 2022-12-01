@@ -2,6 +2,7 @@
 exports.__esModule = true;
 var classnames_1 = require('classnames');
 var recharts_1 = require('recharts');
+var react_redux_1 = require('react-redux');
 var data = [
   {
     name: 'Page A',
@@ -42,26 +43,46 @@ var data = [
 function OverviewChart(_a) {
   var chartWrapperClass = _a.chartWrapperClass,
     balance = _a.balance;
+  var isConnect = react_redux_1.useSelector(function (state) {
+    return state.blockchain;
+  }).isConnect;
   return React.createElement(
     'div',
     {
       className:
         'rounded-lg bg-gray-900 p-6 text-white dark:bg-light-dark sm:p-8',
     },
-    React.createElement(
-      'h3',
-      {
-        className:
-          'text-xl font-medium tracking-tighter text-white sm:text-3xl',
-      },
-      balance,
-      ' Usdt'
-    ),
-    React.createElement(
-      'p',
-      { className: 'mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm' },
-      'Balance'
-    ),
+    isConnect &&
+      React.createElement(
+        'h3',
+        {
+          className:
+            'text-xl font-medium tracking-tighter text-white sm:text-3xl',
+        },
+        balance,
+        ' Usdt'
+      ),
+    !isConnect &&
+      React.createElement(
+        'h3',
+        {
+          className:
+            'text-xl font-medium tracking-tighter text-white sm:text-3xl',
+        },
+        'Connect'
+      ),
+    isConnect &&
+      React.createElement(
+        'p',
+        { className: 'mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm' },
+        'Balance'
+      ),
+    !isConnect &&
+      React.createElement(
+        'p',
+        { className: 'mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm' },
+        'your are not connected'
+      ),
     React.createElement(
       'div',
       { className: classnames_1['default']('h-60 w-full', chartWrapperClass) },

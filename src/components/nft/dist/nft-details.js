@@ -145,7 +145,7 @@ function NftDetails(_a) {
   var product = _a.product,
     type = _a.type;
   var img = product.img,
-    nombre = product.nombre,
+    Nombre = product.Nombre,
     descripcion = product.descripcion,
     precio = product.precio,
     id = product.id,
@@ -166,18 +166,24 @@ function NftDetails(_a) {
   var _f = react_1.useState(0),
     approvedToken = _f[0],
     setApprovedToken = _f[1];
+  var _g = react_1.useState(false),
+    status = _g[0],
+    setStatus = _g[1];
+  var _h = react_1.useState(''),
+    alertMsg = _h[0],
+    setAlertMsg = _h[1];
   var Usuario = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   });
-  var _g = react_redux_1.useSelector(function (state) {
+  var _j = react_redux_1.useSelector(function (state) {
       return state.blockchain;
     }),
-    productoMinter = _g.productoMinter,
-    inversionMinter = _g.inversionMinter,
-    isConnect = _g.isConnect,
-    accountAddress = _g.accountAddress,
-    usdtContract = _g.usdtContract,
-    tokenContract = _g.tokenContract;
+    productoMinter = _j.productoMinter,
+    inversionMinter = _j.inversionMinter,
+    isConnect = _j.isConnect,
+    accountAddress = _j.accountAddress,
+    usdtContract = _j.usdtContract,
+    tokenContract = _j.tokenContract;
   var referidor = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   }).referidor;
@@ -303,7 +309,7 @@ function NftDetails(_a) {
           case 1:
             _a.trys.push([1, 12, , 13]);
             if (!(type == 'producto')) return [3 /*break*/, 8];
-            if (!(!Usuario.isReferido && Usuario.type == 'Agente X'))
+            if (!(Usuario.isReferido && Usuario.type == 'Agente X'))
               return [3 /*break*/, 4];
             porcentaje = 0;
             if (Usuario.range == 'peerx') {
@@ -334,6 +340,8 @@ function NftDetails(_a) {
             setLoading(false);
             setApprovedToken(0);
             dispatch(blockchainAction_1.uProduct());
+            setStatus(true);
+            setAlertMsg('Nft comprado exitosamente');
             return [3 /*break*/, 7];
           case 4:
             return [
@@ -348,6 +356,8 @@ function NftDetails(_a) {
             setLoading(false);
             setApprovedToken(0);
             dispatch(blockchainAction_1.uProduct());
+            setStatus(true);
+            setAlertMsg('Nft comprado exitosamente');
             _a.label = 7;
           case 7:
             return [3 /*break*/, 11];
@@ -365,6 +375,8 @@ function NftDetails(_a) {
             setLoading(false);
             setApprovedToken(0);
             dispatch(blockchainAction_1.uInvertion());
+            setStatus(true);
+            setAlertMsg('Nft comprado exitosamente');
             _a.label = 11;
           case 11:
             return [3 /*break*/, 13];
@@ -378,6 +390,14 @@ function NftDetails(_a) {
       });
     });
   };
+  react_1.useEffect(
+    function () {
+      setTimeout(function () {
+        setStatus(false);
+      }, 5000);
+    },
+    [status]
+  );
   return React.createElement(
     'div',
     { className: 'flex flex-grow' },
@@ -437,7 +457,7 @@ function NftDetails(_a) {
                   className:
                     'text-xl font-medium leading-[1.45em] -tracking-wider text-gray-900 dark:text-white md:text-2xl xl:text-3xl',
                 },
-                nombre
+                Nombre
               )
             ),
             React.createElement(
@@ -491,21 +511,27 @@ function NftDetails(_a) {
                   { className: 'mt-12 justify-evenly space-x-10' },
                   type !== 'invcomprado' &&
                     type !== 'pcomprado' &&
+                    !loading &&
                     product.precio > approvedToken &&
                     React.createElement(
                       button_1['default'],
                       { onClick: approve },
                       'Approve'
                     ),
-                  type !== 'pcomprado' &&
-                    type !== 'invcomprado' &&
+                  loading &&
                     React.createElement(
                       button_1['default'],
                       null,
-                      'Buy without cripto'
+                      React.createElement('span', {
+                        className: 'spinner-border spinner-border-sm',
+                        role: 'status',
+                        'aria-hidden': 'true',
+                      }),
+                      'Loading...'
                     ),
                   type !== 'invcomprado' &&
                     type !== 'pcomprado' &&
+                    !loading &&
                     product.precio <= approvedToken &&
                     React.createElement(
                       button_1['default'],
@@ -515,6 +541,14 @@ function NftDetails(_a) {
                         },
                       },
                       'Buy'
+                    ),
+                  type !== 'pcomprado' &&
+                    !loading &&
+                    type !== 'invcomprado' &&
+                    React.createElement(
+                      button_1['default'],
+                      null,
+                      'Buy without cripto'
                     ),
                   type == 'pcomprado' &&
                     type !== 'invcomprado' &&
@@ -536,7 +570,7 @@ function NftDetails(_a) {
                         },
                       },
                       'Stake'
-                    ),
+                    ), //anchor link
                   type == 'invcomprado' &&
                     React.createElement(
                       button_1['default'],
@@ -546,14 +580,24 @@ function NftDetails(_a) {
                         },
                       },
                       'Transfer'
-                    )
+                    ) //Modal
                 )
               )
             )
           )
         )
       )
-    )
+    ),
+    status &&
+      React.createElement(
+        'div',
+        {
+          className:
+            'absolute top-[620px] right-[280px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800',
+          role: 'alert',
+        },
+        React.createElement('span', { className: 'font-medium' }, alertMsg)
+      )
   );
 }
 exports['default'] = NftDetails;

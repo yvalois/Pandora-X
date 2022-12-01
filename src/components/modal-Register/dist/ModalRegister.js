@@ -158,6 +158,8 @@ var blockchainAction_2 = require('../../redux/Blockchain/blockchainAction');
 var validator_1 = require('validator');
 var button_1 = require('@/components/ui/button');
 var NFTROL_1 = require('@/NFTROL');
+require('react-phone-number-input/style.css');
+var react_phone_number_input_1 = require('react-phone-number-input');
 function ModalRegister() {
   var _this = this;
   var tiempoTranscurrido = Date.now();
@@ -211,6 +213,9 @@ function ModalRegister() {
   var _h = react_1.useState(''),
     rango = _h[0],
     setRango = _h[1];
+  var _j = react_1.useState(''),
+    value1 = _j[0],
+    setValue1 = _j[1];
   var closeModal = context_1.useModal().closeModal;
   var dispatch = react_redux_1.useDispatch();
   //const Usuario = useSelector((state: any) => state.Usuario);
@@ -297,28 +302,6 @@ function ModalRegister() {
                 return __assign(__assign({}, prevState), { ErrNombre: '' });
               });
             }
-            if (value.Id.length < 7) {
-              setError(true);
-              setErrorMsg(function (prevState) {
-                return __assign(__assign({}, prevState), {
-                  ErrId: 'este campo debe tener minimo 7 caracteres',
-                });
-              });
-            } else if (!validator_1['default'].isNumeric(value.Id)) {
-              setError(true);
-              setErrorMsg(function (prevState) {
-                return __assign(__assign({}, prevState), {
-                  ErrId: 'Solo se permiten numero',
-                });
-              });
-            } else if (
-              value.Id.length >= 7 &&
-              validator_1['default'].isNumeric(value.Id)
-            ) {
-              setErrorMsg(function (prevState) {
-                return __assign(__assign({}, prevState), { ErrId: '' });
-              });
-            }
             if (!validator_1['default'].isEmail(value.Correo)) {
               setError(true);
               setErrorMsg(function (prevState) {
@@ -331,14 +314,14 @@ function ModalRegister() {
                 return __assign(__assign({}, prevState), { ErrCorreo: '' });
               });
             }
-            if (value.Telefono.length < 10) {
+            if (value1.length < 10) {
               setError(true);
               setErrorMsg(function (prevState) {
                 return __assign(__assign({}, prevState), {
                   ErrTelefono: 'Este campo debe tener minimo 10 caracteres',
                 });
               });
-            } else if (!validator_1['default'].isNumeric(value.Telefono)) {
+            } else if (!validator_1['default'].isNumeric(value1)) {
               setError(true);
               setErrorMsg(function (prevState) {
                 return __assign(__assign({}, prevState), {
@@ -346,8 +329,8 @@ function ModalRegister() {
                 });
               });
             } else if (
-              value.Telefono.length >= 10 &&
-              validator_1['default'].isNumeric(value.Telefono)
+              value1.length >= 10 &&
+              validator_1['default'].isNumeric(value1)
             ) {
               setErrorMsg(function (prevState) {
                 return __assign(__assign({}, prevState), { ErrTelefono: '' });
@@ -357,16 +340,15 @@ function ModalRegister() {
             }
             if (
               !(
-                value.Telefono.length >= 10 &&
-                validator_1['default'].isNumeric(value.Telefono) &&
+                value1 >= 10 &&
+                validator_1['default'].isNumeric(value1) &&
                 validator_1['default'].isEmail(value.Correo) &&
-                value.Id.length >= 7 &&
-                validator_1['default'].isNumeric(value.Id) &&
                 value.Nombre.length >= 3 &&
                 validator_1['default'].isAlpha(value.Nombre)
               )
             )
               return [3 /*break*/, 2];
+            alert('a');
             setError(false);
             return [4 /*yield*/, RegistrarBD()];
           case 1:
@@ -483,7 +465,7 @@ function ModalRegister() {
       'div',
       {
         className:
-          'relative z-50 mx-auto h-[580px] w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark',
+          'relative z-50 mx-auto h-[480px] w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark',
       },
       react_1['default'].createElement(
         'button',
@@ -535,7 +517,7 @@ function ModalRegister() {
               return ChangeInfo('Nombre', e.target.value);
             },
             className:
-              'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none border-red-500',
+              'focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
             id: 'username',
             type: 'text',
             placeholder: 'Nombre',
@@ -546,46 +528,17 @@ function ModalRegister() {
           'span',
           {
             className:
-              'flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1',
+              'mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500',
           },
           errorMsg.ErrNombre
         ),
-      react_1['default'].createElement(
-        'label',
-        {
-          className:
-            ' mt-[20px] block text-sm font-bold text-gray-700 dark:text-white',
-        },
-        'Id'
-      ),
-      errorMsg.ErrId.length == 0
-        ? react_1['default'].createElement('input', {
-            onChange: function (e) {
-              return ChangeInfo('Id', e.target.value);
-            },
-            className:
-              'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
-            id: 'username',
-            type: 'text',
-            placeholder: 'Identificacion',
-          })
-        : react_1['default'].createElement('input', {
-            onChange: function (e) {
-              return ChangeInfo('Id', e.target.value);
-            },
-            className:
-              'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none border-red-500',
-            id: 'username',
-            type: 'text',
-            placeholder: 'Identificacion',
-          }),
       error == true &&
         errorMsg.ErrId.length > 0 &&
         react_1['default'].createElement(
           'span',
           {
             className:
-              'flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1',
+              'mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500',
           },
           errorMsg.ErrId
         ),
@@ -613,7 +566,7 @@ function ModalRegister() {
               return ChangeInfo('Correo', e.target.value);
             },
             className:
-              'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none border-red-500',
+              'focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
             id: 'username',
             type: 'text',
             placeholder: 'Correo',
@@ -624,7 +577,7 @@ function ModalRegister() {
           'span',
           {
             className:
-              'flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1',
+              'mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500',
           },
           errorMsg.ErrCorreo
         ),
@@ -637,32 +590,36 @@ function ModalRegister() {
         'Telefono'
       ),
       errorMsg.ErrTelefono.length == 0
-        ? react_1['default'].createElement('input', {
-            onChange: function (e) {
-              return ChangeInfo('Telefono', e.target.value);
-            },
-            className:
-              'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
-            id: 'username',
-            type: 'text',
-            placeholder: 'Numero',
-          })
-        : react_1['default'].createElement('input', {
-            onChange: function (e) {
-              return ChangeInfo('Telefono', e.target.value);
-            },
-            className:
-              'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none border-red-500',
-            id: 'username',
-            type: 'text',
-            placeholder: 'Numero',
-          }),
+        ? react_1['default'].createElement(
+            react_phone_number_input_1['default'],
+            {
+              onChange: setValue1,
+              value: value1,
+              className:
+                'focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
+              id: 'username',
+              type: 'text',
+              placeholder: 'Numero',
+            }
+          )
+        : react_1['default'].createElement(
+            react_phone_number_input_1['default'],
+            {
+              onChange: setValue1,
+              value: value1,
+              className:
+                'focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none',
+              id: 'username',
+              type: 'text',
+              placeholder: 'Numero',
+            }
+          ),
       errorMsg.ErrTelefono.length > 0 &&
         react_1['default'].createElement(
           'span',
           {
             className:
-              'flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1',
+              'mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500',
           },
           errorMsg.ErrTelefono
         ),
@@ -673,7 +630,7 @@ function ModalRegister() {
             return Registrar();
           },
           className:
-            ' mt-[35px] flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l color-primary',
+            ' color-primary mt-[35px] flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l',
         },
         react_1['default'].createElement('span', null, 'Registrarse'),
         react_1['default'].createElement('span', { className: 'h-auto w-9' })
@@ -684,7 +641,7 @@ function ModalRegister() {
         'div',
         {
           className:
-            'p-4 mb-4 text-sm w-[300px] flex self-center justify-center ml-[60px] mt-[30px] text-green-700 bg-green-200 rounded-lg dark:bg-green-200 dark:text-green-800',
+            'mb-4 ml-[60px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800',
           role: 'alert',
         },
         react_1['default'].createElement(
@@ -698,7 +655,7 @@ function ModalRegister() {
         'div',
         {
           className:
-            'p-4 mb-4 text-sm w-[300px]  ml-[60px] mt-[30px] self-center justify-center  text-red-700 bg-red-200 rounded-lg dark:bg-red-200 dark:text-red-800',
+            'mb-4 ml-[60px] mt-[30px] w-[300px]  justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800',
           role: 'alert',
         },
         react_1['default'].createElement(

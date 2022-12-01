@@ -152,6 +152,7 @@ var ethers_1 = require('ethers');
 var react_2 = require('react');
 var blockchainAction_1 = require('../../redux/Blockchain/blockchainAction');
 var active_link_1 = require('./links/active-link');
+var button_1 = require('@/components/ui/button');
 function NFTGrid(_a) {
   var _this = this;
   var //author,
@@ -220,20 +221,9 @@ function NFTGrid(_a) {
         ]
       ))
   );
-  var Button = styled_components_1['default'].button(
+  var CButton = styled_components_1['default'].div(
     templateObject_2 ||
       (templateObject_2 = __makeTemplateObject(
-        [
-          '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    cursor: pointer;\n    &:hover {\n      background: #fff;\n      color: #000;\n    }\n  ',
-        ],
-        [
-          '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    cursor: pointer;\n    &:hover {\n      background: #fff;\n      color: #000;\n    }\n  ',
-        ]
-      ))
-  );
-  var CButton = styled_components_1['default'].div(
-    templateObject_3 ||
-      (templateObject_3 = __makeTemplateObject(
         [
           '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    width: 55%;\n  ',
         ],
@@ -243,8 +233,8 @@ function NFTGrid(_a) {
       ))
   );
   var Options = styled_components_1['default'].option(
-    templateObject_4 ||
-      (templateObject_4 = __makeTemplateObject(
+    templateObject_3 ||
+      (templateObject_3 = __makeTemplateObject(
         [
           '\n    color: #fff;\n    background: #000;\n    font-weight: 600;\n    text-transform: uppercase;\n    cursor: pointer;\n  ',
         ],
@@ -254,8 +244,8 @@ function NFTGrid(_a) {
       ))
   );
   var Select = styled_components_1['default'].select(
-    templateObject_5 ||
-      (templateObject_5 = __makeTemplateObject(
+    templateObject_4 ||
+      (templateObject_4 = __makeTemplateObject(
         [
           '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    cursor: pointer;\n    &:hover {\n      background: #fff;\n      color: #000;\n    }\n  ',
         ],
@@ -517,8 +507,8 @@ function NFTGrid(_a) {
         null,
         loading &&
           React.createElement(
-            Button,
-            { type: 'button', disabled: true },
+            button_1['default'],
+            { size: 'small', type: 'button', disabled: true },
             React.createElement('span', {
               className: 'spinner-border spinner-border-sm',
               role: 'status',
@@ -530,8 +520,9 @@ function NFTGrid(_a) {
           !loading &&
           !isConnect &&
           React.createElement(
-            Button,
+            button_1['default'],
             {
+              size: 'small',
               onClick: function () {
                 dispatch(blockchainAction_1.connectWallet());
               },
@@ -542,14 +533,19 @@ function NFTGrid(_a) {
           isConnect &&
           !loading &&
           price > approvedToken &&
-          React.createElement(Button, { onClick: approve }, 'Approve'),
+          React.createElement(
+            button_1['default'],
+            { size: 'small', onClick: approve },
+            'Approve'
+          ),
         alldata &&
           isConnect &&
           !loading /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/ &&
           price <= approvedToken &&
           React.createElement(
-            Button,
+            button_1['default'],
             {
+              size: 'small',
               onClick: function () {
                 return buyNft(number);
               },
@@ -563,27 +559,35 @@ function NFTGrid(_a) {
             React.createElement(
               active_link_1['default'],
               { href: '/staking/' + number },
-              React.createElement(Button, null, 'Stake')
+              React.createElement(
+                button_1['default'],
+                { size: 'small' },
+                'Stake'
+              )
             ),
             React.createElement(
               active_link_1['default'],
               { href: '/infoinv/' + number },
-              React.createElement(Button, null, 'Ver mas...')
+              React.createElement(
+                button_1['default'],
+                { size: 'small' },
+                'Ver mas...'
+              )
             )
           ),
         type == 'productos' &&
           React.createElement(
             active_link_1['default'],
             { href: '/info/' + number },
-            React.createElement(Button, { className: 'mt-2' }, 'Ver mas...')
+            React.createElement(
+              button_1['default'],
+              { size: 'small', className: 'mt-2' },
+              'Ver mas...'
+            )
           )
       )
     )
   );
 }
 exports['default'] = NFTGrid;
-var templateObject_1,
-  templateObject_2,
-  templateObject_3,
-  templateObject_4,
-  templateObject_5;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4;

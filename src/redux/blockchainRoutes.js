@@ -5,7 +5,7 @@ export const contract = () => {
     usdcContract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
     busdContract: '0xdAb529f40E671A1D4bF91361c21bf9f0C9712ab7',
     daiContract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-    productoMinter: '0x04621cB7d39A9C13215be0e3762e5d894eE34260',
+    productoMinter: '0x65831f4844a84eA804e3688Cc4c15Fc0713E0A03',
     inversionMinter: '0xEA8C3f65C7d2b87D9920f75D1416fDdBF8aedAd1',
     staking: '0xa6907c20cd4e333258fE3b1548f03F7abFE5fB10',
     RPC_URL:

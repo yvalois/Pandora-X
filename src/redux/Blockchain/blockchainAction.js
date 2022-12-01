@@ -507,13 +507,13 @@ const subscribeProvider = (connection) => async (dispatch) => {
         }
         const price = await productoMinterContract.buyPrice(tipo);
         const precio = ethers.utils.formatUnits(price, 18);
-        if (productosAR[item].tipo == type) {
+        if (productosAR[tipo - 1].tipo == type) {
           const prod = {
-            nombre: productosAR[item].nombre,
-            img: productosAR[item].img,
+            nombre: productosAR[tipo - 1].nombre,
+            img: productosAR[tipo - 1].img,
             precio: parseInt(precio),
-            tipo: productosAR[item].tipo,
-            descripcion: productosAR[item].descripcion,
+            tipo: productosAR[tipo - 1].tipo,
+            descripcion: productosAR[tipo - 1].descripcion,
             id: item,
           };
 
@@ -542,13 +542,13 @@ const subscribeProvider = (connection) => async (dispatch) => {
         const price = await inversionMinterContract.buyPrice(tipo);
         //alert(price)
         const precio = ethers.utils.formatUnits(price, 18);
-        if (inversionesAR[item].tipo == type) {
+        if (inversionesAR[tipo - 1].tipo == type) {
           const inv = {
-            nombre: inversionesAR[item].nombre,
-            img: inversionesAR[item].img,
+            nombre: inversionesAR[tipo - 1].nombre,
+            img: inversionesAR[tipo - 1].img,
             precio: parseInt(precio),
-            tipo: inversionesAR[item].tipo,
-            descripcion: inversionesAR[item].descripcion,
+            tipo: inversionesAR[tipo - 1].tipo,
+            descripcion: inversionesAR[tipo - 1].descripcion,
             id: item,
           };
           inventoryi.push(inv);
@@ -611,11 +611,14 @@ const infoPagos = async (productoMinter, rango, categoria) => {
   let i;
   if (Pagos.length < cant) {
     for (i = 0; i < cant; i++) {
-      const paid = await productoMinter.getPagoUser(i + 1);
-      const wallet = await productoMinter.getWallet(i + 1);
+      const paid = await productoMinter.getPagoUser(i);
+      const wallet = await productoMinter.getWallet(i);
       const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(
         2
       );
+      const w1 = wallet.slice(0, 6);
+      const w = wallet.slice(wallet.length - 6);
+      const wall = w1 + '...' + w;
       //setInfor((prevState) => ({ ...prevState, pago: paidFormat }))
       //setInfor((prevState) => ({ ...prevState, wallet: wallet }))
       let tipo;
@@ -634,7 +637,7 @@ const infoPagos = async (productoMinter, rango, categoria) => {
       }
       const pago1 = {
         pago: paidFormat,
-        wallet: wallet,
+        wallet: wall,
         porcentaje: porcentaje,
         tipo: tipo,
       };
@@ -824,11 +827,11 @@ export const connectWallet = () => async (dispatch) => {
         const precio = ethers.utils.formatUnits(price, 18);
         if (productosAR[tipo - 1].tipo == type) {
           const prod = {
-            nombre: productosAR[item].nombre,
-            img: productosAR[item].img,
+            nombre: productosAR[tipo - 1].nombre,
+            img: productosAR[tipo - 1].img,
             precio: parseInt(precio),
-            tipo: productosAR[item].tipo,
-            descripcion: productosAR[item].descripcion,
+            tipo: productosAR[tipo - 1].tipo,
+            descripcion: productosAR[tipo - 1].descripcion,
             id: item,
           };
 
@@ -856,7 +859,6 @@ export const connectWallet = () => async (dispatch) => {
         }
 
         const price = await inversionMinterContract.buyPrice(tipo);
-        //alert(price)
 
         const precio = ethers.utils.formatUnits(price, 18);
         if (inversionesAR[tipo - 1].tipo == type) {
@@ -895,6 +897,25 @@ export const connectWallet = () => async (dispatch) => {
       //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
       //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 18);
 
+      /*let preciosP =[]
+      let preciosI =[]
+
+
+
+      inversionesAR.map(async()=>{
+        const precio = await inversionMinterContract.buyPrice(i+1)
+
+        const price = ethers.utils.formatUnits(precio, 18)
+        preciosI.push(price)
+      })
+
+      productosAR.map(async()=>{
+        const precio = await productoMinterContract.buyPrice(i+1)
+
+        const price = ethers.utils.formatUnits(precio, 18)
+        preciosP.push(price)
+      })*/
+
       dispatch(subscribeProvider(instance));
       await dispatch(
         dataLoaded({
@@ -910,7 +931,7 @@ export const connectWallet = () => async (dispatch) => {
           inventoryi: inventoryi,
           inventorys: inventorys,
           instance: instance,
-          balancep: 0,
+          balanceI: 0,
         })
       );
 

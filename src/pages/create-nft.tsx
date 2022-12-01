@@ -159,110 +159,141 @@ const CreateNFTPage: NextPageWithLayout = () => {
 
   const productosAR = [
     {
-      nombre: 'Pandora X NFT - Podcast-Streaming',
+      Nombre: 'Pandora X NFT - Podcast-Streaming',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Streaming%20%282%29.gif',
+      precio: 0,
       tipo: 'PS',
+      tipoN: 1,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        'Los contenidos gratuitos de Pandora X, en sus diferntes formatos visuales y audiovisuales estan repletos de ideas importantes para crear riqueza en el mundo criptográfico. Además, será una herramienta poderosa para acercar a potenciales estudiantes, inversores y coleccionistas al ecosistema PX.',
     },
     {
-      nombre: 'Pandora X NFT - Podcast-Academia',
+      Nombre: 'Pandora X NFT - Podcast-Academia',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Academia%20%281%29.gif',
+      precio: 0,
       tipo: 'PA',
+      tipoN: 2,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        ' Nuestra Academia contará con cursos y capacitaciones desde el nivel básico hasta niveles más avanzados, donde nuestros participantes podrán acceder a estos contenidos que fomentan el conocimiento y aprendizaje sobre el mercado cripto.',
     },
     {
-      nombre: 'Pandora X NFT - NFT Studio',
+      Nombre: ' Pandora X NFT - NFT Studio',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20NFT%20Studio%20%282%29.gif',
+      precio: 0,
       tipo: 'NS',
+      tipoN: 3,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        'Nos estamos preparando para el futuro. Pandora X Studios es nuestro brazo dedicado al mundo Web 3.0 y los Tokens no Fungibles, nuestra comunidad podrá tener acceso a nuestras colecciones en preventa y artículos NFT de manera exclusiva. Además de conocer de primera mano los proyectos asociados a nuestro Studio.',
     },
     {
-      nombre: 'Pandora X NFT - Investing Value',
+      Nombre: 'Pandora X NFT - Investing Value',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Investing%20Value%20%282%29.gif',
+      precio: 0,
       tipo: 'IV',
+      tipoN: 4,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        'Nuestra estrategia de inversión se basa en el Investing Value, es donde nuestra comunidad puede de forma individual llevar su portafolio y puede ver de primera mano como estamos manejando nuestro Portafolio para que puedan copiar y pegar nuestros pasos como inversores inteligentes. Puntos de compra y venta a lo largo de los periodos. Donde cada uno asume la responsabilidad de sus acciones nosotros nos convertimos en esa guía para tomar decisiones.',
     },
     {
-      nombre: 'Pandora X NFT - Comunidad Privada',
+      Nombre: 'Pandora X NFT - Comunidad Privada',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Privada.gif',
-      tipo: 'CP',
+      precio: 0,
+      ' tipo': 'CP',
+      tipoN: 5,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        'Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.',
     },
     {
-      nombre: 'Pandora X NFT - Comunidad Gratuita',
+      Nombre: 'Pandora X NFT - Comunidad Gratuita',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Gratuita.gif',
-      tipo: 'CG',
+      precio: 0,
+      ' tipo': 'CG',
+      tipoN: 6,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        'Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.',
     },
     {
-      nombre: 'Pandora X NFT - Coaching',
+      Nombre: 'Pandora X NFT - Coaching',
+
+      precio: 0,
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Coaching.gif',
       tipo: 'NC',
+      tipoN: 7,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        'En este programa de entrenamiento, el inversor o coleccionista puede tener una o más secciones, con una duración de 45 minutos cada una, con alguno de nuestros Coaches acreditados, para iniciar en el mundo cripto, analizar su Portafolio o simplemente hablar sobre algún tema relevante del mercado cripto.',
     },
     {
-      nombre: 'Pandora X NFT - Alpha Report',
+      Nombre: 'Pandora X NFT - Alpha Report',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Alpha%20Report.gif',
+      precio: 0,
       tipo: 'AP',
+      tipoN: 8,
       descripcion:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
+        'Nuestro Alpha Report, se trata de un reporte mensual que realizamos para nuestra comunidad, en el cual hacemos (compilamos diferentes análisis del mercado que realizamos, gracias a la experiencia que hemos adquirido durante nuestros años en el mundo cripto).',
     },
   ];
 
   const inversionesAR = [
     {
-      nombre: 'UBX Card 100',
+      Nombre: 'UBX Card 100',
       img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100.gif',
+      precio: 0,
       tipo: '100',
+      tipoN: 1,
       descripcion:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
     },
     {
-      nombre: 'UBX Card 1K',
+      Nombre: 'UBX Card 1K',
       img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%201k%20%281%29.gif',
+      precio: 0,
       tipo: '1K',
+      tipoN: 2,
       descripcion:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
     },
     {
-      nombre: 'UBX Card 5K',
+      Nombre: 'UBX Card 5K',
       img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%205k.gif',
+      precio: 0,
       tipo: '5K',
+      tipoN: 3,
       descripcion:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
     },
     {
-      nombre: 'UBX Card 10K',
+      Nombre: 'UBX Card 10K',
       img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2010k.gif',
+      precio: 0,
       tipo: '10K',
+      tipoN: 4,
       descripcion:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
     },
     {
-      nombre: 'UBX Card 20K',
+      Nombre: 'UBX Card 20K',
       img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2020k.gif',
+      precio: 0,
       tipo: '20K',
+      tipoN: 5,
       descripcion:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
     },
     {
-      nombre: 'UBX Card 50K',
+      Nombre: 'UBX Card 50K',
       img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2050k.gif',
+      precio: 0,
       tipo: '50K',
+      tipoN: 6,
       descripcion:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
     },
     {
-      nombre: 'UBX Card 100K',
+      Nombre: 'UBX Card 100K',
       img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100k.gif',
+      precio: 0,
       tipo: '100K',
+      tipoN: 7,
       descripcion:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
     },
@@ -297,7 +328,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearProducto = async (objeto) => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api/CrearNftProducto`, {
+    fetch(`http://localhost:8000/api/CrearNftProducto`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -306,14 +337,18 @@ const CreateNFTPage: NextPageWithLayout = () => {
     })
       .then((res) => {
         res.json();
-        setStatus(res.status);
+        if (res.status == 200) {
+          setStatus(res.status);
+        } else {
+          setStatus(100);
+        }
       })
       .then(() => {})
       .catch((error) => console.error('Error:', error));
   };
 
   const CrearInversion = async (objeto) => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api/CrearNftInversion`, {
+    fetch(`http://localhost:8000/api/CrearNftInversion`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -334,9 +369,8 @@ const CreateNFTPage: NextPageWithLayout = () => {
 
   const createNFTs = async () => {
     let i;
-    for (i = 0; i < productosAR.length; i++) {
-      await CrearProducto(productosAR[i]);
-    }
+
+    await CrearProducto(productosAR[7]);
 
     /*if (tipo.value == 'productos') {
       let i;

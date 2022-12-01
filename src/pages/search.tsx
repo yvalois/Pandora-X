@@ -29,6 +29,14 @@ import Image from '@/components/ui/image';
 import { Verified } from '@/components/icons/verified';
 import styled from 'styled-components';
 import ActiveLink from '@/components/ui/links/active-link';
+import { ethers } from 'ethers';
+import {
+  uProduct,
+  uInvertion,
+  connectWallet,
+} from '../redux/Blockchain/blockchainAction';
+import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
+import inversionMinterAbi from '../abi/InversionMinter.json';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -189,9 +197,17 @@ const BuyButton = styled.button`
   }
 `;
 
+let inversionI = [];
+let productoP = [];
+
 const SearchPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
+  const a = {
+    numb: 0,
+    tipo: '',
+  };
+
   const pricesP = [];
   const pricesI = [];
   const { isGridCompact } = useGridSwitcher();
@@ -199,8 +215,14 @@ const SearchPage: NextPageWithLayout<
   const dispatch = useDispatch<AppDispatch>();
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
-  const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
-    useSelector((state: any) => state.minted);
+  const [tokenAddress, setTokenAddress] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [cuenta, setCuenta] = useState('');
+  const [approvedToken, setApprovedToken] = useState(0);
+  const Usuario = useSelector((state) => state.Usuario);
+  const { dataloaded, inversiones, productos } = useSelector(
+    (state: any) => state.minted
+  );
 
   const {
     productoMinter,
@@ -211,23 +233,156 @@ const SearchPage: NextPageWithLayout<
     tokenContract,
   } = useSelector((state) => state.blockchain);
 
+  const { referidor } = useSelector((state) => state.Usuario);
+
   const getNft = async () => {
     await dispatch(getMintedNftProducts());
   };
-  const more = (tipo) => {
-    window.location.href = `/details/${tipo}`;
+  const verifyApprove = async (type) => {
+    try {
+      if (type == 'producto') {
+        const usdt = await tokenContract.allowance(
+          accountAddress,
+          productoMinter.address
+        ); //MarketPlace
+        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+      } else if (type == 'inversion') {
+        const usdt = await tokenContract.allowance(
+          accountAddress,
+          inversionMinter.address
+        ); //MarketPlace
+        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const approve = async (type, precio) => {
+    setLoading(true);
+
+    try {
+      if (type == 'producto') {
+        setTokenAddress(tokenContract.address);
+
+        const decimals = 18;
+
+        console.log(tokenContract);
+
+        const tx = await tokenContract.approve(
+          productoMinter.address,
+          ethers.utils.parseUnits(precio.toString(), decimals)
+        );
+
+        await tx.wait();
+        await verifyApprove(type);
+        setLoading(false);
+      } else if (type == 'inversion') {
+        setTokenAddress(tokenContract.address);
+        const decimals = 18;
+        const tx = await tokenContract.approve(
+          inversionMinter.address,
+          ethers.utils.parseUnits(precio.toString(), decimals)
+        );
+
+        await tx.wait();
+        await verifyApprove(type);
+        setLoading(false);
+      }
+    } catch (e) {
+      setLoading(false);
+    }
+  };
+
+  const buyNft = async (type, tipoN) => {
+    setLoading(true);
+
+    try {
+      if (type == 'producto') {
+        if (!Usuario.isReferido && Usuario.type == 'Agente X') {
+          let porcentaje = 0;
+          if (Usuario.range == 'peerx') {
+            porcentaje = 200;
+          } else if (Usuario.range == 'blockelite') {
+            porcentaje = 250;
+          } else if (Usuario.range == 'blockmaster') {
+            porcentaje = 350;
+          } else if (Usuario.range == 'blockcreator') {
+            porcentaje = 400;
+          }
+
+          const tx = await productoMinter.buyTokenWithReferido(
+            tipoN,
+            tokenContract.address,
+            referidor,
+            porcentaje
+          );
+          //referidos
+          await tx.wait();
+          setLoading(false);
+          setApprovedToken(0);
+          dispatch(uProduct());
+        } else {
+          const tx = await productoMinter.buyToken(
+            tipoN,
+            tokenContract.address
+          );
+
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          setLoading(false);
+          setApprovedToken(0);
+          dispatch(uProduct());
+        }
+      } else if (type == 'inversion') {
+        const tx = await inversionMinter.buyToken(tipoN, tokenContract.address);
+        await tx.wait();
+        setLoading(false);
+        setApprovedToken(0);
+        dispatch(uInvertion());
+      }
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     const fetchItems = async () => {
-      getNft();
+      await getNft();
       //const itemsPerPage = 6
       //const start = (currentPage - 1) * itemsPerPage
-      setCurrentItems(disponibleNftp);
-      setCurrentInv(disponibleNfti);
+      setCurrentItems(productos);
+      setCurrentInv(inversiones);
+      console.log(inversiones);
     };
     fetchItems();
-  }, [currentItems, dataloaded]);
+  }, [dataloaded, inversiones, productos]);
+
+  /*useEffect(() => {
+    const fetchItems = async () => {
+      if(isConnect){
+        productoP.map(async(item)=>{
+
+          const precio = await productoMinter.buyPrice(item.tipoN)
+
+          const price = ethers.utils.formatUnits(precio, 18)
+          productoP[item.tipoN-1].precio = parseInt(price)
+  
+        })
+        inversionI.map(async(item)=>{
+
+          const precio = await inversionMinter.buyPrice(item.tipoN)
+          const price = ethers.utils.formatUnits(precio, 18)
+          inversionI[item.tipoN-1].precio = parseInt(price)
+  
+        })
+        console.log(productoP)
+      }
+    }
+    fetchItems();
+  },[inversionI]);*/
+
   return (
     <>
       <NextSeo
@@ -256,10 +411,10 @@ const SearchPage: NextPageWithLayout<
                     : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
                 }
               >
-                {productos.map((producto) => (
+                {currentItems.map((producto) => (
                   <div
                     className="row flex space-x-10 p-8"
-                    key={producto.nombre}
+                    key={producto.Nombre}
                   >
                     <div className="relative w-[400px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
                       <div className="relative block w-full pb-full">
@@ -274,35 +429,94 @@ const SearchPage: NextPageWithLayout<
 
                       <div className="pt-5">
                         <div className="text-lg font-medium text-black dark:text-white">
-                          <h1>{producto.nombre}</h1>
+                          <h1>{producto.Nombre}</h1>
                         </div>
-                        <div className="mt-1.5 flex text-lg">
-                          <span>
-                            {producto.precio}${' '}
-                            {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
-                          </span>
-                        </div>
+                        {isConnect && (
+                          <div className="mt-1.5 flex text-lg">
+                            {producto.precio !== 0 && (
+                              <span>
+                                {producto.precio}$ USDT
+                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
+                              </span>
+                            )}
+                            {producto.precio == 0 && (
+                              <span>
+                                Cargando...
+                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       <div className="mt-2 space-x-2">
-                        <BuyButton type="button" disabled>
-                          <span
-                            className="spinner-border spinner-border-sm"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
-                          Approve
-                        </BuyButton>
-                        <ActiveLink href={`/details/${producto.tipo}`}>
-                          <BuyButton type="button">
+                        {loading && (
+                          <Button size="small">
                             <span
                               className="spinner-border spinner-border-sm"
                               role="status"
                               aria-hidden="true"
                             ></span>
-                            Ver mas...
-                          </BuyButton>
-                        </ActiveLink>
+                            Loading...
+                          </Button>
+                        )}
+                        {isConnect && producto.precio > approvedToken && (
+                          <Button
+                            type="button"
+                            size="small"
+                            onClick={() => approve('producto', producto.precio)}
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Approve
+                          </Button>
+                        )}
+
+                        {isConnect &&
+                          !loading &&
+                          producto.precio <= approvedToken && (
+                            <Button
+                              type="button"
+                              size="small"
+                              onClick={() => buyNft('producto', producto.tipoN)}
+                            >
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Buy Nft
+                            </Button>
+                          )}
+
+                        {isConnect && !loading && (
+                          <ActiveLink href={`/details/${producto.tipo}`}>
+                            <Button type="button" size="small">
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Ver mas...
+                            </Button>
+                          </ActiveLink>
+                        )}
+
+                        {!isConnect && (
+                          <Button
+                            type="button"
+                            size="small"
+                            onClick={() => {
+                              dispatch(connectWallet());
+                            }}
+                          >
+                            Connect Wallet
+                          </Button>
+                        )}
+
                         <div className="mt-2">{producto.descripcion}</div>
                       </div>
                     </div>
@@ -318,10 +532,10 @@ const SearchPage: NextPageWithLayout<
                     : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
                 }
               >
-                {inversion.map((inversion) => (
+                {currentInv.map((inversion) => (
                   <div
                     className="row flex space-x-10 p-8"
-                    key={inversion.nombre}
+                    key={inversion.Nombre}
                   >
                     <div className="relative w-[400px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
                       <div className="relative block w-full pb-full">
@@ -330,37 +544,90 @@ const SearchPage: NextPageWithLayout<
                           //placeholder="blur"
                           layout="fill"
                           objectFit="cover"
-                          alt={inversion.nombre}
+                          alt={inversion.Nombre}
                         />
                       </div>
 
                       <div className="pt-5">
                         <div className="text-lg font-medium text-black dark:text-white">
-                          <h1>{inversion.nombre}</h1>
+                          <h1>{inversion.Nombre}</h1>
                         </div>
-                        <div className="mt-1.5 flex text-lg">
-                          <span>{inversion.precio}$</span>
-                        </div>
+                        {isConnect && (
+                          <div className="mt-1.5 flex text-lg">
+                            {inversion.precio !== 0 && (
+                              <span>
+                                {inversion.precio}$ USDT
+                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
+                              </span>
+                            )}
+                            {inversion.precio == 0 && (
+                              <span>
+                                Cargando...
+                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div className="mt-2 space-x-2">
-                        <BuyButton type="button" disabled>
-                          <span
-                            className="spinner-border spinner-border-sm"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
-                          Approve
-                        </BuyButton>
-                        <ActiveLink href={`/details/${inversion.tipo}`}>
-                          <BuyButton type="button">
+                        {isConnect && inversion.precio > approvedToken && (
+                          <Button
+                            type="button"
+                            size="small"
+                            onClick={() =>
+                              approve('inversion', inversion.precio)
+                            }
+                          >
                             <span
                               className="spinner-border spinner-border-sm"
                               role="status"
                               aria-hidden="true"
                             ></span>
-                            Ver mas...
-                          </BuyButton>
-                        </ActiveLink>
+                            Approve
+                          </Button>
+                        )}
+                        {isConnect &&
+                          !loading &&
+                          inversion.precio <= approvedToken && (
+                            <Button
+                              type="button"
+                              size="small"
+                              onClick={() =>
+                                buyNft('inversion', inversion.tipoN)
+                              }
+                            >
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Buy Nft
+                            </Button>
+                          )}
+                        {isConnect && (
+                          <ActiveLink href={`/details/${inversion.tipo}`}>
+                            <Button type="button" size="small">
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Ver mas...
+                            </Button>
+                          </ActiveLink>
+                        )}
+
+                        {!isConnect && (
+                          <Button
+                            type="button"
+                            size="small"
+                            onClick={() => {
+                              dispatch(connectWallet());
+                            }}
+                          >
+                            Connect Wallet
+                          </Button>
+                        )}
                         <div className="mt-2">{inversion.descripcion}</div>
                       </div>
                     </div>

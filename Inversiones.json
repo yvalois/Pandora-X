@@ -1,0 +1,58 @@
+[
+    {
+      "Nombre": "UBX Card 100",
+      "img": "https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100.gif",
+      "precio": 0,
+      "tipo": "100",
+      "tipoN": 1,
+      "descripcion":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.",
+    },
+    {
+      "Nombre": "UBX Card 1K",
+      "img": "https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%201k%20%281%29.gif",
+      "precio": 0,
+      "tipo": "1K",
+      "tipoN": 2,
+      "descripcion":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.",
+    },
+    {
+      "Nombre": "UBX Card 5K",
+      "img": "https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%205k.gif",
+      "precio": 0,
+      "tipo": "5K",
+      "tipoN": 3,
+      "descripcion":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.",
+    },
+    {
+      "Nombre": "UBX Card 10K",
+      "img": "https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2010k.gif",
+      "precio": 0,
+      "tipo": "10K",
+      "tipoN": 4,
+      "descripcion":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.",
+    },
+    {
+      "Nombre": "UBX Card 20K",
+      "img": "https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2020k.gif",
+      "precio": 0,
+      "tipo": "20K",
+      "tipoN": 5,
+      "descripcion":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.",
+    },
+    {
+      "Nombre": "UBX Card 50K",
+      "img": "https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2050k.gif",
+      "precio": 0,
+      "tipo": "50K",
+      "tipoN": 6,
+      "descripcion":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.",
+    },
+    {
+      "Nombre": "UBX Card 100K",
+      "img": "https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100k.gif",
+      "precio": 0,
+      "tipo": "100K",
+      "tipoN": 7,
+      "descripcion":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.",
+    }
+  ]

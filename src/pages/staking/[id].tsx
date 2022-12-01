@@ -43,27 +43,27 @@ export const getStaticProps: GetStaticProps = async () => {
 const stakingOption = [
   {
     id: 1,
-    name: '1 Año',
+    name: '1 Año (APR 10%)',
     //icon: <Ethereum />,
   },
   {
     id: 2,
-    name: '2 Año',
+    name: '2 Año (APR 10%)',
     //icon: <Flow />,
   },
   {
     id: 3,
-    name: '3 Año',
+    name: '3 Año (APR 10%)',
     //icon: <Flow />,
   },
   {
     id: 4,
-    name: '4 año',
+    name: '4 año (APR 10%)',
     //icon: <Flow />,
   },
   {
     id: 5,
-    name: '5 Año',
+    name: '5 Año (APR 10%)',
     //icon: <Flow />,
   },
 ];
@@ -80,12 +80,14 @@ const StakingPage: NextPageWithLayout = () => {
 
   const [nftSelect, setNftSelect] = useState(nftInfo);
   const [time, setTime] = useState(0);
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(false);
 
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
   const [approvedToken, setApprovedToken] = useState(false);
   let [tipoStak, setTipoStak] = useState(stakingOption[0]);
+  const [loading, setLoading] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
   const [id, setId] = useState(0);
   const { inventoryi } = useSelector((state: any) => state.blockchain);
   const nftdata = {
@@ -120,6 +122,7 @@ const StakingPage: NextPageWithLayout = () => {
 
     //funcion que llame el tipo de staking
   };
+  const Usuario = useSelector((state: any) => state.Usuario);
 
   const getTime = async () => {
     let tipo = await inversionMinter.getTypeOfStaking(nftInfo.id);
@@ -149,14 +152,16 @@ const StakingPage: NextPageWithLayout = () => {
   };
 
   const Approve = async () => {
+    setLoading(true);
     const tx = await inversionMinter.approve(staking.address, id);
 
     await tx.wait();
     await verifyApprove();
-    //setLoading(false);
+    setLoading(false);
   };
 
   const Stake = async () => {
+    setLoading(true);
     //si no esta referido
     let tx = await staking.stake(id, tipoStak.id);
 
@@ -165,6 +170,20 @@ const StakingPage: NextPageWithLayout = () => {
     dispatch(uStaking());
 
     //redirigir a tabla
+    setLoading(false);
+    setApprovedToken(false);
+    setStatus(true);
+    setAlertMsg('Nft stakeado correctamente');
+
+    /*if (!Usuario.isReferido && Usuario.type == 'blockMaker') {
+
+    }else{
+
+        const tx = await productoMinter.buyToken(
+          tipoN,
+          tokenContract.address)
+
+    }*/
   };
 
   useEffect(() => {
@@ -184,7 +203,8 @@ const StakingPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setStatus(0);
+      setStatus(false);
+      window.location.href = '/';
     }, 5000);
   }, [status]);
 
@@ -198,6 +218,17 @@ const StakingPage: NextPageWithLayout = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (
+      Usuario.rol !== 'Admin' &&
+      Usuario.rol !== 'usuario' &&
+      Usuario.rol !== 'cliente'
+    ) {
+      window.location.href = '/';
+    }
+  });
+
   return (
     <>
       <NextSeo
@@ -285,13 +316,24 @@ const StakingPage: NextPageWithLayout = () => {
             <div className="mb-8">
               <div className="mb-8"></div>
 
-              {approvedToken == true && (
+              {loading && (
+                <Button>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Loading...
+                </Button>
+              )}
+
+              {approvedToken == true && !loading && (
                 <Button shape="rounded" onClick={() => Stake()}>
                   Staking
                 </Button>
               )}
 
-              {approvedToken === false && (
+              {approvedToken === false && !loading && (
                 <Button shape="rounded" onClick={() => Approve()}>
                   Approve
                 </Button>
@@ -324,21 +366,12 @@ const StakingPage: NextPageWithLayout = () => {
         </div>
       </div>
 
-      {status == 200 && (
+      {status && (
         <div
-          className="mb-4 ml-[580px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="mb-4 ml-[580px] mt-[-90px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">Usuario creado correctamente</span>
-        </div>
-      )}
-
-      {status == 100 && (
-        <div
-          className="mb-4 ml-[580px] mt-[30px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <span className="font-medium">operacion fallo en el minteo</span>
+          <span className="font-medium">{alertMsg}</span>
         </div>
       )}
     </>
