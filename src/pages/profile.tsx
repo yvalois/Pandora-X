@@ -17,6 +17,7 @@ import { LinkIcon } from '@/components/icons/link-icon';
 // static data
 import { authorData } from '@/data/static/author';
 import { useSelector } from 'react-redux';
+import router from 'next/router';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -52,9 +53,10 @@ const AuthorProfilePage: NextPageWithLayout<
   });
 
   const copiar = () => {
-    navigator.clipboard.writeText(
-      `http://localhost:3000/principal/${accountAddress}`
-    );
+    const aux = window.location.href;
+    const a = aux.split('profile');
+    const e = a[0];
+    navigator.clipboard.writeText(`${e}principal/${accountAddress}`);
 
     setCopyButtonStatus(true);
     setTimeout(() => {
