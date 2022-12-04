@@ -49,8 +49,8 @@ export default function ProfileTab() {
         <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentItems?.map((nft) => (
             <NFTGrid
-              key={nft.nombre}
-              name={nft.nombre}
+              key={nft.Nombre}
+              name={nft.Nombre}
               image={nft.img}
               price={nft.precio}
               number={nft.id}
@@ -58,14 +58,23 @@ export default function ProfileTab() {
               type={'productos'}
             />
           ))}
+          {currentItems.length == 0 && (
+            <div className="align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center">
+              <span>
+                <h1 className="w-[700px] text-lg text-gray-600">
+                  Aun no realizas tu primer compra de Nft's de productos
+                </h1>
+              </span>
+            </div>
+          )}
         </div>
       </TabPanel>
       <TabPanel className="focus:outline-none">
         <div className="grid h-[100%] w-[100%] gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentInv?.map((nft) => (
             <NFTGrid
-              key={nft.nombre}
-              name={nft.nombre}
+              key={nft.Nombre}
+              name={nft.Nombre}
               image={nft.img}
               price={nft.precio}
               number={nft.id}
@@ -74,13 +83,15 @@ export default function ProfileTab() {
             />
           ))}
 
-          <div className="align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center">
-            <span>
-              <h1 className="w-[700px] text-lg text-gray-600">
-                Aun no realizas tu primer compra de Nft's de inversion
-              </h1>
-            </span>
-          </div>
+          {currentInv.length == 0 && (
+            <div className="align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center">
+              <span>
+                <h1 className="w-[700px] text-lg text-gray-600">
+                  Aun no realizas tu primer compra de Nft's de inversion
+                </h1>
+              </span>
+            </div>
+          )}
         </div>
       </TabPanel>
       <TabPanel className="focus:outline-none">

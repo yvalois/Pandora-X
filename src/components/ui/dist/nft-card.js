@@ -144,15 +144,15 @@ var __generator =
   };
 exports.__esModule = true;
 var image_1 = require('@/components/ui/image');
+var anchor_link_1 = require('@/components/ui/links/anchor-link');
 var verified_1 = require('@/components/icons/verified');
+var avatar_1 = require('@/components/ui/avatar');
 var styled_components_1 = require('styled-components');
 var react_1 = require('react');
 var react_redux_1 = require('react-redux');
 var ethers_1 = require('ethers');
 var react_2 = require('react');
-var blockchainAction_1 = require('../../redux/Blockchain/blockchainAction');
-var active_link_1 = require('./links/active-link');
-var button_1 = require('@/components/ui/button');
+var Pandora_X_icon_04_svg_1 = require('@/assets/images/Pandora-X-icon-04.svg');
 function NFTGrid(_a) {
   var _this = this;
   var //author,
@@ -164,7 +164,8 @@ function NFTGrid(_a) {
     alldata = _a.alldata,
     type = _a.type,
     nftInfo = _a.nftInfo,
-    setNftInfo = _a.setNftInfo;
+    setNftInfo = _a.setNftInfo,
+    tipo = _a.tipo;
   //const { isConnect, account } = useSelector((state) => state.Usuario);
   var _b = react_redux_1.useSelector(function (state) {
       return state.blockchain;
@@ -173,14 +174,14 @@ function NFTGrid(_a) {
     inversionMinter = _b.inversionMinter,
     isConnect = _b.isConnect,
     accountAddress = _b.accountAddress,
-    usdtContract = _b.usdtContract,
-    tokenContract = _b.tokenContract;
+    tokenContract = _b.tokenContract,
+    usdtContract = _b.usdtContract;
   var referidor = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   }).referidor;
   /*const signer = provider?.getSigner();
     console.log(signer);
-    const tokenContract = new ethers.Contract(
+    const usdtContract = new ethers.Contract(
       '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
       abiErc20,
       signer
@@ -349,7 +350,7 @@ function NFTGrid(_a) {
           case 1:
             usdt = _a.sent();
             //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             return [3 /*break*/, 4];
           case 2:
             if (!(type == 'inversion')) return [3 /*break*/, 4];
@@ -360,13 +361,12 @@ function NFTGrid(_a) {
           case 3:
             usdt = _a.sent();
             //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             _a.label = 4;
           case 4:
             return [3 /*break*/, 6];
           case 5:
             e_1 = _a.sent();
-            console.log(e_1);
             return [3 /*break*/, 6];
           case 6:
             return [2 /*return*/];
@@ -386,8 +386,7 @@ function NFTGrid(_a) {
             _a.trys.push([1, 10, , 11]);
             if (!(type == 'producto')) return [3 /*break*/, 5];
             setTokenAddress(tokenContract.address);
-            decimals = 18;
-            console.log(tokenContract);
+            decimals = 6;
             return [
               4 /*yield*/,
               tokenContract.approve(
@@ -408,7 +407,7 @@ function NFTGrid(_a) {
           case 5:
             if (!(type == 'inversion')) return [3 /*break*/, 9];
             setTokenAddress(tokenContract.address);
-            decimals = 18;
+            decimals = 6;
             return [
               4 /*yield*/,
               tokenContract.approve(
@@ -455,44 +454,164 @@ function NFTGrid(_a) {
     React.createElement(
       'div',
       { className: 'p-4' },
-      React.createElement('div', {
-        className:
-          'flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white',
-      })
+      React.createElement(
+        'div',
+        {
+          className:
+            'flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white',
+        },
+        React.createElement(avatar_1['default'], {
+          image: Pandora_X_icon_04_svg_1['default'],
+          alt: name,
+          size: 'xs',
+          className:
+            'text-ellipsis self-center rtl:mr-3  rtl:ml-3 dark:border-gray-500',
+        }),
+        React.createElement(
+          'span',
+          { className: 'overflow-hidden text-ellipsis' },
+          '@PandoraX'
+        )
+      )
     ),
-    React.createElement(
-      'div',
-      { className: 'relative block w-full pb-full' },
-      React.createElement(image_1['default'], {
-        src: image,
-        //placeholder="blur"
-        layout: 'fill',
-        objectFit: 'cover',
-        alt: '',
-      })
-    ),
+    type == 'compra'
+      ? React.createElement(
+          anchor_link_1['default'],
+          {
+            href: '/details/' + number,
+            className: 'relative block w-full pb-full',
+          },
+          React.createElement(image_1['default'], {
+            src: image,
+            layout: 'fill',
+            objectFit: 'cover',
+            alt: '',
+          })
+        )
+      : type == 'productos'
+      ? React.createElement(
+          anchor_link_1['default'],
+          {
+            href: '/info/' + number,
+            className: 'relative block w-full pb-full',
+          },
+          React.createElement(image_1['default'], {
+            src: image,
+            layout: 'fill',
+            objectFit: 'cover',
+            alt: '',
+          })
+        )
+      : React.createElement(
+          anchor_link_1['default'],
+          {
+            href: '/infoinv/' + number,
+            className: 'relative block w-full pb-full',
+          },
+          React.createElement(image_1['default'], {
+            src: image,
+            layout: 'fill',
+            objectFit: 'cover',
+            alt: '',
+          })
+        ),
     React.createElement(
       'div',
       { className: 'p-5' },
+      type == 'comprap'
+        ? React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/details/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          )
+        : type == 'comprap'
+        ? React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/details/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          )
+        : type == 'productos'
+        ? React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/info/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          )
+        : React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/infoinv/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          ),
       React.createElement(
         'div',
-        { className: 'text-sm font-medium text-black dark:text-white' },
-        name
+        { className: 'mt-1.5 flex' },
+        type == 'comprap' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Productos',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          ),
+        type == 'comprai' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Inversiones',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          )
       ),
       React.createElement(
         'div',
         { className: 'mt-1.5 flex' },
-        React.createElement(
-          'div',
-          {
-            className:
-              'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
-          },
-          parseInt(number) + 1,
-          React.createElement(verified_1.Verified, {
-            className: 'ltr:ml-1 rtl:mr-1',
-          })
-        )
+        type == 'productos' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Productos',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          ),
+        type == 'staking' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Inversiones',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          )
       ),
       alldata &&
         React.createElement(
@@ -500,92 +619,10 @@ function NFTGrid(_a) {
           {
             className: 'mt-4 text-lg font-medium text-gray-900 dark:text-white',
           },
-          price
-        ),
-      React.createElement(
-        'div',
-        null,
-        loading &&
-          React.createElement(
-            button_1['default'],
-            { size: 'small', type: 'button', disabled: true },
-            React.createElement('span', {
-              className: 'spinner-border spinner-border-sm',
-              role: 'status',
-              'aria-hidden': 'true',
-            }),
-            'Loading...'
-          ),
-        alldata &&
-          !loading &&
-          !isConnect &&
-          React.createElement(
-            button_1['default'],
-            {
-              size: 'small',
-              onClick: function () {
-                dispatch(blockchainAction_1.connectWallet());
-              },
-            },
-            'Connect Wallet'
-          ),
-        alldata &&
-          isConnect &&
-          !loading &&
-          price > approvedToken &&
-          React.createElement(
-            button_1['default'],
-            { size: 'small', onClick: approve },
-            'Approve'
-          ),
-        alldata &&
-          isConnect &&
-          !loading /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/ &&
-          price <= approvedToken &&
-          React.createElement(
-            button_1['default'],
-            {
-              size: 'small',
-              onClick: function () {
-                return buyNft(number);
-              },
-            },
-            'Buy'
-          ),
-        type == 'staking' &&
-          React.createElement(
-            'div',
-            { className: ' row ml-[-10px] mt-2   flex justify-evenly' },
-            React.createElement(
-              active_link_1['default'],
-              { href: '/staking/' + number },
-              React.createElement(
-                button_1['default'],
-                { size: 'small' },
-                'Stake'
-              )
-            ),
-            React.createElement(
-              active_link_1['default'],
-              { href: '/infoinv/' + number },
-              React.createElement(
-                button_1['default'],
-                { size: 'small' },
-                'Ver mas...'
-              )
-            )
-          ),
-        type == 'productos' &&
-          React.createElement(
-            active_link_1['default'],
-            { href: '/info/' + number },
-            React.createElement(
-              button_1['default'],
-              { size: 'small', className: 'mt-2' },
-              'Ver mas...'
-            )
-          )
-      )
+          '$',
+          price,
+          ' USDT'
+        )
     )
   );
 }

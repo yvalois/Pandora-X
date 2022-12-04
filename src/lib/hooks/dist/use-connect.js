@@ -242,7 +242,7 @@ exports.WalletProvider = function (_a) {
     };*/
   //wallet address saldra
   /*const conectar = async () => {
-      fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
+      fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

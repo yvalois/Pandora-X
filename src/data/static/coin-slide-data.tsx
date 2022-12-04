@@ -3,6 +3,7 @@ import BitcoinImage from '@/assets/images/coin/bitcoin.svg';
 import TetherImage from '@/assets/images/coin/tether.svg';
 import CardanoImage from '@/assets/images/coin/cardano.svg';
 import BinanceImage from '@/assets/images/coin/binance.svg';
+import usdcoin from '@/assets/images/coin/usd-coin.svg';
 
 export const coinSlideData = [
   {
@@ -19,7 +20,7 @@ export const coinSlideData = [
   {
     id: '1',
     name: 'Tether',
-    symbol: 'USDT',
+    symbol: 'ETH',
     balance: '1.2345',
     usdBalance: '1,032.24',
     logo: TetherImage,
@@ -29,14 +30,14 @@ export const coinSlideData = [
   },
   {
     id: '2',
-    name: 'Cardano',
-    symbol: 'ADA',
-    balance: '1.2370',
-    usdBalance: '532.94',
-    logo: CardanoImage,
-    change: '+12.5%',
-    isChangePositive: true,
-    color: '#DBE3FF',
+    name: 'USDCoin',
+    symbol: 'USDC',
+    balance: '1.2345',
+    usdBalance: '1,032.24',
+    logo: usdcoin,
+    change: '-1.5%',
+    isChangePositive: false,
+    color: '#CCFFFC',
   },
   {
     id: '3',

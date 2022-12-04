@@ -239,8 +239,8 @@ function ProfileTabUser() {
           ? void 0
           : currentItems.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.nombre,
-                name: nft.nombre,
+                key: nft.Nombre,
+                name: nft.Nombre,
                 image: nft.img,
                 price: 13,
                 number: nft.id,
@@ -248,7 +248,24 @@ function ProfileTabUser() {
                 alldata: false,
                 type: 'productos',
               });
-            })
+            }),
+        currentItems.length == 0 &&
+          React.createElement(
+            'div',
+            {
+              className:
+                'align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center',
+            },
+            React.createElement(
+              'span',
+              null,
+              React.createElement(
+                'h1',
+                { className: 'w-[700px] text-lg text-gray-600' },
+                "Aun no realizas tu primer compra de Nft's de productos"
+              )
+            )
+          )
       )
     ),
     React.createElement(
@@ -264,15 +281,32 @@ function ProfileTabUser() {
           ? void 0
           : currentInv.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.nombre,
-                name: nft.nombre,
+                key: nft.Nombre,
+                name: nft.Nombre,
                 image: nft.img,
                 price: 13,
                 number: nft.id,
                 alldata: false,
                 type: 'staking',
               });
-            })
+            }),
+        currentInv.length == 0 &&
+          React.createElement(
+            'div',
+            {
+              className:
+                'align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center',
+            },
+            React.createElement(
+              'span',
+              null,
+              React.createElement(
+                'h1',
+                { className: 'w-[700px] text-lg text-gray-600' },
+                "Aun no realizas tu primer compra de Nft's de inversion"
+              )
+            )
+          )
       )
     ),
     React.createElement(

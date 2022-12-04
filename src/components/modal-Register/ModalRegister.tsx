@@ -68,7 +68,7 @@ export default function ModalRegister() {
 
   const RegistrarBD = async () => {
     try {
-      fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
+      fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/CrearUsuario`, {
         method: 'POST',
         body: JSON.stringify(value),
         headers: {
@@ -92,9 +92,7 @@ export default function ModalRegister() {
           }, 3000);
         })
         .catch((error) => console.error('Error:', error));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const Registrar = async () => {
@@ -150,14 +148,13 @@ export default function ModalRegister() {
       value.Nombre.length >= 3 &&
       validator.isAlpha(value.Nombre)
     ) {
-      alert('a');
       setError(false);
       await RegistrarBD();
     }
   };
 
   /*const conectar = (accountAddress) => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
+    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

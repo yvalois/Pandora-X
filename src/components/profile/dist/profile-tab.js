@@ -56,15 +56,32 @@ function ProfileTab() {
           ? void 0
           : currentItems.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.nombre,
-                name: nft.nombre,
+                key: nft.Nombre,
+                name: nft.Nombre,
                 image: nft.img,
                 price: nft.precio,
                 number: nft.id,
                 alldata: false,
                 type: 'productos',
               });
-            })
+            }),
+        currentItems.length == 0 &&
+          React.createElement(
+            'div',
+            {
+              className:
+                'align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center',
+            },
+            React.createElement(
+              'span',
+              null,
+              React.createElement(
+                'h1',
+                { className: 'w-[700px] text-lg text-gray-600' },
+                "Aun no realizas tu primer compra de Nft's de productos"
+              )
+            )
+          )
       )
     ),
     React.createElement(
@@ -74,14 +91,14 @@ function ProfileTab() {
         'div',
         {
           className:
-            'grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4 w-[100%] h-[100%]',
+            'grid h-[100%] w-[100%] gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4',
         },
         currentInv === null || currentInv === void 0
           ? void 0
           : currentInv.map(function (nft) {
               return React.createElement(nft_card_1['default'], {
-                key: nft.nombre,
-                name: nft.nombre,
+                key: nft.Nombre,
+                name: nft.Nombre,
                 image: nft.img,
                 price: nft.precio,
                 number: nft.id,
@@ -89,22 +106,23 @@ function ProfileTab() {
                 type: 'staking',
               });
             }),
-        React.createElement(
-          'div',
-          {
-            className:
-              'flex justify-center align-self mt-[50%] ml-[100%] w-[100%] height-[100%]',
-          },
+        currentInv.length == 0 &&
           React.createElement(
-            'span',
-            null,
+            'div',
+            {
+              className:
+                'align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center',
+            },
             React.createElement(
-              'h1',
-              { className: 'text-lg text-gray-600 w-[700px]' },
-              "Aun no realizas tu primer compra de Nft's de inversion"
+              'span',
+              null,
+              React.createElement(
+                'h1',
+                { className: 'w-[700px] text-lg text-gray-600' },
+                "Aun no realizas tu primer compra de Nft's de inversion"
+              )
             )
           )
-        )
       )
     ),
     React.createElement(

@@ -20,6 +20,7 @@ import ModalWithdraw from '../modalWithdraw/modalWithdraw';
 import { useModal } from '@/components/modal-views/context';
 import { useSelector, useDispatch } from 'react-redux';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import { useWindowScroll } from 'react-use';
 
 export default function StakingTable() {
   const { inversionMinter } = useSelector((state) => state.blockchain);
@@ -49,15 +50,8 @@ export default function StakingTable() {
   const dispatch = useDispatch<AppDispatch>();
 
   const claim = async (value) => {
-    if (Usuario.isReferido && Usuario.type == 'blockMaker') {
+    if (Usuario.isreferido && Usuario.type == 'BlockMaker') {
       setLoading(true); //usarlos como alerts de cargando y otro de realizado
-      const tx = await staking.claimReward(value, tokenContract.address);
-      await tx.wait();
-
-      setLoading(false);
-      setStatusC(true);
-      setAlertMsg('Transacion cumplida');
-    } else {
       const tx = await staking.claimRewardWithReferido(
         value,
         Usuario.referidor,
@@ -68,19 +62,37 @@ export default function StakingTable() {
       setLoading(false);
       setStatusC(true);
       setAlertMsg('Transacion cumplida');
+    } else {
+      setLoading(true);
+      const tx = await staking.claimReward(value, tokenContract.address);
+      await tx.wait();
+
+      setLoading(false);
+      setStatusC(true);
+      setAlertMsg('Transacion cumplida');
     }
   };
 
   const withdraw = async (value) => {
-    setLoading(true);
-    const tx = await staking.withdraw(value);
-    await tx.wait();
+    //preguntar si esta en tiempo
+    //si no lo esta lanza el modal
+    //aprove del 10% del valor del nft
+    // llamar a withdraw with punishment
+    const isOutTime = await staking.isOutTime(value);
+    if (isOutTime) {
+      window.localStorage.setItem('WithdrawID', value);
+      openModal('WITHDRAW_VIEW');
+    } else {
+      setLoading(true);
+      const tx = await staking.withdraw(value);
+      await tx.wait();
 
-    dispatch(uStaking());
-    dispatch(uInvertion());
-    setLoading(false);
-    setStatusW(true);
-    setAlertMsg('Transacion cumplida');
+      dispatch(uStaking());
+      dispatch(uInvertion());
+      setLoading(false);
+      setStatusW(true);
+      setAlertMsg('Transacion cumplida');
+    }
   };
 
   const COLUMNS = [
@@ -348,7 +360,7 @@ export default function StakingTable() {
 
       {loading && (
         <div
-          className="absolute top-[240px] right-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
+          className="absolute top-[770px] right-[140px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
           role="alert"
         >
           <span className="self-center font-medium">Loading...</span>
@@ -357,7 +369,7 @@ export default function StakingTable() {
 
       {statusC && (
         <div
-          className="absolute top-[240px] right-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute top-[770px] right-[140px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="font-medium">{alertMsg}</span>
@@ -366,7 +378,7 @@ export default function StakingTable() {
 
       {statusW && (
         <div
-          className="absolute top-[240px] right-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute top-[770px] right-[140px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="font-medium">{alertMsg}</span>

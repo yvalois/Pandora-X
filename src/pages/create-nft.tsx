@@ -159,7 +159,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
 
   const productosAR = [
     {
-      Nombre: 'Pandora X NFT - Podcast-Streaming',
+      Nombre: 'Podcast-Streaming',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Streaming%20%282%29.gif',
       precio: 0,
       tipo: 'PS',
@@ -168,7 +168,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
         'Los contenidos gratuitos de Pandora X, en sus diferntes formatos visuales y audiovisuales estan repletos de ideas importantes para crear riqueza en el mundo criptográfico. Además, será una herramienta poderosa para acercar a potenciales estudiantes, inversores y coleccionistas al ecosistema PX.',
     },
     {
-      Nombre: 'Pandora X NFT - Podcast-Academia',
+      Nombre: 'Podcast-Academia',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Academia%20%281%29.gif',
       precio: 0,
       tipo: 'PA',
@@ -177,7 +177,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
         ' Nuestra Academia contará con cursos y capacitaciones desde el nivel básico hasta niveles más avanzados, donde nuestros participantes podrán acceder a estos contenidos que fomentan el conocimiento y aprendizaje sobre el mercado cripto.',
     },
     {
-      Nombre: ' Pandora X NFT - NFT Studio',
+      Nombre: ' NFT Studio',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20NFT%20Studio%20%282%29.gif',
       precio: 0,
       tipo: 'NS',
@@ -186,7 +186,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
         'Nos estamos preparando para el futuro. Pandora X Studios es nuestro brazo dedicado al mundo Web 3.0 y los Tokens no Fungibles, nuestra comunidad podrá tener acceso a nuestras colecciones en preventa y artículos NFT de manera exclusiva. Además de conocer de primera mano los proyectos asociados a nuestro Studio.',
     },
     {
-      Nombre: 'Pandora X NFT - Investing Value',
+      Nombre: 'Investing Value',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Investing%20Value%20%282%29.gif',
       precio: 0,
       tipo: 'IV',
@@ -195,25 +195,25 @@ const CreateNFTPage: NextPageWithLayout = () => {
         'Nuestra estrategia de inversión se basa en el Investing Value, es donde nuestra comunidad puede de forma individual llevar su portafolio y puede ver de primera mano como estamos manejando nuestro Portafolio para que puedan copiar y pegar nuestros pasos como inversores inteligentes. Puntos de compra y venta a lo largo de los periodos. Donde cada uno asume la responsabilidad de sus acciones nosotros nos convertimos en esa guía para tomar decisiones.',
     },
     {
-      Nombre: 'Pandora X NFT - Comunidad Privada',
+      Nombre: 'Comunidad Privada',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Privada.gif',
       precio: 0,
-      ' tipo': 'CP',
+      tipo: 'CP',
       tipoN: 5,
       descripcion:
         'Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.',
     },
     {
-      Nombre: 'Pandora X NFT - Comunidad Gratuita',
+      Nombre: 'Comunidad Gratuita',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Gratuita.gif',
       precio: 0,
-      ' tipo': 'CG',
+      tipo: 'CG',
       tipoN: 6,
       descripcion:
         'Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.',
     },
     {
-      Nombre: 'Pandora X NFT - Coaching',
+      Nombre: 'Coaching',
 
       precio: 0,
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Coaching.gif',
@@ -223,7 +223,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
         'En este programa de entrenamiento, el inversor o coleccionista puede tener una o más secciones, con una duración de 45 minutos cada una, con alguno de nuestros Coaches acreditados, para iniciar en el mundo cripto, analizar su Portafolio o simplemente hablar sobre algún tema relevante del mercado cripto.',
     },
     {
-      Nombre: 'Pandora X NFT - Alpha Report',
+      Nombre: 'Alpha Report',
       img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Alpha%20Report.gif',
       precio: 0,
       tipo: 'AP',
@@ -300,7 +300,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   ];
 
   const getProductos = async () => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
+    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getProducto`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -314,7 +314,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const getInversiones = async () => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
+    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getInversion`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -328,7 +328,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearProducto = async (objeto) => {
-    fetch(`http://localhost:8000/api/CrearNftProducto`, {
+    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/CrearNftProducto`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -348,7 +348,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearInversion = async (objeto) => {
-    fetch(`http://localhost:8000/api/CrearNftInversion`, {
+    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/CrearNftInversion`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {

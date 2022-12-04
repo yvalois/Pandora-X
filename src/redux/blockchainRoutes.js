@@ -5,12 +5,12 @@ export const contract = () => {
     usdcContract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
     busdContract: '0xdAb529f40E671A1D4bF91361c21bf9f0C9712ab7',
     daiContract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-    productoMinter: '0x65831f4844a84eA804e3688Cc4c15Fc0713E0A03',
-    inversionMinter: '0xEA8C3f65C7d2b87D9920f75D1416fDdBF8aedAd1',
-    staking: '0xa6907c20cd4e333258fE3b1548f03F7abFE5fB10',
-    RPC_URL:
-      'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
-    tokenPrueba: '0x8aa436dFb04f325BBF191dAB9E557EB571DCA08F',
+    productoMinter: '0x40ED3Adb3E97f72bE5f85A69bf0be3371cad78E2',
+    inversionMinter: '0x8fA9365bCcc4C554FE1D7c004ff46b7A05d4de2C',
+    staking: '0x96964E04b71Bc0239c2fE64bc595F9f490a71101',
+    RPC_URL: 'https://polygon-rpc.com',
+    //'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
+    tokenPrueba: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', //aqui ponemos el usdt
   };
   // }
 

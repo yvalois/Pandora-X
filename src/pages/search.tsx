@@ -38,15 +38,6 @@ import {
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
 
-const gridCompactViewAtom = atom(false);
-function useGridSwitcher() {
-  const [isGridCompact, setIsGridCompact] = useAtom(gridCompactViewAtom);
-  return {
-    isGridCompact,
-    setIsGridCompact,
-  };
-}
-
 const productos = [
   {
     nombre: 'Pandora X NFT - Podcast-Streaming',
@@ -174,6 +165,267 @@ const inversion = [
   },
 ];
 
+const gridCompactViewAtom = atom(false);
+function useGridSwitcher() {
+  const [isGridCompact, setIsGridCompact] = useAtom(gridCompactViewAtom);
+  return {
+    isGridCompact,
+    setIsGridCompact,
+  };
+}
+
+function GridSwitcher() {
+  const { isGridCompact, setIsGridCompact } = useGridSwitcher();
+  return (
+    <div className="flex overflow-hidden rounded-lg">
+      <button
+        className={`relative flex h-11 w-11 items-center justify-center bg-gray-100 transition dark:bg-gray-800 ${
+          !isGridCompact ? 'z-10 text-white' : 'text-brand dark:text-white'
+        }`}
+        onClick={() => setIsGridCompact(!isGridCompact)}
+        aria-label="Normal Grid"
+      >
+        {!isGridCompact && (
+          <motion.span
+            className="absolute left-0 right-0 bottom-0 h-full w-full bg-brand shadow-large"
+            layoutId="gridSwitchIndicator"
+          />
+        )}
+        <NormalGridIcon className="relative" />
+      </button>
+      <button
+        className={`relative flex h-11 w-11 items-center justify-center bg-gray-100 transition dark:bg-gray-800 ${
+          isGridCompact ? 'z-10 text-white' : 'text-brand dark:text-white'
+        }`}
+        onClick={() => setIsGridCompact(!isGridCompact)}
+        aria-label="Normal Grid"
+      >
+        {isGridCompact && (
+          <motion.span
+            className="absolute left-0 right-0 bottom-0 h-full w-full  bg-brand shadow-large"
+            layoutId="gridSwitchIndicator"
+          />
+        )}
+        <CompactGridIcon className="relative" />
+      </button>
+    </div>
+  );
+}
+
+const sort = [
+  { id: 1, name: 'Date Listed: Newest' },
+  { id: 2, name: 'Date Listed: Oldest' },
+  { id: 3, name: 'Ending: Soonest' },
+  { id: 4, name: 'Ending: Latest' },
+];
+
+function SortList() {
+  const [selectedItem, setSelectedItem] = useState(sort[0]);
+
+  return (
+    <div className="relative">
+      <Listbox value={selectedItem} onChange={setSelectedItem}>
+        <Listbox.Button className="flex h-10 w-auto items-center justify-between rounded-lg bg-gray-100 px-4 text-xs text-gray-900 dark:bg-gray-800 dark:text-white sm:w-56 sm:text-sm lg:h-11">
+          {selectedItem.name}
+          <ChevronDown className="ltr:ml-2 rtl:mr-2" />
+        </Listbox.Button>
+        <Transition
+          enter="ease-out duration-200"
+          enterFrom="opacity-0 translate-y-2"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 -translate-y-0"
+          leaveTo="opacity-0 translate-y-2"
+        >
+          <Listbox.Options className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-white p-3 shadow-large dark:bg-light-dark sm:w-full">
+            {sort.map((item) => (
+              <Listbox.Option key={item.id} value={item}>
+                {({ selected }) => (
+                  <div
+                    className={`block cursor-pointer rounded-lg px-3 py-2 text-xs font-medium text-gray-900 transition dark:text-white sm:text-sm  ${
+                      selected
+                        ? 'my-1 bg-gray-100 dark:bg-gray-800'
+                        : 'hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {item.name}
+                  </div>
+                )}
+              </Listbox.Option>
+            ))}
+          </Listbox.Options>
+        </Transition>
+      </Listbox>
+    </div>
+  );
+}
+
+function PriceRange() {
+  let [range, setRange] = useState({ min: 0, max: 1000 });
+  function handleRangeChange(value: any) {
+    setRange({
+      min: value[0],
+      max: value[1],
+    });
+  }
+
+  function handleMaxChange(max: number) {
+    setRange({
+      ...range,
+      max: max || range.min,
+    });
+  }
+
+  function handleMinChange(min: number) {
+    setRange({
+      ...range,
+      min: min || 0,
+    });
+  }
+
+  return (
+    <div className="p-5">
+      <div className="mb-4 grid grid-cols-2 gap-2">
+        <input
+          className="h-9 rounded-lg border-gray-200 text-sm text-gray-900 outline-none focus:border-gray-900 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-gray-500"
+          type="number"
+          value={range.min}
+          onChange={(e) => handleMinChange(parseInt(e.target.value))}
+          min="0"
+          max={range.max}
+        />
+        <input
+          className="h-9 rounded-lg border-gray-200 text-sm text-gray-900 outline-none focus:border-gray-900 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-gray-500"
+          type="number"
+          value={range.max}
+          onChange={(e) => handleMaxChange(parseInt(e.target.value))}
+          min={range.min}
+        />
+      </div>
+      <Slider
+        range
+        min={0}
+        max={1000}
+        value={[range.min, range.max]}
+        allowCross={false}
+        onChange={(value) => handleRangeChange(value)}
+      />
+    </div>
+  );
+}
+
+function Status() {
+  let [plan, setPlan] = useState('buy-now');
+
+  return (
+    <RadioGroup
+      value={plan}
+      onChange={setPlan}
+      className="grid grid-cols-2 gap-2 p-5"
+    >
+      <RadioGroup.Option value="buy-now">
+        {({ checked }) => (
+          <span
+            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
+              checked
+                ? 'border-brand bg-brand text-white shadow-button'
+                : 'border-gray-200 bg-white text-brand dark:border-gray-700 dark:bg-gray-800 dark:text-white'
+            }`}
+          >
+            Comprar
+          </span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="on-auction">
+        {({ checked }) => (
+          <span
+            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
+              checked
+                ? 'border-brand bg-brand text-white shadow-button'
+                : 'border-gray-200 bg-white text-brand dark:border-gray-700 dark:bg-gray-800 dark:text-white'
+            }`}
+          >
+            Subastas
+          </span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="new">
+        {({ checked }) => (
+          <span
+            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
+              checked
+                ? 'border-brand bg-brand text-white shadow-button'
+                : 'border-gray-200 bg-white text-brand dark:border-gray-700 dark:bg-gray-800 dark:text-white'
+            }`}
+          >
+            Nuevos
+          </span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="has-offers">
+        {({ checked }) => (
+          <span
+            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
+              checked
+                ? 'border-brand bg-brand text-white shadow-button'
+                : 'border-gray-200 bg-white text-brand dark:border-gray-700 dark:bg-gray-800 dark:text-white'
+            }`}
+          >
+            Ofertas
+          </span>
+        )}
+      </RadioGroup.Option>
+    </RadioGroup>
+  );
+}
+
+function Filters() {
+  return (
+    <>
+      <Collapse label="Status" initialOpen>
+        <Status />
+      </Collapse>
+      <Collapse label="Price Range" initialOpen>
+        <PriceRange />
+      </Collapse>
+      <Collapse label="Collection" initialOpen>
+        <CollectionSelect onSelect={(value) => console.log(value)} />
+      </Collapse>
+    </>
+  );
+}
+
+export function DrawerFilters() {
+  const { closeDrawer } = useDrawer();
+  return (
+    <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80">
+      <div className="flex h-20 items-center justify-between overflow-hidden px-6 py-4">
+        <h2 className="text-xl font-medium uppercase tracking-wider text-gray-900 dark:text-white">
+          Filters
+        </h2>
+        <Button
+          shape="circle"
+          color="white"
+          onClick={closeDrawer}
+          className="dark:bg-light-dark"
+        >
+          <Close className="h-auto w-3" />
+        </Button>
+      </div>
+      <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
+        <div className="px-6 pb-20 pt-1">
+          <Filters />
+        </div>
+      </Scrollbar>
+      <div className="absolute left-0 bottom-4 z-10 w-full px-6">
+        <Button fullWidth onClick={closeDrawer}>
+          DONE
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
@@ -197,8 +449,8 @@ const BuyButton = styled.button`
   }
 `;
 
-let inversionI = [];
-let productoP = [];
+//let inversionI = [];
+//let productoP = [];
 
 const SearchPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
@@ -229,7 +481,6 @@ const SearchPage: NextPageWithLayout<
     inversionMinter,
     isConnect,
     accountAddress,
-    usdtContract,
     tokenContract,
   } = useSelector((state) => state.blockchain);
 
@@ -246,14 +497,14 @@ const SearchPage: NextPageWithLayout<
           productoMinter.address
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
       } else if (type == 'inversion') {
         const usdt = await tokenContract.allowance(
           accountAddress,
           inversionMinter.address
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
       }
     } catch (e) {
       console.log(e);
@@ -267,9 +518,7 @@ const SearchPage: NextPageWithLayout<
       if (type == 'producto') {
         setTokenAddress(tokenContract.address);
 
-        const decimals = 18;
-
-        console.log(tokenContract);
+        const decimals = 6;
 
         const tx = await tokenContract.approve(
           productoMinter.address,
@@ -281,7 +530,7 @@ const SearchPage: NextPageWithLayout<
         setLoading(false);
       } else if (type == 'inversion') {
         setTokenAddress(tokenContract.address);
-        const decimals = 18;
+        const decimals = 6;
         const tx = await tokenContract.approve(
           inversionMinter.address,
           ethers.utils.parseUnits(precio.toString(), decimals)
@@ -350,11 +599,11 @@ const SearchPage: NextPageWithLayout<
   useEffect(() => {
     const fetchItems = async () => {
       await getNft();
+
       //const itemsPerPage = 6
       //const start = (currentPage - 1) * itemsPerPage
       setCurrentItems(productos);
       setCurrentInv(inversiones);
-      console.log(inversiones);
     };
     fetchItems();
   }, [dataloaded, inversiones, productos]);
@@ -389,255 +638,90 @@ const SearchPage: NextPageWithLayout<
         title="Explore NTF"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="w-[100%]  sm:pt-5">
-        <div className=" w-[100%]">
-          <ParamTab
-            tabMenu={[
-              {
-                title: 'Productos',
-                path: 'productos',
-              },
-              {
-                title: 'Inversiones',
-                path: 'inversiones',
-              },
-            ]}
-          >
-            <TabPanel className="flex justify-center focus:outline-none">
-              <div
-                className={
-                  isGridCompact
-                    ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                    : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
-                }
-              >
-                {currentItems.map((producto) => (
-                  <div
-                    className="row flex space-x-10 p-8"
-                    key={producto.Nombre}
-                  >
-                    <div className="relative w-[400px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
-                      <div className="relative block w-full pb-full">
-                        <Image
-                          src={producto.img}
-                          //placeholder="blur"
-                          layout="fill"
-                          objectFit="cover"
-                          alt={producto.nombre}
-                        />
-                      </div>
-
-                      <div className="pt-5">
-                        <div className="text-lg font-medium text-black dark:text-white">
-                          <h1>{producto.Nombre}</h1>
-                        </div>
-                        {isConnect && (
-                          <div className="mt-1.5 flex text-lg">
-                            {producto.precio !== 0 && (
-                              <span>
-                                {producto.precio}$ USDT
-                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
-                              </span>
-                            )}
-                            {producto.precio == 0 && (
-                              <span>
-                                Cargando...
-                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="mt-2 space-x-2">
-                        {loading && (
-                          <Button size="small">
-                            <span
-                              className="spinner-border spinner-border-sm"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Loading...
-                          </Button>
-                        )}
-                        {isConnect && producto.precio > approvedToken && (
-                          <Button
-                            type="button"
-                            size="small"
-                            onClick={() => approve('producto', producto.precio)}
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Approve
-                          </Button>
-                        )}
-
-                        {isConnect &&
-                          !loading &&
-                          producto.precio <= approvedToken && (
-                            <Button
-                              type="button"
-                              size="small"
-                              onClick={() => buyNft('producto', producto.tipoN)}
-                            >
-                              <span
-                                className="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Buy Nft
-                            </Button>
-                          )}
-
-                        {isConnect && !loading && (
-                          <ActiveLink href={`/details/${producto.tipo}`}>
-                            <Button type="button" size="small">
-                              <span
-                                className="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Ver mas...
-                            </Button>
-                          </ActiveLink>
-                        )}
-
-                        {!isConnect && (
-                          <Button
-                            type="button"
-                            size="small"
-                            onClick={() => {
-                              dispatch(connectWallet());
-                            }}
-                          >
-                            Connect Wallet
-                          </Button>
-                        )}
-
-                        <div className="mt-2">{producto.descripcion}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabPanel>
-            <TabPanel className="flex justify-center focus:outline-none">
-              <div
-                className={
-                  isGridCompact
-                    ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                    : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
-                }
-              >
-                {currentInv.map((inversion) => (
-                  <div
-                    className="row flex space-x-10 p-8"
-                    key={inversion.Nombre}
-                  >
-                    <div className="relative w-[400px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
-                      <div className="relative block w-full pb-full">
-                        <Image
-                          src={inversion.img}
-                          //placeholder="blur"
-                          layout="fill"
-                          objectFit="cover"
-                          alt={inversion.Nombre}
-                        />
-                      </div>
-
-                      <div className="pt-5">
-                        <div className="text-lg font-medium text-black dark:text-white">
-                          <h1>{inversion.Nombre}</h1>
-                        </div>
-                        {isConnect && (
-                          <div className="mt-1.5 flex text-lg">
-                            {inversion.precio !== 0 && (
-                              <span>
-                                {inversion.precio}$ USDT
-                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
-                              </span>
-                            )}
-                            {inversion.precio == 0 && (
-                              <span>
-                                Cargando...
-                                {/*Cuando se traiga la metadata de la base de datos se setean los precios*/}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="mt-2 space-x-2">
-                        {isConnect && inversion.precio > approvedToken && (
-                          <Button
-                            type="button"
-                            size="small"
-                            onClick={() =>
-                              approve('inversion', inversion.precio)
-                            }
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Approve
-                          </Button>
-                        )}
-                        {isConnect &&
-                          !loading &&
-                          inversion.precio <= approvedToken && (
-                            <Button
-                              type="button"
-                              size="small"
-                              onClick={() =>
-                                buyNft('inversion', inversion.tipoN)
-                              }
-                            >
-                              <span
-                                className="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Buy Nft
-                            </Button>
-                          )}
-                        {isConnect && (
-                          <ActiveLink href={`/details/${inversion.tipo}`}>
-                            <Button type="button" size="small">
-                              <span
-                                className="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Ver mas...
-                            </Button>
-                          </ActiveLink>
-                        )}
-
-                        {!isConnect && (
-                          <Button
-                            type="button"
-                            size="small"
-                            onClick={() => {
-                              dispatch(connectWallet());
-                            }}
-                          >
-                            Connect Wallet
-                          </Button>
-                        )}
-                        <div className="mt-2">{inversion.descripcion}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabPanel>
-          </ParamTab>
+      <div className="grid sm:pt-5 2xl:grid-cols-[280px_minmax(auto,_1fr)] 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
+        <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block">
+          <Filters />
         </div>
+        <div className="2xl:ltr:pl-10 2xl:rtl:pr-10 4xl:ltr:pl-12 4xl:rtl:pr-12">
+          <div className="relative z-10 mb-6 flex items-center justify-between">
+            {/*<span className="text-xs font-medium text-gray-900 dark:text-white sm:text-sm">
+              5,686,066 items
+  </span>*/}
 
+            <div className="flex gap-6 2xl:gap-8">
+              {/*<SortList />*/}
+              <div className="hidden 3xl:block">{/*<GridSwitcher />*/}</div>
+              <div className="hidden sm:block 2xl:hidden">
+                <Button
+                  shape="rounded"
+                  size="small"
+                  color="gray"
+                  onClick={() => openDrawer('DRAWER_SEARCH')}
+                  className="dark:bg-gray-800"
+                >
+                  Filters
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className=" w-[100%]">
+            <ParamTab
+              tabMenu={[
+                {
+                  title: 'Productos',
+                  path: 'productos',
+                },
+                {
+                  title: 'Inversiones',
+                  path: 'inversiones',
+                },
+              ]}
+            >
+              <TabPanel className=" focus:outline-none">
+                <div
+                  className={
+                    isGridCompact
+                      ? 'grid w-full gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
+                      : 'grid w-full gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
+                  }
+                >
+                  {productos.map((producto) => (
+                    <NFTGrid
+                      key={producto.Nombre}
+                      name={producto.Nombre}
+                      image={producto.img}
+                      price={producto.precio}
+                      number={producto.tipo}
+                      alldata={true}
+                      type={'comprap'}
+                    />
+                  ))}
+                </div>
+              </TabPanel>
+              <TabPanel className="focus:outline-none">
+                <div
+                  className={
+                    isGridCompact
+                      ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
+                      : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
+                  }
+                >
+                  {inversiones.map((inversion) => (
+                    <NFTGrid
+                      key={inversion.Nombre}
+                      name={inversion.Nombre}
+                      image={inversion.img}
+                      price={inversion.precio}
+                      number={inversion.tipo}
+                      alldata={true}
+                      type={'comprai'}
+                    />
+                  ))}
+                </div>
+              </TabPanel>
+            </ParamTab>
+          </div>
+        </div>
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
           <Button onClick={() => openDrawer('DRAWER_SEARCH')} fullWidth>
             Filters

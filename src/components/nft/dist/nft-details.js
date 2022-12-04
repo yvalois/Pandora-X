@@ -133,13 +133,475 @@ var __generator =
     }
   };
 exports.__esModule = true;
+var classnames_1 = require('classnames');
 var param_tab_1 = require('@/components/ui/param-tab');
 var image_1 = require('@/components/ui/image');
+var anchor_link_1 = require('@/components/ui/links/anchor-link');
 var button_1 = require('@/components/ui/button');
+var _3_png_1 = require('@/assets/images/avatar/3.png');
+var context_1 = require('@/components/modal-views/context');
 var react_1 = require('react');
 var react_redux_1 = require('react-redux');
 var ethers_1 = require('ethers');
 var blockchainAction_1 = require('../../redux/Blockchain/blockchainAction');
+function NftFooter(_a) {
+  var _this = this;
+  var _b = _a.className,
+    className = _b === void 0 ? 'md:hidden' : _b,
+    price = _a.price,
+    tipo = _a.tipo,
+    tipoN = _a.tipoN,
+    id = _a.id;
+  var openModal = context_1.useModal().openModal;
+  var _c = react_1.useState(''),
+    tokenAddress = _c[0],
+    setTokenAddress = _c[1];
+  var _d = react_1.useState(false),
+    loading = _d[0],
+    setLoading = _d[1];
+  var _e = react_1.useState(''),
+    cuenta = _e[0],
+    setCuenta = _e[1];
+  var _f = react_1.useState(0),
+    approvedUsdt = _f[0],
+    setApprovedUsdt = _f[1];
+  var _g = react_1.useState(0),
+    approvedToken = _g[0],
+    setApprovedToken = _g[1];
+  var _h = react_1.useState(false),
+    status = _h[0],
+    setStatus = _h[1];
+  var _j = react_1.useState(''),
+    alertMsg = _j[0],
+    setAlertMsg = _j[1];
+  var Usuario = react_redux_1.useSelector(function (state) {
+    return state.Usuario;
+  });
+  var _k = react_1.useState(price),
+    auxPrice = _k[0],
+    setAuxPrice = _k[1];
+  var _l = react_redux_1.useSelector(function (state) {
+      return state.blockchain;
+    }),
+    productoMinter = _l.productoMinter,
+    inversionMinter = _l.inversionMinter,
+    isConnect = _l.isConnect,
+    accountAddress = _l.accountAddress,
+    tokenContract = _l.tokenContract,
+    usdtContract = _l.usdtContract;
+  var referidor = react_redux_1.useSelector(function (state) {
+    return state.Usuario;
+  }).referidor;
+  var dispatch = react_redux_1.useDispatch();
+  var verifyApprove = function () {
+    return __awaiter(_this, void 0, void 0, function () {
+      var usdt, usdt, e_1;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            _a.trys.push([0, 5, , 6]);
+            if (!(tipo == 'producto')) return [3 /*break*/, 2];
+            return [
+              4 /*yield*/,
+              tokenContract.allowance(accountAddress, productoMinter.address),
+            ];
+          case 1:
+            usdt = _a.sent();
+            alert(price); //MarketPlace
+            //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
+            return [3 /*break*/, 4];
+          case 2:
+            if (!(tipo == 'inversion')) return [3 /*break*/, 4];
+            return [
+              4 /*yield*/,
+              tokenContract.allowance(accountAddress, inversionMinter.address),
+            ];
+          case 3:
+            usdt = _a.sent();
+            //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
+            _a.label = 4;
+          case 4:
+            return [3 /*break*/, 6];
+          case 5:
+            e_1 = _a.sent();
+            return [3 /*break*/, 6];
+          case 6:
+            return [2 /*return*/];
+        }
+      });
+    });
+  };
+  var approve = function () {
+    return __awaiter(_this, void 0, void 0, function () {
+      var decimals, tx, decimals, tx, e_2;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            setLoading(true);
+            _a.label = 1;
+          case 1:
+            _a.trys.push([1, 10, , 11]);
+            if (!(tipo == 'producto')) return [3 /*break*/, 5];
+            setTokenAddress(tokenContract.address);
+            decimals = 6;
+            return [
+              4 /*yield*/,
+              tokenContract.approve(
+                productoMinter.address,
+                ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
+              ),
+            ];
+          case 2:
+            tx = _a.sent();
+            setAuxPrice(
+              ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
+            );
+            return [4 /*yield*/, tx.wait()];
+          case 3:
+            _a.sent();
+            return [4 /*yield*/, verifyApprove()];
+          case 4:
+            _a.sent();
+            setLoading(false);
+            return [3 /*break*/, 9];
+          case 5:
+            if (!(tipo == 'inversion')) return [3 /*break*/, 9];
+            setTokenAddress(tokenContract.address);
+            decimals = 6;
+            return [
+              4 /*yield*/,
+              tokenContract.approve(
+                inversionMinter.address,
+                ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
+              ),
+            ];
+          case 6:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 7:
+            _a.sent();
+            return [4 /*yield*/, verifyApprove()];
+          case 8:
+            _a.sent();
+            setLoading(false);
+            _a.label = 9;
+          case 9:
+            return [3 /*break*/, 11];
+          case 10:
+            e_2 = _a.sent();
+            setLoading(false);
+            return [3 /*break*/, 11];
+          case 11:
+            return [2 /*return*/];
+        }
+      });
+    });
+  };
+  var buyNft = function () {
+    return __awaiter(_this, void 0, void 0, function () {
+      var porcentaje, tx, tx, tx, err_1;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            setLoading(true);
+            _a.label = 1;
+          case 1:
+            _a.trys.push([1, 12, , 13]);
+            if (!(tipo == 'producto')) return [3 /*break*/, 8];
+            if (!(Usuario.isReferido && Usuario.type == 'Agente X'))
+              return [3 /*break*/, 4];
+            porcentaje = 0;
+            if (Usuario.range == 'peerx') {
+              porcentaje = 200;
+            } else if (Usuario.range == 'blockelite') {
+              porcentaje = 250;
+            } else if (Usuario.range == 'blockmaster') {
+              porcentaje = 350;
+            } else if (Usuario.range == 'blockcreator') {
+              porcentaje = 400;
+            }
+            return [
+              4 /*yield*/,
+              productoMinter.buyTokenWithReferido(
+                tipoN,
+                tokenContract.address,
+                referidor,
+                porcentaje
+              ),
+            ];
+          case 2:
+            tx = _a.sent();
+            //referidos
+            return [4 /*yield*/, tx.wait()];
+          case 3:
+            //referidos
+            _a.sent();
+            setLoading(false);
+            setApprovedToken(0);
+            dispatch(blockchainAction_1.uProduct());
+            setStatus(true);
+            setAlertMsg('Nft comprado exitosamente');
+            return [3 /*break*/, 7];
+          case 4:
+            return [
+              4 /*yield*/,
+              productoMinter.buyToken(tipoN, tokenContract.address),
+            ];
+          case 5:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 6:
+            _a.sent(); //tener en cuenta para los proximos cambios
+            setLoading(false);
+            setApprovedToken(0);
+            dispatch(blockchainAction_1.uProduct());
+            setStatus(true);
+            setAlertMsg('Nft comprado exitosamente');
+            _a.label = 7;
+          case 7:
+            return [3 /*break*/, 11];
+          case 8:
+            if (!(tipo == 'inversion')) return [3 /*break*/, 11];
+            return [
+              4 /*yield*/,
+              inversionMinter.buyToken(tipoN, tokenContract.address),
+            ];
+          case 9:
+            tx = _a.sent();
+            return [4 /*yield*/, tx.wait()];
+          case 10:
+            _a.sent();
+            setLoading(false);
+            setApprovedToken(0);
+            dispatch(blockchainAction_1.uInvertion());
+            setStatus(true);
+            setAlertMsg('Nft comprado exitosamente');
+            _a.label = 11;
+          case 11:
+            return [3 /*break*/, 13];
+          case 12:
+            err_1 = _a.sent();
+            setLoading(false);
+            return [3 /*break*/, 13];
+          case 13:
+            return [2 /*return*/];
+        }
+      });
+    });
+  };
+  react_1.useEffect(
+    function () {
+      setTimeout(function () {
+        setStatus(false);
+      }, 5000);
+    },
+    [status]
+  );
+  return React.createElement(
+    'div',
+    {
+      className: classnames_1['default'](
+        'sticky bottom-0 z-10 bg-body dark:bg-dark md:-mx-2',
+        className
+      ),
+    },
+    React.createElement(
+      'div',
+      {
+        className:
+          '-mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7',
+      },
+      React.createElement(
+        'div',
+        { className: 'flex gap-4 pb-3.5 md:pb-4 xl:gap-5' },
+        React.createElement(
+          'div',
+          { className: 'block w-1/2 shrink-0 md:w-2/5' },
+          React.createElement(
+            'h3',
+            {
+              className:
+                'mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm',
+            },
+            'Precio ',
+            React.createElement('span', { className: 'md:hidden' }, 'by'),
+            ' ',
+            React.createElement(anchor_link_1['default'], {
+              href: '#',
+              className:
+                'normal-case text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:hidden',
+            })
+          ),
+          React.createElement(
+            'div',
+            {
+              className:
+                'text-lg font-medium -tracking-wider md:text-xl xl:text-2xl',
+            },
+            price,
+            ' USDT'
+          ),
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '#',
+              className:
+                'mt-2 hidden items-center text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:inline-flex',
+            },
+            React.createElement(
+              'div',
+              { className: 'h-6 w-6 rounded-full ltr:mr-2 rtl:ml-2' },
+              React.createElement(image_1['default'], {
+                src: _3_png_1['default'],
+                alt: 'avatar',
+                width: 24,
+                height: 24,
+              })
+            ),
+            '@PandoraX'
+          )
+        )
+      ),
+      tipo == 'producto' &&
+        React.createElement(
+          'div',
+          { className: 'grid grid-cols-2 gap-3' },
+          !loading &&
+            parseInt(price) > approvedToken &&
+            React.createElement(
+              button_1['default'],
+              {
+                shape: 'rounded',
+                onClick: function () {
+                  return approve();
+                },
+              },
+              'Aprobar'
+            ),
+          !loading &&
+            parseInt(price) <= approvedToken &&
+            React.createElement(
+              button_1['default'],
+              {
+                shape: 'rounded',
+                onClick: function () {
+                  return buyNft();
+                },
+              },
+              'Comprar por ' + price + ' '
+            ),
+          loading &&
+            React.createElement(
+              button_1['default'],
+              { shape: 'rounded' },
+              'Cargando...'
+            ),
+          React.createElement(
+            button_1['default'],
+            {
+              shape: 'rounded',
+              variant: 'solid',
+              color: 'gray',
+              className: 'dark:bg-gray-800',
+              onClick: function () {
+                return openModal('SHARE_VIEW');
+              },
+            },
+            'Compartir'
+          )
+        ),
+      tipo == 'inversion' &&
+        React.createElement(
+          'div',
+          { className: 'grid grid-cols-2 gap-3' },
+          !loading &&
+            parseInt(price) > approvedToken &&
+            React.createElement(
+              button_1['default'],
+              {
+                shape: 'rounded',
+                onClick: function () {
+                  return approve();
+                },
+              },
+              'Aprobar'
+            ),
+          !loading &&
+            parseInt(price) <= approvedToken &&
+            React.createElement(
+              button_1['default'],
+              {
+                shape: 'rounded',
+                onClick: function () {
+                  return buyNft();
+                },
+              },
+              'Comprar por ' + price + ' '
+            ),
+          loading &&
+            React.createElement(
+              button_1['default'],
+              { shape: 'rounded' },
+              'Cargando...'
+            ),
+          React.createElement(
+            button_1['default'],
+            {
+              shape: 'rounded',
+              variant: 'solid',
+              color: 'gray',
+              className: 'dark:bg-gray-800',
+              onClick: function () {
+                return openModal('SHARE_VIEW');
+              },
+            },
+            'Compartir'
+          )
+        ),
+      tipo == 'pcomprado' &&
+        React.createElement(
+          'div',
+          { className: 'grid grid-cols-2 gap-3' },
+          React.createElement(
+            button_1['default'],
+            { shape: 'rounded' },
+            'Transfer'
+          )
+        ),
+      tipo == 'invcomprado' &&
+        React.createElement(
+          'div',
+          { className: 'grid grid-cols-2 gap-3' },
+          React.createElement(
+            button_1['default'],
+            { shape: 'rounded' },
+            'Transfer'
+          ),
+          React.createElement(
+            anchor_link_1['default'],
+            { href: '/staking/' + id },
+            React.createElement(
+              button_1['default'],
+              { variant: 'solid', shape: 'rounded' },
+              'Stake'
+            )
+          )
+        )
+    ),
+    status &&
+      React.createElement(
+        'div',
+        {
+          className:
+            'absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800',
+          role: 'alert',
+        },
+        React.createElement('span', { className: 'font-medium' }, alertMsg)
+      )
+  );
+}
 function NftDetails(_a) {
   var _this = this;
   var product = _a.product,
@@ -190,7 +652,7 @@ function NftDetails(_a) {
   var dispatch = react_redux_1.useDispatch();
   var verifyApprove = function () {
     return __awaiter(_this, void 0, void 0, function () {
-      var usdt, usdt, e_1;
+      var usdt, usdt, e_3;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -203,7 +665,7 @@ function NftDetails(_a) {
           case 1:
             usdt = _a.sent();
             //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             return [3 /*break*/, 4];
           case 2:
             if (!(type == 'inversion')) return [3 /*break*/, 4];
@@ -214,13 +676,12 @@ function NftDetails(_a) {
           case 3:
             usdt = _a.sent();
             //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             _a.label = 4;
           case 4:
             return [3 /*break*/, 6];
           case 5:
-            e_1 = _a.sent();
-            console.log(e_1);
+            e_3 = _a.sent();
             return [3 /*break*/, 6];
           case 6:
             return [2 /*return*/];
@@ -230,7 +691,7 @@ function NftDetails(_a) {
   };
   var approve = function () {
     return __awaiter(_this, void 0, void 0, function () {
-      var decimals, tx, decimals, tx, e_2;
+      var decimals, tx, decimals, tx, e_4;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -240,8 +701,7 @@ function NftDetails(_a) {
             _a.trys.push([1, 10, , 11]);
             if (!(type == 'producto')) return [3 /*break*/, 5];
             setTokenAddress(tokenContract.address);
-            decimals = 18;
-            console.log(tokenContract);
+            decimals = 6;
             return [
               4 /*yield*/,
               tokenContract.approve(
@@ -265,7 +725,7 @@ function NftDetails(_a) {
           case 5:
             if (!(type == 'inversion')) return [3 /*break*/, 9];
             setTokenAddress(tokenContract.address);
-            decimals = 18;
+            decimals = 6;
             return [
               4 /*yield*/,
               tokenContract.approve(
@@ -289,7 +749,7 @@ function NftDetails(_a) {
           case 9:
             return [3 /*break*/, 11];
           case 10:
-            e_2 = _a.sent();
+            e_4 = _a.sent();
             setLoading(false);
             return [3 /*break*/, 11];
           case 11:
@@ -300,7 +760,7 @@ function NftDetails(_a) {
   };
   var buyNft = function () {
     return __awaiter(_this, void 0, void 0, function () {
-      var porcentaje, tx, tx, tx, err_1;
+      var porcentaje, tx, tx, tx, err_2;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -381,7 +841,7 @@ function NftDetails(_a) {
           case 11:
             return [3 /*break*/, 13];
           case 12:
-            err_1 = _a.sent();
+            err_2 = _a.sent();
             setLoading(false);
             return [3 /*break*/, 13];
           case 13:
@@ -459,11 +919,6 @@ function NftDetails(_a) {
                 },
                 Nombre
               )
-            ),
-            React.createElement(
-              'h6',
-              { className: 'mt-2  text-2xl text-gray-900  dark:text-white' },
-              React.createElement('span', null, precio, '$ USDT ')
             )
           ),
           React.createElement(
@@ -504,20 +959,64 @@ function NftDetails(_a) {
                       },
                       descripcion
                     )
+                  ),
+                  React.createElement(
+                    'div',
+                    { className: 'block' },
+                    React.createElement(
+                      'h3',
+                      {
+                        className:
+                          'text-heading-style mb-2 uppercase text-gray-900 dark:text-white',
+                      },
+                      'Owner'
+                    ),
+                    React.createElement(
+                      'div',
+                      { className: 'inline-flex' },
+                      React.createElement(
+                        'span',
+                        {
+                          className:
+                            'rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white',
+                        },
+                        '@PandoraX'
+                      ),
+                      ' '
+                    )
+                  ),
+                  React.createElement(
+                    'div',
+                    { className: 'block' },
+                    React.createElement(
+                      'h3',
+                      {
+                        className:
+                          'text-heading-style mb-2 uppercase text-gray-900 dark:text-white',
+                      },
+                      'Block Chain'
+                    ),
+                    React.createElement(
+                      'div',
+                      { className: 'flex flex-col gap-2' },
+                      React.createElement(
+                        'div',
+                        { className: 'inline-flex' },
+                        React.createElement(
+                          'span',
+                          {
+                            className:
+                              'rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white',
+                          },
+                          'Polygon'
+                        )
+                      )
+                    )
                   )
                 ),
                 React.createElement(
                   'div',
                   { className: 'mt-12 justify-evenly space-x-10' },
-                  type !== 'invcomprado' &&
-                    type !== 'pcomprado' &&
-                    !loading &&
-                    product.precio > approvedToken &&
-                    React.createElement(
-                      button_1['default'],
-                      { onClick: approve },
-                      'Approve'
-                    ),
                   loading &&
                     React.createElement(
                       button_1['default'],
@@ -542,62 +1041,20 @@ function NftDetails(_a) {
                       },
                       'Buy'
                     ),
-                  type !== 'pcomprado' &&
-                    !loading &&
-                    type !== 'invcomprado' &&
-                    React.createElement(
-                      button_1['default'],
-                      null,
-                      'Buy without cripto'
-                    ),
-                  type == 'pcomprado' &&
-                    type !== 'invcomprado' &&
-                    React.createElement(
-                      button_1['default'],
-                      {
-                        onClick: function () {
-                          return buyNft();
-                        },
-                      },
-                      'transfer'
-                    ),
-                  type == 'invcomprado' &&
-                    React.createElement(
-                      button_1['default'],
-                      {
-                        onClick: function () {
-                          return buyNft();
-                        },
-                      },
-                      'Stake'
-                    ), //anchor link
-                  type == 'invcomprado' &&
-                    React.createElement(
-                      button_1['default'],
-                      {
-                        onClick: function () {
-                          return buyNft();
-                        },
-                      },
-                      'Transfer'
-                    ) //Modal
+                  React.createElement(NftFooter, {
+                    className: 'hidden md:block',
+                    price: precio,
+                    tipo: type,
+                    tipoN: tipoN,
+                    id: id,
+                  })
                 )
               )
             )
           )
         )
       )
-    ),
-    status &&
-      React.createElement(
-        'div',
-        {
-          className:
-            'absolute top-[620px] right-[280px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800',
-          role: 'alert',
-        },
-        React.createElement('span', { className: 'font-medium' }, alertMsg)
-      )
+    )
   );
 }
 exports['default'] = NftDetails;

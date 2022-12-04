@@ -81,13 +81,6 @@ export default function TransactionUserTable() {
 
   const user = [];
 
-  const pago = {
-    pago: '',
-    wallet: '',
-    porcentaje: '',
-    tipo: '',
-  };
-
   const infoUser = {
     tipo: 0,
     procentaje: 'Buy',
@@ -95,14 +88,11 @@ export default function TransactionUserTable() {
     monto: 'Pending',
   };
 
-  const [infor, setInfor] = useState(pago);
-  const [call, setCall] = useState(true);
-
   /*const data = React.useMemo(() => TransactionData, []);*/
 
   //segun el tipo de nft cambiara la funcin
 
-  const setStakings = async () => {
+  /*const setStakings = async () => {
     let count = await productoMinter.cantPagos();
     let i;
     for (i = 0; i < count; i++) {
@@ -195,10 +185,6 @@ export default function TransactionUserTable() {
   );
 
   const { pageIndex } = state;
-
-  useEffect(() => {
-    console.log(paid);
-  }, []);
 
   return (
     <div className="">

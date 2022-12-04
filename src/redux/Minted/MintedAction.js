@@ -34,7 +34,7 @@ const getProductos = async () => {
     productoMinterAbi,
     provider
   );
-  fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
+  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -43,12 +43,15 @@ const getProductos = async () => {
     .then((res) => res.json())
     .then((response) => {
       response.map(async (item) => {
+        const precio = await productosMinter.buyPrice(
+          item.tipoN,
+          '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
+        );
+        const price = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(
+          2
+        );
         Productos[item.tipoN - 1] = item;
-      });
-      Productos.map(async (item) => {
-        const precio = await productosMinter.buyPrice(item.tipoN);
-        const price = ethers.utils.formatUnits(precio, 18);
-        Productos[item.tipoN - 1].precio = parseInt(price);
+        Productos[item.tipoN - 1].precio = price;
       });
     })
     .catch((error) => console.error('Error:', error));
@@ -61,7 +64,7 @@ const getInversiones = async () => {
     inversionMinterAbi,
     provider
   );
-  fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
+  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -70,12 +73,15 @@ const getInversiones = async () => {
     .then((res) => res.json())
     .then((response) => {
       response.map(async (item) => {
+        const precio = await inversionesMinter.buyPrice(
+          item.tipoN,
+          '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
+        );
+        const price = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(
+          2
+        );
         Inversiones[item.tipoN - 1] = item;
-      });
-      Inversiones.map(async (item) => {
-        const precio = await inversionesMinter.buyPrice(item.tipoN);
-        const price = ethers.utils.formatUnits(precio, 18);
-        Inversiones[item.tipoN - 1].precio = parseInt(price);
+        Inversiones[item.tipoN - 1].precio = price;
       });
     })
     .catch((error) => console.error('Error:', error));

@@ -21,10 +21,11 @@ import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
 
 interface NftFooterProps {
   className?: string;
-  currentBid: any;
-  auctionTime: Date | string | number;
-  isAuction?: boolean;
-  price?: number;
+
+  price: number;
+  tipo: string;
+  tipoN: string;
+  id: number;
 }
 
 type Avatar = {
@@ -33,6 +34,263 @@ type Avatar = {
   slug: string;
   logo: StaticImageData;
 };
+
+function NftFooter({
+  className = 'md:hidden',
+  price,
+  tipo,
+  tipoN,
+  id,
+}: NftFooterProps) {
+  const { openModal } = useModal();
+  const [tokenAddress, setTokenAddress] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [cuenta, setCuenta] = useState('');
+  const [approvedUsdt, setApprovedUsdt] = useState(0);
+  const [approvedToken, setApprovedToken] = useState(0);
+  const [status, setStatus] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+  const Usuario = useSelector((state) => state.Usuario);
+  const [auxPrice, setAuxPrice] = useState(price);
+
+  const {
+    productoMinter,
+    inversionMinter,
+    isConnect,
+    accountAddress,
+    tokenContract,
+    usdtContract,
+  } = useSelector((state) => state.blockchain);
+
+  const { referidor } = useSelector((state) => state.Usuario);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const verifyApprove = async () => {
+    try {
+      if (tipo == 'producto') {
+        const usdt = await tokenContract.allowance(
+          accountAddress,
+          productoMinter.address
+        );
+        alert(price); //MarketPlace
+        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
+      } else if (tipo == 'inversion') {
+        const usdt = await tokenContract.allowance(
+          accountAddress,
+          inversionMinter.address
+        ); //MarketPlace
+        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
+      }
+    } catch (e) {}
+  };
+
+  const approve = async () => {
+    setLoading(true);
+
+    try {
+      if (tipo == 'producto') {
+        setTokenAddress(tokenContract.address);
+
+        const decimals = 6;
+
+        const tx = await tokenContract.approve(
+          productoMinter.address,
+          ethers.utils.parseUnits(price.toString(), decimals)
+        );
+        setAuxPrice(ethers.utils.parseUnits(price.toString(), decimals));
+        await tx.wait();
+        await verifyApprove();
+        setLoading(false);
+      } else if (tipo == 'inversion') {
+        setTokenAddress(tokenContract.address);
+        const decimals = 6;
+        const tx = await tokenContract.approve(
+          inversionMinter.address,
+          ethers.utils.parseUnits(price.toString(), decimals)
+        );
+
+        await tx.wait();
+        await verifyApprove();
+        setLoading(false);
+      }
+    } catch (e) {
+      setLoading(false);
+    }
+  };
+
+  const buyNft = async () => {
+    setLoading(true);
+    try {
+      if (tipo == 'producto') {
+        if (Usuario.isReferido && Usuario.type == 'Agente X') {
+          let porcentaje = 0;
+          if (Usuario.range == 'peerx') {
+            porcentaje = 200;
+          } else if (Usuario.range == 'blockelite') {
+            porcentaje = 250;
+          } else if (Usuario.range == 'blockmaster') {
+            porcentaje = 350;
+          } else if (Usuario.range == 'blockcreator') {
+            porcentaje = 400;
+          }
+
+          const tx = await productoMinter.buyTokenWithReferido(
+            tipoN,
+            tokenContract.address,
+            referidor,
+            porcentaje
+          );
+          //referidos
+          await tx.wait();
+          setLoading(false);
+          setApprovedToken(0);
+          dispatch(uProduct());
+          setStatus(true);
+          setAlertMsg('Nft comprado exitosamente');
+        } else {
+          const tx = await productoMinter.buyToken(
+            tipoN,
+            tokenContract.address
+          );
+
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          setLoading(false);
+          setApprovedToken(0);
+          dispatch(uProduct());
+          setStatus(true);
+          setAlertMsg('Nft comprado exitosamente');
+        }
+      } else if (tipo == 'inversion') {
+        const tx = await inversionMinter.buyToken(tipoN, tokenContract.address);
+        await tx.wait();
+        setLoading(false);
+        setApprovedToken(0);
+        dispatch(uInvertion());
+        setStatus(true);
+        setAlertMsg('Nft comprado exitosamente');
+      }
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStatus(false);
+    }, 5000);
+  }, [status]);
+  return (
+    <div
+      className={cn(
+        'sticky bottom-0 z-10 bg-body dark:bg-dark md:-mx-2',
+        className
+      )}
+    >
+      <div className="-mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
+        <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
+          <div className="block w-1/2 shrink-0 md:w-2/5">
+            <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
+              Precio <span className="md:hidden">by</span>{' '}
+              <AnchorLink
+                href={'#'}
+                className="normal-case text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:hidden"
+              ></AnchorLink>
+            </h3>
+            <div className="text-lg font-medium -tracking-wider md:text-xl xl:text-2xl">
+              {price} USDT
+            </div>
+            <AnchorLink
+              href={'#'}
+              className="mt-2 hidden items-center text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:inline-flex"
+            >
+              <div className="h-6 w-6 rounded-full ltr:mr-2 rtl:ml-2">
+                <Image src={Avatar1} alt="avatar" width={24} height={24} />
+              </div>
+              @PandoraX
+            </AnchorLink>
+          </div>
+        </div>
+
+        {tipo == 'producto' && (
+          <div className="grid grid-cols-2 gap-3">
+            {!loading && parseInt(price) > approvedToken && (
+              <Button shape="rounded" onClick={() => approve()}>
+                Aprobar
+              </Button>
+            )}
+            {!loading && parseInt(price) <= approvedToken && (
+              <Button shape="rounded" onClick={() => buyNft()}>
+                {`Comprar por ${price} `}
+              </Button>
+            )}
+            {loading && <Button shape="rounded">Cargando...</Button>}
+            <Button
+              shape="rounded"
+              variant="solid"
+              color="gray"
+              className="dark:bg-gray-800"
+              onClick={() => openModal('SHARE_VIEW')}
+            >
+              Compartir
+            </Button>
+          </div>
+        )}
+
+        {tipo == 'inversion' && (
+          <div className="grid grid-cols-2 gap-3">
+            {!loading && parseInt(price) > approvedToken && (
+              <Button shape="rounded" onClick={() => approve()}>
+                Aprobar
+              </Button>
+            )}
+            {!loading && parseInt(price) <= approvedToken && (
+              <Button shape="rounded" onClick={() => buyNft()}>
+                {`Comprar por ${price} `}
+              </Button>
+            )}
+            {loading && <Button shape="rounded">Cargando...</Button>}
+            <Button
+              shape="rounded"
+              variant="solid"
+              color="gray"
+              className="dark:bg-gray-800"
+              onClick={() => openModal('SHARE_VIEW')}
+            >
+              Compartir
+            </Button>
+          </div>
+        )}
+
+        {tipo == 'pcomprado' && (
+          <div className="grid grid-cols-2 gap-3">
+            <Button shape="rounded">Transfer</Button>
+          </div>
+        )}
+
+        {tipo == 'invcomprado' && (
+          <div className="grid grid-cols-2 gap-3">
+            <Button shape="rounded">Transfer</Button>
+            <AnchorLink href={`/staking/${id}`}>
+              <Button variant="solid" shape="rounded">
+                Stake
+              </Button>
+            </AnchorLink>
+          </div>
+        )}
+      </div>
+      {status && (
+        <div
+          className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">{alertMsg}</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function NftDetails({ product, type }) {
   const { img, Nombre, descripcion, precio, id, tipo, tipoN } = product;
@@ -66,18 +324,16 @@ export default function NftDetails({ product, type }) {
           productoMinter.address
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
       } else if (type == 'inversion') {
         const usdt = await tokenContract.allowance(
           accountAddress,
           inversionMinter.address
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const approve = async () => {
@@ -87,9 +343,7 @@ export default function NftDetails({ product, type }) {
       if (type == 'producto') {
         setTokenAddress(tokenContract.address);
 
-        const decimals = 18;
-
-        console.log(tokenContract);
+        const decimals = 6;
 
         const tx = await tokenContract.approve(
           productoMinter.address,
@@ -101,7 +355,7 @@ export default function NftDetails({ product, type }) {
         setLoading(false);
       } else if (type == 'inversion') {
         setTokenAddress(tokenContract.address);
-        const decimals = 18;
+        const decimals = 6;
         const tx = await tokenContract.approve(
           inversionMinter.address,
           ethers.utils.parseUnits(product.precio.toString(), decimals)
@@ -203,10 +457,6 @@ export default function NftDetails({ product, type }) {
                   {Nombre}
                 </h2>
               </div>
-
-              <h6 className="mt-2  text-2xl text-gray-900  dark:text-white">
-                <span>{precio}$ USDT </span>
-              </h6>
             </div>
             <div className="mt-5 flex flex-col pb-5 xl:mt-9">
               <ParamTab
@@ -227,15 +477,39 @@ export default function NftDetails({ product, type }) {
                         {descripcion}
                       </div>
                     </div>
+                    <div className="block">
+                      <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
+                        Owner
+                      </h3>
+
+                      <div className="inline-flex">
+                        <span className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                          @PandoraX
+                        </span>{' '}
+                      </div>
+                    </div>
+                    <div className="block">
+                      <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
+                        Block Chain
+                      </h3>
+
+                      <div className="flex flex-col gap-2">
+                        <div className="inline-flex">
+                          <span className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                            Polygon
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="mt-12 justify-evenly space-x-10">
-                    {type !== 'invcomprado' &&
+                    {/*type !== 'invcomprado' &&
                       type !== 'pcomprado' &&
                       !loading &&
                       product.precio > approvedToken && (
                         <Button onClick={approve}>Approve</Button>
-                      )}
+                      )*/}
 
                     {loading && (
                       <Button>
@@ -255,22 +529,29 @@ export default function NftDetails({ product, type }) {
                         <Button onClick={() => buyNft()}>Buy</Button>
                       )}
 
-                    {type !== 'pcomprado' &&
+                    {/*type !== 'pcomprado' &&
                       !loading &&
                       type !== 'invcomprado' && (
                         <Button>Buy without cripto</Button>
-                      )}
+                      )*/}
 
-                    {type == 'pcomprado' && type !== 'invcomprado' && (
+                    {/*type == 'pcomprado' && type !== 'invcomprado' && (
                       <Button onClick={() => buyNft()}>transfer</Button>
-                    )}
+                    )*/}
 
-                    {type == 'invcomprado' && (
+                    {/*type == 'invcomprado' && (
                       <Button onClick={() => buyNft()}>Stake</Button> //anchor link
-                    )}
-                    {type == 'invcomprado' && (
+                    )*/}
+                    {/*type == 'invcomprado' && (
                       <Button onClick={() => buyNft()}>Transfer</Button> //Modal
-                    )}
+                    )*/}
+                    <NftFooter
+                      className="hidden md:block"
+                      price={precio}
+                      tipo={type}
+                      tipoN={tipoN}
+                      id={id}
+                    />
                   </div>
                 </TabPanel>
               </ParamTab>
@@ -278,14 +559,6 @@ export default function NftDetails({ product, type }) {
           </div>
         </div>
       </div>
-      {status && (
-        <div
-          className="absolute top-[620px] right-[280px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">{alertMsg}</span>
-        </div>
-      )}
     </div>
   );
 }

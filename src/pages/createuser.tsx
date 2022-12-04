@@ -113,7 +113,7 @@ const CreateUser: NextPageWithLayout<
   };
 
   const registrar = async () => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api/CrearUsuario`, {
+    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/CrearUsuario`, {
       method: 'POST',
       body: JSON.stringify(value),
       headers: {

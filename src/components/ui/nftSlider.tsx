@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import styled from 'styled-components';
+import CollectionCard from '@/components/ui/collection-card';
 
 type CoinCardProps = {
   id: string;
@@ -25,13 +26,7 @@ interface CoinSliderProps {
   coins: CoinCardProps[];
 }
 
-export default function NftSlider({
-  nfts,
-  priceFormat,
-  nftInfo,
-  setNftInfo,
-  type,
-}) {
+export default function NftSlider({ nfts, type }) {
   const sliderBreakPoints = {
     768: {
       slidesPerView: 2,
@@ -76,45 +71,28 @@ export default function NftSlider({
 
   return (
     <div>
-      {isConnect && (
-        <Swiper
-          modules={[Scrollbar, A11y]}
-          spaceBetween={24}
-          slidesPerView={1}
-          scrollbar={{ draggable: true }}
-          breakpoints={sliderBreakPoints}
-          observer={true}
-          dir="ltr"
-        >
-          {nfts.map((nfts) => (
-            <SwiperSlide key={nfts.id}>
-              <NFTGrid
-                key={nfts.nombre}
-                name={nfts.nombre}
-                image={nfts.img}
-                price={nfts.precio}
-                number={nfts.id}
+      <Swiper
+        modules={[Scrollbar, A11y]}
+        spaceBetween={24}
+        slidesPerView={1}
+        scrollbar={{ draggable: true }}
+        breakpoints={sliderBreakPoints}
+        observer={true}
+        dir="ltr"
+      >
+        {nfts.map((nfts) => (
+          <SwiperSlide key={nfts.id}>
+            <CollectionCard
+              key={nfts.nombre}
+              item={nfts}
+              /*image={nfts.image}
                 alldata={false}
-                type={type}
-                nftInfo={nftInfo}
-                setNftInfo={setNftInfo}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      )}
-      {!isConnect && (
-        <div className="flex  h-[375px] w-full items-center  justify-center bg-gray-200">
-          <Button
-            className="self-center"
-            onClick={() => {
-              dispatch(connectWallet());
-            }}
-          >
-            Connect Wallet
-          </Button>
-        </div>
-      )}
+                type={"compra"}
+                number={nfts.tipo}*/
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }

@@ -67,7 +67,7 @@ var initialState = {
   type: '',
   categoria: '',
   rango: '',
-  pagos: [],
+  paid: [],
 };
 
 var UsuariosReducer = function UsuariosReducer() {

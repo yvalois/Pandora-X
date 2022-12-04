@@ -23,7 +23,7 @@ const providerOptions = {
     package: WalletConnectProvider,
     options: {
       rpc: {
-        5: RPC_URL,
+        137: RPC_URL,
       },
     },
   },
@@ -141,6 +141,9 @@ const inversionesAR = [
 ];
 let Pagos = [];
 
+let Productos = [];
+let Inversiones = [];
+
 const loading = () => ({
   type: 'LOADING',
 });
@@ -255,13 +258,13 @@ export const uProduct = () => async (dispatch) => {
     }
     const price = await productoMinterContract.buyPrice(tipo);
     const precio = ethers.utils.formatUnits(price, 18);
-    if (productosAR[tipo - 1].tipo == type) {
+    if (Productos[tipo - 1].tipo == type) {
       const prod = {
-        nombre: productosAR[item].nombre,
-        img: productosAR[item].img,
+        Nombre: Productos[item].nombre,
+        img: Productos[item].img,
         precio: parseInt(precio),
-        tipo: productosAR[item].tipo,
-        descripcion: productosAR[item].descripcion,
+        tipo: Productos[item].tipo,
+        descripcion: Productos[item].descripcion,
         id: item,
       };
 
@@ -317,13 +320,13 @@ export const uInvertion = () => async (dispatch) => {
     //alert(price)
 
     const precio = ethers.utils.formatUnits(price, 18);
-    if (inversionesAR[tipo - 1].tipo == type) {
+    if (Inversiones[tipo - 1].tipo == type) {
       const inv = {
-        nombre: inversionesAR[tipo - 1].nombre,
-        img: inversionesAR[tipo - 1].img,
+        Nombre: Inversiones[tipo - 1].nombre,
+        img: Inversiones[tipo - 1].img,
         precio: parseInt(precio),
-        tipo: inversionesAR[tipo - 1].tipo,
-        descripcion: inversionesAR[tipo - 1].descripcion,
+        tipo: Inversiones[tipo - 1].tipo,
+        descripcion: Inversiones[tipo - 1].descripcion,
         id: item,
       };
       inventoryi.push(inv);
@@ -422,6 +425,8 @@ const subscribeProvider = (connection) => async (dispatch) => {
   });
   window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER');
   connection.on('accountsChanged', async (accounts) => {
+    await getProductos();
+    await getInversiones();
     if (accounts?.length) {
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
@@ -445,8 +450,8 @@ const subscribeProvider = (connection) => async (dispatch) => {
         signer
       );
 
-      /*await getProductos();
-      await getInversiones();*/
+      await getProductos();
+      await getInversiones();
       const nftStaking = stakingContract.getNfts();
 
       const nftpBalance = await productoMinterContract.getMyInventory(
@@ -507,13 +512,13 @@ const subscribeProvider = (connection) => async (dispatch) => {
         }
         const price = await productoMinterContract.buyPrice(tipo);
         const precio = ethers.utils.formatUnits(price, 18);
-        if (productosAR[tipo - 1].tipo == type) {
+        if (Productos[tipo - 1].tipo == type) {
           const prod = {
-            nombre: productosAR[tipo - 1].nombre,
-            img: productosAR[tipo - 1].img,
+            Nombre: Productos[tipo - 1].nombre,
+            img: Productos[tipo - 1].img,
             precio: parseInt(precio),
-            tipo: productosAR[tipo - 1].tipo,
-            descripcion: productosAR[tipo - 1].descripcion,
+            tipo: Productos[tipo - 1].tipo,
+            descripcion: Productos[tipo - 1].descripcion,
             id: item,
           };
 
@@ -544,7 +549,7 @@ const subscribeProvider = (connection) => async (dispatch) => {
         const precio = ethers.utils.formatUnits(price, 18);
         if (inversionesAR[tipo - 1].tipo == type) {
           const inv = {
-            nombre: inversionesAR[tipo - 1].nombre,
+            Nombre: inversionesAR[tipo - 1].nombre,
             img: inversionesAR[tipo - 1].img,
             precio: parseInt(precio),
             tipo: inversionesAR[tipo - 1].tipo,
@@ -593,7 +598,7 @@ const subscribeProvider = (connection) => async (dispatch) => {
 };
 
 const getProductos = async () => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api/getProducto`, {
+  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -611,8 +616,8 @@ const infoPagos = async (productoMinter, rango, categoria) => {
   let i;
   if (Pagos.length < cant) {
     for (i = 0; i < cant; i++) {
-      const paid = await productoMinter.getPagoUser(i);
-      const wallet = await productoMinter.getWallet(i);
+      const paid = await productoMinter.getPagoUser(i + 1);
+      const wallet = await productoMinter.getWallet(i + 1);
       const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(
         2
       );
@@ -621,7 +626,7 @@ const infoPagos = async (productoMinter, rango, categoria) => {
       const wall = w1 + '...' + w;
       //setInfor((prevState) => ({ ...prevState, pago: paidFormat }))
       //setInfor((prevState) => ({ ...prevState, wallet: wallet }))
-      let tipo;
+      let tipo = '';
       if (categoria == 'Agente X') {
         tipo = 'Compra';
       }
@@ -635,6 +640,7 @@ const infoPagos = async (productoMinter, rango, categoria) => {
       } else if (rango == 'blockcreator') {
         porcentaje = '40%';
       }
+
       const pago1 = {
         pago: paidFormat,
         wallet: wall,
@@ -646,9 +652,49 @@ const infoPagos = async (productoMinter, rango, categoria) => {
     }
   }
 };
+const infoPagosC = async (staking, rango, categoria) => {
+  const cant = await staking.cantPagos();
+  let i;
+  if (Pagos.length < cant) {
+    for (i = 0; i < cant; i++) {
+      const paid = await staking.getPagoUser(i + 1);
+      const wallet = await staking.getWallet(i + 1);
+      const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(
+        2
+      );
+      const w1 = wallet.slice(0, 6);
+      const w = wallet.slice(wallet.length - 6);
+      const wall = w1 + '...' + w;
+      //setInfor((prevState) => ({ ...prevState, pago: paidFormat }))
+      //setInfor((prevState) => ({ ...prevState, wallet: wallet }))
+      let tipo = '';
+      if (categoria == 'BlockMaker') {
+        tipo = 'Staking';
+      }
+      let porcentaje = '1%';
+      /*if (rango == 'peerx') {
+        porcentaje = '20%';
+      } else if (rango == 'blockelite') {
+        porcentaje = '25%';
+      } else if (rango == 'blockmaster') {
+        porcentaje = '35%';
+      } else if (rango == 'blockcreator') {
+        porcentaje = '40%';
+      }*/
+
+      const pago1 = {
+        pago: paidFormat,
+        wallet: wall,
+        porcentaje: porcentaje,
+        tipo: tipo,
+      };
+      Pagos.push(pago1);
+    }
+  }
+};
 
 const getInversiones = async () => {
-  fetch(`https://pandoraxapi1.herokuapp.com/api/getInversion`, {
+  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -662,17 +708,29 @@ const getInversiones = async () => {
 };
 
 const conectar =
-  (accountAddress, productoMinterContract) => async (dispatch) => {
-    fetch(`https://pandoraxapi1.herokuapp.com/api/login/${accountAddress}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+  (accountAddress, productoMinterContract, stakingContract) =>
+  async (dispatch) => {
+    fetch(
+      `https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then((res) => res.json())
       .then((response) => {
         if (response !== null) {
-          infoPagos(productoMinterContract, response.Rango, response.Categoria);
+          if (response.Categoria == 'Agente X') {
+            infoPagos(
+              productoMinterContract,
+              response.Rango,
+              response.Categoria
+            );
+          } else if (response.Categoria == 'BlockMaker') {
+            infoPagosC(stakingContract, response.Rango, response.Categoria);
+          }
 
           dispatch(
             connectSuccessToMongo({
@@ -682,7 +740,6 @@ const conectar =
               referidor: response.Referidor,
               range: response.Range,
               type: response.Type,
-              categoria: response.Categoria,
               rango: response.Rango,
               paid: Pagos,
             })
@@ -742,8 +799,8 @@ export const connectWallet = () => async (dispatch) => {
         signer
       );
 
-      /*await getProductos();
-      await getInversiones();*/
+      await getProductos();
+      await getInversiones();
       const nftStaking = await stakingContract.getNfts();
 
       const nftpBalance = await productoMinterContract.getMyInventory(
@@ -825,13 +882,13 @@ export const connectWallet = () => async (dispatch) => {
         }
         const price = await productoMinterContract.buyPrice(tipo);
         const precio = ethers.utils.formatUnits(price, 18);
-        if (productosAR[tipo - 1].tipo == type) {
+        if (Productos[tipo - 1].tipo == type) {
           const prod = {
-            nombre: productosAR[tipo - 1].nombre,
-            img: productosAR[tipo - 1].img,
+            Nombre: Productos[tipo - 1].Nombre,
+            img: Productos[tipo - 1].img,
             precio: parseInt(precio),
-            tipo: productosAR[tipo - 1].tipo,
-            descripcion: productosAR[tipo - 1].descripcion,
+            tipo: Productos[tipo - 1].tipo,
+            descripcion: Productos[tipo - 1].descripcion,
             id: item,
           };
 
@@ -861,13 +918,13 @@ export const connectWallet = () => async (dispatch) => {
         const price = await inversionMinterContract.buyPrice(tipo);
 
         const precio = ethers.utils.formatUnits(price, 18);
-        if (inversionesAR[tipo - 1].tipo == type) {
+        if (Inversiones[tipo - 1].tipo == type) {
           const inv = {
-            nombre: inversionesAR[tipo - 1].nombre,
-            img: inversionesAR[tipo - 1].img,
+            Nombre: Inversiones[tipo - 1].Nombre,
+            img: Inversiones[tipo - 1].img,
             precio: parseInt(precio),
-            tipo: inversionesAR[tipo - 1].tipo,
-            descripcion: inversionesAR[tipo - 1].descripcion,
+            tipo: Inversiones[tipo - 1].tipo,
+            descripcion: Inversiones[tipo - 1].descripcion,
             id: item,
           };
           inventoryi.push(inv);
@@ -909,7 +966,7 @@ export const connectWallet = () => async (dispatch) => {
         preciosI.push(price)
       })
 
-      productosAR.map(async()=>{
+      Productos.map(async()=>{
         const precio = await productoMinterContract.buyPrice(i+1)
 
         const price = ethers.utils.formatUnits(precio, 18)
@@ -935,7 +992,7 @@ export const connectWallet = () => async (dispatch) => {
         })
       );
 
-      dispatch(conectar(accounts[0], productoMinterContract));
+      dispatch(conectar(accounts[0], productoMinterContract, stakingContract));
 
       /*instance.on('close',() => {
       web3Modal && web3Modal.clearCachedProvider();

@@ -34,6 +34,11 @@ var Withdraw = dynamic_1['default'](function () {
     return require('@/components/modalWithdraw/modalWithdraw');
   });
 });
+var Staking = dynamic_1['default'](function () {
+  return Promise.resolve().then(function () {
+    return require('@/components/modalCondiciones/modalStaking');
+  });
+});
 function renderModalContent(view) {
   switch (view) {
     case 'SEARCH_VIEW':
@@ -46,6 +51,8 @@ function renderModalContent(view) {
       return React.createElement(Register, null);
     case 'WITHDRAW_VIEW':
       return React.createElement(Withdraw, null);
+    case 'STAKING_VIEW':
+      return React.createElement(Staking, null);
     default:
       return null;
   }

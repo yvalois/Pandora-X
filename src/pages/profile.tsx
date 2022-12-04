@@ -55,7 +55,11 @@ const AuthorProfilePage: NextPageWithLayout<
     navigator.clipboard.writeText(
       `http://localhost:3000/principal/${accountAddress}`
     );
-    setCopiado(true);
+
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
   };
 
   useEffect(() => {
@@ -72,7 +76,7 @@ const AuthorProfilePage: NextPageWithLayout<
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
       {/* Profile Cover Image */}
-      {/*<div className="relative h-36 w-full overflow-hidden rounded-lg sm:h-44 md:h-64 xl:h-80 2xl:h-96 3xl:h-[448px]">
+      <div className="relative h-36 w-full overflow-hidden rounded-lg sm:h-44 md:h-64 xl:h-80 2xl:h-96 3xl:h-[448px]">
         <Image
           src={authorData?.cover_image?.thumbnail}
           placeholder="blur"
@@ -80,17 +84,19 @@ const AuthorProfilePage: NextPageWithLayout<
           objectFit="cover"
           alt="Cover Image"
         />
-  </div>*/}
+      </div>
 
       {/* Profile Container */}
       <div className="mx-auto flex w-full shrink-0 flex-col md:px-4 xl:px-6 3xl:max-w-[1700px] 3xl:px-12">
         {/* Profile Image */}
-        {/*<Avatar
-          size="xl"
-          image={authorData?.avatar?.thumbnail}
-          alt="Author"
-          className="z-10 mx-auto -mt-12 dark:border-gray-500 sm:-mt-14 md:mx-0 md:-mt-16 xl:mx-0 3xl:-mt-20"
-  />*/}{' '}
+        {
+          <Avatar
+            size="xl"
+            image={authorData?.avatar?.thumbnail}
+            alt="Author"
+            className="z-10 mx-auto -mt-12 dark:border-gray-500 sm:-mt-14 md:mx-0 md:-mt-16 xl:mx-0 3xl:-mt-20"
+          />
+        }{' '}
         {Usuario.rol == 'usuario' && (
           <div className="">
             <span className="row ml-[60px] mr-2 w-full justify-around">
@@ -103,42 +109,66 @@ const AuthorProfilePage: NextPageWithLayout<
         )}
         {/* Profile Info */}
         <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row xl:pt-12">
-          {/*<div className="shrink-0 border-dashed border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
+          <div className="shrink-0 border-dashed border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
             <div className="text-center ltr:md:text-left rtl:md:text-right">
-              { Name }
+              {/*Name */}
               <h2 className="text-xl font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl">
                 {authorData?.name}
               </h2>
 
-              { Username }
-              <div className="mt-1 text-sm font-medium tracking-tighter text-gray-600 dark:text-gray-400 xl:mt-3">
+              {/*Username */}
+              {/*<div className="mt-1 text-sm font-medium tracking-tighter text-gray-600 dark:text-gray-400 xl:mt-3">
                 @{authorData?.user_name}
-              </div>
+        </div>*/}
 
-              { User ID and Address }
-              <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
-                <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
-                  #{authorData?.id}
+              {/* User ID and Address */}
+              {/* que se muestre unicamente si es ususuario */}
+              {Usuario.rol == 'usuario' && (
+                <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
+                  <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
+                    Link
+                  </div>
+                  <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
+                    http://localhost:3000/principal/${accountAddress}
+                  </div>
+                  <div
+                    className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                    title="Copy Address"
+                    onClick={copiar}
+                  >
+                    {copyButtonStatus ? (
+                      <Check className="h-auto w-3.5 text-green-500" />
+                    ) : (
+                      <Copy className="h-auto w-3.5" />
+                    )}
+                  </div>
                 </div>
-                <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
-                  {authorData?.wallet_key}
+              )}
+              {Usuario.rol == 'Admin' && (
+                <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
+                  <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
+                    Link
+                  </div>
+                  <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
+                    http://localhost:3000/principal/${accountAddress}
+                  </div>
+                  <div
+                    className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                    title="Copy Address"
+                    onClick={copiar}
+                  >
+                    {copyButtonStatus ? (
+                      <Check className="h-auto w-3.5 text-green-500" />
+                    ) : (
+                      <Copy className="h-auto w-3.5" />
+                    )}
+                  </div>
                 </div>
-                <div
-                  className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                  title="Copy Address"
-                  onClick={handleCopyToClipboard}
-                >
-                  {copyButtonStatus ? (
-                    <Check className="h-auto w-3.5 text-green-500" />
-                  ) : (
-                    <Copy className="h-auto w-3.5" />
-                  )}
-                </div>
-              </div>
+              )}
             </div>
 
-            { Followers, Following and follow button }
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 md:justify-start ltr:md:text-left rtl:md:text-right xl:mt-12 xl:gap-8 xl:py-6">
+            {/* Followers, Following and follow button */}
+            {/*<div className="mt-10 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 md:justify-start ltr:md:text-left rtl:md:text-right xl:mt-12 xl:gap-8 xl:py-6">
               <div>
                 <div className="mb-1.5 text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
                   {authorData?.following}
@@ -163,15 +193,15 @@ const AuthorProfilePage: NextPageWithLayout<
               >
                 Follow
               </Button>
-            </div>
+                  </div>*/}
 
-            { Followed by }
-            <div className="border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 ltr:md:text-left rtl:md:text-right xl:py-6">
+            {/* Followed by */}
+            {/*<div className="border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 ltr:md:text-left rtl:md:text-right xl:py-6">
               <div className="mb-2 text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
                 Followed by
               </div>
               <div className="flex justify-center md:justify-start">
-                { Followers list }
+                { Followers list}
                 {authorData?.followed_by?.map((item) => (
                   <AnchorLink
                     key={item?.id}
@@ -198,10 +228,15 @@ const AuthorProfilePage: NextPageWithLayout<
                   View All
                 </AnchorLink>
               </div>
-            </div>
+            </div>*/}
 
-            <AuthorInformation className="hidden md:block" data={authorData} />
-                </div>*/}
+            {
+              <AuthorInformation
+                className="hidden md:block"
+                data={authorData}
+              />
+            }
+          </div>
 
           <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:ltr:pl-7 md:rtl:pr-7 lg:ltr:pl-10 lg:rtl:pr-10 xl:ltr:pl-14 xl:rtl:pr-14 3xl:ltr:pl-16 3xl:rtl:pr-16">
             {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (

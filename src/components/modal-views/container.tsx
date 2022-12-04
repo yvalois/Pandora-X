@@ -16,6 +16,9 @@ const Register = dynamic(
 const Withdraw = dynamic(
   () => import('@/components/modalWithdraw/modalWithdraw')
 );
+const Staking = dynamic(
+  () => import('@/components/modalCondiciones/modalStaking')
+);
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
@@ -29,6 +32,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Register />;
     case 'WITHDRAW_VIEW':
       return <Withdraw />;
+    case 'STAKING_VIEW':
+      return <Staking />;
     default:
       return null;
   }

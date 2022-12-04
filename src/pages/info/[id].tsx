@@ -164,7 +164,7 @@ const NFTDetailsPage: NextPageWithLayout<
   );
 
   const nftdata = {
-    nombre: '',
+    Nombre: '',
     img: '',
     precio: 0,
     tipo: '',

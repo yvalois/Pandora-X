@@ -307,76 +307,74 @@ exports.WalletProvider = function (_a) {
     checkConnection(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   /*const setWalletAddress = async (provider: any) => {
-      try {
-        const signer = provider.getSigner();
-        if (signer) {
-          const web3Address = await signer.getAddress();
-          setAddress(web3Address);
-          console.log(address);
-          await conectar(web3Address);
-  
-          getBalance(provider, web3Address);
-        }
-      } catch (error) {
-        console.log(
-          'Account not connected; logged from setWalletAddress function'
-        );
+    try {
+      const signer = provider.getSigner();
+      if (signer) {
+        const web3Address = await signer.getAddress();
+        setAddress(web3Address);
+        console.log(address);
+        await conectar(web3Address);
+           getBalance(provider, web3Address);
       }
-    };*/
+    } catch (error) {
+      console.log(
+        'Account not connected; logged from setWalletAddress function'
+      );
+    }
+  };*/
   //wallet address saldra
 
   /*const conectar = async () => {
-      fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((response) => {
-          if (response !== null) {
-            console.log(response);
-            connectToMongo(response.Rol, response.Nombre);
-          } else {
-            connectToMongo('usuario', 'usuario');
-          }
-        });
-    };*/
+    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response !== null) {
+          console.log(response);
+          connectToMongo(response.Rol, response.Nombre);
+        } else {
+          connectToMongo('usuario', 'usuario');
+        }
+      });
+  };*/
 
   /*const disconect = () => {
-      dispatch(disconectWallet());
-    };*/
+    dispatch(disconectWallet());
+  };*/
 
   /*const connectBLockchain = (p) => {
-      dispatch(connectBLockchain(p));
-      console.log('e');
-    };*/
+    dispatch(connectBLockchain(p));
+    console.log('e');
+  };*/
 
   /*const connect = (cuenta: string) => {
-      dispatch(
-        connectSuccess({
-          account: cuenta,
-          //web3: web3Modal,
-        })
-      );
-  
-      Usuario.account;
-    };*/
+    dispatch(
+      connectSuccess({
+        account: cuenta,
+        //web3: web3Modal,
+      })
+    );
+       Usuario.account;
+  };*/
 
   /* const connectToMongo = (_rol: string, _nombre: string) => {
-      dispatch(
-        connectSuccessToMongo({
-          rol: _rol,
-          nombre: _nombre,
-        })
-      );
-    };*/
+    dispatch(
+      connectSuccessToMongo({
+        rol: _rol,
+        nombre: _nombre,
+      })
+    );
+  };*/
 
   /*const getBalance = async (provider: any, walletAddress: string) => {
-      const walletBalance = await provider.getBalance(walletAddress);
-      const balanceInEth = ethers.utils.formatEther(walletBalance);
-      setBalance(balanceInEth);
-    };*/
+    const walletBalance = await provider.getBalance(walletAddress);
+    const balanceInEth = ethers.utils.formatEther(walletBalance);
+    setBalance(balanceInEth);
+  };*/
 
   var disconnectWallet = function disconnectWallet() {
     //setAddress('');
@@ -384,8 +382,7 @@ exports.WalletProvider = function (_a) {
     dispatch(blockchainAction_1.disconectWallet());
     setAddress(''); //disconect();
   };
-
-  var checkIfExtensionIsAvailable = function checkIfExtensionIsAvailable() {
+  /*const checkIfExtensionIsAvailable = () => {
     if (
       (window && window.web3 === undefined) ||
       (window && window.ethereum === undefined)
@@ -393,7 +390,8 @@ exports.WalletProvider = function (_a) {
       setError(true);
       web3Modal && web3Modal.toggleModal();
     }
-  }; // seteamos el provider
+  };*/
+  // seteamos el provider
 
   var connectToWallet = function connectToWallet() {
     return __awaiter(void 0, void 0, void 0, function () {
@@ -403,8 +401,8 @@ exports.WalletProvider = function (_a) {
           case 0:
             _a.trys.push([0, 2, , 3]);
 
-            setLoading(true);
-            checkIfExtensionIsAvailable();
+            setLoading(true); //checkIfExtensionIsAvailable();
+
             return [
               4,
               /*yield*/
@@ -412,6 +410,7 @@ exports.WalletProvider = function (_a) {
             ];
 
           case 1:
+            //checkIfExtensionIsAvailable();
             _a.sent();
 
             setLoading(false);
@@ -443,20 +442,20 @@ exports.WalletProvider = function (_a) {
     });
   };
   /*const subscribeProvider = async (connection: any) => {
-      connection.on('close', () => {
+    connection.on('close', () => {
+      disconnectWallet();
+    });
+    connection.on('accountsChanged', async (accounts: string[]) => {
+      if (accounts?.length) {
+        setAddress(accounts[0]);
+        const provider = new ethers.providers.Web3Provider(connection);
+        getBalance(provider, accounts[0]);
+        connect(accounts[0]);
+      } else {
         disconnectWallet();
-      });
-      connection.on('accountsChanged', async (accounts: string[]) => {
-        if (accounts?.length) {
-          setAddress(accounts[0]);
-          const provider = new ethers.providers.Web3Provider(connection);
-          getBalance(provider, accounts[0]);
-          connect(accounts[0]);
-        } else {
-          disconnectWallet();
-        }
-      });
-    };*/
+      }
+    });
+  };*/
 
   return React.createElement(
     exports.WalletContext.Provider,

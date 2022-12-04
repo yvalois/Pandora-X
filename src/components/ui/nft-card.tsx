@@ -17,6 +17,7 @@ import inversionMinterAbi from '../../abi/inversionMinter.json';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import ActiveLink from './links/active-link';
 import Button from '@/components/ui/button';
+import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 
 type NFTGridProps = {
   image: StaticImageData;
@@ -39,6 +40,7 @@ export default function NFTGrid({
   type,
   nftInfo,
   setNftInfo,
+  tipo,
 }) {
   //const { isConnect, account } = useSelector((state) => state.Usuario);
   const {
@@ -46,15 +48,15 @@ export default function NFTGrid({
     inversionMinter,
     isConnect,
     accountAddress,
-    usdtContract,
     tokenContract,
+    usdtContract,
   } = useSelector((state) => state.blockchain);
 
   const { referidor } = useSelector((state) => state.Usuario);
 
   /*const signer = provider?.getSigner();
   console.log(signer);
-  const tokenContract = new ethers.Contract(
+  const usdtContract = new ethers.Contract(
     '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
     abiErc20,
     signer
@@ -180,18 +182,16 @@ export default function NFTGrid({
           productoMinter.address
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
       } else if (type == 'inversion') {
         const usdt = await tokenContract.allowance(
           accountAddress,
           inversionMinter.address
         ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const approve = async () => {
@@ -200,8 +200,8 @@ export default function NFTGrid({
     try {
       if (type == 'producto') {
         setTokenAddress(tokenContract.address);
-        const decimals = 18;
-        console.log(tokenContract);
+        const decimals = 6;
+
         const tx = await tokenContract.approve(
           productoMinter.address,
           ethers.utils.parseUnits('999', decimals)
@@ -212,7 +212,7 @@ export default function NFTGrid({
         setLoading(false);
       } else if (type == 'inversion') {
         setTokenAddress(tokenContract.address);
-        const decimals = 18;
+        const decimals = 6;
         const tx = await tokenContract.approve(
           inversionMinter.address,
           ethers.utils.parseUnits('999', decimals)
@@ -237,41 +237,122 @@ export default function NFTGrid({
     <div className="relative w-[300px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
       <div className="p-4">
         <div className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
-          {/*<Avatar
-            image={authorImage}
-            alt={name}
-            size="sm"
-            className="text-ellipsis ltr:mr-3 rtl:ml-3 dark:border-gray-500"
-          />*/}
-          {/*<span className="overflow-hidden text-ellipsis">@{author}</span>*/}
+          {
+            <Avatar
+              image={pandorax}
+              alt={name}
+              size="xs"
+              className="self-center text-ellipsis rtl:mr-3  rtl:ml-3 dark:border-gray-500"
+            />
+          }
+          <span className="overflow-hidden text-ellipsis">@PandoraX</span>
         </div>
       </div>
-      <div className="relative block w-full pb-full">
-        <Image
-          src={image}
-          //placeholder="blur"
-          layout="fill"
-          objectFit="cover"
-          alt=""
-        />
-      </div>
+      {type == 'compra' ? (
+        <AnchorLink
+          href={`/details/${number}`}
+          className="relative block w-full pb-full"
+        >
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
+      ) : type == 'productos' ? (
+        <AnchorLink
+          href={`/info/${number}`}
+          className="relative block w-full pb-full"
+        >
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
+      ) : (
+        <AnchorLink
+          href={`/infoinv/${number}`}
+          className="relative block w-full pb-full"
+        >
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
+      )}
 
       <div className="p-5">
-        <div className="text-sm font-medium text-black dark:text-white">
-          {name}
-        </div>
+        {type == 'comprap' ? (
+          <AnchorLink
+            href={`/details/${number}`}
+            className="text-sm font-medium text-black dark:text-white"
+          >
+            {name}
+          </AnchorLink>
+        ) : type == 'comprap' ? (
+          <AnchorLink
+            href={`/details/${number}`}
+            className="text-sm font-medium text-black dark:text-white"
+          >
+            {name}
+          </AnchorLink>
+        ) : type == 'productos' ? (
+          <AnchorLink
+            href={`/info/${number}`}
+            className="text-sm font-medium text-black dark:text-white"
+          >
+            {name}
+          </AnchorLink>
+        ) : (
+          <AnchorLink
+            href={`/infoinv/${number}`}
+            className="text-sm font-medium text-black dark:text-white"
+          >
+            {name}
+          </AnchorLink>
+        )}
+
         <div className="mt-1.5 flex">
-          <div className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400">
-            {parseInt(number) + 1}
-            <Verified className="ltr:ml-1 rtl:mr-1" />
-          </div>
+          {type == 'comprap' && (
+            <AnchorLink
+              href="/nft-details"
+              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
+            >
+              Productos
+              <Verified className="ltr:ml-1 rtl:mr-1" />
+            </AnchorLink>
+          )}
+
+          {type == 'comprai' && (
+            <AnchorLink
+              href="/nft-details"
+              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
+            >
+              Inversiones
+              <Verified className="ltr:ml-1 rtl:mr-1" />
+            </AnchorLink>
+          )}
         </div>
+
+        <div className="mt-1.5 flex">
+          {type == 'productos' && (
+            <AnchorLink
+              href="/nft-details"
+              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
+            >
+              Productos
+              <Verified className="ltr:ml-1 rtl:mr-1" />
+            </AnchorLink>
+          )}
+
+          {type == 'staking' && (
+            <AnchorLink
+              href="/nft-details"
+              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
+            >
+              Inversiones
+              <Verified className="ltr:ml-1 rtl:mr-1" />
+            </AnchorLink>
+          )}
+        </div>
+
         {alldata && (
           <div className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-            {price}
+            ${price} USDT
           </div>
         )}
-        <div>
+
+        {/*<div>
           {loading && (
             <Button size="small" type="button" disabled>
               <span
@@ -301,7 +382,7 @@ export default function NFTGrid({
 
           {alldata &&
             isConnect &&
-            !loading /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/ &&
+            !loading && tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F' &&
             price <= approvedToken && (
               <Button size="small" onClick={() => buyNft(number)}>
                 Buy
@@ -326,7 +407,7 @@ export default function NFTGrid({
               </Button>
             </ActiveLink>
           )}
-        </div>
+        </div>*/}
       </div>
     </div>
   );

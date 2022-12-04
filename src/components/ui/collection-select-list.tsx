@@ -6,32 +6,23 @@ import CollectionImage1 from '@/assets/images/collection/collection-1.jpg';
 import CollectionImage2 from '@/assets/images/collection/collection-2.jpg';
 import CollectionImage3 from '@/assets/images/collection/collection-3.jpg';
 import CollectionImage4 from '@/assets/images/collection/collection-4.jpg';
+import AnchorLink from './links/anchor-link';
 
 export const collectionList = [
   {
     icon: CollectionImage1,
-    name: 'Iron flower',
-    value: 'iron-flower',
+    name: 'Productos',
+    value: 'productos',
   },
   {
     icon: CollectionImage2,
-    name: 'Creative web',
-    value: 'creative-web',
+    name: 'Inversion',
+    value: 'inversiones ',
   },
   {
     icon: CollectionImage3,
-    name: 'Art in binary',
-    value: 'art-in-binary',
-  },
-  {
-    icon: CollectionImage4,
-    name: 'Sound of wave',
-    value: 'sound-of-wave',
-  },
-  {
-    icon: CollectionImage2,
-    name: 'Pixel art',
-    value: 'pixel-art',
+    name: 'profile pictures',
+    value: 'profile pictures',
   },
 ];
 
@@ -69,18 +60,23 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
       <ul role="listbox" className="py-3">
         {coinListData.length > 0 ? (
           coinListData.map((item, index) => (
-            <li
+            <AnchorLink
+              href={`http://localhost:3000/search?view=${item.value}`}
               key={index}
-              role="listitem"
-              tabIndex={index}
-              onClick={() => handleSelectedCoin(item.value)}
-              className="mb-1 flex cursor-pointer items-center gap-3 py-1.5 px-6 outline-none hover:bg-gray-100 focus:bg-gray-200 dark:hover:bg-gray-700 dark:focus:bg-gray-600"
+              className="w-full"
             >
-              <Avatar image={item.icon} size="xs" alt={item.name} />
-              <span className="text-sm tracking-tight text-gray-600 dark:text-white">
-                {item.name}
-              </span>
-            </li>
+              <li
+                role="listitem"
+                tabIndex={index}
+                onClick={() => handleSelectedCoin(item.value)}
+                className="mb-1 flex cursor-pointer items-center gap-3 py-1.5 px-6 outline-none hover:bg-gray-100 focus:bg-gray-200 dark:hover:bg-gray-700 dark:focus:bg-gray-600"
+              >
+                <Avatar image={item.icon} size="xs" alt={item.name} />
+                <span className="text-sm tracking-tight text-gray-600 dark:text-white">
+                  {item.name}
+                </span>
+              </li>
+            </AnchorLink>
           ))
         ) : (
           // FIXME: need coin not found svg from designer

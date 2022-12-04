@@ -11,7 +11,7 @@ const initialState = {
   type: '',
   categoria: '',
   rango: '',
-  pagos: [],
+  paid: [],
 };
 
 const UsuariosReducer = (state = initialState, action) => {

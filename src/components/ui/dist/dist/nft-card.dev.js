@@ -188,7 +188,11 @@ exports.__esModule = true;
 
 var image_1 = require('@/components/ui/image');
 
+var anchor_link_1 = require('@/components/ui/links/anchor-link');
+
 var verified_1 = require('@/components/icons/verified');
+
+var avatar_1 = require('@/components/ui/avatar');
 
 var styled_components_1 = require('styled-components');
 
@@ -200,7 +204,7 @@ var ethers_1 = require('ethers');
 
 var react_2 = require('react');
 
-var blockchainAction_1 = require('../../redux/Blockchain/blockchainAction');
+var Pandora_X_icon_04_svg_1 = require('@/assets/images/Pandora-X-icon-04.svg');
 
 function NFTGrid(_a) {
   var _this = this;
@@ -214,7 +218,8 @@ function NFTGrid(_a) {
     alldata = _a.alldata,
     type = _a.type,
     nftInfo = _a.nftInfo,
-    setNftInfo = _a.setNftInfo; //const { isConnect, account } = useSelector((state) => state.Usuario);
+    setNftInfo = _a.setNftInfo,
+    tipo = _a.tipo; //const { isConnect, account } = useSelector((state) => state.Usuario);
 
   var _b = react_redux_1.useSelector(function (state) {
       return state.blockchain;
@@ -224,14 +229,14 @@ function NFTGrid(_a) {
     isConnect = _b.isConnect,
     accountAddress = _b.accountAddress,
     usdtContract = _b.usdtContract,
-    tokenContract = _b.tokenContract;
+    usdtContract = _b.usdtContract;
 
   var referidor = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   }).referidor;
   /*const signer = provider?.getSigner();
   console.log(signer);
-  const tokenContract = new ethers.Contract(
+  const usdtContract = new ethers.Contract(
     '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
     abiErc20,
     signer
@@ -280,20 +285,9 @@ function NFTGrid(_a) {
         ]
       ))
   );
-  var Button = styled_components_1['default'].button(
+  var CButton = styled_components_1['default'].div(
     templateObject_2 ||
       (templateObject_2 = __makeTemplateObject(
-        [
-          '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    cursor: pointer;\n    &:hover {\n      background: #fff;\n      color: #000;\n    }\n  ',
-        ],
-        [
-          '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    cursor: pointer;\n    &:hover {\n      background: #fff;\n      color: #000;\n    }\n  ',
-        ]
-      ))
-  );
-  var CButton = styled_components_1['default'].div(
-    templateObject_3 ||
-      (templateObject_3 = __makeTemplateObject(
         [
           '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    width: 55%;\n  ',
         ],
@@ -303,8 +297,8 @@ function NFTGrid(_a) {
       ))
   );
   var Options = styled_components_1['default'].option(
-    templateObject_4 ||
-      (templateObject_4 = __makeTemplateObject(
+    templateObject_3 ||
+      (templateObject_3 = __makeTemplateObject(
         [
           '\n    color: #fff;\n    background: #000;\n    font-weight: 600;\n    text-transform: uppercase;\n    cursor: pointer;\n  ',
         ],
@@ -314,8 +308,8 @@ function NFTGrid(_a) {
       ))
   );
   var Select = styled_components_1['default'].select(
-    templateObject_5 ||
-      (templateObject_5 = __makeTemplateObject(
+    templateObject_4 ||
+      (templateObject_4 = __makeTemplateObject(
         [
           '\n    background: #000;\n    border: none;\n    border-radius: 16px;\n    color: #fff;\n    font-size: 14px;\n    font-weight: 600;\n    padding: 5px 20px;\n    text-transform: uppercase;\n    transition: all 0.1s ease-in-out;\n    cursor: pointer;\n    &:hover {\n      background: #fff;\n      color: #000;\n    }\n  ',
         ],
@@ -364,7 +358,7 @@ function NFTGrid(_a) {
               /*yield*/
               productoMinter.buyTokenWithReferido(
                 id.toString(),
-                tokenContract.address,
+                usdtContract.address,
                 referidor,
                 porcentaje
               ),
@@ -394,7 +388,7 @@ function NFTGrid(_a) {
             return [
               4,
               /*yield*/
-              productoMinter.buyToken(id.toString(), tokenContract.address),
+              productoMinter.buyToken(id.toString(), usdtContract.address),
             ];
 
           case 5:
@@ -485,14 +479,13 @@ function NFTGrid(_a) {
             return [
               4,
               /*yield*/
-              tokenContract.allowance(accountAddress, productoMinter.address),
+              usdtContract.allowance(accountAddress, productoMinter.address),
             ];
 
           case 1:
             usdt = _a.sent(); //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
 
             setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
-            alert(approvedToken);
             return [
               3, /*break*/
               4,
@@ -507,7 +500,7 @@ function NFTGrid(_a) {
             return [
               4,
               /*yield*/
-              tokenContract.allowance(accountAddress, inversionMinter.address),
+              usdtContract.allowance(accountAddress, inversionMinter.address),
             ];
 
           case 3:
@@ -524,7 +517,6 @@ function NFTGrid(_a) {
 
           case 5:
             e_1 = _a.sent();
-            console.log(e_1);
             return [
               3, /*break*/
               6,
@@ -557,13 +549,12 @@ function NFTGrid(_a) {
                 3, /*break*/
                 5,
               ];
-            setTokenAddress(tokenContract.address);
+            setTokenAddress(usdtContract.address);
             decimals = 18;
-            console.log(tokenContract);
             return [
               4,
               /*yield*/
-              tokenContract.approve(
+              usdtContract.approve(
                 productoMinter.address,
                 ethers_1.ethers.utils.parseUnits('999', decimals)
               ),
@@ -601,12 +592,12 @@ function NFTGrid(_a) {
                 3, /*break*/
                 9,
               ];
-            setTokenAddress(tokenContract.address);
+            setTokenAddress(usdtContract.address);
             decimals = 18;
             return [
               4,
               /*yield*/
-              tokenContract.approve(
+              usdtContract.approve(
                 inversionMinter.address,
                 ethers_1.ethers.utils.parseUnits('999', decimals)
               ),
@@ -671,59 +662,179 @@ function NFTGrid(_a) {
     'div',
     {
       className:
-        'relative overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark w-[300px]',
+        'relative w-[300px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark',
     },
     React.createElement(
       'div',
       {
         className: 'p-4',
       },
-      React.createElement('div', {
-        className:
-          'flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white',
-      })
+      React.createElement(
+        'div',
+        {
+          className:
+            'flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white',
+        },
+        React.createElement(avatar_1['default'], {
+          image: Pandora_X_icon_04_svg_1['default'],
+          alt: name,
+          size: 'xs',
+          className:
+            'text-ellipsis self-center rtl:mr-3  rtl:ml-3 dark:border-gray-500',
+        }),
+        React.createElement(
+          'span',
+          {
+            className: 'overflow-hidden text-ellipsis',
+          },
+          '@PandoraX'
+        )
+      )
     ),
-    React.createElement(
-      'div',
-      {
-        className: 'relative block w-full pb-full',
-      },
-      React.createElement(image_1['default'], {
-        src: image,
-        //placeholder="blur"
-        layout: 'fill',
-        objectFit: 'cover',
-        alt: '',
-      })
-    ),
+    type == 'compra'
+      ? React.createElement(
+          anchor_link_1['default'],
+          {
+            href: '/details/' + number,
+            className: 'relative block w-full pb-full',
+          },
+          React.createElement(image_1['default'], {
+            src: image,
+            layout: 'fill',
+            objectFit: 'cover',
+            alt: '',
+          })
+        )
+      : type == 'productos'
+      ? React.createElement(
+          anchor_link_1['default'],
+          {
+            href: '/info/' + number,
+            className: 'relative block w-full pb-full',
+          },
+          React.createElement(image_1['default'], {
+            src: image,
+            layout: 'fill',
+            objectFit: 'cover',
+            alt: '',
+          })
+        )
+      : React.createElement(
+          anchor_link_1['default'],
+          {
+            href: '/infoinv/' + number,
+            className: 'relative block w-full pb-full',
+          },
+          React.createElement(image_1['default'], {
+            src: image,
+            layout: 'fill',
+            objectFit: 'cover',
+            alt: '',
+          })
+        ),
     React.createElement(
       'div',
       {
         className: 'p-5',
       },
+      type == 'comprap'
+        ? React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/details/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          )
+        : type == 'comprap'
+        ? React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/details/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          )
+        : type == 'productos'
+        ? React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/info/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          )
+        : React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/infoinv/' + number,
+              className: 'text-sm font-medium text-black dark:text-white',
+            },
+            name
+          ),
       React.createElement(
         'div',
         {
-          className: 'text-sm font-medium text-black dark:text-white',
+          className: 'mt-1.5 flex',
         },
-        name
+        type == 'comprap' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Productos',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          ),
+        type == 'comprai' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Inversiones',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          )
       ),
       React.createElement(
         'div',
         {
           className: 'mt-1.5 flex',
         },
-        React.createElement(
-          'div',
-          {
-            className:
-              'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
-          },
-          number + 1,
-          React.createElement(verified_1.Verified, {
-            className: 'ltr:ml-1 rtl:mr-1',
-          })
-        )
+        type == 'productos' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Productos',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          ),
+        type == 'staking' &&
+          React.createElement(
+            anchor_link_1['default'],
+            {
+              href: '/nft-details',
+              className:
+                'inline-flex items-center text-xs text-gray-600 dark:text-gray-400',
+            },
+            'Inversiones',
+            React.createElement(verified_1.Verified, {
+              className: 'ltr:ml-1 rtl:mr-1',
+            })
+          )
       ),
       alldata &&
         React.createElement(
@@ -731,106 +842,13 @@ function NFTGrid(_a) {
           {
             className: 'mt-4 text-lg font-medium text-gray-900 dark:text-white',
           },
-          price
-        ),
-      React.createElement(
-        'div',
-        null,
-        loading &&
-          React.createElement(
-            Button,
-            {
-              type: 'button',
-              disabled: true,
-            },
-            React.createElement('span', {
-              className: 'spinner-border spinner-border-sm',
-              role: 'status',
-              'aria-hidden': 'true',
-            }),
-            'Loading...'
-          ),
-        alldata &&
-          !loading &&
-          !isConnect &&
-          React.createElement(
-            Button,
-            {
-              onClick: function onClick() {
-                dispatch(blockchainAction_1.connectWallet());
-              },
-            },
-            'Connect Wallet'
-          ),
-        alldata &&
-          isConnect &&
-          !loading &&
-          price > approvedToken &&
-          React.createElement(
-            Button,
-            {
-              onClick: approve,
-            },
-            'Approve'
-          ),
-        alldata &&
-          isConnect &&
-          !loading &&
-          /*&& tokenAddress === '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F'*/
-          price <= approvedToken &&
-          React.createElement(
-            Button,
-            {
-              onClick: function onClick() {
-                return buyNft(number);
-              },
-            },
-            'Buy'
-          ),
-        type == 'staking' &&
-          React.createElement(
-            'div',
-            {
-              className: ' flex row justify-evenly   ml-[-10px] mt-2',
-            },
-            React.createElement(
-              Button,
-              {
-                onClick: function onClick() {
-                  return setNftInfo(name, image, price, number);
-                },
-              },
-              'Stake'
-            ),
-            React.createElement(
-              Button,
-              {
-                onClick: function onClick() {
-                  return setNftInfo(name, image, price, number);
-                },
-              },
-              'Ver mas...'
-            )
-          ),
-        type == 'productos' &&
-          React.createElement(
-            Button,
-            {
-              className: 'mt-2',
-              onClick: function onClick() {
-                return setNftInfo(name, image, price, number);
-              },
-            },
-            'Ver mas...'
-          )
-      )
+          '$',
+          price,
+          ' USDT'
+        )
     )
   );
 }
 
 exports['default'] = NFTGrid;
-var templateObject_1,
-  templateObject_2,
-  templateObject_3,
-  templateObject_4,
-  templateObject_5;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4;

@@ -7,11 +7,6 @@
                 "type": "address"
             },
             {
-                "internalType": "uint256",
-                "name": "_Apr",
-                "type": "uint256"
-            },
-            {
                 "internalType": "contract IERC20",
                 "name": "_token",
                 "type": "address"
@@ -40,7 +35,13 @@
         "type": "event"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "name": "Apr",
         "outputs": [
             {
@@ -195,6 +196,19 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            }
+        ],
+        "name": "banWallet",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "cantPagos",
         "outputs": [
@@ -282,24 +296,20 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
                 "internalType": "contract IERC20",
-                "name": "_token",
+                "name": "",
                 "type": "address"
             }
         ],
-        "name": "claimRewardWithReferido",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "name": "decimals",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -340,7 +350,13 @@
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
         "name": "getApr",
         "outputs": [
             {
@@ -888,6 +904,11 @@
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "position",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
                 "name": "_Apr",
                 "type": "uint256"
             }
@@ -960,6 +981,11 @@
                 "internalType": "uint256",
                 "name": "_years",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_apr",
+                "type": "uint256"
             }
         ],
         "name": "stake",
@@ -976,6 +1002,42 @@
             }
         ],
         "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            }
+        ],
+        "name": "unBanWallet",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "contract IERC20",
+                "name": "_token",
+                "type": "address"
+            }
+        ],
+        "name": "wardWithReferido",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

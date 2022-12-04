@@ -3,7 +3,17 @@
 		"inputs": [
 			{
 				"internalType": "contract IERC20",
-				"name": "_token",
+				"name": "_tokenT",
+				"type": "address"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_tokenC",
+				"type": "address"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_tokenB",
 				"type": "address"
 			}
 		],
@@ -229,6 +239,11 @@
 				"internalType": "uint256",
 				"name": "_tipo",
 				"type": "uint256"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_token",
+				"type": "address"
 			}
 		],
 		"name": "buyPrice",
@@ -266,6 +281,11 @@
 				"internalType": "uint256",
 				"name": "_price",
 				"type": "uint256"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_token",
+				"type": "address"
 			}
 		],
 		"name": "buyTokenFee",
@@ -287,7 +307,7 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "contract IERC20",
+				"internalType": "contract IERC20Metadata",
 				"name": "_token",
 				"type": "address"
 			},
@@ -310,6 +330,25 @@
 	{
 		"inputs": [],
 		"name": "cantPagos",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "decimals",
 		"outputs": [
 			{
 				"internalType": "uint256",

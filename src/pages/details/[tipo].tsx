@@ -50,7 +50,7 @@ const NFTDetailsPage: NextPageWithLayout<
     });
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (
       Usuario.rol !== 'Admin' &&
       Usuario.rol !== 'usuario' &&
@@ -58,7 +58,7 @@ const NFTDetailsPage: NextPageWithLayout<
     ) {
       window.location.href = '/';
     }
-  });
+  });*/
 
   return (
     <>

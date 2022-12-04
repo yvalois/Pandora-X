@@ -33,6 +33,8 @@ import NftSlider from '@/components/ui/nftSlider';
 import router from 'next/router';
 import { setISODay } from 'date-fns';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import { useModal } from '@/components/modal-views/context';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -81,7 +83,7 @@ const StakingPage: NextPageWithLayout = () => {
   const [nftSelect, setNftSelect] = useState(nftInfo);
   const [time, setTime] = useState(0);
   const [status, setStatus] = useState(false);
-
+  const { openModal } = useModal();
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
   const [approvedToken, setApprovedToken] = useState(false);
@@ -89,9 +91,10 @@ const StakingPage: NextPageWithLayout = () => {
   const [loading, setLoading] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [id, setId] = useState(0);
+  const [success, setSuccess] = useState(false);
   const { inventoryi } = useSelector((state: any) => state.blockchain);
   const nftdata = {
-    nombre: '',
+    Nombre: '',
     img: '',
     precio: 0,
     tipo: '',
@@ -147,7 +150,6 @@ const StakingPage: NextPageWithLayout = () => {
     if (isap == staking.address) {
       setApprovedToken(true);
     } else {
-      alert(isap);
     }
   };
 
@@ -173,6 +175,7 @@ const StakingPage: NextPageWithLayout = () => {
     setLoading(false);
     setApprovedToken(false);
     setStatus(true);
+    setSuccess(true);
     setAlertMsg('Nft stakeado correctamente');
 
     /*if (!Usuario.isReferido && Usuario.type == 'blockMaker') {
@@ -181,7 +184,7 @@ const StakingPage: NextPageWithLayout = () => {
 
         const tx = await productoMinter.buyToken(
           tipoN,
-          tokenContract.address)
+          usdtContract.address)
 
     }*/
   };
@@ -204,7 +207,6 @@ const StakingPage: NextPageWithLayout = () => {
   useEffect(() => {
     setTimeout(() => {
       setStatus(false);
-      window.location.href = '/';
     }, 5000);
   }, [status]);
 
@@ -219,7 +221,7 @@ const StakingPage: NextPageWithLayout = () => {
     });
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (
       Usuario.rol !== 'Admin' &&
       Usuario.rol !== 'usuario' &&
@@ -227,7 +229,11 @@ const StakingPage: NextPageWithLayout = () => {
     ) {
       window.location.href = '/';
     }
-  });
+  });*/
+
+  useEffect(() => {
+    openModal('STAKING_VIEW');
+  }, []);
 
   return (
     <>
@@ -247,7 +253,7 @@ const StakingPage: NextPageWithLayout = () => {
                 type="text"
                 placeholder="Item name"
                 //onChange={(e) => setNombre(e.target.value)}
-                value={nft.nombre}
+                value={nft.Nombre}
                 disabled
               />
             </div>
@@ -327,16 +333,22 @@ const StakingPage: NextPageWithLayout = () => {
                 </Button>
               )}
 
-              {approvedToken == true && !loading && (
+              {!success && approvedToken == true && !loading && (
                 <Button shape="rounded" onClick={() => Stake()}>
                   Staking
                 </Button>
               )}
 
-              {approvedToken === false && !loading && (
+              {!success && approvedToken === false && !loading && (
                 <Button shape="rounded" onClick={() => Approve()}>
                   Approve
                 </Button>
+              )}
+
+              {success && (
+                <AnchorLink href="/">
+                  <Button shape="rounded">Ir al Home</Button>
+                </AnchorLink>
               )}
             </div>
           </div>
@@ -355,7 +367,7 @@ const StakingPage: NextPageWithLayout = () => {
               </div>
               <div className="p-5">
                 <div className="text-sm font-medium text-black dark:text-white">
-                  {nft.nombre}
+                  {nft.Nombre}
                 </div>
                 <div className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
                   {nft.precio} USDT

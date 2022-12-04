@@ -3,8 +3,8 @@ const initialState = {
   dataloaded: false,
   error: null,
   errorMsg: null,
-  usdtContract: null,
   tokenContract: null,
+  usdtContract: null,
   //busdContract: null,
   //usdcContract: null,
   //daiContract: null,
@@ -25,6 +25,7 @@ const initialState = {
   instance: null,
   isUser: null,
   paid: [],
+  paids: [],
   balanceI: 0,
 };
 
