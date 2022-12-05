@@ -41,6 +41,7 @@ const AuthorProfilePage: NextPageWithLayout<
   const Usuario = useSelector((state: any) => state.Usuario);
   const { accountAddress } = useSelector((state) => state.blockchain);
   const [copiado, setCopiado] = useState(false);
+  const [link, setLink] = useState('');
 
   useEffect(() => {
     if (
@@ -56,6 +57,7 @@ const AuthorProfilePage: NextPageWithLayout<
     const aux = window.location.href;
     const a = aux.split('profile');
     const e = a[0];
+    setLink(e);
     navigator.clipboard.writeText(`${e}principal/${accountAddress}`);
 
     setCopyButtonStatus(true);
@@ -99,16 +101,6 @@ const AuthorProfilePage: NextPageWithLayout<
             className="z-10 mx-auto -mt-12 dark:border-gray-500 sm:-mt-14 md:mx-0 md:-mt-16 xl:mx-0 3xl:-mt-20"
           />
         }{' '}
-        {Usuario.rol == 'usuario' && (
-          <div className="">
-            <span className="row ml-[60px] mr-2 w-full justify-around">
-              Copiar link de referido
-            </span>
-            <button onClick={() => copiar()} className="h-[25px] w-[25px] ">
-              <LinkIcon className="h-[18px] w-[18px]" />
-            </button>
-          </div>
-        )}
         {/* Profile Info */}
         <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row xl:pt-12">
           <div className="shrink-0 border-dashed border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
@@ -131,7 +123,7 @@ const AuthorProfilePage: NextPageWithLayout<
                     Link
                   </div>
                   <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
-                    http://localhost:3000/principal/${accountAddress}
+                    {`${link}principal/${accountAddress}`}
                   </div>
                   <div
                     className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"

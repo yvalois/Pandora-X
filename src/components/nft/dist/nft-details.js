@@ -322,6 +322,7 @@ function NftFooter(_a) {
             } else if (Usuario.range == 'blockcreator') {
               porcentaje = 400;
             }
+            alert;
             return [
               4 /*yield*/,
               productoMinter.buyTokenWithReferido(
@@ -347,7 +348,7 @@ function NftFooter(_a) {
           case 4:
             return [
               4 /*yield*/,
-              productoMinter.buyToken(tipoN, tokenContract.address),
+              productoMinter.buyToken(1, tokenContract.address),
             ];
           case 5:
             tx = _a.sent();
@@ -765,6 +766,7 @@ function NftDetails(_a) {
         switch (_a.label) {
           case 0:
             setLoading(true);
+            alert('a');
             _a.label = 1;
           case 1:
             _a.trys.push([1, 12, , 13]);
@@ -781,6 +783,7 @@ function NftDetails(_a) {
             } else if (Usuario.range == 'blockcreator') {
               porcentaje = 400;
             }
+            alert(approvedToken);
             return [
               4 /*yield*/,
               productoMinter.buyTokenWithReferido(
@@ -802,6 +805,7 @@ function NftDetails(_a) {
             dispatch(blockchainAction_1.uProduct());
             setStatus(true);
             setAlertMsg('Nft comprado exitosamente');
+            alert('a');
             return [3 /*break*/, 7];
           case 4:
             return [

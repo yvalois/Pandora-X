@@ -27,10 +27,9 @@ export default function ModalWithdraw() {
 
   const getInfo = async () => {
     const _id = window.localStorage.getItem('WithdrawID');
-    setId(_id);
     const _val = await inversionMinter.getPricePlusFee(_id);
-    const _valor = parseFloat(ethers.utils.formatUnits(_val, 18)).toFixed(2);
-    const lastValor = _valor * (10 / 1000);
+    const _valor = parseFloat(ethers.utils.formatUnits(_val, 6)).toFixed(2);
+    const lastValor = parseFloat(_valor * (10 / 1000)).toFixed(3);
     setValor(lastValor);
   };
 
@@ -66,7 +65,7 @@ export default function ModalWithdraw() {
 
   const withdraw = async () => {
     setLoading(true);
-    const tx = await staking.withdraw(id);
+    const tx = await staking.withdrawP(id);
     await tx.wait();
 
     dispatch(uStaking());

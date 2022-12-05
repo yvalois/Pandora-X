@@ -45,27 +45,32 @@ export const getStaticProps: GetStaticProps = async () => {
 const stakingOption = [
   {
     id: 1,
-    name: '1 Año (APR 10%)',
+    name: '1 Año (APR 30%)',
+    value: 1,
     //icon: <Ethereum />,
   },
   {
     id: 2,
-    name: '2 Año (APR 10%)',
+    name: '2 Año (APR 36%)',
+    value: 2,
     //icon: <Flow />,
   },
   {
     id: 3,
-    name: '3 Año (APR 10%)',
+    name: '3 Año (APR 42%)',
+    value: 3,
     //icon: <Flow />,
   },
   {
     id: 4,
-    name: '4 año (APR 10%)',
+    name: '4 año (APR 48%)',
+    value: 4,
     //icon: <Flow />,
   },
   {
     id: 5,
-    name: '5 Año (APR 10%)',
+    name: '5 Año (APR 54%)',
+    value: 5,
     //icon: <Flow />,
   },
 ];
@@ -146,6 +151,7 @@ const StakingPage: NextPageWithLayout = () => {
 
   const verifyApprove = async () => {
     const isap = await inversionMinter.getApproved(id); //MarketPlace
+    alert(isap);
     //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
     if (isap == staking.address) {
       setApprovedToken(true);
@@ -165,7 +171,10 @@ const StakingPage: NextPageWithLayout = () => {
   const Stake = async () => {
     setLoading(true);
     //si no esta referido
-    let tx = await staking.stake(id, tipoStak.id);
+
+    let tx = await staking
+      .stake(id, tipoStak.id, tipoStak.value)
+      .send({ gas: '1000000', gasPrice: '2000000000', from: accountAddress });
 
     await tx.wait();
     dispatch(uInvertion());

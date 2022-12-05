@@ -172,14 +172,13 @@ function ModalWithdraw() {
         switch (_a.label) {
           case 0:
             _id = window.localStorage.getItem('WithdrawID');
-            setId(_id);
             return [4 /*yield*/, inversionMinter.getPricePlusFee(_id)];
           case 1:
             _val = _a.sent();
             _valor = parseFloat(
-              ethers_1.ethers.utils.formatUnits(_val, 18)
+              ethers_1.ethers.utils.formatUnits(_val, 6)
             ).toFixed(2);
-            lastValor = _valor * (10 / 1000);
+            lastValor = parseFloat(_valor * (10 / 1000)).toFixed(3);
             setValor(lastValor);
             return [2 /*return*/];
         }
@@ -257,7 +256,7 @@ function ModalWithdraw() {
         switch (_a.label) {
           case 0:
             setLoading(true);
-            return [4 /*yield*/, staking.withdraw(id)];
+            return [4 /*yield*/, staking.withdrawP(id)];
           case 1:
             tx = _a.sent();
             return [4 /*yield*/, tx.wait()];

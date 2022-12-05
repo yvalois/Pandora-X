@@ -52,7 +52,7 @@ export default function StakingTable() {
   const claim = async (value) => {
     if (Usuario.isreferido && Usuario.type == 'BlockMaker') {
       setLoading(true); //usarlos como alerts de cargando y otro de realizado
-      const tx = await staking.claimRewardWithReferido(
+      const tx = await staking.wardWithReferido(
         value,
         Usuario.referidor,
         tokenContract.address

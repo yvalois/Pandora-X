@@ -248,7 +248,14 @@ export default function NFTGrid({
           <span className="overflow-hidden text-ellipsis">@PandoraX</span>
         </div>
       </div>
-      {type == 'compra' ? (
+      {type == 'comprap' ? (
+        <AnchorLink
+          href={`/details/${number}`}
+          className="relative block w-full pb-full"
+        >
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
+      ) : type == 'comprai' ? (
         <AnchorLink
           href={`/details/${number}`}
           className="relative block w-full pb-full"
@@ -279,7 +286,7 @@ export default function NFTGrid({
           >
             {name}
           </AnchorLink>
-        ) : type == 'comprap' ? (
+        ) : type == 'comprai' ? (
           <AnchorLink
             href={`/details/${number}`}
             className="text-sm font-medium text-black dark:text-white"
@@ -304,45 +311,45 @@ export default function NFTGrid({
 
         <div className="mt-1.5 flex">
           {type == 'comprap' && (
-            <AnchorLink
+            <div
               href="/nft-details"
               className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
             >
               Productos
               <Verified className="ltr:ml-1 rtl:mr-1" />
-            </AnchorLink>
+            </div>
           )}
 
           {type == 'comprai' && (
-            <AnchorLink
+            <div
               href="/nft-details"
               className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
             >
               Inversiones
               <Verified className="ltr:ml-1 rtl:mr-1" />
-            </AnchorLink>
+            </div>
           )}
         </div>
 
         <div className="mt-1.5 flex">
           {type == 'productos' && (
-            <AnchorLink
-              href="/nft-details"
+            <div
+              href={`/infoinv/${number}`}
               className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
             >
               Productos
               <Verified className="ltr:ml-1 rtl:mr-1" />
-            </AnchorLink>
+            </div>
           )}
 
           {type == 'staking' && (
-            <AnchorLink
-              href="/nft-details"
+            <div
+              href={`/infoinv/${number}`}
               className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
             >
               Inversiones
               <Verified className="ltr:ml-1 rtl:mr-1" />
-            </AnchorLink>
+            </div>
           )}
         </div>
 

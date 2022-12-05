@@ -826,15 +826,16 @@ export const connectWallet = () => async (dispatch) => {
 
           const pr = await stakingContract.getPosition(item);
           const pre = await inversionMinterContract.getPricePlusFee(item);
-          const ap = await stakingContract.getApr();
-
+          const ap = await stakingContract.getApr(item);
           const cpa = await stakingContract.rewardPerToken(item);
           const ind = await stakingContract.getIndice(item);
           const dat = await stakingContract.getDate(ind);
-          const precio = ethers.utils.formatUnits(pre, 18);
-          const cantpago = parseFloat(
-            ethers.utils.formatUnits(cpa, 18)
-          ).toFixed(2);
+          const precio = parseFloat(ethers.utils.formatUnits(pre, 6)).toFixed(
+            2
+          );
+          const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 6)).toFixed(
+            2
+          );
           const apr = ethers.utils.formatUnits(ap, 8);
           const i = 0;
           const date = toDateTime(dat);
@@ -847,7 +848,7 @@ export const connectWallet = () => async (dispatch) => {
               id: parseInt(item),
               position: parseInt(i),
               positionR: parseInt(pr), //llamar funcion
-              precio: parseInt(precio), //getpricePlusfee
+              precio: precio, //getpricePlusfee
               fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
               Apr: parseInt(apr), // getApr
               cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
@@ -880,7 +881,10 @@ export const connectWallet = () => async (dispatch) => {
         } else if (tipo == 8) {
           var type = 'AP';
         }
-        const price = await productoMinterContract.buyPrice(tipo);
+        const price = await productoMinterContract.buyPrice(
+          tipo,
+          tokenContract.address
+        );
         const precio = ethers.utils.formatUnits(price, 18);
         if (Productos[tipo - 1].tipo == type) {
           const prod = {
@@ -915,7 +919,10 @@ export const connectWallet = () => async (dispatch) => {
           var type = '100K';
         }
 
-        const price = await inversionMinterContract.buyPrice(tipo);
+        const price = await inversionMinterContract.buyPrice(
+          tipo,
+          tokenContract.address
+        );
 
         const precio = ethers.utils.formatUnits(price, 18);
         if (Inversiones[tipo - 1].tipo == type) {

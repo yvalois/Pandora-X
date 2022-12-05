@@ -214,7 +214,7 @@ function StakingTable() {
             setLoading(true); //usarlos como alerts de cargando y otro de realizado
             return [
               4 /*yield*/,
-              staking.claimRewardWithReferido(
+              staking.wardWithReferido(
                 value,
                 Usuario.referidor,
                 tokenContract.address

@@ -122,6 +122,7 @@ function NftFooter({
 
   const buyNft = async () => {
     setLoading(true);
+
     try {
       if (tipo == 'producto') {
         if (Usuario.isReferido && Usuario.type == 'Agente X') {
@@ -135,7 +136,7 @@ function NftFooter({
           } else if (Usuario.range == 'blockcreator') {
             porcentaje = 400;
           }
-
+          alert;
           const tx = await productoMinter.buyTokenWithReferido(
             tipoN,
             tokenContract.address,
@@ -150,10 +151,7 @@ function NftFooter({
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
         } else {
-          const tx = await productoMinter.buyToken(
-            tipoN,
-            tokenContract.address
-          );
+          const tx = await productoMinter.buyToken(1, tokenContract.address);
 
           await tx.wait(); //tener en cuenta para los proximos cambios
           setLoading(false);
@@ -372,6 +370,7 @@ export default function NftDetails({ product, type }) {
 
   const buyNft = async () => {
     setLoading(true);
+    alert('a');
     try {
       if (type == 'producto') {
         if (Usuario.isReferido && Usuario.type == 'Agente X') {
@@ -385,7 +384,7 @@ export default function NftDetails({ product, type }) {
           } else if (Usuario.range == 'blockcreator') {
             porcentaje = 400;
           }
-
+          alert(approvedToken);
           const tx = await productoMinter.buyTokenWithReferido(
             tipoN,
             tokenContract.address,
@@ -399,6 +398,7 @@ export default function NftDetails({ product, type }) {
           dispatch(uProduct());
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
+          alert('a');
         } else {
           const tx = await productoMinter.buyToken(
             tipoN,

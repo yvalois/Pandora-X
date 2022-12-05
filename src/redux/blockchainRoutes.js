@@ -7,7 +7,7 @@ export const contract = () => {
     daiContract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     productoMinter: '0x40ED3Adb3E97f72bE5f85A69bf0be3371cad78E2',
     inversionMinter: '0x8fA9365bCcc4C554FE1D7c004ff46b7A05d4de2C',
-    staking: '0x96964E04b71Bc0239c2fE64bc595F9f490a71101',
+    staking: '0xd04a0C1E76ed0dE870ecf04767644C6923aD0309',
     RPC_URL: 'https://polygon-rpc.com',
     //'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
     tokenPrueba: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', //aqui ponemos el usdt
