@@ -813,17 +813,17 @@ export const update = (accountAddress) => async (dispatch) => {
 export const connectWallet = () => async (dispatch) => {
   dispatch(loading());
   try {
-    /*const web3Modal =
+    const web3Modal =
       typeof window !== 'undefined' &&
       new Web3Modal({
         cacheProvider: true,
-      });*/
+      });
 
-    const web3Modal = new Web3Modal({
+    /*const web3Modal = new Web3Modal({
       cacheProvider: true,
 
       // required
-    });
+    });*/
     const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
 
