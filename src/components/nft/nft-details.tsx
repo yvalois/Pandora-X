@@ -49,10 +49,13 @@ function NftFooter({
   const [approvedUsdt, setApprovedUsdt] = useState(0);
   const [approvedToken, setApprovedToken] = useState(0);
   const [status, setStatus] = useState(false);
+  const [status2, setStatus2] = useState(false);
+
   const [alertMsg, setAlertMsg] = useState('');
+  const [alertMsg2, setAlertMsg2] = useState('');
+
   const Usuario = useSelector((state) => state.Usuario);
   const [auxPrice, setAuxPrice] = useState(price);
-
   const {
     productoMinter,
     inversionMinter,
@@ -71,8 +74,7 @@ function NftFooter({
         const usdt = await tokenContract.allowance(
           accountAddress,
           productoMinter.address
-        );
-        alert(price); //MarketPlace
+        ); //MarketPlace
         //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
         setApprovedToken(ethers.utils.formatUnits(usdt, 6));
       } else if (tipo == 'inversion') {
@@ -87,36 +89,47 @@ function NftFooter({
   };
 
   const approve = async () => {
-    setLoading(true);
+    //setLoading(true);
 
-    try {
-      if (tipo == 'producto') {
-        setTokenAddress(tokenContract.address);
+    const a = await tokenContract.balanceOf(accountAddress);
+    let prir = parseFloat(ethers.utils.formatUnits(a, 6)).toFixed(2);
+    const price1 = parseFloat(prir);
+    const price2 = parseFloat(price);
 
-        const decimals = 6;
+    if (price1 < price) {
+      setAlertMsg2('no tienes balance suficiente');
+      setStatus2(true);
+    } else {
+      try {
+        setLoading(true);
+        if (tipo == 'producto') {
+          setTokenAddress(tokenContract.address);
 
-        const tx = await tokenContract.approve(
-          productoMinter.address,
-          ethers.utils.parseUnits(price.toString(), decimals)
-        );
-        setAuxPrice(ethers.utils.parseUnits(price.toString(), decimals));
-        await tx.wait();
-        await verifyApprove();
-        setLoading(false);
-      } else if (tipo == 'inversion') {
-        setTokenAddress(tokenContract.address);
-        const decimals = 6;
-        const tx = await tokenContract.approve(
-          inversionMinter.address,
-          ethers.utils.parseUnits(price.toString(), decimals)
-        );
+          const decimals = 6;
 
-        await tx.wait();
-        await verifyApprove();
+          const tx = await tokenContract.approve(
+            productoMinter.address,
+            ethers.utils.parseUnits(price.toString(), decimals)
+          );
+          setAuxPrice(ethers.utils.parseUnits(price.toString(), decimals));
+          await tx.wait();
+          await verifyApprove();
+          setLoading(false);
+        } else if (tipo == 'inversion') {
+          setTokenAddress(tokenContract.address);
+          const decimals = 6;
+          const tx = await tokenContract.approve(
+            inversionMinter.address,
+            ethers.utils.parseUnits(price.toString(), decimals)
+          );
+
+          await tx.wait();
+          await verifyApprove();
+          setLoading(false);
+        }
+      } catch (e) {
         setLoading(false);
       }
-    } catch (e) {
-      setLoading(false);
     }
   };
 
@@ -151,7 +164,10 @@ function NftFooter({
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
         } else {
-          const tx = await productoMinter.buyToken(1, tokenContract.address);
+          const tx = await productoMinter.buyToken(
+            tipoN,
+            tokenContract.address
+          );
 
           await tx.wait(); //tener en cuenta para los proximos cambios
           setLoading(false);
@@ -161,7 +177,11 @@ function NftFooter({
           setAlertMsg('Nft comprado exitosamente');
         }
       } else if (tipo == 'inversion') {
-        const tx = await inversionMinter.buyToken(tipoN, tokenContract.address);
+        const tx = await inversionMinter.buyToken(
+          1,
+          '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
+        );
+
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
@@ -174,11 +194,27 @@ function NftFooter({
     }
   };
 
+  const open = () => {
+    window.localStorage.setItem('TransferPId', id);
+    openModal('TRANSFER_P');
+  };
+
+  const openI = () => {
+    window.localStorage.setItem('TransferIId', id);
+    openModal('TRANSFER_I');
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setStatus(false);
     }, 5000);
   }, [status]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStatus2(false);
+    }, 5000);
+  }, [status2]);
   return (
     <div
       className={cn(
@@ -263,15 +299,32 @@ function NftFooter({
 
         {tipo == 'pcomprado' && (
           <div className="grid grid-cols-2 gap-3">
-            <Button shape="rounded">Transfer</Button>
+            <Button shape="rounded" onClick={open}>
+              Transfer
+            </Button>
+            <Button
+              shape="rounded"
+              variant="solid"
+              color="gray"
+              className="dark:bg-gray-800"
+            >
+              Acceder
+            </Button>
           </div>
         )}
 
         {tipo == 'invcomprado' && (
           <div className="grid grid-cols-2 gap-3">
-            <Button shape="rounded">Transfer</Button>
+            <Button shape="rounded" onClick={openI}>
+              Transfer
+            </Button>
             <AnchorLink href={`/staking/${id}`}>
-              <Button variant="solid" shape="rounded">
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="gray"
+                className="dark:bg-gray-800"
+              >
                 Stake
               </Button>
             </AnchorLink>
@@ -284,6 +337,15 @@ function NftFooter({
           role="alert"
         >
           <span className="font-medium">{alertMsg}</span>
+        </div>
+      )}
+
+      {status2 && (
+        <div
+          className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">{alertMsg2}</span>
         </div>
       )}
     </div>
@@ -370,7 +432,6 @@ export default function NftDetails({ product, type }) {
 
   const buyNft = async () => {
     setLoading(true);
-    alert('a');
     try {
       if (type == 'producto') {
         if (Usuario.isReferido && Usuario.type == 'Agente X') {
@@ -384,7 +445,6 @@ export default function NftDetails({ product, type }) {
           } else if (Usuario.range == 'blockcreator') {
             porcentaje = 400;
           }
-          alert(approvedToken);
           const tx = await productoMinter.buyTokenWithReferido(
             tipoN,
             tokenContract.address,
@@ -398,7 +458,6 @@ export default function NftDetails({ product, type }) {
           dispatch(uProduct());
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
-          alert('a');
         } else {
           const tx = await productoMinter.buyToken(
             tipoN,
@@ -522,12 +581,12 @@ export default function NftDetails({ product, type }) {
                       </Button>
                     )}
 
-                    {type !== 'invcomprado' &&
+                    {/*type !== 'invcomprado' &&
                       type !== 'pcomprado' &&
                       !loading &&
                       product.precio <= approvedToken && (
                         <Button onClick={() => buyNft()}>Buy</Button>
-                      )}
+                      )*/}
 
                     {/*type !== 'pcomprado' &&
                       !loading &&

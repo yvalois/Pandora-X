@@ -65,7 +65,7 @@ export default function ModalWithdraw() {
 
   const withdraw = async () => {
     setLoading(true);
-    const tx = await staking.withdrawP(id);
+    const tx = await staking.withdrawP(id, tokenContract.address);
     await tx.wait();
 
     dispatch(uStaking());

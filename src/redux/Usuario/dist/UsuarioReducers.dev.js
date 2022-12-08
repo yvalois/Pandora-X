@@ -68,6 +68,9 @@ var initialState = {
   categoria: '',
   rango: '',
   paid: [],
+  perfil: '',
+  banner: '',
+  descripcion: '',
 };
 
 var UsuariosReducer = function UsuariosReducer() {
@@ -122,6 +125,18 @@ var UsuariosReducer = function UsuariosReducer() {
         categoria: action.payload.categoria,
         rango: action.payload.rango,
         paid: action.payload.paid,
+        perfil: action.payload.perfil,
+        banner: action.payload.banner,
+        descripcion: action.payload.descripcion,
+      });
+
+    case 'UPDATE_MONGO':
+      return _objectSpread({}, state, {
+        loading: false,
+        nombre: action.payload.nombre,
+        perfil: action.payload.perfil,
+        banner: action.payload.banner,
+        descripcion: action.payload.descripcion,
       });
 
     default:

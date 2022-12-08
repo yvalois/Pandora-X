@@ -39,6 +39,16 @@ var Staking = dynamic_1['default'](function () {
     return require('@/components/modalCondiciones/modalStaking');
   });
 });
+var TransferP = dynamic_1['default'](function () {
+  return Promise.resolve().then(function () {
+    return require('@/components/modalTransfer/modalTP');
+  });
+});
+var TransferI = dynamic_1['default'](function () {
+  return Promise.resolve().then(function () {
+    return require('@/components/modalTransfer/modalTI');
+  });
+});
 function renderModalContent(view) {
   switch (view) {
     case 'SEARCH_VIEW':
@@ -53,6 +63,10 @@ function renderModalContent(view) {
       return React.createElement(Withdraw, null);
     case 'STAKING_VIEW':
       return React.createElement(Staking, null);
+    case 'TRANSFER_P':
+      return React.createElement(TransferP, null);
+    case 'TRANSFER_I':
+      return React.createElement(TransferI, null);
     default:
       return null;
   }
@@ -81,7 +95,7 @@ function ModalContainer() {
         className:
           'fixed inset-0 z-50 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12',
         onClose: function () {
-          if (view && view !== 'REGISTER_VIEW') {
+          if (view && view !== 'REGISTER_VIEW' && view !== 'STAKING_VIEW') {
             closeModal();
           }
         },

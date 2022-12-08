@@ -177,6 +177,13 @@ export const connectSuccessToMongo = (payload) => {
     payload: payload,
   };
 };
+
+export const Update = (payload) => {
+  return {
+    type: 'UPDATE_MONGO',
+    payload: payload,
+  };
+};
 export const disconectWallet = () => {
   return {
     type: 'DISCONECT_WALLET',
@@ -234,6 +241,11 @@ export const uProduct = () => async (dispatch) => {
     productoMinterAbi,
     signer
   );
+  const tokenContract = new ethers.Contract(
+    TokenPrueba_ADDRESS,
+    abiErc20,
+    signer
+  );
   const nftpBalance = await productoMinterContract.getMyInventory(accounts[0]);
   const inventoryp = [];
   nftpBalance.map(async (item) => {
@@ -256,8 +268,11 @@ export const uProduct = () => async (dispatch) => {
     } else if (tipo == 8) {
       var type = 'AP';
     }
-    const price = await productoMinterContract.buyPrice(tipo);
-    const precio = ethers.utils.formatUnits(price, 18);
+    const price = await productoMinterContract.buyPrice(
+      tipo,
+      tokenContract.address
+    );
+    const precio = ethers.utils.formatUnits(price, 6);
     if (Productos[tipo - 1].tipo == type) {
       const prod = {
         Nombre: Productos[item].nombre,
@@ -295,6 +310,11 @@ export const uInvertion = () => async (dispatch) => {
     inversionMinterAbi,
     signer
   );
+  const tokenContract = new ethers.Contract(
+    TokenPrueba_ADDRESS,
+    abiErc20,
+    signer
+  );
   const nftiBalance = await inversionMinterContract.getMyInventory(accounts[0]);
   const inventoryi = [];
   nftiBalance.map(async (item) => {
@@ -316,10 +336,13 @@ export const uInvertion = () => async (dispatch) => {
       var type = '100K';
     }
 
-    const price = await inversionMinterContract.buyPrice(tipo);
+    const price = await inversionMinterContract.buyPrice(
+      tipo,
+      tokenContract.address
+    );
     //alert(price)
 
-    const precio = ethers.utils.formatUnits(price, 18);
+    const precio = ethers.utils.formatUnits(price, 6);
     if (Inversiones[tipo - 1].tipo == type) {
       const inv = {
         Nombre: Inversiones[tipo - 1].nombre,
@@ -383,8 +406,8 @@ export const uStaking = () => async (dispatch) => {
       const cpa = await stakingContract.rewardPerToken(item);
       const ind = await stakingContract.getIndice(item);
       const dat = await stakingContract.getDate(ind);
-      const precio = ethers.utils.formatUnits(pre, 18);
-      const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 18)).toFixed(2);
+      const precio = ethers.utils.formatUnits(pre, 6);
+      const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 6)).toFixed(2);
       const apr = ethers.utils.formatUnits(ap, 8);
       const i = 0;
       const date = toDateTime(dat);
@@ -431,7 +454,11 @@ const subscribeProvider = (connection) => async (dispatch) => {
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
       //const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
-      //const tokenContract = new ethers.Contract(TokenPrueba_ADDRESS, abiErc20, signer);
+      const tokenContract = new ethers.Contract(
+        TokenPrueba_ADDRESS,
+        abiErc20,
+        signer
+      );
       const productoMinterContract = new ethers.Contract(
         PRODUCTOS_MINTER_ADDRESS,
         productoMinterAbi,
@@ -510,8 +537,11 @@ const subscribeProvider = (connection) => async (dispatch) => {
         } else if (tipo == 8) {
           var type = 'AP';
         }
-        const price = await productoMinterContract.buyPrice(tipo);
-        const precio = ethers.utils.formatUnits(price, 18);
+        const price = await productoMinterContract.buyPrice(
+          tipo,
+          tokenContract.address
+        );
+        const precio = ethers.utils.formatUnits(price, 6);
         if (Productos[tipo - 1].tipo == type) {
           const prod = {
             Nombre: Productos[tipo - 1].nombre,
@@ -544,9 +574,12 @@ const subscribeProvider = (connection) => async (dispatch) => {
         } else if (tipo == 7) {
           var type = '100K';
         }
-        const price = await inversionMinterContract.buyPrice(tipo);
+        const price = await inversionMinterContract.buyPrice(
+          tipo,
+          tokenContract.address
+        );
         //alert(price)
-        const precio = ethers.utils.formatUnits(price, 18);
+        const precio = ethers.utils.formatUnits(price, 6);
         if (inversionesAR[tipo - 1].tipo == type) {
           const inv = {
             Nombre: inversionesAR[tipo - 1].nombre,
@@ -563,15 +596,14 @@ const subscribeProvider = (connection) => async (dispatch) => {
       let balancei = 0;
 
       nftiBalance.map(async (item) => {
-        const precio = await inversionMinterContract.buyPrice(item);
-
-        balancei += precio;
+        const precio = await inversionMinterContract.getPricePlusFee(item);
+        balancei += parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(2);
       });
 
       let balancep = 0;
 
       nftpBalance.map(async (item) => {
-        const precio = await inversionMinterContract.buyPrice(item);
+        const precio = await productoMinterContract.getPricePlusFee(item);
 
         balancep = precio;
       });
@@ -618,7 +650,7 @@ const infoPagos = async (productoMinter, rango, categoria) => {
     for (i = 0; i < cant; i++) {
       const paid = await productoMinter.getPagoUser(i + 1);
       const wallet = await productoMinter.getWallet(i + 1);
-      const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(
+      const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 6)).toFixed(
         2
       );
       const w1 = wallet.slice(0, 6);
@@ -659,7 +691,7 @@ const infoPagosC = async (staking, rango, categoria) => {
     for (i = 0; i < cant; i++) {
       const paid = await staking.getPagoUser(i + 1);
       const wallet = await staking.getWallet(i + 1);
-      const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 18)).toFixed(
+      const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 6)).toFixed(
         2
       );
       const w1 = wallet.slice(0, 6);
@@ -731,7 +763,6 @@ const conectar =
           } else if (response.Categoria == 'BlockMaker') {
             infoPagosC(stakingContract, response.Rango, response.Categoria);
           }
-
           dispatch(
             connectSuccessToMongo({
               rol: response.Rol,
@@ -742,6 +773,9 @@ const conectar =
               type: response.Type,
               rango: response.Rango,
               paid: Pagos,
+              perfil: response.Perfil,
+              banner: response.Banner,
+              descripcion: response.Descripcion,
             })
           );
         } else {
@@ -749,6 +783,32 @@ const conectar =
         }
       });
   };
+export const update = (accountAddress) => async (dispatch) => {
+  fetch(
+    `https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+    .then((res) => res.json())
+    .then((response) => {
+      if (response !== null) {
+        dispatch(
+          Update({
+            nombre: response.Nombre,
+            perfil: response.Perfil,
+            banner: response.Banner,
+            descripcion: response.Descripcion,
+          })
+        );
+      } else {
+        dispatch(register());
+      }
+    });
+};
 
 export const connectWallet = () => async (dispatch) => {
   dispatch(loading());
@@ -761,9 +821,9 @@ export const connectWallet = () => async (dispatch) => {
 
     const web3Modal = new Web3Modal({
       cacheProvider: true,
-      // providerOptions // required
-    });
 
+      // required
+    });
     const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
 
@@ -885,7 +945,7 @@ export const connectWallet = () => async (dispatch) => {
           tipo,
           tokenContract.address
         );
-        const precio = ethers.utils.formatUnits(price, 18);
+        const precio = ethers.utils.formatUnits(price, 6);
         if (Productos[tipo - 1].tipo == type) {
           const prod = {
             Nombre: Productos[tipo - 1].Nombre,
@@ -924,7 +984,7 @@ export const connectWallet = () => async (dispatch) => {
           tokenContract.address
         );
 
-        const precio = ethers.utils.formatUnits(price, 18);
+        const precio = ethers.utils.formatUnits(price, 6);
         if (Inversiones[tipo - 1].tipo == type) {
           const inv = {
             Nombre: Inversiones[tipo - 1].Nombre,
@@ -938,28 +998,20 @@ export const connectWallet = () => async (dispatch) => {
         }
       });
 
-      /*let balancei = 0
-
-      nftiBalance.map(async(item)=>{
-        const precio =  await inversionMinterContract.buyPrice(item)
-
-        balancei += precio
-      })
-
-      let balancep = 0 ;
-
-      nftpBalance.map(async(item)=>{
-        const precio =  await inversionMinterContract.buyPrice(item)
-
-        balancep = precio
-
-      })*/
+      let balancei = [];
+      balancei[0] = 0;
+      nftiBalance.map(async (item) => {
+        const precio = await inversionMinterContract.getPricePlusFee(item);
+        const aux = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(2);
+        const auxiliar = balancei[0];
+        balancei[0] = parseFloat(auxiliar) + parseFloat(aux);
+      });
 
       //const usdtBalance = await usdtContract.balanceOf(accounts[0]);
       //const tokenBalance = await tokenContract.balanceOf(accounts[0]);
 
       //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
-      //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 18);
+      //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 6);
 
       /*let preciosP =[]
       let preciosI =[]
@@ -969,14 +1021,14 @@ export const connectWallet = () => async (dispatch) => {
       inversionesAR.map(async()=>{
         const precio = await inversionMinterContract.buyPrice(i+1)
 
-        const price = ethers.utils.formatUnits(precio, 18)
+        const price = ethers.utils.formatUnits(precio, 6)
         preciosI.push(price)
       })
 
       Productos.map(async()=>{
         const precio = await productoMinterContract.buyPrice(i+1)
 
-        const price = ethers.utils.formatUnits(precio, 18)
+        const price = ethers.utils.formatUnits(precio, 6)
         preciosP.push(price)
       })*/
 
@@ -995,7 +1047,7 @@ export const connectWallet = () => async (dispatch) => {
           inventoryi: inventoryi,
           inventorys: inventorys,
           instance: instance,
-          balanceI: 0,
+          balancei: balancei,
         })
       );
 
@@ -1023,7 +1075,7 @@ export const connectWallet = () => async (dispatch) => {
 
       const accountAddress = accounts[0];
 
-      //const balanceFormat = ethers.utils.formatUnits(tokenBalance, 18);
+      //const balanceFormat = ethers.utils.formatUnits(tokenBalance, 6);
       //const balanceFormat2 = ethers.utils.formatUnits(usdtBalance, 6);
 
       dispatch(

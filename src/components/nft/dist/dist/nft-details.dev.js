@@ -248,7 +248,7 @@ function NftFooter(_a) {
     inversionMinter = _l.inversionMinter,
     isConnect = _l.isConnect,
     accountAddress = _l.accountAddress,
-    usdtContract = _l.usdtContract,
+    tokenContract = _l.tokenContract,
     usdtContract = _l.usdtContract;
 
   var referidor = react_redux_1.useSelector(function (state) {
@@ -272,15 +272,13 @@ function NftFooter(_a) {
             return [
               4,
               /*yield*/
-              usdtContract.allowance(accountAddress, productoMinter.address),
+              tokenContract.allowance(accountAddress, productoMinter.address),
             ];
 
           case 1:
-            usdt = _a.sent();
-            alert(price); //MarketPlace
-            //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+            usdt = _a.sent(); //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
 
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             return [
               3, /*break*/
               4,
@@ -295,13 +293,13 @@ function NftFooter(_a) {
             return [
               4,
               /*yield*/
-              usdtContract.allowance(accountAddress, inversionMinter.address),
+              tokenContract.allowance(accountAddress, inversionMinter.address),
             ];
 
           case 3:
             usdt = _a.sent(); //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
 
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             _a.label = 4;
 
           case 4:
@@ -344,12 +342,12 @@ function NftFooter(_a) {
                 3, /*break*/
                 5,
               ];
-            setTokenAddress(usdtContract.address);
-            decimals = 18;
+            setTokenAddress(tokenContract.address);
+            decimals = 6;
             return [
               4,
               /*yield*/
-              usdtContract.approve(
+              tokenContract.approve(
                 productoMinter.address,
                 ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
               ),
@@ -390,12 +388,12 @@ function NftFooter(_a) {
                 3, /*break*/
                 9,
               ];
-            setTokenAddress(usdtContract.address);
-            decimals = 18;
+            setTokenAddress(tokenContract.address);
+            decimals = 6;
             return [
               4,
               /*yield*/
-              usdtContract.approve(
+              tokenContract.approve(
                 inversionMinter.address,
                 ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
               ),
@@ -482,12 +480,13 @@ function NftFooter(_a) {
               porcentaje = 400;
             }
 
+            alert;
             return [
               4,
               /*yield*/
               productoMinter.buyTokenWithReferido(
                 tipoN,
-                usdtContract.address,
+                tokenContract.address,
                 referidor,
                 porcentaje
               ),
@@ -520,7 +519,7 @@ function NftFooter(_a) {
             return [
               4,
               /*yield*/
-              productoMinter.buyToken(tipoN, usdtContract.address),
+              productoMinter.buyToken(1, tokenContract.address),
             ];
 
           case 5:
@@ -556,7 +555,7 @@ function NftFooter(_a) {
             return [
               4,
               /*yield*/
-              inversionMinter.buyToken(tipoN, usdtContract.address),
+              inversionMinter.buyToken(tipoN, tokenContract.address),
             ];
 
           case 9:
@@ -905,7 +904,7 @@ function NftDetails(_a) {
     isConnect = _j.isConnect,
     accountAddress = _j.accountAddress,
     usdtContract = _j.usdtContract,
-    usdtContract = _j.usdtContract;
+    tokenContract = _j.tokenContract;
 
   var referidor = react_redux_1.useSelector(function (state) {
     return state.Usuario;
@@ -928,13 +927,13 @@ function NftDetails(_a) {
             return [
               4,
               /*yield*/
-              usdtContract.allowance(accountAddress, productoMinter.address),
+              tokenContract.allowance(accountAddress, productoMinter.address),
             ];
 
           case 1:
             usdt = _a.sent(); //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
 
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             return [
               3, /*break*/
               4,
@@ -949,13 +948,13 @@ function NftDetails(_a) {
             return [
               4,
               /*yield*/
-              usdtContract.allowance(accountAddress, inversionMinter.address),
+              tokenContract.allowance(accountAddress, inversionMinter.address),
             ];
 
           case 3:
             usdt = _a.sent(); //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
 
-            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 18));
+            setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             _a.label = 4;
 
           case 4:
@@ -998,12 +997,12 @@ function NftDetails(_a) {
                 3, /*break*/
                 5,
               ];
-            setTokenAddress(usdtContract.address);
-            decimals = 18;
+            setTokenAddress(tokenContract.address);
+            decimals = 6;
             return [
               4,
               /*yield*/
-              usdtContract.approve(
+              tokenContract.approve(
                 productoMinter.address,
                 ethers_1.ethers.utils.parseUnits(
                   product.precio.toString(),
@@ -1044,12 +1043,12 @@ function NftDetails(_a) {
                 3, /*break*/
                 9,
               ];
-            setTokenAddress(usdtContract.address);
-            decimals = 18;
+            setTokenAddress(tokenContract.address);
+            decimals = 6;
             return [
               4,
               /*yield*/
-              usdtContract.approve(
+              tokenContract.approve(
                 inversionMinter.address,
                 ethers_1.ethers.utils.parseUnits(
                   product.precio.toString(),
@@ -1144,7 +1143,7 @@ function NftDetails(_a) {
               /*yield*/
               productoMinter.buyTokenWithReferido(
                 tipoN,
-                usdtContract.address,
+                tokenContract.address,
                 referidor,
                 porcentaje
               ),
@@ -1177,7 +1176,7 @@ function NftDetails(_a) {
             return [
               4,
               /*yield*/
-              productoMinter.buyToken(tipoN, usdtContract.address),
+              productoMinter.buyToken(tipoN, tokenContract.address),
             ];
 
           case 5:
@@ -1213,7 +1212,7 @@ function NftDetails(_a) {
             return [
               4,
               /*yield*/
-              inversionMinter.buyToken(tipoN, usdtContract.address),
+              inversionMinter.buyToken(tipoN, tokenContract.address),
             ];
 
           case 9:
@@ -1463,19 +1462,6 @@ function NftDetails(_a) {
                         'aria-hidden': 'true',
                       }),
                       'Loading...'
-                    ),
-                  type !== 'invcomprado' &&
-                    type !== 'pcomprado' &&
-                    !loading &&
-                    product.precio <= approvedToken &&
-                    React.createElement(
-                      button_1['default'],
-                      {
-                        onClick: function onClick() {
-                          return buyNft();
-                        },
-                      },
-                      'Buy'
                     ),
                   React.createElement(NftFooter, {
                     className: 'hidden md:block',

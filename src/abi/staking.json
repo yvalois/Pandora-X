@@ -296,6 +296,29 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "contract IERC20",
+                "name": "_token",
+                "type": "address"
+            }
+        ],
+        "name": "claimRewardWithReferido",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "contract IERC20",
                 "name": "",
                 "type": "address"
@@ -948,6 +971,19 @@
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "_p",
+                "type": "uint256"
+            }
+        ],
+        "name": "setPer",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
                 "name": "_percentage",
                 "type": "uint256"
             }
@@ -1015,29 +1051,6 @@
             }
         ],
         "name": "unBanWallet",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "contract IERC20",
-                "name": "_token",
-                "type": "address"
-            }
-        ],
-        "name": "wardWithReferido",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

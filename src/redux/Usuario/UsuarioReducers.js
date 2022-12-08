@@ -12,6 +12,9 @@ const initialState = {
   categoria: '',
   rango: '',
   paid: [],
+  perfil: '',
+  banner: '',
+  descripcion: '',
 };
 
 const UsuariosReducer = (state = initialState, action) => {
@@ -60,6 +63,18 @@ const UsuariosReducer = (state = initialState, action) => {
         categoria: action.payload.categoria,
         rango: action.payload.rango,
         paid: action.payload.paid,
+        perfil: action.payload.perfil,
+        banner: action.payload.banner,
+        descripcion: action.payload.descripcion,
+      };
+    case 'UPDATE_MONGO':
+      return {
+        ...state,
+        loading: false,
+        nombre: action.payload.nombre,
+        perfil: action.payload.perfil,
+        banner: action.payload.banner,
+        descripcion: action.payload.descripcion,
       };
     default:
       return state;

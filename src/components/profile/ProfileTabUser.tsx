@@ -67,8 +67,8 @@ export default function ProfileTabUser() {
         },
       ]}
     >
-      <TabPanel className="focus:outline-none">
-        <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
+      <TabPanel className="w-full focus:outline-none">
+        <div className="grid w-full gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentItems?.map((nft) => (
             <NFTGrid
               key={nft.Nombre}
@@ -82,18 +82,22 @@ export default function ProfileTabUser() {
             />
           ))}
           {currentItems.length == 0 && (
-            <div className="align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center">
-              <span>
-                <h1 className="w-[700px] text-lg text-gray-600">
-                  Aun no realizas tu primer compra de Nft's de productos
-                </h1>
-              </span>
+            <div className=" flex h-full  w-full justify-center self-center">
+              <div className="w-full items-center justify-center">
+                <div className=" h-full w-full">
+                  <span>
+                    <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                      No tienes Nft's de productos
+                    </h1>
+                  </span>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </TabPanel>
-      <TabPanel className="focus:outline-none">
-        <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
+      <TabPanel className="h-full w-full focus:outline-none">
+        <div className="grid h-full w-full gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentInv?.map((nft) => (
             <NFTGrid
               key={nft.Nombre}
@@ -106,12 +110,14 @@ export default function ProfileTabUser() {
             />
           ))}
           {currentInv.length == 0 && (
-            <div className="align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center">
-              <span>
-                <h1 className="w-[700px] text-lg text-gray-600">
-                  Aun no realizas tu primer compra de Nft's de inversion
-                </h1>
-              </span>
+            <div className="flex h-full w-full  items-center justify-center ">
+              <div className=" h-full w-full">
+                <span>
+                  <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                    No tienes Nft's de inversion
+                  </h1>
+                </span>
+              </div>
             </div>
           )}
         </div>

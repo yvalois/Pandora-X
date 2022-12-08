@@ -18,6 +18,12 @@ import { PlusCircle } from '@/components/icons/plus-circle';
 import { CompassIcon } from '@/components/icons/compass';
 import { InfoCircle } from '@/components/icons/info-circle';
 import { useDispatch, useSelector } from 'react-redux';
+import PeerX from '@/assets/images/profile/PEER-X.jpg';
+import BlockCreator from '@/assets/images/profile/BLOCKCREATOR.jpg';
+import BlockElite from '@/assets/images/profile/BLOCKELITE.jpg';
+import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
+import Generic from '@/assets/images/profile/GENERIC.jpg';
+import NoProfile from '@/assets/images/profile/NoProfile.jpg';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
@@ -72,11 +78,11 @@ export const menuItems = [
     icon: <CompassIcon />,
     href: routes.search,
   },
-  {
+  /*{
     name: 'Staking',
     icon: <PlusCircle />,
     href: routes.staking,
-  },
+  },*/
   {
     name: 'Comunidad',
     icon: <VoteIcon />,
@@ -161,9 +167,18 @@ type SidebarProps = {
 };
 
 export default function Sidebar({ className }: SidebarProps) {
-  const Usuario = useSelector((state: any) => state.blockchain.rol);
+  const UsuarioR = useSelector((state: any) => state.blockchain.rol);
   const { closeDrawer } = useDrawer();
-
+  const Usuario = useSelector((state: any) => state.Usuario);
+  const {
+    inventoryp,
+    inventoryi,
+    productoMinter,
+    accountAddress,
+    balanceI,
+    isConnect,
+    inversionMinter,
+  } = useSelector((state: any) => state.blockchain);
   return (
     <aside
       className={cn(
@@ -189,19 +204,63 @@ export default function Sidebar({ className }: SidebarProps) {
 
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-5 2xl:px-8">
-          <AuthorCard image={AuthorImage} name="Root" role="admin" />
+          {isConnect &&
+          Usuario.perfil.length == 0 &&
+          Usuario.rango == 'peerx' ? (
+            <AuthorCard image={PeerX} name={Usuario.nombre} role={UsuarioR} />
+          ) : isConnect &&
+            Usuario.perfil.length == 0 &&
+            Usuario.rango == 'blockelite' ? (
+            <AuthorCard
+              image={BlockElite}
+              name={Usuario.nombre}
+              role={UsuarioR}
+            />
+          ) : isConnect &&
+            Usuario.perfil.length == 0 &&
+            Usuario.rango == 'blockmaster' ? (
+            <AuthorCard
+              image={BlockMaster}
+              name={Usuario.nombre}
+              role={UsuarioR}
+            />
+          ) : isConnect &&
+            Usuario.perfil.length == 0 &&
+            Usuario.rango == 'blockcreator' ? (
+            <AuthorCard
+              image={BlockCreator}
+              name={Usuario.nombre}
+              role={UsuarioR}
+            />
+          ) : isConnect && Usuario.perfil.length > 0 ? (
+            <AuthorCard
+              image={Usuario.perfil}
+              name={Usuario.nombre}
+              role={UsuarioR}
+            />
+          ) : isConnect ? (
+            <AuthorCard image={Generic} name={Usuario.nombre} role={UsuarioR} />
+          ) : (
+            !isConnect && (
+              <AuthorCard
+                image={Generic}
+                name={'Inicia Sesion'}
+                role={'No haz iniciado sesion'}
+              />
+            )
+          )}
 
           <div className="mt-12">
             {menuItems.map((item, index) =>
-              (Usuario !== 'Admin' && item.name == 'Referidos') ||
-              (Usuario !== 'Admin' && item.name == 'Crear NFT') ||
-              (Usuario !== 'Admin' &&
-                Usuario !== 'usuario' &&
-                Usuario !== 'cliente' &&
+              (UsuarioR !== 'Admin' && item.name == 'Referidos') ||
+              (UsuarioR !== 'Admin' && item.name == 'Crear NFT') ||
+              (UsuarioR !== 'Admin' &&
+                UsuarioR !== 'usuario' &&
+                UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
-              (Usuario !== 'Admin' &&
-                Usuario !== 'usuario' &&
-                Usuario !== 'cliente' &&
+              (UsuarioR !== 'Admin' &&
+                UsuarioR !== 'usuario' &&
+                UsuarioR !== 'cliente' &&
                 item.name == 'Staking') ? (
                 <div key={index}></div>
               ) : (

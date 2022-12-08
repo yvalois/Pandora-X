@@ -171,24 +171,30 @@ function NftFooter(_a) {
   var _h = react_1.useState(false),
     status = _h[0],
     setStatus = _h[1];
-  var _j = react_1.useState(''),
-    alertMsg = _j[0],
-    setAlertMsg = _j[1];
+  var _j = react_1.useState(false),
+    status2 = _j[0],
+    setStatus2 = _j[1];
+  var _k = react_1.useState(''),
+    alertMsg = _k[0],
+    setAlertMsg = _k[1];
+  var _l = react_1.useState(''),
+    alertMsg2 = _l[0],
+    setAlertMsg2 = _l[1];
   var Usuario = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   });
-  var _k = react_1.useState(price),
-    auxPrice = _k[0],
-    setAuxPrice = _k[1];
-  var _l = react_redux_1.useSelector(function (state) {
+  var _m = react_1.useState(price),
+    auxPrice = _m[0],
+    setAuxPrice = _m[1];
+  var _o = react_redux_1.useSelector(function (state) {
       return state.blockchain;
     }),
-    productoMinter = _l.productoMinter,
-    inversionMinter = _l.inversionMinter,
-    isConnect = _l.isConnect,
-    accountAddress = _l.accountAddress,
-    tokenContract = _l.tokenContract,
-    usdtContract = _l.usdtContract;
+    productoMinter = _o.productoMinter,
+    inversionMinter = _o.inversionMinter,
+    isConnect = _o.isConnect,
+    accountAddress = _o.accountAddress,
+    tokenContract = _o.tokenContract,
+    usdtContract = _o.usdtContract;
   var referidor = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   }).referidor;
@@ -207,7 +213,6 @@ function NftFooter(_a) {
             ];
           case 1:
             usdt = _a.sent();
-            alert(price); //MarketPlace
             //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
             setApprovedToken(ethers_1.ethers.utils.formatUnits(usdt, 6));
             return [3 /*break*/, 4];
@@ -235,15 +240,26 @@ function NftFooter(_a) {
   };
   var approve = function () {
     return __awaiter(_this, void 0, void 0, function () {
-      var decimals, tx, decimals, tx, e_2;
+      var a, prir, price1, price2, decimals, tx, decimals, tx, e_2;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
-            setLoading(true);
-            _a.label = 1;
+            return [4 /*yield*/, tokenContract.balanceOf(accountAddress)];
           case 1:
-            _a.trys.push([1, 10, , 11]);
-            if (!(tipo == 'producto')) return [3 /*break*/, 5];
+            a = _a.sent();
+            prir = parseFloat(ethers_1.ethers.utils.formatUnits(a, 6)).toFixed(
+              2
+            );
+            price1 = parseFloat(prir);
+            price2 = parseFloat(price);
+            if (!(price1 < price)) return [3 /*break*/, 2];
+            setAlertMsg2('no tienes balance suficiente');
+            setStatus2(true);
+            return [3 /*break*/, 12];
+          case 2:
+            _a.trys.push([2, 11, , 12]);
+            setLoading(true);
+            if (!(tipo == 'producto')) return [3 /*break*/, 6];
             setTokenAddress(tokenContract.address);
             decimals = 6;
             return [
@@ -253,21 +269,21 @@ function NftFooter(_a) {
                 ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
               ),
             ];
-          case 2:
+          case 3:
             tx = _a.sent();
             setAuxPrice(
               ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
             );
             return [4 /*yield*/, tx.wait()];
-          case 3:
-            _a.sent();
-            return [4 /*yield*/, verifyApprove()];
           case 4:
             _a.sent();
-            setLoading(false);
-            return [3 /*break*/, 9];
+            return [4 /*yield*/, verifyApprove()];
           case 5:
-            if (!(tipo == 'inversion')) return [3 /*break*/, 9];
+            _a.sent();
+            setLoading(false);
+            return [3 /*break*/, 10];
+          case 6:
+            if (!(tipo == 'inversion')) return [3 /*break*/, 10];
             setTokenAddress(tokenContract.address);
             decimals = 6;
             return [
@@ -277,23 +293,23 @@ function NftFooter(_a) {
                 ethers_1.ethers.utils.parseUnits(price.toString(), decimals)
               ),
             ];
-          case 6:
+          case 7:
             tx = _a.sent();
             return [4 /*yield*/, tx.wait()];
-          case 7:
-            _a.sent();
-            return [4 /*yield*/, verifyApprove()];
           case 8:
             _a.sent();
-            setLoading(false);
-            _a.label = 9;
+            return [4 /*yield*/, verifyApprove()];
           case 9:
-            return [3 /*break*/, 11];
+            _a.sent();
+            setLoading(false);
+            _a.label = 10;
           case 10:
+            return [3 /*break*/, 12];
+          case 11:
             e_2 = _a.sent();
             setLoading(false);
-            return [3 /*break*/, 11];
-          case 11:
+            return [3 /*break*/, 12];
+          case 12:
             return [2 /*return*/];
         }
       });
@@ -348,7 +364,7 @@ function NftFooter(_a) {
           case 4:
             return [
               4 /*yield*/,
-              productoMinter.buyToken(1, tokenContract.address),
+              productoMinter.buyToken(tipoN, tokenContract.address),
             ];
           case 5:
             tx = _a.sent();
@@ -367,7 +383,10 @@ function NftFooter(_a) {
             if (!(tipo == 'inversion')) return [3 /*break*/, 11];
             return [
               4 /*yield*/,
-              inversionMinter.buyToken(tipoN, tokenContract.address),
+              inversionMinter.buyToken(
+                1,
+                '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
+              ),
             ];
           case 9:
             tx = _a.sent();
@@ -392,6 +411,14 @@ function NftFooter(_a) {
       });
     });
   };
+  var open = function () {
+    window.localStorage.setItem('TransferPId', id);
+    openModal('TRANSFER_P');
+  };
+  var openI = function () {
+    window.localStorage.setItem('TransferIId', id);
+    openModal('TRANSFER_I');
+  };
   react_1.useEffect(
     function () {
       setTimeout(function () {
@@ -399,6 +426,14 @@ function NftFooter(_a) {
       }, 5000);
     },
     [status]
+  );
+  react_1.useEffect(
+    function () {
+      setTimeout(function () {
+        setStatus2(false);
+      }, 5000);
+    },
+    [status2]
   );
   return React.createElement(
     'div',
@@ -567,8 +602,18 @@ function NftFooter(_a) {
           { className: 'grid grid-cols-2 gap-3' },
           React.createElement(
             button_1['default'],
-            { shape: 'rounded' },
+            { shape: 'rounded', onClick: open },
             'Transfer'
+          ),
+          React.createElement(
+            button_1['default'],
+            {
+              shape: 'rounded',
+              variant: 'solid',
+              color: 'gray',
+              className: 'dark:bg-gray-800',
+            },
+            'Acceder'
           )
         ),
       tipo == 'invcomprado' &&
@@ -577,7 +622,7 @@ function NftFooter(_a) {
           { className: 'grid grid-cols-2 gap-3' },
           React.createElement(
             button_1['default'],
-            { shape: 'rounded' },
+            { shape: 'rounded', onClick: openI },
             'Transfer'
           ),
           React.createElement(
@@ -585,7 +630,12 @@ function NftFooter(_a) {
             { href: '/staking/' + id },
             React.createElement(
               button_1['default'],
-              { variant: 'solid', shape: 'rounded' },
+              {
+                shape: 'rounded',
+                variant: 'solid',
+                color: 'gray',
+                className: 'dark:bg-gray-800',
+              },
               'Stake'
             )
           )
@@ -600,6 +650,16 @@ function NftFooter(_a) {
           role: 'alert',
         },
         React.createElement('span', { className: 'font-medium' }, alertMsg)
+      ),
+    status2 &&
+      React.createElement(
+        'div',
+        {
+          className:
+            'absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-green-200 dark:text-green-800',
+          role: 'alert',
+        },
+        React.createElement('span', { className: 'font-medium' }, alertMsg2)
       )
   );
 }
@@ -766,7 +826,6 @@ function NftDetails(_a) {
         switch (_a.label) {
           case 0:
             setLoading(true);
-            alert('a');
             _a.label = 1;
           case 1:
             _a.trys.push([1, 12, , 13]);
@@ -783,7 +842,6 @@ function NftDetails(_a) {
             } else if (Usuario.range == 'blockcreator') {
               porcentaje = 400;
             }
-            alert(approvedToken);
             return [
               4 /*yield*/,
               productoMinter.buyTokenWithReferido(
@@ -805,7 +863,6 @@ function NftDetails(_a) {
             dispatch(blockchainAction_1.uProduct());
             setStatus(true);
             setAlertMsg('Nft comprado exitosamente');
-            alert('a');
             return [3 /*break*/, 7];
           case 4:
             return [
@@ -1031,19 +1088,6 @@ function NftDetails(_a) {
                         'aria-hidden': 'true',
                       }),
                       'Loading...'
-                    ),
-                  type !== 'invcomprado' &&
-                    type !== 'pcomprado' &&
-                    !loading &&
-                    product.precio <= approvedToken &&
-                    React.createElement(
-                      button_1['default'],
-                      {
-                        onClick: function () {
-                          return buyNft();
-                        },
-                      },
-                      'Buy'
                     ),
                   React.createElement(NftFooter, {
                     className: 'hidden md:block',

@@ -6,6 +6,7 @@ import Button from '@/components/ui/button';
 import NotificationCard, {
   NotificationCardProps,
 } from '@/components/ui/notification-card';
+import TweetEmbed from 'react-tweet-embed';
 
 //images
 import User1 from '@/assets/images/avatar/8.jpg';
@@ -72,24 +73,26 @@ const NotificationPage: NextPageWithLayout = () => {
       <div className="mx-auto w-[660px] max-w-full">
         <div className="mb-7 flex items-center justify-between gap-6">
           <h2 className="text-center text-lg font-medium text-gray-900 dark:text-white sm:text-xl lg:text-2xl">
-            Notifications
+            Notificaciones
           </h2>
-          <Button
-            color="white"
-            variant="transparent"
-            size="mini"
-            shape="rounded"
-          >
-            <span className="text-xs tracking-tighter">Mark all as read</span>
-          </Button>
         </div>
-
-        {notifications.map((notification) => {
+        {/*notifications.map((notification) => {
           const notificationItem = notification as NotificationCardProps;
           return (
             <NotificationCard key={notification.id} {...notificationItem} />
           );
-        })}
+        })*/}
+        <a
+          className="twitter-timeline"
+          href="https://twitter.com/Pandorax_co?ref_src=twsrc%5Etfw"
+        >
+          Tweets by Pandorax_co
+        </a>{' '}
+        <script
+          async
+          src="https://platform.twitter.com/widgets.js"
+          charset="utf-8"
+        ></script>
       </div>
     </>
   );

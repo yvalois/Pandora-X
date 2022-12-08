@@ -4,6 +4,7 @@ var react_1 = require('react');
 var context_1 = require('@/components/modal-views/context');
 var anchor_link_1 = require('../ui/links/anchor-link');
 var button_1 = require('../ui/button');
+var warning_1 = require('@/components/icons/warning');
 function ModalWithdraw() {
   var closeModal = context_1.useModal().closeModal;
   var _a = react_1.useState(0),
@@ -21,8 +22,24 @@ function ModalWithdraw() {
   var _e = react_1.useState(false),
     succes = _e[0],
     setSuccess = _e[1];
+  var _f = react_1.useState(false),
+    msg = _f[0],
+    setMsg = _f[1];
+  var _g = react_1.useState(''),
+    alert = _g[0],
+    setAlert = _g[1];
   var close = function () {
     closeModal('Withdraw_VIEW');
+  };
+  var verify = function () {
+    if (msg == true) {
+      close();
+    } else {
+      setAlert('Debes aceptar los terminos');
+    }
+  };
+  var change = function () {
+    setMsg(!msg);
   };
   return react_1['default'].createElement(
     react_1['default'].Fragment,
@@ -31,8 +48,15 @@ function ModalWithdraw() {
       'div',
       {
         className:
-          'relative z-50 mx-auto h-[200px] w-[400px] max-w-full rounded-lg bg-white px-8 py-8 dark:bg-light-dark',
+          'relative z-50 mx-auto h-auto w-[430px] column  justify-center items-center max-w-full rounded-lg bg-white px-8 py-8 dark:bg-light-dark',
       },
+      react_1['default'].createElement(
+        'div',
+        { className: 'width-full flex justify-center items-center mb-8' },
+        react_1['default'].createElement(warning_1.Warning, {
+          className: 'text-[#2a52be] ',
+        })
+      ),
       react_1['default'].createElement(
         anchor_link_1['default'],
         { href: '/' },
@@ -55,15 +79,57 @@ function ModalWithdraw() {
       ),
       react_1['default'].createElement(
         'p',
-        { className: 'mb-4' },
-        'Al presionar aceptar, confirmas estar de acuerdo con no poder recuperar el token hasta cumplir el tiempo establecido'
+        { className: 'mb-8' },
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, assumenda voluptatem! Optio iusto eum qui voluptate aperiam mollitia corporis! Ullam id commodi ad consectetur suscipit architecto delectus nobis veritatis. Accusamus asperiores eaque nihil quaerat neque modi. Laborum, ad. Aperiam quis qui necessitatibus vel labore voluptatem praesentium ullam quos saepe possimus placeat optio consectetur porro id odio ex quam assumenda quaerat fugiat, ipsum explicabo voluptate. Quas veritatis architecto itaque ut doloremque?'
+      ),
+      react_1['default'].createElement(
+        'div',
+        { className: 'flex items-center mb-0' },
+        react_1['default'].createElement('input', {
+          id: 'link-checkbox',
+          type: 'checkbox',
+          value: msg,
+          onChange: change,
+          className:
+            'w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600',
+        }),
+        react_1['default'].createElement(
+          'label',
+          {
+            for: 'link-checkbox',
+            className:
+              'ml-2 text-sm font-medium text-gray-900 dark:text-gray-300',
+          },
+          'I agree with the ',
+          react_1['default'].createElement(
+            'a',
+            {
+              href: '#',
+              className: 'text-blue-600 dark:text-blue-500 hover:underline',
+            },
+            'terms and conditions'
+          ),
+          '.'
+        )
+      ),
+      react_1['default'].createElement(
+        'div',
+        { className: 'mb-6' },
+        '    ',
+        !msg &&
+          alert.length > 0 &&
+          react_1['default'].createElement(
+            'label',
+            { className: 'ml-6 text-xs text-red-500' },
+            alert
+          )
       ),
       react_1['default'].createElement(
         'div',
         { className: 'flex w-full justify-evenly' },
         react_1['default'].createElement(
           button_1['default'],
-          { onClick: close, size: 'small' },
+          { onClick: verify, size: 'small' },
           react_1['default'].createElement(
             'span',
             {

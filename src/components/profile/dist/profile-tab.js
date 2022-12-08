@@ -45,7 +45,7 @@ function ProfileTab() {
     },
     React.createElement(
       param_tab_1.TabPanel,
-      { className: 'focus:outline-none' },
+      { className: 'focus:outline-none vw-[100%]' },
       React.createElement(
         'div',
         {
@@ -68,17 +68,25 @@ function ProfileTab() {
         currentItems.length == 0 &&
           React.createElement(
             'div',
-            {
-              className:
-                'align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center',
-            },
+            { className: ' h-full justify-center  self-center flex w-full' },
             React.createElement(
-              'span',
-              null,
+              'div',
+              { className: 'w-full justify-center items-center' },
               React.createElement(
-                'h1',
-                { className: 'w-[700px] text-lg text-gray-600' },
-                "Aun no realizas tu primer compra de Nft's de productos"
+                'div',
+                { className: ' h-full w-full' },
+                React.createElement(
+                  'span',
+                  null,
+                  React.createElement(
+                    'h1',
+                    {
+                      className:
+                        'xl:w-[700px] md:w-[500px] xl:text-lg md:text-md text-gray-600',
+                    },
+                    "No tienes Nft's de productos"
+                  )
+                )
               )
             )
           )
@@ -109,17 +117,25 @@ function ProfileTab() {
         currentInv.length == 0 &&
           React.createElement(
             'div',
-            {
-              className:
-                'align-self height-[100%] mt-[50%] ml-[100%] flex w-[100%] justify-center',
-            },
+            { className: ' h-full justify-center  self-center flex w-full' },
             React.createElement(
-              'span',
-              null,
+              'div',
+              { className: 'w-full justify-center items-center' },
               React.createElement(
-                'h1',
-                { className: 'w-[700px] text-lg text-gray-600' },
-                "Aun no realizas tu primer compra de Nft's de inversion"
+                'div',
+                { className: ' h-full w-full' },
+                React.createElement(
+                  'span',
+                  null,
+                  React.createElement(
+                    'h1',
+                    {
+                      className:
+                        'xl:w-[700px] md:w-[500px] xl:text-lg md:text-md text-gray-600',
+                    },
+                    "No tienes Nft's de Inversion"
+                  )
+                )
               )
             )
           )

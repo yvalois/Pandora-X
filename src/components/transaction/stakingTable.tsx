@@ -46,6 +46,7 @@ export default function StakingTable() {
   const { inventorys, staking, tokenContract } = useSelector(
     (state) => state.blockchain
   );
+
   const Usuario = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -99,8 +100,8 @@ export default function StakingTable() {
     {
       Header: 'ID',
       accessor: 'id',
-      minWidth: 60,
-      maxWidth: 80,
+      minWidth: 10,
+      maxWidth: 10,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Valor</div>,
@@ -109,8 +110,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
-      minWidth: 35,
-      maxWidth: 45,
+      minWidth: 5,
+      maxWidth: 20,
     },
     {
       Header: () => (
@@ -121,8 +122,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
-      minWidth: 160,
-      maxWidth: 220,
+      minWidth: 40,
+      maxWidth: 70,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Apr</div>,
@@ -131,8 +132,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
-      minWidth: 80,
-      maxWidth: 120,
+      minWidth: 5,
+      maxWidth: 20,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Balance</div>,
@@ -141,8 +142,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}USDT</div>
       ),
-      minWidth: 100,
-      maxWidth: 180,
+      minWidth: 40,
+      maxWidth: 40,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
@@ -159,15 +160,15 @@ export default function StakingTable() {
           </Button>
         </div>
       ),
-      minWidth: 220,
-      maxWidth: 280,
+      minWidth: 20,
+      maxWidth: 70,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
       accessor: 'idW',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="flex items-center justify-end">
+        <div className="fl  ex items-center justify-end">
           <Button
             size="small"
             onClick={() => withdraw(value)} //onClick={() => openModal('WITHDRAW_VIEW')}
@@ -177,8 +178,8 @@ export default function StakingTable() {
           </Button>
         </div>
       ),
-      minWidth: 200,
-      maxWidth: 300,
+      minWidth: 20,
+      maxWidth: 60,
     },
   ];
 

@@ -28,12 +28,20 @@ import investing from '@/assets/images/prod/investing.jpeg';
 import studio from '@/assets/images/prod/studio.jpeg';
 import academia from '@/assets/images/prod/academia.jpeg';
 
+import PeerX from '@/assets/images/profile/PEER-X.jpg';
+import BlockCreator from '@/assets/images/profile/BLOCKCREATOR.jpg';
+import BlockElite from '@/assets/images/profile/BLOCKELITE.jpg';
+import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
+import Generic from '@/assets/images/profile/GENERIC.jpg';
+import { transations } from '../redux/Transactions/TransactionsActions';
+import AvatarP from '@/components/ui/AvatarP';
+
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
   };
 };
-
+let Data = [];
 const prod = [
   {
     nombre: 'Podcast Straming',
@@ -92,8 +100,13 @@ const HomePage: NextPageWithLayout<
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
   const [balance, setBalance] = useState(0);
+  const Usuario = useSelector((state: any) => state.Usuario);
+  let Contador = 0;
   const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
     useSelector((state: any) => state.minted);
+
+  const { Transactions } = useSelector((state) => state.transaction);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const getNft = async () => {
@@ -117,6 +130,8 @@ const HomePage: NextPageWithLayout<
     balanceI,
     isConnect,
     inversionMinter,
+    staking,
+    tokenContract,
   } = useSelector((state: any) => state.blockchain);
 
   const inventory = async () => {
@@ -128,17 +143,272 @@ const HomePage: NextPageWithLayout<
 
     return 0;
   };
+  const getInvertionTrans = async () => {
+    fetch(
+      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${inversionMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
+ `,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        function toDateTime(secs) {
+          var t = new Date(1970, 0, 1); // Epoch
+          t.setSeconds(secs);
+          return t;
+        }
+        const arr = response.result;
+        arr.map(async (item) => {
+          const cant = arr.length;
+          Contador += cant;
+          const dat = item.timeStamp;
+          const date = toDateTime(dat);
+          const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+          const precio = ethers.utils.formatUnits(pre, 6);
+          const w1 = inversionMinter.address.slice(0, 6);
+          const w = inversionMinter.address.slice(
+            inversionMinter.address.length - 6
+          );
+          const wall = w1 + '...' + w;
+          if (cant >= Data.length || cant == 0) {
+            const Tx = {
+              Id: item.tokenID,
+              Tipo: 'Compra Inversion',
+              Time: dat,
+              Fecha: date.toDateString(),
+              Asset: 'Tether',
+              Status: 'Exitosa',
+              Address: wall,
+              Precio: precio,
+            };
+            Data.push(Tx);
+          }
+        });
+      });
+  };
+
+  const getProductosTrans = async () => {
+    fetch(
+      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${productoMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
+ `,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        function toDateTime(secs) {
+          var t = new Date(1970, 0, 1); // Epoch
+          t.setSeconds(secs);
+          return t;
+        }
+        const arr = response.result;
+        arr.map(async (item) => {
+          const cant = arr.length + Data.length;
+          Contador += cant;
+          const dat = item.timeStamp;
+          const date = toDateTime(dat);
+          const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+          const precio = ethers.utils.formatUnits(pre, 6);
+          const w1 = inversionMinter.address.slice(0, 6);
+          const w = inversionMinter.address.slice(
+            inversionMinter.address.length - 6
+          );
+          const wall = w1 + '...' + w;
+          if (cant >= Data.length || cant == 0) {
+            const Tx = {
+              Id: item.tokenID,
+              Tipo: 'Compra Producto',
+              Time: dat,
+              Fecha: date.toDateString(),
+              Asset: 'Tether',
+              Status: 'Exitosa',
+              Address: wall,
+              Precio: precio,
+            };
+            Data.push(Tx);
+          }
+        });
+      });
+  };
+
+  const getStakingsTrans = async () => {
+    fetch(
+      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${inversionMinter.address}&address=${staking.address}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
+ `,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        function toDateTime(secs) {
+          var t = new Date(1970, 0, 1); // Epoch
+          t.setSeconds(secs);
+          return t;
+        }
+        const arr = response.result;
+
+        arr.map(async (item) => {
+          const cant = arr.length + Data.length;
+          Contador += cant;
+          const dat = item.timeStamp;
+          const date = toDateTime(dat);
+          const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+          const precio = ethers.utils.formatUnits(pre, 6);
+          const w1 = inversionMinter.address.slice(0, 6);
+          const w = inversionMinter.address.slice(
+            inversionMinter.address.length - 6
+          );
+          const wall = w1 + '...' + w;
+          const from = item.from;
+          const to = item.to;
+          if (cant >= Data.length || cant == 0) {
+            if (from == accountAddress.toLowerCase()) {
+              const Tx = {
+                Id: item.tokenID,
+                Tipo: 'Staking',
+                Time: dat,
+                Fecha: date.toDateString(),
+                Asset: 'Tether',
+                Status: 'Exitosa',
+                Address: wall,
+                Precio: 'NP',
+              };
+              Data.push(Tx);
+            } else {
+              const Tx = {
+                Id: item.tokenID,
+                Tipo: 'Withdraw',
+                Time: dat,
+                Fecha: date.toDateString(),
+                Asset: 'Tether',
+                Status: 'Exitosa',
+                Address: wall,
+                Precio: precio,
+              };
+              Data.push(Tx);
+            }
+          }
+        });
+      });
+  };
+
+  const getClaimsTrans = async () => {
+    fetch(
+      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${tokenContract.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
+ `,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        function toDateTime(secs) {
+          var t = new Date(1970, 0, 1); // Epoch
+          t.setSeconds(secs);
+          return t;
+        }
+        const arr = response.result;
+        if (arr.length > 0) {
+          arr.map(async (item) => {
+            const cant = arr.length + Data.length;
+            Contador += cant;
+            const dat = item.timeStamp;
+            const date = toDateTime(dat);
+            const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+            const precio = ethers.utils.formatUnits(pre, 6);
+            const w1 = inversionMinter.address.slice(0, 6);
+            const w = inversionMinter.address.slice(
+              inversionMinter.address.length - 6
+            );
+            const wall = w1 + '...' + w;
+            const from = item.from;
+            const to = item.to;
+            if (cant >= Data.length || cant == 0) {
+              if (to == accountAddress.toLowerCase()) {
+                const Tx = {
+                  Id: item.tokenID,
+                  Tipo: 'ClaimReward',
+                  Time: dat,
+                  Fecha: date.toDateString(),
+                  Asset: 'Tether',
+                  Status: 'Exitosa',
+                  Address: wall,
+                  Precio: 'No Aplica',
+                };
+
+                Data.push(Tx);
+              }
+            }
+          });
+        }
+      });
+  };
+  const setData = async () => {
+    const DataU = Data.sort((a, b) => a.Time < b.Time);
+    dispatch(
+      transations({
+        Transactions: DataU,
+      })
+    );
+  };
 
   useEffect(() => {
     setCurrentItems(prod);
     const fetchItems = async () => {
       await getNft();
-
       //setCurrentInv(inventoryi);
       //setBalance(balanceI);
     };
     fetchItems();
   }, []);
+
+  useEffect(() => {
+    setCurrentItems(prod);
+    const fetchItems = async () => {
+      if (isConnect) {
+        await getInvertionTrans();
+        await getProductosTrans();
+        await getStakingsTrans();
+        await getClaimsTrans();
+
+        await setData();
+      } else {
+        Data = [];
+      }
+      //setCurrentInv(inventoryi);
+      //setBalance(balanceI);
+    };
+    fetchItems();
+  }, [isConnect, accountAddress]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      await setData();
+
+      //setCurrentInv(inventoryi);
+      //setBalance(balanceI);
+    };
+    fetchItems();
+  }, [Data]);
+
+  useEffect(() => {
+    setBalance(balanceI[0]);
+  }, [balanceI]);
 
   return (
     <>
@@ -153,17 +423,82 @@ const HomePage: NextPageWithLayout<
 
         <div className="w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
           <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
-            <Avatar
-              image={AuthorImage}
-              alt="Author"
-              className="mx-auto mb-6"
-              size="lg"
-            />
+            {isConnect &&
+            Usuario.perfil.length == 0 &&
+            Usuario.rango == 'peerx' ? (
+              <Avatar
+                image={PeerX}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+            ) : isConnect &&
+              Usuario.perfil.length == 0 &&
+              Usuario.rango == 'blockelite' ? (
+              <Avatar
+                image={BlockElite}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+            ) : isConnect &&
+              Usuario.perfil.length == 0 &&
+              Usuario.rango == 'blockmaster' ? (
+              <Avatar
+                image={BlockMaster}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+            ) : isConnect &&
+              Usuario.perfil.length == 0 &&
+              Usuario.rango == 'blockcreator' ? (
+              <Avatar
+                image={BlockCreator}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+            ) : isConnect && Usuario.perfil.length > 0 ? (
+              <AvatarP
+                image={Usuario.perfil}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+                activate={false}
+                is={false}
+                setPrevProfile={null}
+                prevProfile={false}
+              />
+            ) : isConnect ? (
+              <Avatar
+                image={Generic}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+            ) : isConnect && Usuario.perfil.length > 0 ? (
+              <Avatar
+                image={Usuario.perfil}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+            ) : (
+              !isConnect && (
+                <Avatar
+                  image={Generic}
+                  alt="Author"
+                  className="mx-auto mb-6"
+                  size="lg"
+                />
+              )
+            )}
             <h3 className="mb-2 text-center text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 3xl:mb-3">
               My Balance
             </h3>
             <div className="mb-7 text-center font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl 3xl:mb-8 3xl:text-[32px]">
-              $10,86,000
+              ${balanceI[0]}
             </div>
             <TopupButton />
           </div>
@@ -189,7 +524,9 @@ const HomePage: NextPageWithLayout<
 
       <div className="flex flex-wrap">
         <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
-          <TransactionTable />
+          {isConnect && Transactions.length != 0 && (
+            <TransactionTable Data={Data} />
+          )}
         </div>
         <div className="order-first mb-8 grid w-full grid-cols-1 gap-6 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
           {/*<TopPools />*/}

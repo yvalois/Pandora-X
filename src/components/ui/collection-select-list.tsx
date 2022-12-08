@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StaticImageData } from 'next/image';
 import { SearchIcon } from '@/components/icons/search';
 import Avatar from '@/components/ui/avatar';
@@ -31,6 +31,7 @@ interface CollectionSelectTypes {
 }
 
 export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
+  const [link, setLink] = useState('');
   let [searchKeyword, setSearchKeyword] = useState('');
   let coinListData = collectionList;
   if (searchKeyword.length > 0) {
@@ -45,6 +46,14 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
   function handleSelectedCoin(value: string) {
     onSelect(value);
   }
+
+  useEffect(() => {
+    const aux = window.location.href;
+    const a = aux.split('profile');
+    const e = a[0];
+    setLink(e);
+  }, []);
+
   return (
     <div className="w-full rounded-lg bg-white text-sm shadow-large dark:bg-light-dark">
       <div className="relative">
@@ -61,7 +70,7 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
         {coinListData.length > 0 ? (
           coinListData.map((item, index) => (
             <AnchorLink
-              href={`http://localhost:3000/search?view=${item.value}`}
+              href={`${link}?view=${item.value}`}
               key={index}
               className="w-full"
             >

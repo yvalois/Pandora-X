@@ -16,8 +16,11 @@ var close_1 = require('@/components/icons/close');
 var plus_circle_1 = require('@/components/icons/plus-circle');
 var compass_1 = require('@/components/icons/compass');
 var react_redux_1 = require('react-redux');
-//images
-var author_jpg_1 = require('@/assets/images/author.jpg');
+var PEER_X_jpg_1 = require('@/assets/images/profile/PEER-X.jpg');
+var BLOCKCREATOR_jpg_1 = require('@/assets/images/profile/BLOCKCREATOR.jpg');
+var BLOCKELITE_jpg_1 = require('@/assets/images/profile/BLOCKELITE.jpg');
+var BLOCKMASTER_jpg_1 = require('@/assets/images/profile/BLOCKMASTER.jpg');
+var GENERIC_jpg_1 = require('@/assets/images/profile/GENERIC.jpg');
 exports.menuItems = [
   {
     name: 'Home',
@@ -49,11 +52,11 @@ exports.menuItems = [
     icon: React.createElement(compass_1.CompassIcon, null),
     href: routes_1['default'].search,
   },
-  {
-    name: 'Staking',
-    icon: React.createElement(plus_circle_1.PlusCircle, null),
-    href: routes_1['default'].staking,
-  },
+  /*{
+      name: 'Staking',
+      icon: <PlusCircle />,
+      href: routes.staking,
+    },*/
   {
     name: 'Comunidad',
     icon: React.createElement(vote_icon_1.VoteIcon, null),
@@ -133,10 +136,23 @@ exports.menuItems = [
 ];
 function Sidebar(_a) {
   var className = _a.className;
-  var Usuario = react_redux_1.useSelector(function (state) {
+  var UsuarioR = react_redux_1.useSelector(function (state) {
     return state.blockchain.rol;
   });
   var closeDrawer = context_1.useDrawer().closeDrawer;
+  var Usuario = react_redux_1.useSelector(function (state) {
+    return state.Usuario;
+  });
+  var _b = react_redux_1.useSelector(function (state) {
+      return state.blockchain;
+    }),
+    inventoryp = _b.inventoryp,
+    inventoryi = _b.inventoryi,
+    productoMinter = _b.productoMinter,
+    accountAddress = _b.accountAddress,
+    balanceI = _b.balanceI,
+    isConnect = _b.isConnect,
+    inversionMinter = _b.inversionMinter;
   return React.createElement(
     'aside',
     {
@@ -175,24 +191,67 @@ function Sidebar(_a) {
       React.createElement(
         'div',
         { className: 'px-6 pb-5 2xl:px-8' },
-        React.createElement(author_card_1['default'], {
-          image: author_jpg_1['default'],
-          name: 'Root',
-          role: 'admin',
-        }),
+        isConnect && Usuario.perfil.length == 0 && Usuario.rango == 'peerx'
+          ? React.createElement(author_card_1['default'], {
+              image: PEER_X_jpg_1['default'],
+              name: Usuario.nombre,
+              role: UsuarioR,
+            })
+          : isConnect &&
+            Usuario.perfil.length == 0 &&
+            Usuario.rango == 'blockelite'
+          ? React.createElement(author_card_1['default'], {
+              image: BLOCKELITE_jpg_1['default'],
+              name: Usuario.nombre,
+              role: UsuarioR,
+            })
+          : isConnect &&
+            Usuario.perfil.length == 0 &&
+            Usuario.rango == 'blockmaster'
+          ? React.createElement(author_card_1['default'], {
+              image: BLOCKMASTER_jpg_1['default'],
+              name: Usuario.nombre,
+              role: UsuarioR,
+            })
+          : isConnect &&
+            Usuario.perfil.length == 0 &&
+            Usuario.rango == 'blockcreator'
+          ? React.createElement(author_card_1['default'], {
+              image: BLOCKCREATOR_jpg_1['default'],
+              name: Usuario.nombre,
+              role: UsuarioR,
+            })
+          : isConnect && Usuario.perfil.length > 0
+          ? React.createElement(author_card_1['default'], {
+              image: Usuario.perfil,
+              name: Usuario.nombre,
+              role: UsuarioR,
+            })
+          : isConnect
+          ? React.createElement(author_card_1['default'], {
+              image: GENERIC_jpg_1['default'],
+              name: Usuario.nombre,
+              role: UsuarioR,
+            })
+          : !isConnect &&
+            React.createElement(author_card_1['default'], {
+              image: GENERIC_jpg_1['default'],
+              name: 'Inicia Sesion',
+              role: 'No haz iniciado sesion',
+            }),
         React.createElement(
           'div',
           { className: 'mt-12' },
           exports.menuItems.map(function (item, index) {
-            return (Usuario !== 'Admin' && item.name == 'Referidos') ||
-              (Usuario !== 'Admin' && item.name == 'Crear NFT') ||
-              (Usuario !== 'Admin' &&
-                Usuario !== 'usuario' &&
-                Usuario !== 'cliente' &&
+            return (UsuarioR !== 'Admin' && item.name == 'Referidos') ||
+              (UsuarioR !== 'Admin' && item.name == 'Crear NFT') ||
+              (UsuarioR !== 'Admin' &&
+                UsuarioR !== 'usuario' &&
+                UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
-              (Usuario !== 'Admin' &&
-                Usuario !== 'usuario' &&
-                Usuario !== 'cliente' &&
+              (UsuarioR !== 'Admin' &&
+                UsuarioR !== 'usuario' &&
+                UsuarioR !== 'cliente' &&
                 item.name == 'Staking')
               ? React.createElement('div', { key: index })
               : React.createElement(collapsible_menu_1.MenuItem, {

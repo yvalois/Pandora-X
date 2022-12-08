@@ -1,4 +1,4 @@
-import Avatar from '@/components/ui/avatar';
+import AvatarP from '@/components/ui/AvatarP';
 import { StaticImageData } from 'next/image';
 
 type AuthorCardProps = {
@@ -16,7 +16,7 @@ export default function AuthorCard({ image, name, role }: AuthorCardProps) {
           : 'ml-3 justify-center bg-none p-5 dark:mr-3 dark:bg-none'
       }`}
     >
-      <Avatar
+      <AvatarP
         image={image}
         alt={name ? name : ''}
         className="dark:border-gray-400"

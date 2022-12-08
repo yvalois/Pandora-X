@@ -8,6 +8,12 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/components/ui/button';
 import validator from 'validator';
+import Banner from '@/assets/images/Banner/Banner-Profile.jpg';
+import PeerX from '@/assets/images/profile/PEER-X.jpg';
+import BlockCreator from '@/assets/images/profile/BLOCKCREATOR.jpg';
+import BlockElite from '@/assets/images/profile/BLOCKELITE.jpg';
+import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
+import Generic from '@/assets/images/profile/GENERIC.jpg';
 
 // static data
 export const getStaticProps: GetStaticProps = async () => {
@@ -30,6 +36,9 @@ const CreateUser: NextPageWithLayout<
     Rango: 'peerx',
     Fecha: hoy.toLocaleDateString(),
     Rol: 'usuario',
+    Perfil: '',
+    Banner: '',
+    Descripcion: '',
   };
 
   const Err = {
@@ -49,6 +58,16 @@ const CreateUser: NextPageWithLayout<
       window.location.href = '/';
     }
   });
+
+  async function encodeFileAsBase64URL(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener('loadend', () => {
+        resolve(reader.result);
+      });
+      reader.readAsDataURL(file);
+    });
+  }
 
   const ChangeInfo = (Dato: string, valor: string) => {
     if (Dato == 'Nombre') {
@@ -108,7 +127,17 @@ const CreateUser: NextPageWithLayout<
       validator.isEthereumAddress(value.Address)
     ) {
       setError(false);
-      await CrearUsuario();
+      //<option value="Peerx">Peerx</option>
+      //<option value="BlockElite">BlockElite</option>
+      //<option value="BlockMaster">BlockMaster</option>
+      //<option value="BlockCreator">BlockCreator</option>
+      const base64URL = await encodeFileAsBase64URL(Banner);
+      setValue((prevState) => ({ ...prevState, Banner: base64URL }));
+      if (value.Rango == 'Peerx') {
+        const base64URL = await encodeFileAsBase64URL(PeerX);
+        setValue((prevState) => ({ ...prevState, Perfil: base64URL }));
+      }
+      //await CrearUsuario();
     }
   };
 
@@ -160,142 +189,140 @@ const CreateUser: NextPageWithLayout<
         title="Create new user"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="mx-auto ml-[320px] w-[1060px] justify-center self-center text-sm md:pt-14 4xl:pt-24 ">
-        <div className="grid w-full grid-cols-1 justify-center gap-6  xs:grid-cols-2 lg:grid-cols-3 ">
-          <div className="ml-60 w-full max-w-xs  justify-center">
-            <form className="mb-4 rounded  bg-white px-8 pt-6 pb-8 shadow-md dark:bg-dark  ">
-              <div className="mb-3">
-                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
-                  Name
-                </label>
-                {errorMsg.ErrNombre.length == 0 ? (
-                  <input
-                    onChange={(e) => ChangeInfo('Nombre', e.target.value)}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                    id="username"
-                    type="text"
-                    placeholder="Name"
-                  />
-                ) : (
-                  <input
-                    onChange={(e) => ChangeInfo('Nombre', e.target.value)}
-                    className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                    id="username"
-                    type="text"
-                    placeholder="Name"
-                  />
-                )}
-              </div>
-
-              {error == true && errorMsg.ErrNombre.length > 0 && (
-                <span className="flex items-center text-xs font-medium tracking-wide text-red-500">
-                  {errorMsg.ErrNombre}
-                </span>
+      <div className="mx-auto flex  w-full justify-center self-center text-sm md:pt-14 4xl:pt-24 ">
+        <div className=" w-full max-w-xs  justify-center">
+          <form className="mb-4 rounded  bg-white px-8 pt-6 pb-8 shadow-md dark:bg-dark ">
+            <div className="mb-3">
+              <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
+                Name
+              </label>
+              {errorMsg.ErrNombre.length == 0 ? (
+                <input
+                  onChange={(e) => ChangeInfo('Nombre', e.target.value)}
+                  className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                  id="username"
+                  type="text"
+                  placeholder="Name"
+                />
+              ) : (
+                <input
+                  onChange={(e) => ChangeInfo('Nombre', e.target.value)}
+                  className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                  id="username"
+                  type="text"
+                  placeholder="Name"
+                />
               )}
+            </div>
 
-              <div className="mb-3">
-                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
-                  Correo
-                </label>
+            {error == true && errorMsg.ErrNombre.length > 0 && (
+              <span className="flex items-center text-xs font-medium tracking-wide text-red-500">
+                {errorMsg.ErrNombre}
+              </span>
+            )}
 
-                {errorMsg.ErrCorreo.length == 0 ? (
-                  <input
-                    onChange={(e) => ChangeInfo('Correo', e.target.value)}
-                    className="focus:shadow-outline  w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                    type="text"
-                    id="Correo"
-                    placeholder="Correo"
-                  />
-                ) : (
-                  <input
-                    onChange={(e) => ChangeInfo('Correo', e.target.value)}
-                    className="focus:shadow-outline  w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                    type="text"
-                    id="Correo"
-                    placeholder="Correo"
-                  />
-                )}
-              </div>
+            <div className="mb-3">
+              <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
+                Correo
+              </label>
 
-              {error == true && errorMsg.ErrCorreo.length > 0 && (
-                <span className="flex items-center text-xs font-medium tracking-wide text-red-500">
-                  {errorMsg.ErrCorreo}
-                </span>
+              {errorMsg.ErrCorreo.length == 0 ? (
+                <input
+                  onChange={(e) => ChangeInfo('Correo', e.target.value)}
+                  className="focus:shadow-outline  w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                  type="text"
+                  id="Correo"
+                  placeholder="Correo"
+                />
+              ) : (
+                <input
+                  onChange={(e) => ChangeInfo('Correo', e.target.value)}
+                  className="focus:shadow-outline  w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                  type="text"
+                  id="Correo"
+                  placeholder="Correo"
+                />
               )}
+            </div>
 
-              <div className="mb-3">
-                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
-                  Address Wallet
-                </label>
+            {error == true && errorMsg.ErrCorreo.length > 0 && (
+              <span className="flex items-center text-xs font-medium tracking-wide text-red-500">
+                {errorMsg.ErrCorreo}
+              </span>
+            )}
 
-                {errorMsg.ErrAddress.length == 0 ? (
-                  <input
-                    onChange={(e) => ChangeInfo('Address', e.target.value)}
-                    className="focus:shadow-outline  w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                    type="text"
-                    id="wallet"
-                    placeholder="Address Wallet"
-                  />
-                ) : (
-                  <input
-                    onChange={(e) => ChangeInfo('Address', e.target.value)}
-                    className="focus:shadow-outline  w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                    type="text"
-                    id="wallet"
-                    placeholder="Address Wallet"
-                  />
-                )}
-              </div>
+            <div className="mb-3">
+              <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
+                Address Wallet
+              </label>
 
-              {error == true && errorMsg.ErrAddress.length > 0 && (
-                <span className="mt-0 flex items-center text-xs font-medium tracking-wide text-red-500">
-                  {errorMsg.ErrAddress}
-                </span>
-              )}
-
-              <div className="mb-6">
-                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
-                  Categoria NFT
-                </label>
-                <select
-                  onChange={(e) => ChangeInfo('Categoria', e.target.value)}
-                  name="select"
-                  className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+              {errorMsg.ErrAddress.length == 0 ? (
+                <input
+                  onChange={(e) => ChangeInfo('Address', e.target.value)}
+                  className="focus:shadow-outline  w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                  type="text"
                   id="wallet"
-                >
-                  <option value="Agente X">Agente X </option>
-                  <option value="BlockMaker">BlockMaker</option>
-                </select>
-              </div>
-
-              <div className="mb-6">
-                <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
-                  Rango NFT
-                </label>
-                <select
-                  onChange={(e) => ChangeInfo('Rango', e.target.value)}
-                  name="select"
-                  className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                  placeholder="Address Wallet"
+                />
+              ) : (
+                <input
+                  onChange={(e) => ChangeInfo('Address', e.target.value)}
+                  className="focus:shadow-outline  w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                  type="text"
                   id="wallet"
-                >
-                  <option value="Peerx">Peerx</option>
-                  <option value="BlockElite">BlockElite</option>
-                  <option value="BlockMaster">BlockMaster</option>
-                  <option value="BlockCreator">BlockCreator</option>
-                </select>
-              </div>
+                  placeholder="Address Wallet"
+                />
+              )}
+            </div>
 
-              <div className="flex items-center justify-center">
-                <Button
-                  onClick={() => registerUser()}
-                  className="focus:shadow-outline  rounded"
-                  type="button"
-                >
-                  Crear Usuario
-                </Button>
-              </div>
-            </form>
-          </div>
+            {error == true && errorMsg.ErrAddress.length > 0 && (
+              <span className="mt-0 flex items-center text-xs font-medium tracking-wide text-red-500">
+                {errorMsg.ErrAddress}
+              </span>
+            )}
+
+            <div className="mb-6">
+              <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
+                Categoria NFT
+              </label>
+              <select
+                onChange={(e) => ChangeInfo('Categoria', e.target.value)}
+                name="select"
+                className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                id="wallet"
+              >
+                <option value="Agente X">Agente X </option>
+                <option value="BlockMaker">BlockMaker</option>
+              </select>
+            </div>
+
+            <div className="mb-6">
+              <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">
+                Rango NFT
+              </label>
+              <select
+                onChange={(e) => ChangeInfo('Rango', e.target.value)}
+                name="select"
+                className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                id="wallet"
+              >
+                <option value="peerx">Peerx</option>
+                <option value="blockelite">BlockElite</option>
+                <option value="blockmaster">BlockMaster</option>
+                <option value="blockcreator">BlockCreator</option>
+              </select>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <Button
+                onClick={() => registerUser()}
+                className="focus:shadow-outline  rounded"
+                type="button"
+              >
+                Crear Usuario
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
 

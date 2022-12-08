@@ -287,8 +287,8 @@ function StakingTable() {
     {
       Header: 'ID',
       accessor: 'id',
-      minWidth: 60,
-      maxWidth: 80,
+      minWidth: 10,
+      maxWidth: 10,
     },
     {
       Header: function () {
@@ -308,8 +308,8 @@ function StakingTable() {
           value
         );
       },
-      minWidth: 35,
-      maxWidth: 45,
+      minWidth: 5,
+      maxWidth: 20,
     },
     {
       Header: function () {
@@ -329,8 +329,8 @@ function StakingTable() {
           value
         );
       },
-      minWidth: 160,
-      maxWidth: 220,
+      minWidth: 40,
+      maxWidth: 70,
     },
     {
       Header: function () {
@@ -350,8 +350,8 @@ function StakingTable() {
           value
         );
       },
-      minWidth: 80,
-      maxWidth: 120,
+      minWidth: 5,
+      maxWidth: 20,
     },
     {
       Header: function () {
@@ -372,8 +372,8 @@ function StakingTable() {
           'USDT'
         );
       },
-      minWidth: 100,
-      maxWidth: 180,
+      minWidth: 40,
+      maxWidth: 40,
     },
     {
       Header: function () {
@@ -401,8 +401,8 @@ function StakingTable() {
           )
         );
       },
-      minWidth: 220,
-      maxWidth: 280,
+      minWidth: 20,
+      maxWidth: 70,
     },
     {
       Header: function () {
@@ -416,7 +416,7 @@ function StakingTable() {
         var value = _a.cell.value;
         return react_1['default'].createElement(
           'div',
-          { className: 'flex items-center justify-end' },
+          { className: 'fl  ex items-center justify-end' },
           react_1['default'].createElement(
             button_1['default'],
             {
@@ -430,8 +430,8 @@ function StakingTable() {
           )
         );
       },
-      minWidth: 200,
-      maxWidth: 300,
+      minWidth: 20,
+      maxWidth: 60,
     },
   ];
   var data = inventorys;

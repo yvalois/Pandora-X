@@ -49,8 +49,8 @@ var COLUMNS = [
         value
       );
     },
-    minWidth: 80,
-    maxWidth: 120,
+    minWidth: 60,
+    maxWidth: 80,
   },
   {
     Header: function () {
@@ -74,8 +74,8 @@ var COLUMNS = [
         value
       );
     },
-    minWidth: 220,
-    maxWidth: 280,
+    minWidth: 80,
+    maxWidth: 100,
   },
   {
     Header: function () {
@@ -111,8 +111,8 @@ var COLUMNS = [
         '-'
       );
     },
-    minWidth: 200,
-    maxWidth: 300,
+    minWidth: 60,
+    maxWidth: 90,
   },
 ];
 //const Pagos = []

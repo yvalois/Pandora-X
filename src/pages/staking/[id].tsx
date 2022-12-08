@@ -151,11 +151,9 @@ const StakingPage: NextPageWithLayout = () => {
 
   const verifyApprove = async () => {
     const isap = await inversionMinter.getApproved(id); //MarketPlace
-    alert(isap);
     //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
     if (isap == staking.address) {
       setApprovedToken(true);
-    } else {
     }
   };
 
@@ -315,17 +313,6 @@ const StakingPage: NextPageWithLayout = () => {
                   </Transition>
                 </Listbox>
               </div>
-            </div>
-
-            <div className="mb-8">
-              <InputLabel title="APR" />
-              <Input
-                type="text"
-                placeholder="0"
-                //onChange={(e) => setUrl(e.target.value)}
-                value={'10%'}
-                disabled
-              />
             </div>
 
             <div className="mb-8">

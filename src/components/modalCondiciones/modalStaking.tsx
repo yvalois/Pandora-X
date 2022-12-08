@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import AnchorLink from '../ui/links/anchor-link';
 import Button from '../ui/button';
+import { Warning } from '@/components/icons/warning';
 
 export default function ModalWithdraw() {
   const { closeModal } = useModal();
@@ -10,14 +11,32 @@ export default function ModalWithdraw() {
   const [approvedToken, setApprovedToken] = useState(0);
   const [id, setId] = useState(0);
   const [succes, setSuccess] = useState(false);
+  const [msg, setMsg] = useState(false);
+  const [alert, setAlert] = useState('');
 
   const close = () => {
     closeModal('Withdraw_VIEW');
   };
 
+  const verify = () => {
+    if (msg == true) {
+      close();
+    } else {
+      setAlert('Debes aceptar los terminos');
+    }
+  };
+
+  const change = () => {
+    setMsg(!msg);
+  };
+
   return (
     <>
-      <div className="relative z-50 mx-auto h-[200px] w-[400px] max-w-full rounded-lg bg-white px-8 py-8 dark:bg-light-dark">
+      <div className="column relative z-50 mx-auto h-auto w-[430px]  max-w-full items-center justify-center rounded-lg bg-white px-8 py-8 dark:bg-light-dark">
+        <div className="width-full mb-8 flex items-center justify-center">
+          <Warning className="text-[#2a52be] " />
+        </div>
+
         <AnchorLink href="/">
           <button
             className="absolute right-[20px] top-[20px] mb-2 flex h-[20px] w-[20px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white"
@@ -28,12 +47,46 @@ export default function ModalWithdraw() {
             </span>
           </button>
         </AnchorLink>
-        <p className="mb-4">
-          Al presionar aceptar, confirmas estar de acuerdo con no poder
-          recuperar el token hasta cumplir el tiempo establecido
+        <p className="mb-8">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
+          assumenda voluptatem! Optio iusto eum qui voluptate aperiam mollitia
+          corporis! Ullam id commodi ad consectetur suscipit architecto delectus
+          nobis veritatis. Accusamus asperiores eaque nihil quaerat neque modi.
+          Laborum, ad. Aperiam quis qui necessitatibus vel labore voluptatem
+          praesentium ullam quos saepe possimus placeat optio consectetur porro
+          id odio ex quam assumenda quaerat fugiat, ipsum explicabo voluptate.
+          Quas veritatis architecto itaque ut doloremque?
         </p>
+        <div className="mb-0 flex items-center">
+          <input
+            id="link-checkbox"
+            type="checkbox"
+            value={msg}
+            onChange={change}
+            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+          />
+          <label
+            for="link-checkbox"
+            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            I agree with the{' '}
+            <a
+              href="#"
+              className="text-blue-600 hover:underline dark:text-blue-500"
+            >
+              terms and conditions
+            </a>
+            .
+          </label>
+        </div>
+        <div className="mb-6">
+          {' '}
+          {!msg && alert.length > 0 && (
+            <label className="ml-6 text-xs text-red-500">{alert}</label>
+          )}
+        </div>
         <div className="flex w-full justify-evenly">
-          <Button onClick={close} size="small">
+          <Button onClick={verify} size="small">
             <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
               aceptar
             </span>

@@ -256,7 +256,7 @@ function ModalWithdraw() {
         switch (_a.label) {
           case 0:
             setLoading(true);
-            return [4 /*yield*/, staking.withdrawP(id)];
+            return [4 /*yield*/, staking.withdrawP(id, tokenContract.address)];
           case 1:
             tx = _a.sent();
             return [4 /*yield*/, tx.wait()];

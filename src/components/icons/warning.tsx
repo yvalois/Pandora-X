@@ -1,8 +1,8 @@
 export function Warning(props: React.SVGAttributes<{}>) {
   return (
     <svg
-      width="18"
-      height="17"
+      width="70"
+      height="70"
       viewBox="0 0 18 17"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -19,7 +19,9 @@ const Withdraw = dynamic(
 const Staking = dynamic(
   () => import('@/components/modalCondiciones/modalStaking')
 );
+const TransferP = dynamic(() => import('@/components/modalTransfer/modalTP'));
 
+const TransferI = dynamic(() => import('@/components/modalTransfer/modalTI'));
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
     case 'SEARCH_VIEW':
@@ -34,6 +36,10 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Withdraw />;
     case 'STAKING_VIEW':
       return <Staking />;
+    case 'TRANSFER_P':
+      return <TransferP />;
+    case 'TRANSFER_I':
+      return <TransferI />;
     default:
       return null;
   }
@@ -56,7 +62,7 @@ export default function ModalContainer() {
         as="div"
         className="fixed inset-0 z-50 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12"
         onClose={() => {
-          if (view && view !== 'REGISTER_VIEW') {
+          if (view && view !== 'REGISTER_VIEW' && view !== 'STAKING_VIEW') {
             closeModal();
           }
         }}

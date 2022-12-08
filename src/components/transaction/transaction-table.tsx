@@ -16,23 +16,24 @@ import { LinkIcon } from '@/components/icons/link-icon';
 import { TransactionData } from '@/data/static/transaction-data';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import { useSelector } from 'react-redux';
 
 const COLUMNS = [
   {
     Header: 'ID',
-    accessor: 'id',
+    accessor: 'Id',
     minWidth: 60,
     maxWidth: 80,
   },
   {
     Header: 'Type',
-    accessor: 'transactionType',
+    accessor: 'Tipo',
     minWidth: 60,
     maxWidth: 80,
   },
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Date</div>,
-    accessor: 'createdAt',
+    accessor: 'Fecha',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-right rtl:text-left">{value}</div>
@@ -42,7 +43,7 @@ const COLUMNS = [
   },
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Asset</div>,
-    accessor: 'symbol',
+    accessor: 'Asset',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-right rtl:text-left">{value}</div>
@@ -52,7 +53,7 @@ const COLUMNS = [
   },
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Status</div>,
-    accessor: 'status',
+    accessor: 'Status',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-right rtl:text-left">{value}</div>
@@ -62,7 +63,7 @@ const COLUMNS = [
   },
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Address</div>,
-    accessor: 'address',
+    accessor: 'Address',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="flex items-center justify-end">
@@ -74,19 +75,17 @@ const COLUMNS = [
   },
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Amount</div>,
-    accessor: 'amount',
+    accessor: 'Precio',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="-tracking-[1px] ltr:text-right rtl:text-left">
         <strong className="mb-0.5 flex justify-end text-base md:mb-1.5 md:text-lg lg:text-base 3xl:text-2xl">
           {value.balance}
           <span className="inline-block ltr:ml-1.5 rtl:mr-1.5 md:ltr:ml-2 md:rtl:mr-2">
-            BTC
+            USDT
           </span>
         </strong>
-        <span className="text-gray-600 dark:text-gray-400">
-          ${value.usdBalance}
-        </span>
+        <span className="text-gray-600 dark:text-gray-400">${value}</span>
       </div>
     ),
     minWidth: 200,
@@ -94,9 +93,13 @@ const COLUMNS = [
   },
 ];
 
-export default function TransactionTable() {
-  const data = React.useMemo(() => TransactionData, []);
+export default function TransactionTable(Data) {
+  const { Transactions } = useSelector((state) => state.transaction);
+  const data = Transactions;
+  //const data = React.useMemo(() => TransactionData, []);
   const columns = React.useMemo(() => COLUMNS, []);
+
+  const { isConnect } = useSelector((state: any) => state.blockchain);
 
   const {
     getTableProps,
@@ -124,6 +127,9 @@ export default function TransactionTable() {
   );
 
   const { pageIndex } = state;
+  useEffect(() => {
+    console.log(Data);
+  }, [isConnect]);
 
   return (
     <div className="">

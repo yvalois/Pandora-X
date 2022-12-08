@@ -26,7 +26,7 @@ const initialState = {
   isUser: null,
   paid: [],
   paids: [],
-  balanceI: 0,
+  balanceI: [],
 };
 
 const blockchainReducer = (state = initialState, action) => {
@@ -60,7 +60,7 @@ const blockchainReducer = (state = initialState, action) => {
         inventorys: action.payload.inventorys,
         isConnect: true,
         isUser: true,
-        balanceI: action.payload.balanceI,
+        balanceI: action.payload.balancei,
       };
     case 'ERROR':
       return {
