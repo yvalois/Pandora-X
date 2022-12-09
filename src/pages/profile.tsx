@@ -224,7 +224,7 @@ const AuthorProfilePage: NextPageWithLayout<
       {/* Profile Cover Image */}
       <div className="relative h-36 w-full overflow-hidden rounded-lg sm:h-44 sm:w-[100%] md:h-64 md:w-[100%] xl:h-80 xl:w-[100%] 2xl:h-96 3xl:h-[448px]">
         <div className="relative h-full w-full">
-          {Usuario.banner.length > 0 && prevBanner.length == 0 ? (
+          {Usuario.banner?.length > 0 && prevBanner.length == 0 ? (
             <Image
               src={Usuario.banner}
               //placeholder="blur"
@@ -232,9 +232,17 @@ const AuthorProfilePage: NextPageWithLayout<
               objectFit="cover"
               alt="Cover Image"
             />
-          ) : (
+          ) : Usuario.banner?.length > 0 && prevBanner.length > 0 ? (
             <Image
               src={prevBanner}
+              //placeholder="blur"
+              layout="fill"
+              objectFit="cover"
+              alt="Cover Image"
+            />
+          ) : (
+            <Image
+              src={Banner}
               //placeholder="blur"
               layout="fill"
               objectFit="cover"
@@ -411,11 +419,11 @@ const AuthorProfilePage: NextPageWithLayout<
               </div>
             )}
           </div>
-        ) : Usuario.perfil?.length == 0 && Usuario.rol == 'cliente' ? (
+        ) : Usuario.perfil?.length > 0 ? (
           <div className="row flex w-full">
             <AvatarP
               size="xl"
-              image={Generic}
+              image={Usuario.perfil}
               alt="Author"
               className="z-10 mx-auto -mt-12 dark:border-gray-500 sm:-mt-14 md:mx-0 md:-mt-16 xl:mx-0 3xl:-mt-20"
               activate={activateP}
@@ -453,7 +461,7 @@ const AuthorProfilePage: NextPageWithLayout<
           <div className="row flex w-full">
             <AvatarP
               size="xl"
-              image={Usuario.perfil}
+              image={Generic}
               alt="Author"
               className="z-10 mx-auto -mt-12 dark:border-gray-500 sm:-mt-14 md:mx-0 md:-mt-16 xl:mx-0 3xl:-mt-20"
               activate={activateP}

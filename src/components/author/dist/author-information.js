@@ -208,9 +208,9 @@ function AuthorInformation(_a) {
         'div',
         {
           className:
-            'flex justify-between w-[34%] mb-2 row text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white',
+            'row mb-2 flex w-[34%] justify-between text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white',
         },
-        React.createElement('span', null, '  Biografia'),
+        React.createElement('span', null, ' Biografia'),
         React.createElement(
           'div',
           { className: 'h-4 w-4 cursor-pointer' },
@@ -244,12 +244,12 @@ function AuthorInformation(_a) {
           }),
           React.createElement(
             'div',
-            { className: 'w-[90%] flex justify-center ' },
+            { className: 'flex w-[90%] justify-center ' },
             React.createElement(
               button_1['default'],
               {
                 onClick: UploadDescipcion,
-                className: 'w-24 h-14 text-sm rounded-r-sm',
+                className: 'h-14 w-24 rounded-r-sm text-sm',
               },
               'Aceptar'
             ),
@@ -257,7 +257,7 @@ function AuthorInformation(_a) {
               button_1['default'],
               {
                 onClick: activate,
-                className: 'w-24 h-14 text-sm rounded-l-sm bg-gray-500',
+                className: 'h-14 w-24 rounded-l-sm bg-gray-500 text-sm',
               },
               'Cancelar'
             )
