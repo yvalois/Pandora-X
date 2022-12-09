@@ -258,7 +258,7 @@ const AuthorProfilePage: NextPageWithLayout<
       {/* Profile Container */}
       <div className="mx-auto flex w-full shrink-0 flex-col md:px-4 xl:px-6 3xl:max-w-[1700px] 3xl:px-12">
         {/* Profile Image */}
-        {Usuario.perfil.length == 0 && Usuario.rango == 'peerx' ? (
+        {Usuario.perfil?.length == 0 && Usuario.rango == 'peerx' ? (
           <div className="row flex w-full">
             <AvatarP
               size="xl"
@@ -297,7 +297,7 @@ const AuthorProfilePage: NextPageWithLayout<
               </div>
             )}
           </div>
-        ) : Usuario.perfil.length == 0 && Usuario.rango == 'blockelite' ? (
+        ) : Usuario.perfil?.length == 0 && Usuario.rango == 'blockelite' ? (
           <div className="row flex w-full">
             <AvatarP
               size="xl"
@@ -335,7 +335,7 @@ const AuthorProfilePage: NextPageWithLayout<
               </div>
             )}
           </div>
-        ) : Usuario.perfil.length == 0 && Usuario.rango == 'blockmaster' ? (
+        ) : Usuario.perfil?.length == 0 && Usuario.rango == 'blockmaster' ? (
           <div className="row flex w-full">
             <AvatarP
               size="xl"
@@ -373,7 +373,7 @@ const AuthorProfilePage: NextPageWithLayout<
               </div>
             )}
           </div>
-        ) : Usuario.perfil.length == 0 && Usuario.rango == 'blockcreator' ? (
+        ) : Usuario.perfil?.length == 0 && Usuario.rango == 'blockcreator' ? (
           <div className="row flex w-full">
             <AvatarP
               size="xl"
@@ -411,7 +411,7 @@ const AuthorProfilePage: NextPageWithLayout<
               </div>
             )}
           </div>
-        ) : Usuario.perfil.length == 0 && Usuario.rol == 'cliente' ? (
+        ) : Usuario.perfil?.length == 0 && Usuario.rol == 'cliente' ? (
           <div className="row flex w-full">
             <AvatarP
               size="xl"

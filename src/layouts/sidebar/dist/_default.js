@@ -135,6 +135,7 @@ exports.menuItems = [
   },
 ];
 function Sidebar(_a) {
+  var _b, _c, _d, _e, _f;
   var className = _a.className;
   var UsuarioR = react_redux_1.useSelector(function (state) {
     return state.blockchain.rol;
@@ -143,16 +144,16 @@ function Sidebar(_a) {
   var Usuario = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   });
-  var _b = react_redux_1.useSelector(function (state) {
+  var _g = react_redux_1.useSelector(function (state) {
       return state.blockchain;
     }),
-    inventoryp = _b.inventoryp,
-    inventoryi = _b.inventoryi,
-    productoMinter = _b.productoMinter,
-    accountAddress = _b.accountAddress,
-    balanceI = _b.balanceI,
-    isConnect = _b.isConnect,
-    inversionMinter = _b.inversionMinter;
+    inventoryp = _g.inventoryp,
+    inventoryi = _g.inventoryi,
+    productoMinter = _g.productoMinter,
+    accountAddress = _g.accountAddress,
+    balanceI = _g.balanceI,
+    isConnect = _g.isConnect,
+    inversionMinter = _g.inversionMinter;
   return React.createElement(
     'aside',
     {
@@ -191,14 +192,20 @@ function Sidebar(_a) {
       React.createElement(
         'div',
         { className: 'px-6 pb-5 2xl:px-8' },
-        isConnect && Usuario.perfil.length == 0 && Usuario.rango == 'peerx'
+        isConnect &&
+          ((_b = Usuario.perfil) === null || _b === void 0
+            ? void 0
+            : _b.length) == 0 &&
+          Usuario.rango == 'peerx'
           ? React.createElement(author_card_1['default'], {
               image: PEER_X_jpg_1['default'],
               name: Usuario.nombre,
               role: UsuarioR,
             })
           : isConnect &&
-            Usuario.perfil.length == 0 &&
+            ((_c = Usuario.perfil) === null || _c === void 0
+              ? void 0
+              : _c.length) == 0 &&
             Usuario.rango == 'blockelite'
           ? React.createElement(author_card_1['default'], {
               image: BLOCKELITE_jpg_1['default'],
@@ -206,7 +213,9 @@ function Sidebar(_a) {
               role: UsuarioR,
             })
           : isConnect &&
-            Usuario.perfil.length == 0 &&
+            ((_d = Usuario.perfil) === null || _d === void 0
+              ? void 0
+              : _d.length) == 0 &&
             Usuario.rango == 'blockmaster'
           ? React.createElement(author_card_1['default'], {
               image: BLOCKMASTER_jpg_1['default'],
@@ -214,14 +223,19 @@ function Sidebar(_a) {
               role: UsuarioR,
             })
           : isConnect &&
-            Usuario.perfil.length == 0 &&
+            ((_e = Usuario.perfil) === null || _e === void 0
+              ? void 0
+              : _e.length) == 0 &&
             Usuario.rango == 'blockcreator'
           ? React.createElement(author_card_1['default'], {
               image: BLOCKCREATOR_jpg_1['default'],
               name: Usuario.nombre,
               role: UsuarioR,
             })
-          : isConnect && Usuario.perfil.length > 0
+          : isConnect &&
+            ((_f = Usuario.perfil) === null || _f === void 0
+              ? void 0
+              : _f.length) > 0
           ? React.createElement(author_card_1['default'], {
               image: Usuario.perfil,
               name: Usuario.nombre,

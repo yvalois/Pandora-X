@@ -205,11 +205,11 @@ export default function Sidebar({ className }: SidebarProps) {
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-5 2xl:px-8">
           {isConnect &&
-          Usuario.perfil.length == 0 &&
+          Usuario.perfil?.length == 0 &&
           Usuario.rango == 'peerx' ? (
             <AuthorCard image={PeerX} name={Usuario.nombre} role={UsuarioR} />
           ) : isConnect &&
-            Usuario.perfil.length == 0 &&
+            Usuario.perfil?.length == 0 &&
             Usuario.rango == 'blockelite' ? (
             <AuthorCard
               image={BlockElite}
@@ -217,7 +217,7 @@ export default function Sidebar({ className }: SidebarProps) {
               role={UsuarioR}
             />
           ) : isConnect &&
-            Usuario.perfil.length == 0 &&
+            Usuario.perfil?.length == 0 &&
             Usuario.rango == 'blockmaster' ? (
             <AuthorCard
               image={BlockMaster}
@@ -225,14 +225,14 @@ export default function Sidebar({ className }: SidebarProps) {
               role={UsuarioR}
             />
           ) : isConnect &&
-            Usuario.perfil.length == 0 &&
+            Usuario.perfil?.length == 0 &&
             Usuario.rango == 'blockcreator' ? (
             <AuthorCard
               image={BlockCreator}
               name={Usuario.nombre}
               role={UsuarioR}
             />
-          ) : isConnect && Usuario.perfil.length > 0 ? (
+          ) : isConnect && Usuario.perfil?.length > 0 ? (
             <AuthorCard
               image={Usuario.perfil}
               name={Usuario.nombre}

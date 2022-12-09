@@ -424,7 +424,7 @@ const HomePage: NextPageWithLayout<
         <div className="w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
           <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
             {isConnect &&
-            Usuario.perfil.length == 0 &&
+            Usuario.perfil?.length == 0 &&
             Usuario.rango == 'peerx' ? (
               <Avatar
                 image={PeerX}
@@ -433,7 +433,7 @@ const HomePage: NextPageWithLayout<
                 size="lg"
               />
             ) : isConnect &&
-              Usuario.perfil.length == 0 &&
+              Usuario.perfil?.length == 0 &&
               Usuario.rango == 'blockelite' ? (
               <Avatar
                 image={BlockElite}
@@ -442,7 +442,7 @@ const HomePage: NextPageWithLayout<
                 size="lg"
               />
             ) : isConnect &&
-              Usuario.perfil.length == 0 &&
+              Usuario.perfil?.length == 0 &&
               Usuario.rango == 'blockmaster' ? (
               <Avatar
                 image={BlockMaster}
@@ -451,7 +451,7 @@ const HomePage: NextPageWithLayout<
                 size="lg"
               />
             ) : isConnect &&
-              Usuario.perfil.length == 0 &&
+              Usuario.perfil?.length == 0 &&
               Usuario.rango == 'blockcreator' ? (
               <Avatar
                 image={BlockCreator}
@@ -459,7 +459,7 @@ const HomePage: NextPageWithLayout<
                 className="mx-auto mb-6"
                 size="lg"
               />
-            ) : isConnect && Usuario.perfil.length > 0 ? (
+            ) : isConnect && Usuario.perfil?.length > 0 ? (
               <AvatarP
                 image={Usuario.perfil}
                 alt="Author"
@@ -477,7 +477,7 @@ const HomePage: NextPageWithLayout<
                 className="mx-auto mb-6"
                 size="lg"
               />
-            ) : isConnect && Usuario.perfil.length > 0 ? (
+            ) : isConnect && Usuario.perfil?.length > 0 ? (
               <Avatar
                 image={Usuario.perfil}
                 alt="Author"
