@@ -813,17 +813,17 @@ export const update = (accountAddress) => async (dispatch) => {
 export const connectWallet = () => async (dispatch) => {
   dispatch(loading());
   try {
-    const web3Modal =
+    /*const web3Modal =
       typeof window !== 'undefined' &&
       new Web3Modal({
         cacheProvider: true,
-      });
+      });*/
 
-    /*const web3Modal = new Web3Modal({
+    const web3Modal = new Web3Modal({
       cacheProvider: true,
 
       // required
-    });*/
+    });
     const instance = await web3Modal.connect(providerOptions);
     const provider = new ethers.providers.Web3Provider(instance);
 
@@ -985,7 +985,7 @@ export const connectWallet = () => async (dispatch) => {
         );
 
         const precio = ethers.utils.formatUnits(price, 6);
-        if (Inversiones[tipo - 1].tipo == type) {
+        if (Inversiones[tipo - 1]?.tipo == type) {
           const inv = {
             Nombre: Inversiones[tipo - 1].Nombre,
             img: Inversiones[tipo - 1].img,
