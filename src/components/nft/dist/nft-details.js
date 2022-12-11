@@ -174,27 +174,30 @@ function NftFooter(_a) {
   var _j = react_1.useState(false),
     status2 = _j[0],
     setStatus2 = _j[1];
-  var _k = react_1.useState(''),
-    alertMsg = _k[0],
-    setAlertMsg = _k[1];
+  var _k = react_1.useState(false),
+    isBuy = _k[0],
+    setIsBuy = _k[1];
   var _l = react_1.useState(''),
-    alertMsg2 = _l[0],
-    setAlertMsg2 = _l[1];
+    alertMsg = _l[0],
+    setAlertMsg = _l[1];
+  var _m = react_1.useState(''),
+    alertMsg2 = _m[0],
+    setAlertMsg2 = _m[1];
   var Usuario = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   });
-  var _m = react_1.useState(price),
-    auxPrice = _m[0],
-    setAuxPrice = _m[1];
-  var _o = react_redux_1.useSelector(function (state) {
+  var _o = react_1.useState(price),
+    auxPrice = _o[0],
+    setAuxPrice = _o[1];
+  var _p = react_redux_1.useSelector(function (state) {
       return state.blockchain;
     }),
-    productoMinter = _o.productoMinter,
-    inversionMinter = _o.inversionMinter,
-    isConnect = _o.isConnect,
-    accountAddress = _o.accountAddress,
-    tokenContract = _o.tokenContract,
-    usdtContract = _o.usdtContract;
+    productoMinter = _p.productoMinter,
+    inversionMinter = _p.inversionMinter,
+    isConnect = _p.isConnect,
+    accountAddress = _p.accountAddress,
+    tokenContract = _p.tokenContract,
+    usdtContract = _p.usdtContract;
   var referidor = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   }).referidor;
@@ -360,6 +363,7 @@ function NftFooter(_a) {
             dispatch(blockchainAction_1.uProduct());
             setStatus(true);
             setAlertMsg('Nft comprado exitosamente');
+            setIsBuy(true);
             return [3 /*break*/, 7];
           case 4:
             return [
@@ -376,6 +380,7 @@ function NftFooter(_a) {
             dispatch(blockchainAction_1.uProduct());
             setStatus(true);
             setAlertMsg('Nft comprado exitosamente');
+            setIsBuy(true);
             _a.label = 7;
           case 7:
             return [3 /*break*/, 11];
@@ -398,6 +403,7 @@ function NftFooter(_a) {
             dispatch(blockchainAction_1.uInvertion());
             setStatus(true);
             setAlertMsg('Nft comprado exitosamente');
+            setIsBuy(true);
             _a.label = 11;
           case 11:
             return [3 /*break*/, 13];
@@ -504,8 +510,9 @@ function NftFooter(_a) {
         React.createElement(
           'div',
           { className: 'grid grid-cols-2 gap-3' },
-          !loading &&
-            parseInt(price) > approvedToken &&
+          !isBuy &&
+            !loading &&
+            price > approvedToken &&
             React.createElement(
               button_1['default'],
               {
@@ -516,8 +523,9 @@ function NftFooter(_a) {
               },
               'Aprobar'
             ),
-          !loading &&
-            parseInt(price) <= approvedToken &&
+          !isBuy &&
+            !loading &&
+            price <= approvedToken &&
             React.createElement(
               button_1['default'],
               {
@@ -528,7 +536,18 @@ function NftFooter(_a) {
               },
               'Comprar por ' + price + ' '
             ),
-          loading &&
+          isBuy &&
+            React.createElement(
+              button_1['default'],
+              { shape: 'rounded' },
+              React.createElement(
+                anchor_link_1['default'],
+                { href: '/', className: 'w-full' },
+                'Ir a inicio'
+              )
+            ),
+          !isBuy &&
+            loading &&
             React.createElement(
               button_1['default'],
               { shape: 'rounded' },
@@ -552,7 +571,8 @@ function NftFooter(_a) {
         React.createElement(
           'div',
           { className: 'grid grid-cols-2 gap-3' },
-          !loading &&
+          !isBuy &&
+            !loading &&
             parseInt(price) > approvedToken &&
             React.createElement(
               button_1['default'],
@@ -564,7 +584,8 @@ function NftFooter(_a) {
               },
               'Aprobar'
             ),
-          !loading &&
+          !isBuy &&
+            !loading &&
             parseInt(price) <= approvedToken &&
             React.createElement(
               button_1['default'],
@@ -576,7 +597,18 @@ function NftFooter(_a) {
               },
               'Comprar por ' + price + ' '
             ),
-          loading &&
+          isBuy &&
+            React.createElement(
+              button_1['default'],
+              { shape: 'rounded' },
+              React.createElement(
+                anchor_link_1['default'],
+                { href: '/', className: 'w-full' },
+                'Ir a inicio'
+              )
+            ),
+          !isBuy &&
+            loading &&
             React.createElement(
               button_1['default'],
               { shape: 'rounded' },
@@ -603,7 +635,7 @@ function NftFooter(_a) {
           React.createElement(
             button_1['default'],
             { shape: 'rounded', onClick: open },
-            'Transfer'
+            'Transferir'
           ),
           React.createElement(
             button_1['default'],
@@ -623,7 +655,7 @@ function NftFooter(_a) {
           React.createElement(
             button_1['default'],
             { shape: 'rounded', onClick: openI },
-            'Transfer'
+            'Transferir'
           ),
           React.createElement(
             anchor_link_1['default'],
@@ -1087,7 +1119,7 @@ function NftDetails(_a) {
                         role: 'status',
                         'aria-hidden': 'true',
                       }),
-                      'Loading...'
+                      'Cargando...'
                     ),
                   React.createElement(NftFooter, {
                     className: 'hidden md:block',

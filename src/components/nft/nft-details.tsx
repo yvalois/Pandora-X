@@ -50,7 +50,7 @@ function NftFooter({
   const [approvedToken, setApprovedToken] = useState(0);
   const [status, setStatus] = useState(false);
   const [status2, setStatus2] = useState(false);
-
+  const [isBuy, setIsBuy] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [alertMsg2, setAlertMsg2] = useState('');
 
@@ -163,6 +163,7 @@ function NftFooter({
           dispatch(uProduct());
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
+          setIsBuy(true);
         } else {
           const tx = await productoMinter.buyToken(
             tipoN,
@@ -175,6 +176,7 @@ function NftFooter({
           dispatch(uProduct());
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
+          setIsBuy(true);
         }
       } else if (tipo == 'inversion') {
         const tx = await inversionMinter.buyToken(
@@ -188,6 +190,7 @@ function NftFooter({
         dispatch(uInvertion());
         setStatus(true);
         setAlertMsg('Nft comprado exitosamente');
+        setIsBuy(true);
       }
     } catch (err) {
       setLoading(false);
@@ -249,17 +252,25 @@ function NftFooter({
 
         {tipo == 'producto' && (
           <div className="grid grid-cols-2 gap-3">
-            {!loading && parseInt(price) > approvedToken && (
+            {!isBuy && !loading && price > approvedToken && (
               <Button shape="rounded" onClick={() => approve()}>
                 Aprobar
               </Button>
             )}
-            {!loading && parseInt(price) <= approvedToken && (
+            {!isBuy && !loading && price <= approvedToken && (
               <Button shape="rounded" onClick={() => buyNft()}>
                 {`Comprar por ${price} `}
               </Button>
             )}
-            {loading && <Button shape="rounded">Cargando...</Button>}
+            {isBuy && (
+              <Button shape="rounded">
+                <AnchorLink href="/" className="w-full">
+                  Ir a inicio
+                </AnchorLink>
+              </Button>
+            )}
+
+            {!isBuy && loading && <Button shape="rounded">Cargando...</Button>}
             <Button
               shape="rounded"
               variant="solid"
@@ -274,17 +285,25 @@ function NftFooter({
 
         {tipo == 'inversion' && (
           <div className="grid grid-cols-2 gap-3">
-            {!loading && parseInt(price) > approvedToken && (
+            {!isBuy && !loading && parseInt(price) > approvedToken && (
               <Button shape="rounded" onClick={() => approve()}>
                 Aprobar
               </Button>
             )}
-            {!loading && parseInt(price) <= approvedToken && (
+            {!isBuy && !loading && parseInt(price) <= approvedToken && (
               <Button shape="rounded" onClick={() => buyNft()}>
                 {`Comprar por ${price} `}
               </Button>
             )}
-            {loading && <Button shape="rounded">Cargando...</Button>}
+
+            {isBuy && (
+              <Button shape="rounded">
+                <AnchorLink href="/" className="w-full">
+                  Ir a inicio
+                </AnchorLink>
+              </Button>
+            )}
+            {!isBuy && loading && <Button shape="rounded">Cargando...</Button>}
             <Button
               shape="rounded"
               variant="solid"
@@ -300,7 +319,7 @@ function NftFooter({
         {tipo == 'pcomprado' && (
           <div className="grid grid-cols-2 gap-3">
             <Button shape="rounded" onClick={open}>
-              Transfer
+              Transferir
             </Button>
             <Button
               shape="rounded"
@@ -316,7 +335,7 @@ function NftFooter({
         {tipo == 'invcomprado' && (
           <div className="grid grid-cols-2 gap-3">
             <Button shape="rounded" onClick={openI}>
-              Transfer
+              Transferir
             </Button>
             <AnchorLink href={`/staking/${id}`}>
               <Button
@@ -362,6 +381,7 @@ export default function NftDetails({ product, type }) {
   const [approvedToken, setApprovedToken] = useState(0);
   const [status, setStatus] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
+
   const Usuario = useSelector((state) => state.Usuario);
 
   const {
@@ -577,7 +597,7 @@ export default function NftDetails({ product, type }) {
                           role="status"
                           aria-hidden="true"
                         ></span>
-                        Loading...
+                        Cargando...
                       </Button>
                     )}
 

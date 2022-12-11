@@ -34,7 +34,7 @@ function Avatar({
   image,
   alt,
   className,
-  size = 'md',
+  size,
   shape = 'circle',
   width,
   height,

@@ -94,23 +94,23 @@ export const menuItems = [
       },
       {
         name: 'Academia X',
-        href: routes.proposals,
+        href: routes.academiaX,
       },
       {
         name: 'Alpha Report',
-        href: routes.createProposal,
+        href: routes.alphaR,
       },
       {
         name: 'Investing Value',
-        href: routes.createProposal,
+        href: routes.investingV,
       },
       {
         name: 'Coaching',
-        href: routes.createProposal,
+        href: routes.coaching,
       },
       {
         name: 'Podcast',
-        href: routes.createProposal,
+        href: routes.podcast,
       },
     ],
   },
@@ -145,21 +145,21 @@ export const menuItems = [
     icon: <PlusCircle />,
     href: routes.createuser,
   },*/
-  {
+  /*{
     name: 'Crear NFT',
     icon: <PlusCircle />,
     href: routes.createNft,
-  },
+  },*/
   {
     name: 'Referidos',
     icon: <PlusCircle />,
     href: routes.createuser,
   },
-  {
+  /*{
     name: 'Configuracion',
     icon: <PlusCircle />,
     href: '',
-  },
+  },*/
 ];
 
 type SidebarProps = {

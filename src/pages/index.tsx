@@ -49,7 +49,7 @@ const prod = [
     tipo: 'PS',
   },
   {
-    nombre: 'Podcast-Academia',
+    nombre: 'Academia X',
     image: academia,
     tipo: 'PA',
   },
@@ -161,33 +161,38 @@ const HomePage: NextPageWithLayout<
           t.setSeconds(secs);
           return t;
         }
-        const arr = response.result;
-        arr.map(async (item) => {
-          const cant = arr.length;
-          Contador += cant;
-          const dat = item.timeStamp;
-          const date = toDateTime(dat);
-          const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-          const precio = ethers.utils.formatUnits(pre, 6);
-          const w1 = inversionMinter.address.slice(0, 6);
-          const w = inversionMinter.address.slice(
-            inversionMinter.address.length - 6
-          );
-          const wall = w1 + '...' + w;
-          if (cant >= Data.length || cant == 0) {
-            const Tx = {
-              Id: item.tokenID,
-              Tipo: 'Compra Inversion',
-              Time: dat,
-              Fecha: date.toDateString(),
-              Asset: 'Tether',
-              Status: 'Exitosa',
-              Address: wall,
-              Precio: precio,
-            };
-            Data.push(Tx);
-          }
-        });
+        let arr = [];
+        arr = response.result;
+        if (arr.length > 0) {
+          arr.map(async (item) => {
+            if (item.from == 0x0000000000000000000000000000000000000000) {
+              const cant = arr.length;
+              Contador += cant;
+              const dat = item.timeStamp;
+              const date = toDateTime(dat);
+              const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+              const precio = ethers.utils.formatUnits(pre, 6);
+              const w1 = inversionMinter.address.slice(0, 6);
+              const w = inversionMinter.address.slice(
+                inversionMinter.address.length - 6
+              );
+              const wall = w1 + '...' + w;
+              if (cant >= Data.length || cant == 0) {
+                const Tx = {
+                  Id: item.tokenID,
+                  Tipo: 'Compra Inversion',
+                  Time: dat,
+                  Fecha: date.toDateString(),
+                  Asset: 'Tether',
+                  Status: 'Exitosa',
+                  Address: wall,
+                  Precio: precio,
+                };
+                Data.push(Tx);
+              }
+            }
+          });
+        }
       });
   };
 
@@ -209,33 +214,38 @@ const HomePage: NextPageWithLayout<
           t.setSeconds(secs);
           return t;
         }
-        const arr = response.result;
-        arr.map(async (item) => {
-          const cant = arr.length + Data.length;
-          Contador += cant;
-          const dat = item.timeStamp;
-          const date = toDateTime(dat);
-          const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-          const precio = ethers.utils.formatUnits(pre, 6);
-          const w1 = inversionMinter.address.slice(0, 6);
-          const w = inversionMinter.address.slice(
-            inversionMinter.address.length - 6
-          );
-          const wall = w1 + '...' + w;
-          if (cant >= Data.length || cant == 0) {
-            const Tx = {
-              Id: item.tokenID,
-              Tipo: 'Compra Producto',
-              Time: dat,
-              Fecha: date.toDateString(),
-              Asset: 'Tether',
-              Status: 'Exitosa',
-              Address: wall,
-              Precio: precio,
-            };
-            Data.push(Tx);
-          }
-        });
+        let arr = [];
+        arr = response.result;
+        if (arr.length > 0) {
+          arr.map(async (item) => {
+            if (item.from == 0x0000000000000000000000000000000000000000) {
+              const cant = arr.length + Data.length;
+              Contador += cant;
+              const dat = item.timeStamp;
+              const date = toDateTime(dat);
+              const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+              const precio = ethers.utils.formatUnits(pre, 6);
+              const w1 = inversionMinter.address.slice(0, 6);
+              const w = inversionMinter.address.slice(
+                inversionMinter.address.length - 6
+              );
+              const wall = w1 + '...' + w;
+              if (cant >= Data.length || cant == 0) {
+                const Tx = {
+                  Id: item.tokenID,
+                  Tipo: 'Compra Producto',
+                  Time: dat,
+                  Fecha: date.toDateString(),
+                  Asset: 'Tether',
+                  Status: 'Exitosa',
+                  Address: wall,
+                  Precio: precio,
+                };
+                Data.push(Tx);
+              }
+            }
+          });
+        }
       });
   };
 
@@ -257,50 +267,52 @@ const HomePage: NextPageWithLayout<
           t.setSeconds(secs);
           return t;
         }
-        const arr = response.result;
-
-        arr.map(async (item) => {
-          const cant = arr.length + Data.length;
-          Contador += cant;
-          const dat = item.timeStamp;
-          const date = toDateTime(dat);
-          const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-          const precio = ethers.utils.formatUnits(pre, 6);
-          const w1 = inversionMinter.address.slice(0, 6);
-          const w = inversionMinter.address.slice(
-            inversionMinter.address.length - 6
-          );
-          const wall = w1 + '...' + w;
-          const from = item.from;
-          const to = item.to;
-          if (cant >= Data.length || cant == 0) {
-            if (from == accountAddress.toLowerCase()) {
-              const Tx = {
-                Id: item.tokenID,
-                Tipo: 'Staking',
-                Time: dat,
-                Fecha: date.toDateString(),
-                Asset: 'Tether',
-                Status: 'Exitosa',
-                Address: wall,
-                Precio: 'NP',
-              };
-              Data.push(Tx);
-            } else {
-              const Tx = {
-                Id: item.tokenID,
-                Tipo: 'Withdraw',
-                Time: dat,
-                Fecha: date.toDateString(),
-                Asset: 'Tether',
-                Status: 'Exitosa',
-                Address: wall,
-                Precio: precio,
-              };
-              Data.push(Tx);
+        let arr = [];
+        arr = response.result;
+        if (arr.length > 0) {
+          arr.map(async (item) => {
+            const cant = arr.length + Data.length;
+            Contador += cant;
+            const dat = item.timeStamp;
+            const date = toDateTime(dat);
+            const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+            const precio = ethers.utils.formatUnits(pre, 6);
+            const w1 = inversionMinter.address.slice(0, 6);
+            const w = inversionMinter.address.slice(
+              inversionMinter.address.length - 6
+            );
+            const wall = w1 + '...' + w;
+            const from = item.from;
+            const to = item.to;
+            if (cant >= Data.length || cant == 0) {
+              if (from == accountAddress.toLowerCase()) {
+                const Tx = {
+                  Id: item.tokenID,
+                  Tipo: 'Staking',
+                  Time: dat,
+                  Fecha: date.toDateString(),
+                  Asset: 'Tether',
+                  Status: 'Exitosa',
+                  Address: wall,
+                  Precio: 'NP',
+                };
+                Data.push(Tx);
+              } else {
+                const Tx = {
+                  Id: item.tokenID,
+                  Tipo: 'Withdraw',
+                  Time: dat,
+                  Fecha: date.toDateString(),
+                  Asset: 'Tether',
+                  Status: 'Exitosa',
+                  Address: wall,
+                  Precio: precio,
+                };
+                Data.push(Tx);
+              }
             }
-          }
-        });
+          });
+        }
       });
   };
 
@@ -322,7 +334,9 @@ const HomePage: NextPageWithLayout<
           t.setSeconds(secs);
           return t;
         }
-        const arr = response.result;
+        let arr = [];
+        arr = response.result;
+
         if (arr.length > 0) {
           arr.map(async (item) => {
             const cant = arr.length + Data.length;
@@ -358,16 +372,45 @@ const HomePage: NextPageWithLayout<
         }
       });
   };
+
+  const getPrices = async () => {
+    fetch(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        coinSlideData[0].balance = response[0].current_price;
+        coinSlideData[1].balance = response[2].current_price;
+        coinSlideData[2].balance = response[4].current_price;
+        coinSlideData[3].balance = response[1].current_price;
+      });
+  };
+  useEffect(() => {
+    const fetch = async () => {
+      await getPrices();
+    };
+    fetch();
+  }, []);
+
+  setTimeout(async () => {
+    await getPrices();
+  }, 3600000);
+
   const setData = async () => {
-    const DataU = Data.sort((a, b) => a.Time < b.Time);
     dispatch(
       transations({
-        Transactions: DataU,
+        Transactions: Data,
       })
     );
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     setCurrentItems(prod);
     const fetchItems = async () => {
       await getNft();
@@ -376,7 +419,7 @@ const HomePage: NextPageWithLayout<
     };
     fetchItems();
   }, []);
-
+*/
   useEffect(() => {
     setCurrentItems(prod);
     const fetchItems = async () => {
@@ -385,7 +428,6 @@ const HomePage: NextPageWithLayout<
         await getProductosTrans();
         await getStakingsTrans();
         await getClaimsTrans();
-
         await setData();
       } else {
         Data = [];
@@ -394,7 +436,7 @@ const HomePage: NextPageWithLayout<
       //setBalance(balanceI);
     };
     fetchItems();
-  }, [isConnect, accountAddress]);
+  }, [isConnect]);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -524,9 +566,7 @@ const HomePage: NextPageWithLayout<
 
       <div className="flex flex-wrap">
         <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
-          {isConnect && Transactions.length != 0 && (
-            <TransactionTable Data={Data} />
-          )}
+          {isConnect && Transactions.length != 0 && <TransactionTable />}
         </div>
         <div className="order-first mb-8 grid w-full grid-cols-1 gap-6 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
           {/*<TopPools />*/}

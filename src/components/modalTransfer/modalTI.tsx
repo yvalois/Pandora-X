@@ -146,7 +146,7 @@ export default function ModalTP() {
           {!loading && approvedToken && (
             <Button onClick={transfer} size="small">
               <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
-                Transfer
+                Transferir
               </span>
             </Button>
           )}
@@ -154,7 +154,7 @@ export default function ModalTP() {
           {!loading && !approvedToken && (
             <Button onClick={Approve} size="small">
               <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
-                Approve
+                Aprobar
               </span>
             </Button>
           )}

@@ -132,28 +132,12 @@ const StakingPage: NextPageWithLayout = () => {
   };
   const Usuario = useSelector((state: any) => state.Usuario);
 
-  const getTime = async () => {
-    let tipo = await inversionMinter.getTypeOfStaking(nftInfo.id);
-
-    if (tipo === '1Y') {
-      //tipo se quitan debido al castigo
-      setTime(1);
-    } else if (tipo == '2Y') {
-      setTime(2);
-    } else if (tipo == '3Y') {
-      setTime(3);
-    } else if (tipo == '4Y') {
-      setTime(4);
-    } else if (tipo == '5Y') {
-      setTime(5);
-    }
-  };
-
   const verifyApprove = async () => {
     const isap = await inversionMinter.getApproved(id); //MarketPlace
     //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
     if (isap == staking.address) {
       setApprovedToken(true);
+    } else {
     }
   };
 
@@ -170,9 +154,8 @@ const StakingPage: NextPageWithLayout = () => {
     setLoading(true);
     //si no esta referido
 
-    let tx = await staking
-      .stake(id, tipoStak.id, tipoStak.value)
-      .send({ gas: '1000000', gasPrice: '2000000000', from: accountAddress });
+    let tx = await staking.stake(id, tipoStak.value);
+    //  .send({ gas: '1000000', gasPrice: '2000000000', from: accountAddress });
 
     await tx.wait();
     dispatch(uInvertion());
@@ -325,7 +308,7 @@ const StakingPage: NextPageWithLayout = () => {
                     role="status"
                     aria-hidden="true"
                   ></span>
-                  Loading...
+                  Cargando...
                 </Button>
               )}
 
@@ -335,15 +318,15 @@ const StakingPage: NextPageWithLayout = () => {
                 </Button>
               )}
 
-              {!success && approvedToken === false && !loading && (
+              {!success && approvedToken == false && !loading && (
                 <Button shape="rounded" onClick={() => Approve()}>
-                  Approve
+                  Aprobar
                 </Button>
               )}
 
               {success && (
                 <AnchorLink href="/">
-                  <Button shape="rounded">Ir al Home</Button>
+                  <Button shape="rounded">Ir Inicio</Button>
                 </AnchorLink>
               )}
             </div>

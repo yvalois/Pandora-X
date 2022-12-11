@@ -93,9 +93,27 @@ const COLUMNS = [
   },
 ];
 
-export default function TransactionTable(Data) {
+export default function TransactionTable() {
   const { Transactions } = useSelector((state) => state.transaction);
-  const data = Transactions;
+
+  const orden = (Data) => {
+    let orden = Data;
+
+    //alert(orden[0]?.Id)
+    for (let i = 1; i < orden.length; i++) {
+      let length = orden.length - 1;
+      for (let j = length; j >= i; j--) {
+        console.log(orden[j].Time);
+        if (parseInt(orden[j - 1].Time) < parseInt(orden[j].Time)) {
+          const temp = orden[j - 1];
+          orden[j - 1] = orden[j];
+          orden[j] = temp;
+        }
+      }
+    }
+    return orden;
+  };
+  const data = orden(Transactions);
   //const data = React.useMemo(() => TransactionData, []);
   const columns = React.useMemo(() => COLUMNS, []);
 
@@ -127,9 +145,7 @@ export default function TransactionTable(Data) {
   );
 
   const { pageIndex } = state;
-  useEffect(() => {
-    console.log(Data);
-  }, [isConnect]);
+  useEffect(() => {}, [isConnect]);
 
   return (
     <div className="">

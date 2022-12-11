@@ -9,7 +9,7 @@ var routes = {
   liquidityPosition: '/liquidity-position',
   farms: '/farms',
   farmsTwo: '/farms-2',
-  createNft: '/create-nft',
+  //createNft: '/create-nft',
   search: '/search',
   notification: '/notification',
   vote: '/vote',
@@ -24,5 +24,10 @@ var routes = {
   staking: '/staking',
   principal: '/principal',
   details: '/details',
+  academiaX: '/details/PA',
+  alphaR: '/details/AP',
+  investingV: '/details/IV',
+  coaching: '/details/NC',
+  podcast: '/details/PS',
 };
 exports['default'] = routes;

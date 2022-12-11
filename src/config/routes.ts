@@ -7,7 +7,7 @@ const routes = {
   liquidityPosition: '/liquidity-position',
   farms: '/farms',
   farmsTwo: '/farms-2',
-  createNft: '/create-nft',
+  //createNft: '/create-nft',
   search: '/search',
   notification: '/notification',
   vote: '/vote',
@@ -22,6 +22,11 @@ const routes = {
   staking: '/staking',
   principal: '/principal',
   details: '/details',
+  academiaX: '/details/PA',
+  alphaR: '/details/AP',
+  investingV: '/details/IV',
+  coaching: '/details/NC',
+  podcast: '/details/PS',
 };
 
 export default routes;

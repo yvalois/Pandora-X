@@ -168,11 +168,27 @@ var COLUMNS = [
     maxWidth: 300,
   },
 ];
-function TransactionTable(Data) {
+function TransactionTable() {
   var Transactions = react_redux_1.useSelector(function (state) {
     return state.transaction;
   }).Transactions;
-  var data = Transactions;
+  var orden = function (Data) {
+    var orden = Data;
+    //alert(orden[0]?.Id)
+    for (var i = 1; i < orden.length; i++) {
+      var length = orden.length - 1;
+      for (var j = length; j >= i; j--) {
+        console.log(orden[j].Time);
+        if (parseInt(orden[j - 1].Time) < parseInt(orden[j].Time)) {
+          var temp = orden[j - 1];
+          orden[j - 1] = orden[j];
+          orden[j] = temp;
+        }
+      }
+    }
+    return orden;
+  };
+  var data = orden(Transactions);
   //const data = React.useMemo(() => TransactionData, []);
   var columns = react_1['default'].useMemo(function () {
     return COLUMNS;
@@ -204,12 +220,7 @@ function TransactionTable(Data) {
     previousPage = _a.previousPage,
     prepareRow = _a.prepareRow;
   var pageIndex = state.pageIndex;
-  react_1.useEffect(
-    function () {
-      console.log(Data);
-    },
-    [isConnect]
-  );
+  react_1.useEffect(function () {}, [isConnect]);
   return react_1['default'].createElement(
     'div',
     { className: '' },

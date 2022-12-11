@@ -42,7 +42,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "Apr",
+        "name": "Aprs",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -196,19 +196,6 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_user",
-                "type": "address"
-            }
-        ],
-        "name": "banWallet",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "name": "cantPagos",
         "outputs": [
@@ -314,25 +301,6 @@
         "name": "claimRewardWithReferido",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "decimals",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -751,6 +719,19 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "_years",
+                "type": "uint256"
+            }
+        ],
+        "name": "maxYear",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -932,7 +913,7 @@
             },
             {
                 "internalType": "uint256",
-                "name": "_Apr",
+                "name": "_apr",
                 "type": "uint256"
             }
         ],
@@ -963,19 +944,6 @@
             }
         ],
         "name": "setFinishDate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_p",
-                "type": "uint256"
-            }
-        ],
-        "name": "setPer",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -1017,11 +985,6 @@
                 "internalType": "uint256",
                 "name": "_years",
                 "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_apr",
-                "type": "uint256"
             }
         ],
         "name": "stake",
@@ -1033,24 +996,35 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "newOwner",
+                "name": "",
                 "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "name": "tokenApr",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_user",
+                "name": "newOwner",
                 "type": "address"
             }
         ],
-        "name": "unBanWallet",
+        "name": "transferOwnership",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

@@ -272,7 +272,7 @@ function ModalTP() {
       'div',
       {
         className:
-          'relative z-50 mx-auto h-auto w-[430px] column  justify-center items-center max-w-full rounded-lg bg-white px-8 py-8 dark:bg-light-dark',
+          'column relative z-50 mx-auto h-auto w-[430px]  max-w-full items-center justify-center rounded-lg bg-white px-8 py-8 dark:bg-light-dark',
       },
       react_1['default'].createElement(
         anchor_link_1['default'],
@@ -356,7 +356,7 @@ function ModalTP() {
             }),
         react_1['default'].createElement(
           'label',
-          { className: 'text-red-500 text-sm' },
+          { className: 'text-sm text-red-500' },
           error
         )
       ),
@@ -391,7 +391,7 @@ function ModalTP() {
                 className:
                   'blockbg-transparent text-sm text-white outline-none focus:outline-none',
               },
-              'Transfer'
+              'Transferir'
             )
           ),
         loading &&
@@ -418,7 +418,7 @@ function ModalTP() {
                 className:
                   'blockbg-transparent text-sm text-white outline-none focus:outline-none',
               },
-              'Approve'
+              'Aprobar'
             )
           ),
         react_1['default'].createElement(

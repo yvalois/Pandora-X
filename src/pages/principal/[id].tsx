@@ -44,7 +44,7 @@ const prod = [
     tipo: 'PS',
   },
   {
-    nombre: 'Podcast-Academia',
+    nombre: 'Academia X',
     image: academia,
     tipo: 'PA',
   },

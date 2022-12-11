@@ -426,7 +426,7 @@ function StakingTable() {
               },
               className: 'focus:shadow-outline  rounded',
             },
-            'withdraw'
+            'Retirar'
           )
         );
       },

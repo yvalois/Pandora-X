@@ -45,11 +45,13 @@ export function CoinCard({
       </div>
       <div className="mt-8 mb-2 text-sm font-medium tracking-wider text-gray-900 lg:text-lg 2xl:text-xl 3xl:text-2xl">
         {balance}
-        <span className="uppercase"> {symbol}</span>
+        <span className="uppercase"> USD</span>
       </div>
       <div className="flex items-center justify-between text-xs font-medium 2xl:text-sm">
-        <span className="tracking-wider text-gray-600">{usdBalance} USD</span>
-        <span
+        <span className="tracking-wider text-gray-600">
+          {usdBalance} {symbol}
+        </span>
+        {/*       <span
           className={`flex items-center  ${
             isChangePositive ? 'text-green-500' : 'text-red-500'
           }`}
@@ -62,7 +64,7 @@ export function CoinCard({
             <ArrowUp />
           </span>
           {change}
-        </span>
+          </span>*/}
       </div>
     </div>
   );
@@ -115,9 +117,6 @@ export default function CoinSlider({ coins }: CoinSliderProps) {
               symbol={coin.symbol}
               logo={coin.logo}
               balance={coin.balance}
-              usdBalance={coin.usdBalance}
-              change={coin.change}
-              isChangePositive={coin.isChangePositive}
               color={coin.color}
             />
           </SwiperSlide>

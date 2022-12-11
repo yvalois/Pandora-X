@@ -174,7 +174,7 @@ export default function StakingTable() {
             onClick={() => withdraw(value)} //onClick={() => openModal('WITHDRAW_VIEW')}
             className="focus:shadow-outline  rounded"
           >
-            withdraw
+            Retirar
           </Button>
         </div>
       ),

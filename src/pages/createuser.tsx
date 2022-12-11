@@ -52,6 +52,7 @@ const CreateUser: NextPageWithLayout<
   const [status, setStatus] = useState(0);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(Err);
+  const [exist, setExist] = useState(false);
 
   useEffect(() => {
     if (Usuario.rol !== 'Admin') {
@@ -127,18 +128,58 @@ const CreateUser: NextPageWithLayout<
       validator.isEthereumAddress(value.Address)
     ) {
       setError(false);
-      //<option value="Peerx">Peerx</option>
-      //<option value="BlockElite">BlockElite</option>
-      //<option value="BlockMaster">BlockMaster</option>
-      //<option value="BlockCreator">BlockCreator</option>
-      const base64URL = await encodeFileAsBase64URL(Banner);
-      setValue((prevState) => ({ ...prevState, Banner: base64URL }));
-      if (value.Rango == 'Peerx') {
-        const base64URL = await encodeFileAsBase64URL(PeerX);
-        setValue((prevState) => ({ ...prevState, Perfil: base64URL }));
-      }
-      //await CrearUsuario();
+
+      await CrearUsuario();
     }
+  };
+
+  const update = async () => {
+    const newAccount = {
+      Categoria: value.Categoria,
+      Rango: value.Rango,
+      Fecha: hoy.toLocaleDateString(),
+      Rol: 'usuario',
+    };
+    fetch(
+      `https://shark-app-w9pvy.ondigitalocean.app/api/updateAccount/${value.Address}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(newAccount),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => {
+        res.json();
+        if (res.status == 200) {
+          setStatus(res.status);
+        } else {
+          setStatus(100);
+        }
+      })
+      .then(() => {});
+  };
+
+  const login = async () => {
+    fetch(
+      `https://shark-app-w9pvy.ondigitalocean.app/api/login/${value.Address}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        if (response?.Address == value.Address) {
+          alert('a');
+          setExist(true);
+        } else if (response == null) {
+          setExist(false);
+        }
+      });
   };
 
   const registrar = async () => {
@@ -158,17 +199,22 @@ const CreateUser: NextPageWithLayout<
   };
 
   const CrearUsuario = async () => {
+    login();
     try {
       let address = value.Address;
       let categoria = value.Categoria;
       let rango = value.Rango;
 
-      const txResult = await mint(address, categoria, rango);
+      //const txResult = await mint(address, categoria, rango);
       //const a = await getType(address);
       //const b = await getRange(address);
 
-      if (txResult.status === 1) {
-        await registrar();
+      if (/*txResult.status*/ 1 == 1) {
+        if (exist == true) {
+          await update();
+        } else {
+          await registrar();
+        }
       } else {
         setStatus(100);
       }
@@ -328,7 +374,7 @@ const CreateUser: NextPageWithLayout<
 
       {status == 200 && (
         <div
-          className="mb-4 ml-[580px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="mb-4 ml-[610px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="font-medium">Usuario creado correctamente</span>

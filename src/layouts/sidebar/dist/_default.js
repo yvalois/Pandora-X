@@ -68,23 +68,23 @@ exports.menuItems = [
       },
       {
         name: 'Academia X',
-        href: routes_1['default'].proposals,
+        href: routes_1['default'].academiaX,
       },
       {
         name: 'Alpha Report',
-        href: routes_1['default'].createProposal,
+        href: routes_1['default'].alphaR,
       },
       {
         name: 'Investing Value',
-        href: routes_1['default'].createProposal,
+        href: routes_1['default'].investingV,
       },
       {
         name: 'Coaching',
-        href: routes_1['default'].createProposal,
+        href: routes_1['default'].coaching,
       },
       {
         name: 'Podcast',
-        href: routes_1['default'].createProposal,
+        href: routes_1['default'].podcast,
       },
     ],
   },
@@ -118,20 +118,15 @@ exports.menuItems = [
       icon: <PlusCircle />,
       href: routes.createuser,
     },*/
-  {
-    name: 'Crear NFT',
-    icon: React.createElement(plus_circle_1.PlusCircle, null),
-    href: routes_1['default'].createNft,
-  },
+  /*{
+      name: 'Crear NFT',
+      icon: <PlusCircle />,
+      href: routes.createNft,
+    },*/
   {
     name: 'Referidos',
     icon: React.createElement(plus_circle_1.PlusCircle, null),
     href: routes_1['default'].createuser,
-  },
-  {
-    name: 'Configuracion',
-    icon: React.createElement(plus_circle_1.PlusCircle, null),
-    href: '',
   },
 ];
 function Sidebar(_a) {
