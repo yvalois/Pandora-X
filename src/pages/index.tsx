@@ -15,6 +15,8 @@ import TopupButton from '@/components/ui/topup-button';
 import NftSlider from '@/components/ui/nftSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMintedNftProducts } from '../redux/Minted/MintedAction';
+import { useAccount } from 'wagmi';
+
 //images
 import AuthorImage from '@/assets/images/author.jpg';
 import { useEffect, useState } from 'react';
@@ -134,6 +136,8 @@ const HomePage: NextPageWithLayout<
     tokenContract,
   } = useSelector((state: any) => state.blockchain);
 
+  const { isConnected, address } = useAccount();
+
   const inventory = async () => {
     if (accountAddress !== '') {
       const tx = await productoMinter.getMyInventory(accountAddress);
@@ -165,7 +169,7 @@ const HomePage: NextPageWithLayout<
         arr = response.result;
         if (arr.length > 0) {
           arr.map(async (item) => {
-            if (item.from == 0x0000000000000000000000000000000000000000) {
+            if (item.from == '0x0000000000000000000000000000000000000000') {
               const cant = arr.length;
               Contador += cant;
               const dat = item.timeStamp;
@@ -181,6 +185,7 @@ const HomePage: NextPageWithLayout<
                 const Tx = {
                   Id: item.tokenID,
                   Tipo: 'Compra Inversion',
+                  Hash: item.hash,
                   Time: dat,
                   Fecha: date.toDateString(),
                   Asset: 'Tether',
@@ -218,7 +223,7 @@ const HomePage: NextPageWithLayout<
         arr = response.result;
         if (arr.length > 0) {
           arr.map(async (item) => {
-            if (item.from == 0x0000000000000000000000000000000000000000) {
+            if (item.from == '0x0000000000000000000000000000000000000000') {
               const cant = arr.length + Data.length;
               Contador += cant;
               const dat = item.timeStamp;
@@ -234,6 +239,7 @@ const HomePage: NextPageWithLayout<
                 const Tx = {
                   Id: item.tokenID,
                   Tipo: 'Compra Producto',
+                  Hash: item.hash,
                   Time: dat,
                   Fecha: date.toDateString(),
                   Asset: 'Tether',
@@ -271,44 +277,51 @@ const HomePage: NextPageWithLayout<
         arr = response.result;
         if (arr.length > 0) {
           arr.map(async (item) => {
-            const cant = arr.length + Data.length;
-            Contador += cant;
-            const dat = item.timeStamp;
-            const date = toDateTime(dat);
-            const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-            const precio = ethers.utils.formatUnits(pre, 6);
-            const w1 = inversionMinter.address.slice(0, 6);
-            const w = inversionMinter.address.slice(
-              inversionMinter.address.length - 6
-            );
-            const wall = w1 + '...' + w;
-            const from = item.from;
-            const to = item.to;
-            if (cant >= Data.length || cant == 0) {
-              if (from == accountAddress.toLowerCase()) {
-                const Tx = {
-                  Id: item.tokenID,
-                  Tipo: 'Staking',
-                  Time: dat,
-                  Fecha: date.toDateString(),
-                  Asset: 'Tether',
-                  Status: 'Exitosa',
-                  Address: wall,
-                  Precio: 'NP',
-                };
-                Data.push(Tx);
-              } else {
-                const Tx = {
-                  Id: item.tokenID,
-                  Tipo: 'Withdraw',
-                  Time: dat,
-                  Fecha: date.toDateString(),
-                  Asset: 'Tether',
-                  Status: 'Exitosa',
-                  Address: wall,
-                  Precio: precio,
-                };
-                Data.push(Tx);
+            if (
+              item.from == accountAddress.toLowerCase() ||
+              item.to.toString() == accountAddress.toLowerCase()
+            ) {
+              const cant = arr.length + Data.length;
+              Contador += cant;
+              const dat = item.timeStamp;
+              const date = toDateTime(dat);
+              const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+              const precio = ethers.utils.formatUnits(pre, 6);
+              const w1 = inversionMinter.address.slice(0, 6);
+              const w = inversionMinter.address.slice(
+                inversionMinter.address.length - 6
+              );
+              const wall = w1 + '...' + w;
+              const from = item.from;
+              const to = item.to;
+              if (cant >= Data.length || cant == 0) {
+                if (from == accountAddress.toLowerCase()) {
+                  const Tx = {
+                    Id: item.tokenID,
+                    Tipo: 'Staking',
+                    Hash: item.hash,
+                    Time: dat,
+                    Fecha: date.toDateString(),
+                    Asset: 'Tether',
+                    Status: 'Exitosa',
+                    Address: wall,
+                    Precio: 'NP',
+                  };
+                  Data.push(Tx);
+                } else {
+                  const Tx = {
+                    Id: item.tokenID,
+                    Tipo: 'Withdraw',
+                    Hash: item.hash,
+                    Time: dat,
+                    Fecha: date.toDateString(),
+                    Asset: 'Tether',
+                    Status: 'Exitosa',
+                    Address: wall,
+                    Precio: precio,
+                  };
+                  Data.push(Tx);
+                }
               }
             }
           });
@@ -357,6 +370,7 @@ const HomePage: NextPageWithLayout<
                 const Tx = {
                   Id: item.tokenID,
                   Tipo: 'ClaimReward',
+                  Hash: item.hash,
                   Time: dat,
                   Fecha: date.toDateString(),
                   Asset: 'Tether',
@@ -386,9 +400,9 @@ const HomePage: NextPageWithLayout<
       .then((res) => res.json())
       .then((response) => {
         coinSlideData[0].balance = response[0].current_price;
-        coinSlideData[1].balance = response[2].current_price;
-        coinSlideData[2].balance = response[4].current_price;
-        coinSlideData[3].balance = response[1].current_price;
+        coinSlideData[1].balance = response[1].current_price;
+        coinSlideData[2].balance = response[2].current_price;
+        coinSlideData[3].balance = response[4].current_price;
       });
   };
   useEffect(() => {
@@ -410,7 +424,7 @@ const HomePage: NextPageWithLayout<
     );
   };
 
-  /*useEffect(() => {
+  useEffect(() => {
     setCurrentItems(prod);
     const fetchItems = async () => {
       await getNft();
@@ -419,7 +433,7 @@ const HomePage: NextPageWithLayout<
     };
     fetchItems();
   }, []);
-*/
+
   useEffect(() => {
     setCurrentItems(prod);
     const fetchItems = async () => {
@@ -428,7 +442,6 @@ const HomePage: NextPageWithLayout<
         await getProductosTrans();
         await getStakingsTrans();
         await getClaimsTrans();
-        await setData();
       } else {
         Data = [];
       }
@@ -436,7 +449,7 @@ const HomePage: NextPageWithLayout<
       //setBalance(balanceI);
     };
     fetchItems();
-  }, [isConnect]);
+  }, [accountAddress]);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -545,7 +558,7 @@ const HomePage: NextPageWithLayout<
             <TopupButton />
           </div>
         </div>
-        <div className="mb-8 mt-12 w-full sm:mb-0   sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%] ">
+        <div className="mb-8 mt-12 w-full sm:mb-0   sm:w-full sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%] ">
           <NftSlider
             nfts={currentItems}
             priceFormat={priceFormat}
@@ -566,7 +579,7 @@ const HomePage: NextPageWithLayout<
 
       <div className="flex flex-wrap">
         <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
-          {isConnect && Transactions.length != 0 && <TransactionTable />}
+          {Transactions.length > 0 && <TransactionTable />}
         </div>
         <div className="order-first mb-8 grid w-full grid-cols-1 gap-6 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
           {/*<TopPools />*/}

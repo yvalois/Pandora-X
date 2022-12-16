@@ -19,6 +19,7 @@ export default function AuthorCard({ image, name, role }: AuthorCardProps) {
       <AvatarP
         image={image}
         alt={name ? name : ''}
+        is={false}
         className="dark:border-gray-400"
       />
       <div className="ltr:pl-3 rtl:pr-3">

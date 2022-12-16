@@ -56,16 +56,15 @@ export default function AuthorInformation({
     <div className={`${className}`}>
       {/* Bio */}
       <div className="border-y border-dashed border-gray-200 py-5 dark:border-gray-700 xl:py-6">
-        <div className="row mb-2 flex w-[34%] justify-between text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
+        <div className="row flex items-center space-x-2 text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
+          {' '}
+          {/*   mb-2   text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white  */}
           <span> Biografia</span>
-
-          <div className="h-4 w-4 cursor-pointer">
-            {!editIsActivated && (
-              <div className="h-10" onClick={activate}>
-                <Image className="h-2" src={edit} alt="Criptic" priority />
-              </div>
-            )}
-          </div>
+          {!editIsActivated && (
+            <div className="h-4 w-4 cursor-pointer" onClick={activate}>
+              <Image className="h-2" src={edit} alt="Criptic" priority />
+            </div>
+          )}
         </div>
         {!editIsActivated && Usuario.descripcion}
         {editIsActivated && (

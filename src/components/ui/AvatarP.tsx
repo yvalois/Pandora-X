@@ -2,6 +2,8 @@ import cn from 'classnames';
 import Image from '@/components/ui/image';
 import { StaticImageData } from 'next/image';
 import { useEffect, useState } from 'react';
+import Button from '@/components/ui/button';
+
 import { useSelector } from 'react-redux';
 
 interface AvatarProps {
@@ -12,6 +14,7 @@ interface AvatarProps {
   shape?: ShapeNames;
   width?: number;
   height?: number;
+  iss: boolean;
 }
 
 type ShapeNames = 'rounded' | 'circle';
@@ -44,6 +47,7 @@ function AvatarP({
   is,
   setPrevProfile,
   prevProfile,
+  iss,
 }) {
   const sizeClassNames = sizes[size];
   //const [prevProfile, setPrevProfile] = useState("")
@@ -70,7 +74,6 @@ function AvatarP({
   };
 
   const UploadProfile = async () => {
-    alert('ya');
     const value = {
       profile: prevProfile,
     };
@@ -86,7 +89,6 @@ function AvatarP({
     )
       .then((res) => {
         res.json();
-        alert(res.status);
       })
       .then(() => {})
       .catch((error) => console.error('Error:', error));
@@ -122,15 +124,24 @@ function AvatarP({
                   className="rounded-full"
                 />
               )}
-              <div className="group absolute  top-0 z-10  flex h-full w-full cursor-pointer items-center justify-center rounded-full opacity-60 transition duration-500 hover:bg-gray-200">
-                <input
-                  type="file"
-                  onChange={(e) => {
-                    editphotoP(e);
-                  }}
-                  className="z-10 hidden w-[10%] group-hover:block"
-                />
-              </div>
+              {is != false && (
+                <div className="group absolute  top-0 z-10 hidden  h-full w-full   cursor-pointer items-center justify-center rounded-full opacity-60 transition duration-500 hover:bg-gray-200 lg:flex xl:flex">
+                  <Button
+                    size="small"
+                    className="z-10 hidden group-hover:block "
+                  >
+                    <label htmlFor="bgfile">Subir</label>
+                  </Button>
+                  <input
+                    type="file"
+                    id="bgfile"
+                    onChange={(e) => {
+                      editphotoP(e);
+                    }}
+                    className="file:border-1 absolute z-10 hidden text-transparent opacity-0 file:rounded file:border-gray-400 group-hover:block"
+                  />
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -155,15 +166,25 @@ function AvatarP({
                   className="absolute h-64 w-64 rounded-full "
                 />
               )}
-              <div className="group absolute  top-0 z-10  flex h-full w-full cursor-pointer items-center justify-center rounded-full opacity-60 transition duration-500 hover:bg-gray-200">
-                <input
-                  type="file"
-                  onChange={() => {
-                    editphotoP(e);
-                  }}
-                  className="w-[30%]z-10 hidden group-hover:block"
-                />
-              </div>
+              {is != false && (
+                <div className="group absolute top-0 z-10 hidden   h-full w-full  cursor-pointer items-center justify-center rounded-full opacity-60 transition duration-500 hover:bg-gray-200 lg:flex xl:flex">
+                  <Button
+                    size="small"
+                    className="z-10 hidden group-hover:block "
+                  >
+                    <label htmlFor="bgfile">Subir</label>
+                  </Button>
+
+                  <input
+                    type="file"
+                    id="bgfile"
+                    onChange={() => {
+                      editphotoP(e);
+                    }}
+                    className="file:border-1 absolute z-10 hidden text-transparent opacity-0 file:rounded file:border-gray-400 group-hover:block"
+                  />
+                </div>
+              )}
             </div>
           </div>
         )

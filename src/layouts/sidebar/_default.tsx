@@ -24,6 +24,7 @@ import BlockElite from '@/assets/images/profile/BLOCKELITE.jpg';
 import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
 import NoProfile from '@/assets/images/profile/NoProfile.jpg';
+import { useAccount } from 'wagmi';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
@@ -86,11 +87,11 @@ export const menuItems = [
   {
     name: 'Comunidad',
     icon: <VoteIcon />,
-    href: '',
+    href: '/search',
     dropdownItems: [
       {
         name: 'Discord',
-        href: routes.vote,
+        href: 'https://discord.gg/bybu984z',
       },
       {
         name: 'Academia X',
@@ -170,6 +171,8 @@ export default function Sidebar({ className }: SidebarProps) {
   const UsuarioR = useSelector((state: any) => state.blockchain.rol);
   const { closeDrawer } = useDrawer();
   const Usuario = useSelector((state: any) => state.Usuario);
+  const { isConnected, address } = useAccount();
+
   const {
     inventoryp,
     inventoryi,

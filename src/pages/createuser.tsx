@@ -174,7 +174,6 @@ const CreateUser: NextPageWithLayout<
       .then((res) => res.json())
       .then((response) => {
         if (response?.Address == value.Address) {
-          alert('a');
           setExist(true);
         } else if (response == null) {
           setExist(false);

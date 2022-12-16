@@ -208,24 +208,21 @@ function AuthorInformation(_a) {
         'div',
         {
           className:
-            'row mb-2 flex w-[34%] justify-between text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white',
+            'row flex items-center space-x-2 text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white',
         },
+        ' ',
         React.createElement('span', null, ' Biografia'),
-        React.createElement(
-          'div',
-          { className: 'h-4 w-4 cursor-pointer' },
-          !editIsActivated &&
-            React.createElement(
-              'div',
-              { className: 'h-10', onClick: activate },
-              React.createElement(image_1['default'], {
-                className: 'h-2',
-                src: edit_svgrepo_com_svg_1['default'],
-                alt: 'Criptic',
-                priority: true,
-              })
-            )
-        )
+        !editIsActivated &&
+          React.createElement(
+            'div',
+            { className: 'h-4 w-4 cursor-pointer', onClick: activate },
+            React.createElement(image_1['default'], {
+              className: 'h-2',
+              src: edit_svgrepo_com_svg_1['default'],
+              alt: 'Criptic',
+              priority: true,
+            })
+          )
       ),
       !editIsActivated && Usuario.descripcion,
       editIsActivated &&

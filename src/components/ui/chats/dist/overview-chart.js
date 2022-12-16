@@ -3,6 +3,7 @@ exports.__esModule = true;
 var classnames_1 = require('classnames');
 var recharts_1 = require('recharts');
 var react_redux_1 = require('react-redux');
+var wagmi_1 = require('wagmi');
 var data = [
   {
     name: 'Page A',
@@ -46,13 +47,16 @@ function OverviewChart(_a) {
   var isConnect = react_redux_1.useSelector(function (state) {
     return state.blockchain;
   }).isConnect;
+  var _b = wagmi_1.useAccount(),
+    isConnected = _b.isConnected,
+    address = _b.address;
   return React.createElement(
     'div',
     {
       className:
         'rounded-lg bg-gray-900 p-6 text-white dark:bg-light-dark sm:p-8',
     },
-    isConnect &&
+    isConnected &&
       React.createElement(
         'h3',
         {
@@ -62,7 +66,7 @@ function OverviewChart(_a) {
         balance,
         ' Usdt'
       ),
-    !isConnect &&
+    !isConnected &&
       React.createElement(
         'h3',
         {
@@ -71,13 +75,13 @@ function OverviewChart(_a) {
         },
         'Connect'
       ),
-    isConnect &&
+    isConnected &&
       React.createElement(
         'p',
         { className: 'mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm' },
         'Balance'
       ),
-    !isConnect &&
+    !isConnected &&
       React.createElement(
         'p',
         { className: 'mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm' },

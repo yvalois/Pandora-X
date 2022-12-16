@@ -100,8 +100,8 @@ export default function StakingTable() {
     {
       Header: 'ID',
       accessor: 'id',
-      minWidth: 10,
-      maxWidth: 10,
+      minWidth: 60,
+      maxWidth: 80,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Valor</div>,
@@ -110,8 +110,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
-      minWidth: 5,
-      maxWidth: 20,
+      minWidth: 80,
+      maxWidth: 120,
     },
     {
       Header: () => (
@@ -122,8 +122,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
-      minWidth: 40,
-      maxWidth: 70,
+      minWidth: 220,
+      maxWidth: 280,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Apr</div>,
@@ -132,8 +132,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}</div>
       ),
-      minWidth: 5,
-      maxWidth: 20,
+      minWidth: 60,
+      maxWidth: 80,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">Balance</div>,
@@ -142,8 +142,8 @@ export default function StakingTable() {
       Cell: ({ cell: { value } }) => (
         <div className="ltr:text-right rtl:text-left">{value}USDT</div>
       ),
-      minWidth: 40,
-      maxWidth: 40,
+      minWidth: 100,
+      maxWidth: 190,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
@@ -156,12 +156,12 @@ export default function StakingTable() {
             onClick={() => claim(value)}
             className="focus:shadow-outline  rounded"
           >
-            Claim Reward
+            Claim Rewards
           </Button>
         </div>
       ),
-      minWidth: 20,
-      maxWidth: 70,
+      minWidth: 230,
+      maxWidth: 290,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
@@ -178,8 +178,8 @@ export default function StakingTable() {
           </Button>
         </div>
       ),
-      minWidth: 20,
-      maxWidth: 60,
+      minWidth: 80,
+      maxWidth: 170,
     },
   ];
 

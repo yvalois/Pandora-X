@@ -285,7 +285,11 @@ function ModalRegister() {
                   ErrNombre: 'El nombre debe tener minimo 3 caracteres',
                 });
               });
-            } else if (!validator_1['default'].isAlpha(value.Nombre)) {
+            } else if (
+              !validator_1['default'].isAlpha(value.Nombre, 'en-US', {
+                ignore: ' ',
+              })
+            ) {
               setError(true);
               setErrorMsg(function (prevState) {
                 return __assign(__assign({}, prevState), {
@@ -294,7 +298,9 @@ function ModalRegister() {
               });
             } else if (
               value.Nombre.length >= 3 &&
-              validator_1['default'].isAlpha(value.Nombre)
+              validator_1['default'].isAlpha(value.Nombre, 'en-US', {
+                ignore: ' ',
+              })
             ) {
               setErrorMsg(function (prevState) {
                 return __assign(__assign({}, prevState), { ErrNombre: '' });
@@ -462,7 +468,7 @@ function ModalRegister() {
       'div',
       {
         className:
-          'relative z-50 mx-auto h-[480px] w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark',
+          'relative z-50 mx-auto h-auto w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark',
       },
       react_1['default'].createElement(
         'button',

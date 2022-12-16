@@ -146,11 +146,10 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     setBalance(balanceInEth);
   };*/
 
-  const disconnectWallet = () => {
+  const disconnectWallet = async () => {
     //setAddress('');
-    web3Modal && web3Modal.clearCachedProvider();
-    dispatch(disconectWallet());
-    setAddress('');
+
+    await dispatch(disconectWallet());
     //disconect();
   };
 
@@ -164,12 +163,12 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   };*/
   // seteamos el provider
-  const connectToWallet = async () => {
+  const connectToWallet = async (address) => {
     //request();
     try {
       setLoading(true);
       //checkIfExtensionIsAvailable();
-      await dispatch(connectWallet());
+      await dispatch(connectWallet(address));
       setLoading(false);
       setAddress(accountAddress);
       //conectar()

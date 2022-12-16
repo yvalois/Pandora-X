@@ -21,8 +21,8 @@ export const collectionList = [
   },
   {
     icon: CollectionImage3,
-    name: 'profile pictures',
-    value: 'profile pictures',
+    name: 'Nueva Coleccion',
+    value: 'coleccion',
   },
 ];
 
@@ -70,7 +70,7 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
         {coinListData.length > 0 ? (
           coinListData.map((item, index) => (
             <AnchorLink
-              href={`${link}?view=${item.value}`}
+              href={`search?view=${item.value}`}
               key={index}
               className="w-full"
             >

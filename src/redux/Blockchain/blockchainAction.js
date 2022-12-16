@@ -8,6 +8,11 @@ import inversionMinterAbi from '../../abi/InversionMinter.json';
 import stakingAbi from '../../abi/staking.json';
 import { items } from '../../utils/constant'; //Buscar
 import { setProvider } from '../../NFTROL';
+import { ethereumClient } from '../../pages/_app';
+import { flatMap } from 'lodash';
+import { useAccount } from 'wagmi';
+
+//import WalletLink from 'walletlink'
 
 const router = contract();
 
@@ -18,16 +23,17 @@ const INVERSION_MINTER_ADDRESS = router.inversionMinter;
 const STAKING_ADDRESS = router.staking;
 const RPC_URL = router.RPC_URL;
 
-const providerOptions = {
+const options = new WalletConnectProvider({
+  infuraId: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn',
+});
+
+const providerOptions = new WalletConnectProvider({
   walletconnect: {
-    package: WalletConnectProvider,
-    options: {
-      rpc: {
-        137: RPC_URL,
-      },
-    },
+    package: WalletConnectProvider, // required
   },
-};
+  infuraId: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn',
+  rpc: 'https://matic-mainnet.chainstacklabs.com',
+});
 
 const productosAR = [
   {
@@ -810,7 +816,7 @@ export const update = (accountAddress) => async (dispatch) => {
     });
 };
 
-export const connectWallet = () => async (dispatch) => {
+export const connectWallet = (address) => async (dispatch) => {
   dispatch(loading());
   try {
     /*const web3Modal =
@@ -819,19 +825,29 @@ export const connectWallet = () => async (dispatch) => {
         cacheProvider: true,
       });*/
 
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-
-      // required
+    const _web3Modal = new Web3Modal({
+      network: 'Polygon',
+      cacheProvider: false,
+      disableInjectedProvider: false,
+      providerOptions: providerOptions,
     });
-    const instance = await web3Modal.connect(providerOptions);
+    const instance = await _web3Modal.connect();
+
+    /*let aux1Provider =ethereumClient.wagmi
+    let aux2Provider = aux1Provider.providers
+    let aux3Provider = aux2Provider.get(137)
+    let provider =  aux3Provider*/
+
     const provider = new ethers.providers.Web3Provider(instance);
 
     setProvider(provider);
     const signer = provider.getSigner();
+
+    //signer._address =  "0x"
+
     const accounts = await provider.listAccounts();
 
-    const networkId = await provider.getNetwork();
+    //  const networkId = await provider.getNetwork();
 
     if (1 == 1) {
       const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
@@ -861,11 +877,13 @@ export const connectWallet = () => async (dispatch) => {
 
       await getProductos();
       await getInversiones();
+
       const nftStaking = await stakingContract.getNfts();
 
       const nftpBalance = await productoMinterContract.getMyInventory(
         accounts[0]
       );
+
       const nftiBalance = await inversionMinterContract.getMyInventory(
         accounts[0]
       );
@@ -1007,8 +1025,8 @@ export const connectWallet = () => async (dispatch) => {
         balancei[0] = parseFloat(auxiliar) + parseFloat(aux);
       });
 
-      //const usdtBalance = await usdtContract.balanceOf(accounts[0]);
-      //const tokenBalance = await tokenContract.balanceOf(accounts[0]);
+      //const usdtBalance = await usdtContract.balanceOf(address);
+      //const tokenBalance = await tokenContract.balanceOf(address);
 
       //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
       //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 6);
@@ -1032,7 +1050,8 @@ export const connectWallet = () => async (dispatch) => {
         preciosP.push(price)
       })*/
 
-      dispatch(subscribeProvider(instance));
+      //  dispatch(subscribeProvider(instance));
+
       await dispatch(
         dataLoaded({
           usdtContract,
@@ -1046,7 +1065,7 @@ export const connectWallet = () => async (dispatch) => {
           inventoryp: inventoryp,
           inventoryi: inventoryi,
           inventorys: inventorys,
-          instance: instance,
+          instance: null,
           balancei: balancei,
         })
       );

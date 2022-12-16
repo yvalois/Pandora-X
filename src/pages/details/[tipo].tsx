@@ -5,9 +5,10 @@ import DashboardLayout from '@/layouts/_dashboard';
 import NftDetails from '@/components/nft/nft-details';
 import { nftData } from '@/data/static/single-nft';
 import { useEffect, useState } from 'react';
-import router from 'next/router';
-import { useSelector } from 'react-redux';
+import Router from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 import { ethers } from 'ethers';
+import { getMintedNftProducts } from '@/redux/Minted/MintedAction';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -31,9 +32,24 @@ const NFTDetailsPage: NextPageWithLayout<
   const Usuario = useSelector((state: any) => state.Usuario);
   const { productos, inversiones } = useSelector((state) => state.minted);
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const t = Router;
+
+  const getNft = async () => {
+    await dispatch(getMintedNftProducts());
+  };
+
   useEffect(() => {
-    //router.query.id
-    const tipo = router.query.tipo;
+    const fetch = async () => {
+      await getNft();
+    };
+    fetch();
+  }, []);
+
+  useEffect(() => {
+    //Router.query.id
+    const tipo = Router.query.tipo;
 
     productos.map((producto) => {
       if (producto.tipo == tipo) {

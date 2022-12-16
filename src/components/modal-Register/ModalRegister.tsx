@@ -102,13 +102,16 @@ export default function ModalRegister() {
         ...prevState,
         ErrNombre: 'El nombre debe tener minimo 3 caracteres',
       }));
-    } else if (!validator.isAlpha(value.Nombre)) {
+    } else if (!validator.isAlpha(value.Nombre, 'en-US', { ignore: ' ' })) {
       setError(true);
       setErrorMsg((prevState) => ({
         ...prevState,
         ErrNombre: 'solo se permiten letras',
       }));
-    } else if (value.Nombre.length >= 3 && validator.isAlpha(value.Nombre)) {
+    } else if (
+      value.Nombre.length >= 3 &&
+      validator.isAlpha(value.Nombre, 'en-US', { ignore: ' ' })
+    ) {
       setErrorMsg((prevState) => ({ ...prevState, ErrNombre: '' }));
     }
 
@@ -222,7 +225,7 @@ export default function ModalRegister() {
   //botton y state
   return (
     <>
-      <div className="relative z-50 mx-auto h-[480px] w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark">
+      <div className="relative z-50 mx-auto h-auto w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark">
         <button
           className="absolute right-[25px] top-[25px] mb-2 flex h-[20px] w-[20px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white"
           onClick={() => disconnectWallet()}

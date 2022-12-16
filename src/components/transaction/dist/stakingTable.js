@@ -287,8 +287,8 @@ function StakingTable() {
     {
       Header: 'ID',
       accessor: 'id',
-      minWidth: 10,
-      maxWidth: 10,
+      minWidth: 60,
+      maxWidth: 80,
     },
     {
       Header: function () {
@@ -308,8 +308,8 @@ function StakingTable() {
           value
         );
       },
-      minWidth: 5,
-      maxWidth: 20,
+      minWidth: 80,
+      maxWidth: 120,
     },
     {
       Header: function () {
@@ -329,8 +329,8 @@ function StakingTable() {
           value
         );
       },
-      minWidth: 40,
-      maxWidth: 70,
+      minWidth: 220,
+      maxWidth: 280,
     },
     {
       Header: function () {
@@ -350,8 +350,8 @@ function StakingTable() {
           value
         );
       },
-      minWidth: 5,
-      maxWidth: 20,
+      minWidth: 60,
+      maxWidth: 80,
     },
     {
       Header: function () {
@@ -372,8 +372,8 @@ function StakingTable() {
           'USDT'
         );
       },
-      minWidth: 40,
-      maxWidth: 40,
+      minWidth: 100,
+      maxWidth: 190,
     },
     {
       Header: function () {
@@ -397,12 +397,12 @@ function StakingTable() {
               },
               className: 'focus:shadow-outline  rounded',
             },
-            'Claim Reward'
+            'Claim  Rewards'
           )
         );
       },
-      minWidth: 20,
-      maxWidth: 70,
+      minWidth: 230,
+      maxWidth: 290,
     },
     {
       Header: function () {
@@ -430,8 +430,8 @@ function StakingTable() {
           )
         );
       },
-      minWidth: 20,
-      maxWidth: 60,
+      minWidth: 80,
+      maxWidth: 170,
     },
   ];
   var data = inventorys;

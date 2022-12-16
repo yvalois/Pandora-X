@@ -228,12 +228,12 @@ function ProfileTabUser() {
     },
     React.createElement(
       param_tab_1.TabPanel,
-      { className: 'focus:outline-none w-full' },
+      { className: 'w-full focus:outline-none' },
       React.createElement(
         'div',
         {
           className:
-            'w-full grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4',
+            'grid w-full gap-4 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4',
         },
         currentItems === null || currentItems === void 0
           ? void 0
@@ -252,10 +252,10 @@ function ProfileTabUser() {
         currentItems.length == 0 &&
           React.createElement(
             'div',
-            { className: ' h-full justify-center  self-center flex w-full' },
+            { className: ' flex h-full  w-full justify-center self-center' },
             React.createElement(
               'div',
-              { className: 'w-full justify-center items-center' },
+              { className: 'w-full items-center justify-center' },
               React.createElement(
                 'div',
                 { className: ' h-full w-full' },
@@ -266,7 +266,7 @@ function ProfileTabUser() {
                     'h1',
                     {
                       className:
-                        'xl:w-[700px] md:w-[500px] xl:text-lg md:text-md text-gray-600',
+                        'md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg',
                     },
                     "No tienes Nft's de productos"
                   )
@@ -278,12 +278,12 @@ function ProfileTabUser() {
     ),
     React.createElement(
       param_tab_1.TabPanel,
-      { className: 'focus:outline-none w-full h-full' },
+      { className: 'h-full w-full focus:outline-none' },
       React.createElement(
         'div',
         {
           className:
-            'grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4 w-full h-full',
+            'grid h-full w-full gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4',
         },
         currentInv === null || currentInv === void 0
           ? void 0
@@ -301,7 +301,7 @@ function ProfileTabUser() {
         currentInv.length == 0 &&
           React.createElement(
             'div',
-            { className: 'justify-center items-center h-full  flex w-full ' },
+            { className: 'flex h-full w-full  items-center justify-center ' },
             React.createElement(
               'div',
               { className: ' h-full w-full' },
@@ -312,7 +312,7 @@ function ProfileTabUser() {
                   'h1',
                   {
                     className:
-                      'xl:w-[700px] md:w-[500px] xl:text-lg md:text-md text-gray-600',
+                      'md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg',
                   },
                   "No tienes Nft's de inversion"
                 )

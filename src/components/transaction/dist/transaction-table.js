@@ -24,6 +24,7 @@ var long_arrow_right_1 = require('@/components/icons/long-arrow-right');
 var long_arrow_left_1 = require('@/components/icons/long-arrow-left');
 var link_icon_1 = require('@/components/icons/link-icon');
 var react_redux_1 = require('react-redux');
+var wagmi_1 = require('wagmi');
 var COLUMNS = [
   {
     Header: 'ID',
@@ -105,21 +106,28 @@ var COLUMNS = [
       return react_1['default'].createElement(
         'div',
         { className: 'ltr:ml-auto rtl:mr-auto' },
-        'Address'
+        'Hash'
       );
     },
-    accessor: 'Address',
+    accessor: 'Hash',
     // @ts-ignore
     Cell: function (_a) {
       var value = _a.cell.value;
       return react_1['default'].createElement(
         'div',
-        { className: 'flex items-center justify-end' },
+        {
+          onClick: function () {
+            window.open('https://polygonscan.com/tx/' + value);
+          },
+          className: 'flex items-center justify-end cursor-pointer',
+        },
         react_1['default'].createElement(link_icon_1.LinkIcon, {
           className: 'h-[18px] w-[18px] ltr:mr-2 rtl:ml-2',
         }),
         ' ',
-        value
+        '' + value.slice(0, 8),
+        '...',
+        '' + value.slice(value.length - 8)
       );
     },
     minWidth: 220,
@@ -172,6 +180,9 @@ function TransactionTable() {
   var Transactions = react_redux_1.useSelector(function (state) {
     return state.transaction;
   }).Transactions;
+  var _a = wagmi_1.useAccount(),
+    isConnected = _a.isConnected,
+    address = _a.address;
   var orden = function (Data) {
     var orden = Data;
     //alert(orden[0]?.Id)
@@ -196,7 +207,7 @@ function TransactionTable() {
   var isConnect = react_redux_1.useSelector(function (state) {
     return state.blockchain;
   }).isConnect;
-  var _a = react_table_1.useTable(
+  var _b = react_table_1.useTable(
       {
         // @ts-ignore
         columns: columns,
@@ -208,19 +219,19 @@ function TransactionTable() {
       react_table_1.useFlexLayout,
       react_table_1.usePagination
     ),
-    getTableProps = _a.getTableProps,
-    getTableBodyProps = _a.getTableBodyProps,
-    canPreviousPage = _a.canPreviousPage,
-    canNextPage = _a.canNextPage,
-    pageOptions = _a.pageOptions,
-    state = _a.state,
-    headerGroups = _a.headerGroups,
-    page = _a.page,
-    nextPage = _a.nextPage,
-    previousPage = _a.previousPage,
-    prepareRow = _a.prepareRow;
+    getTableProps = _b.getTableProps,
+    getTableBodyProps = _b.getTableBodyProps,
+    canPreviousPage = _b.canPreviousPage,
+    canNextPage = _b.canNextPage,
+    pageOptions = _b.pageOptions,
+    state = _b.state,
+    headerGroups = _b.headerGroups,
+    page = _b.page,
+    nextPage = _b.nextPage,
+    previousPage = _b.previousPage,
+    prepareRow = _b.prepareRow;
   var pageIndex = state.pageIndex;
-  react_1.useEffect(function () {}, [isConnect]);
+  react_1.useEffect(function () {}, [isConnected]);
   return react_1['default'].createElement(
     'div',
     { className: '' },

@@ -21,6 +21,7 @@ var BLOCKCREATOR_jpg_1 = require('@/assets/images/profile/BLOCKCREATOR.jpg');
 var BLOCKELITE_jpg_1 = require('@/assets/images/profile/BLOCKELITE.jpg');
 var BLOCKMASTER_jpg_1 = require('@/assets/images/profile/BLOCKMASTER.jpg');
 var GENERIC_jpg_1 = require('@/assets/images/profile/GENERIC.jpg');
+var wagmi_1 = require('wagmi');
 exports.menuItems = [
   {
     name: 'Home',
@@ -64,7 +65,7 @@ exports.menuItems = [
     dropdownItems: [
       {
         name: 'Discord',
-        href: routes_1['default'].vote,
+        href: 'https://discord.gg/bybu984z',
       },
       {
         name: 'Academia X',
@@ -139,16 +140,19 @@ function Sidebar(_a) {
   var Usuario = react_redux_1.useSelector(function (state) {
     return state.Usuario;
   });
-  var _g = react_redux_1.useSelector(function (state) {
+  var _g = wagmi_1.useAccount(),
+    isConnected = _g.isConnected,
+    address = _g.address;
+  var _h = react_redux_1.useSelector(function (state) {
       return state.blockchain;
     }),
-    inventoryp = _g.inventoryp,
-    inventoryi = _g.inventoryi,
-    productoMinter = _g.productoMinter,
-    accountAddress = _g.accountAddress,
-    balanceI = _g.balanceI,
-    isConnect = _g.isConnect,
-    inversionMinter = _g.inversionMinter;
+    inventoryp = _h.inventoryp,
+    inventoryi = _h.inventoryi,
+    productoMinter = _h.productoMinter,
+    accountAddress = _h.accountAddress,
+    balanceI = _h.balanceI,
+    isConnect = _h.isConnect,
+    inversionMinter = _h.inversionMinter;
   return React.createElement(
     'aside',
     {
@@ -187,7 +191,7 @@ function Sidebar(_a) {
       React.createElement(
         'div',
         { className: 'px-6 pb-5 2xl:px-8' },
-        isConnect &&
+        isConnected &&
           ((_b = Usuario.perfil) === null || _b === void 0
             ? void 0
             : _b.length) == 0 &&
@@ -197,7 +201,7 @@ function Sidebar(_a) {
               name: Usuario.nombre,
               role: UsuarioR,
             })
-          : isConnect &&
+          : isConnected &&
             ((_c = Usuario.perfil) === null || _c === void 0
               ? void 0
               : _c.length) == 0 &&
@@ -207,7 +211,7 @@ function Sidebar(_a) {
               name: Usuario.nombre,
               role: UsuarioR,
             })
-          : isConnect &&
+          : isConnected &&
             ((_d = Usuario.perfil) === null || _d === void 0
               ? void 0
               : _d.length) == 0 &&
@@ -217,7 +221,7 @@ function Sidebar(_a) {
               name: Usuario.nombre,
               role: UsuarioR,
             })
-          : isConnect &&
+          : isConnected &&
             ((_e = Usuario.perfil) === null || _e === void 0
               ? void 0
               : _e.length) == 0 &&
@@ -227,7 +231,7 @@ function Sidebar(_a) {
               name: Usuario.nombre,
               role: UsuarioR,
             })
-          : isConnect &&
+          : isConnected &&
             ((_f = Usuario.perfil) === null || _f === void 0
               ? void 0
               : _f.length) > 0
@@ -236,13 +240,13 @@ function Sidebar(_a) {
               name: Usuario.nombre,
               role: UsuarioR,
             })
-          : isConnect
+          : isConnected
           ? React.createElement(author_card_1['default'], {
               image: GENERIC_jpg_1['default'],
               name: Usuario.nombre,
               role: UsuarioR,
             })
-          : !isConnect &&
+          : !isConnected &&
             React.createElement(author_card_1['default'], {
               image: GENERIC_jpg_1['default'],
               name: 'Inicia Sesion',

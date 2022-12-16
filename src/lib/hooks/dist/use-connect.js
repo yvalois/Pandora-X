@@ -289,11 +289,22 @@ exports.WalletProvider = function (_a) {
       setBalance(balanceInEth);
     };*/
   var disconnectWallet = function () {
-    //setAddress('');
-    web3Modal && web3Modal.clearCachedProvider();
-    dispatch(blockchainAction_1.disconectWallet());
-    setAddress('');
-    //disconect();
+    return __awaiter(void 0, void 0, void 0, function () {
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            //setAddress('');
+            return [
+              4 /*yield*/,
+              dispatch(blockchainAction_1.disconectWallet()),
+            ];
+          case 1:
+            //setAddress('');
+            _a.sent();
+            return [2 /*return*/];
+        }
+      });
+    });
   };
   /*const checkIfExtensionIsAvailable = () => {
       if (
@@ -305,7 +316,7 @@ exports.WalletProvider = function (_a) {
       }
     };*/
   // seteamos el provider
-  var connectToWallet = function () {
+  var connectToWallet = function (address) {
     return __awaiter(void 0, void 0, void 0, function () {
       var error_2;
       return __generator(this, function (_a) {
@@ -314,7 +325,10 @@ exports.WalletProvider = function (_a) {
             _a.trys.push([0, 2, , 3]);
             setLoading(true);
             //checkIfExtensionIsAvailable();
-            return [4 /*yield*/, dispatch(blockchainAction_1.connectWallet())];
+            return [
+              4 /*yield*/,
+              dispatch(blockchainAction_1.connectWallet(address)),
+            ];
           case 1:
             //checkIfExtensionIsAvailable();
             _a.sent();

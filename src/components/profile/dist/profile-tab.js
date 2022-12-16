@@ -45,7 +45,7 @@ function ProfileTab() {
     },
     React.createElement(
       param_tab_1.TabPanel,
-      { className: 'focus:outline-none vw-[100%]' },
+      { className: 'vw-[100%] focus:outline-none' },
       React.createElement(
         'div',
         {
@@ -68,10 +68,10 @@ function ProfileTab() {
         currentItems.length == 0 &&
           React.createElement(
             'div',
-            { className: ' h-full justify-center  self-center flex w-full' },
+            { className: ' flex h-full  w-full justify-center self-center' },
             React.createElement(
               'div',
-              { className: 'w-full justify-center items-center' },
+              { className: 'w-full items-center justify-center' },
               React.createElement(
                 'div',
                 { className: ' h-full w-full' },
@@ -82,7 +82,7 @@ function ProfileTab() {
                     'h1',
                     {
                       className:
-                        'xl:w-[700px] md:w-[500px] xl:text-lg md:text-md text-gray-600',
+                        'md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg',
                     },
                     "No tienes Nft's de productos"
                   )
@@ -117,10 +117,10 @@ function ProfileTab() {
         currentInv.length == 0 &&
           React.createElement(
             'div',
-            { className: ' h-full justify-center  self-center flex w-full' },
+            { className: ' flex h-full  w-full justify-center self-center' },
             React.createElement(
               'div',
-              { className: 'w-full justify-center items-center' },
+              { className: 'w-full items-center justify-center' },
               React.createElement(
                 'div',
                 { className: ' h-full w-full' },
@@ -131,7 +131,7 @@ function ProfileTab() {
                     'h1',
                     {
                       className:
-                        'xl:w-[700px] md:w-[500px] xl:text-lg md:text-md text-gray-600',
+                        'md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg',
                     },
                     "No tienes Nft's de Inversion"
                   )

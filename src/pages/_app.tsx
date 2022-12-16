@@ -1,6 +1,6 @@
 // import type { AppProps } from 'next/app';
 // import type { NextPageWithLayout } from '@/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -18,12 +18,46 @@ import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
+import {
+  EthereumClient,
+  modalConnectors,
+  walletConnectProvider,
+} from '@web3modal/ethereum';
+import { Web3Modal } from '@web3modal/react';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import {
+  arbitrum,
+  avalanche,
+  bsc,
+  fantom,
+  mainnet,
+  optimism,
+  polygon,
+} from 'wagmi/chains';
 
 /*type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };*/
+const projectId = 'd293c0c6bb189c2b2a02c81a0dec03c9';
+const chains = [polygon];
+export const { provider } = configureChains(chains, [
+  walletConnectProvider({ projectId }),
+]);
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors: modalConnectors({ appName: 'web3Modal', chains }),
+  provider,
+});
+export const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
+  const [domLoaded, setDomLoaded] = useState(false);
+  const [client, setClient] = useState({});
+
+  useEffect(() => {
+    setDomLoaded(true);
+  }, []);
+
   const [queryClient] = useState(() => new QueryClient());
   const getLayout = Component.getLayout ?? ((page) => page);
   //could remove this if you don't need to page level layout
@@ -52,6 +86,75 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
                 <DrawersContainer />
               </WalletProvider>
             </ThemeProvider>
+            {/* <Web3Modal
+        ethereumClient={ethereumClient}
+        // Custom Linking Mobile Wallets
+        mobileWallets={[
+          {
+            id: 'trust',
+            name: 'Trust Wallet',
+            links: { native: 'trust://', universal: 'https://link.trustwallet.com' }
+          },
+          {
+            id: 'rainbow',
+            name: 'Rainbow',
+            links: { native: 'rainbow://', universal: 'https://rainbow.me' }
+          },
+          {
+            id: 'zerion',
+            name: 'Zerion',
+            links: { native: 'zerion://', universal: 'https://wallet.zerion.io' }
+          },
+          {
+            id: 'tokenary',
+            name: 'Tokenary',
+            links: { native: 'tokenary://', universal: 'https://tokenary.io' }
+          }
+        ]}
+        // Custom Linking Desktop Wallets
+        desktopWallets={[
+          {
+            id: 'ledger',
+            name: 'Ledger',
+            links: { native: 'ledgerlive://', universal: 'https://www.ledger.com' }
+          },
+          {
+            id: 'zerion',
+            name: 'Zerion',
+            links: { native: 'zerion://', universal: 'https://wallet.zerion.io' }
+          },
+          {
+            id: 'tokenary',
+            name: 'Tokenary',
+            links: { native: 'tokenary://', universal: 'https://tokenary.io' }
+          },
+          {
+            id: 'oreid',
+            name: 'OREID',
+            links: {
+              native: '',
+              universal: 'https://www.oreid.io/'
+            }
+          }
+        ]}
+        // Custom Wallet Images
+        walletImages={{
+          metaMask: '../../assets/images/images.jpg',
+          brave: '/images/wallet_brave.webp',
+          ledger: '/images/wallet_ledger.webp',
+          coinbaseWallet: '/images/wallet_coinbase.webp',
+          zerion: '/images/wallet_zerion.webp',
+          trust: '/images/wallet_trust.webp',
+          rainbow: '/images/wallet_rainbow.webp',
+          oreid: '/images/wallet_oreid.svg'
+        }}
+        // Custom Chain Images
+        chainImages={{
+          137: '/images/chain_polygon.webp',
+          10: '/images/chain_optimism.webp',
+          42161: '/images/chain_arbitrum.webp'
+        }}
+      /> */}
           </Hydrate>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         </QueryClientProvider>

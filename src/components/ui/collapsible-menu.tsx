@@ -37,14 +37,17 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
     <div className="mb-2 min-h-[48px] list-none last:mb-0">
       {dropdownItems?.length ? (
         <>
-          <div
+          <ActiveLink
+            href={href}
             className={cn(
               'relative flex h-12 cursor-pointer items-center justify-between whitespace-nowrap  rounded-lg px-4 text-sm transition-all',
               isChildrenActive
                 ? 'text-white'
                 : 'text-gray-500 hover:text-brand dark:hover:text-white'
             )}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
           >
             <span className="z-[1] flex items-center ltr:mr-3 rtl:ml-3">
               <span className="ltr:mr-3 rtl:ml-3">{icon}</span>
@@ -64,7 +67,7 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
                 layoutId="menu-item-active-indicator"
               />
             )}
-          </div>
+          </ActiveLink>
 
           <div
             style={{

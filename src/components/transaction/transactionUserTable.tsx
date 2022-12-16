@@ -35,8 +35,8 @@ const COLUMNS = [
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-right rtl:text-left">{value}</div>
     ),
-    minWidth: 60,
-    maxWidth: 80,
+    minWidth: 230,
+    maxWidth: 290,
   },
 
   {
@@ -48,8 +48,8 @@ const COLUMNS = [
         <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" /> {value}
       </div>
     ),
-    minWidth: 80,
-    maxWidth: 100,
+    minWidth: 230,
+    maxWidth: 290,
   },
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Amount</div>,
@@ -66,8 +66,8 @@ const COLUMNS = [
         -
       </div>
     ),
-    minWidth: 60,
-    maxWidth: 90,
+    minWidth: 230,
+    maxWidth: 290,
   },
 ];
 

@@ -37,6 +37,7 @@ import {
 } from '../redux/Blockchain/blockchainAction';
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
+import { useAccount } from 'wagmi';
 
 const productos = [
   {
@@ -675,14 +676,18 @@ const SearchPage: NextPageWithLayout<
                   title: 'Inversiones',
                   path: 'inversiones',
                 },
+                {
+                  title: 'Nueva Coleccion',
+                  path: 'coleccion',
+                },
               ]}
             >
               <TabPanel className=" focus:outline-none">
                 <div
                   className={
                     isGridCompact
-                      ? 'grid w-full gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                      : 'grid w-full gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
+                      ? 'grid w-full gap-5 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
+                      : 'grid w-full gap-6 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
                   }
                 >
                   {productos.map((producto) => (
@@ -702,8 +707,8 @@ const SearchPage: NextPageWithLayout<
                 <div
                   className={
                     isGridCompact
-                      ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                      : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
+                      ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
+                      : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
                   }
                 >
                   {inversiones.map((inversion) => (
@@ -718,6 +723,9 @@ const SearchPage: NextPageWithLayout<
                     />
                   ))}
                 </div>
+              </TabPanel>
+              <TabPanel className="focus:outline-none">
+                <div>Pronto</div>
               </TabPanel>
             </ParamTab>
           </div>

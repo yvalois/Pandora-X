@@ -9,8 +9,7 @@ export const contract = () => {
     inversionMinter: '0x8fA9365bCcc4C554FE1D7c004ff46b7A05d4de2C',
     staking: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
     RPC_URL:
-      'https://polygon-mainnet.g.alchemy.com/v2/qNx7v3LVrqjER1_Wtmk-R0HjTxAfmZ0p',
-    //'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
+      'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', //aqui ponemos el usdt
   };
   // }

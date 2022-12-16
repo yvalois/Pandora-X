@@ -17,6 +17,8 @@ import { TransactionData } from '@/data/static/transaction-data';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useSelector } from 'react-redux';
+import { useAccount } from 'wagmi';
+import { transations } from '@/redux/Transactions/TransactionsActions';
 
 const COLUMNS = [
   {
@@ -62,12 +64,18 @@ const COLUMNS = [
     maxWidth: 180,
   },
   {
-    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Address</div>,
-    accessor: 'Address',
+    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Hash</div>,
+    accessor: 'Hash',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="flex items-center justify-end">
-        <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" /> {value}
+      <div
+        onClick={() => {
+          window.open(`https://polygonscan.com/tx/${value}`);
+        }}
+        className="flex cursor-pointer items-center justify-end"
+      >
+        <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" />{' '}
+        {`${value.slice(0, 8)}`}...{`${value.slice(value.length - 8)}`}
       </div>
     ),
     minWidth: 220,
@@ -95,6 +103,7 @@ const COLUMNS = [
 
 export default function TransactionTable() {
   const { Transactions } = useSelector((state) => state.transaction);
+  const { isConnected, address } = useAccount();
 
   const orden = (Data) => {
     let orden = Data;
@@ -145,7 +154,7 @@ export default function TransactionTable() {
   );
 
   const { pageIndex } = state;
-  useEffect(() => {}, [isConnect]);
+  useEffect(() => {}, [isConnected]);
 
   return (
     <div className="">

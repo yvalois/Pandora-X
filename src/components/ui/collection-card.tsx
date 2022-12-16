@@ -51,20 +51,20 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
         />
         <div className="flex justify-between gap-3">
           <div
-            className="-px-4 inline-flex h-8 shrink-0 items-center rounded-2xl bg-white/20 text-xs font-medium uppercase -tracking-wide text-white
-          backdrop-blur-[40px]"
+            className="font-hairline hidden h-8 shrink-0 items-center   rounded-2xl bg-white/20 px-4 text-xs uppercase -tracking-wide text-white backdrop-blur-[50px] md:inline-flex md:h-6
+          md:px-4"
           >
             {nombre}
           </div>
         </div>
-        <div className="block">
-          <h2 className="mb-1.5 truncate text-lg font-medium -tracking-wider text-white">
+        <div className="hidden lg:block">
+          <h2 className=" font-hairline truncate text-lg -tracking-wider text-white md:mb-1.5 md:h-6 md:px-4 md:text-xs">
             {title}
           </h2>
           {/*<div className="text-sm font-medium -tracking-wide text-[#B6AAA2]">
             {number_of_artwork} Artworks
       </div>*/}
-          <div className="relative z-10 mt-3.5 inline-flex items-center rounded-3xl bg-white/20 p-2 backdrop-blur-[40px]">
+          <div className="relative z-10 mt-3.5 hidden items-center  rounded-3xl bg-white/20 p-2 backdrop-blur-[40px] md:inline-flex">
             <Avatar
               //@ts-ignore
               image={pandorax}

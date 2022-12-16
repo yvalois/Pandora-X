@@ -250,14 +250,23 @@ const AuthorProfilePage: NextPageWithLayout<
             />
           )}
 
-          <div className="group absolute flex h-full w-full  cursor-pointer items-center justify-center opacity-60 transition duration-500 hover:bg-gray-200">
+          <div
+            aria-hidden="true"
+            className="group absolute inset-0 hidden h-full w-full cursor-pointer items-center  justify-center opacity-60 transition duration-500 hover:bg-gray-200 lg:flex xl:flex"
+          >
+            <Button className="z-10 hidden group-hover:block">
+              <label htmlFor="bgfile">Cambiar Imagen</label>
+            </Button>
+
             <input
               type="file"
+              id="bgfile"
               onChange={(e) => {
                 editphotoB(e);
               }}
-              className="d-none file:border-1 z-10 hidden text-transparent file:rounded file:border-gray-400 group-hover:block"
+              className="  file:border-1 absolute z-10 hidden text-transparent opacity-0 file:rounded file:border-gray-400 group-hover:block"
             />
+
             {/*<img className="hidden group-hover:block w-[5%]" src="https://www.svgrepo.com/show/33565/upload.svg" alt="" />*/}
           </div>
         </div>
@@ -563,7 +572,7 @@ const AuthorProfilePage: NextPageWithLayout<
               {Usuario.rol == 'usuario' && (
                 <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
                   <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
-                    Link
+                    Referido
                   </div>
                   <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
                     {`${link}principal/${accountAddress}`}
@@ -585,7 +594,7 @@ const AuthorProfilePage: NextPageWithLayout<
               {Usuario.rol == 'Admin' && (
                 <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
                   <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
-                    Link
+                    Referido
                   </div>
                   <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
                     {`${link}principal/${accountAddress}`}
@@ -676,7 +685,7 @@ const AuthorProfilePage: NextPageWithLayout<
             }
           </div>
 
-          <div className="grow ">
+          <div className="ml-10 grow">
             {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (
               <ProfileTabUser />
             ) : (

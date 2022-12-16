@@ -6,18 +6,40 @@ import ActiveLink from '@/components/ui/links/active-link';
 import { ChevronForward } from '@/components/icons/chevron-forward';
 import { PowerIcon } from '@/components/icons/power';
 import { useModal } from '@/components/modal-views/context';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useWeb3Modal, Web3Button, Web3Modal } from '@web3modal/react';
+import { ClientCtrl, ModalCtrl } from '@web3modal/core';
+import { useAccount } from 'wagmi';
+import { ethereumClient } from '../../pages/_app';
+import { useDispatch } from 'react-redux';
 
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
 
-  const { disconnectWallet, balance, address, connectToWallet, error } =
+  const { disconnectWallet, balance, connectToWallet, error } =
     useContext(WalletContext);
 
-  const { accountAddress, isUser } = useSelector(
+  const { accountAddress, isUser, isConnect } = useSelector(
     (state: any) => state.blockchain
   );
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { isConnected, address } = useAccount();
+  const { open } = useWeb3Modal();
+  const desconectar = async () => {
+    ClientCtrl?.client().disconnect();
+
+    disconnectWallet();
+    console.log(ClientCtrl);
+  };
+
+  const [domLoaded, setDomLoaded] = useState(false);
+
+  useEffect(() => {
+    setDomLoaded(true);
+  }, []);
 
   useEffect(() => {
     if (isUser == false) {
@@ -26,6 +48,14 @@ export default function WalletConnect() {
       closeModal();
     }
   }, [isUser]);
+
+  useEffect(() => {
+    if (isConnected) {
+      connectToWallet(address);
+    } else if (!isConnected) {
+      disconnectWallet();
+    }
+  }, [isConnected]);
 
   return (
     <>
@@ -88,22 +118,27 @@ export default function WalletConnect() {
               onClick={disconnectWallet}
             >
               <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
-                {accountAddress.slice(0, 6)}
+                {accountAddress?.slice(0, 6)}
                 {'...'}
-                {accountAddress.slice(accountAddress.length - 6)}
+                {accountAddress?.slice(accountAddress?.length - 6)}
               </span>
               <PowerIcon />
-              <span className="grow uppercase">Disconnect</span>
+              <div className="hidden md:block">
+                <span className="grow uppercase">Disconnect</span>
+              </div>
             </div>
           </div>
         </div>
       ) : (
-        <Button
-          onClick={connectToWallet}
-          className="shadow-main hover:shadow-large"
-        >
-          CONNECT
-        </Button>
+        <>
+          <Button
+            onClick={connectToWallet}
+            className="shadow-main hover:shadow-large"
+          >
+            CONNECT
+          </Button>
+          <div></div>
+        </>
       )}
     </>
   );
