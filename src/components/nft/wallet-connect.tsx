@@ -8,8 +8,6 @@ import { PowerIcon } from '@/components/icons/power';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useWeb3Modal, Web3Button, Web3Modal } from '@web3modal/react';
-import { ClientCtrl, ModalCtrl } from '@web3modal/core';
 
 import { useDispatch } from 'react-redux';
 
