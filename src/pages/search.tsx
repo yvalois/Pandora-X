@@ -37,7 +37,6 @@ import {
 } from '../redux/Blockchain/blockchainAction';
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
-import { useAccount } from 'wagmi';
 
 const productos = [
   {

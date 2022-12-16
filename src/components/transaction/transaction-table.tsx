@@ -17,7 +17,7 @@ import { TransactionData } from '@/data/static/transaction-data';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useSelector } from 'react-redux';
-import { useAccount } from 'wagmi';
+
 import { transations } from '@/redux/Transactions/TransactionsActions';
 
 const COLUMNS = [
@@ -103,7 +103,6 @@ const COLUMNS = [
 
 export default function TransactionTable() {
   const { Transactions } = useSelector((state) => state.transaction);
-  const { isConnected, address } = useAccount();
 
   const orden = (Data) => {
     let orden = Data;
@@ -154,7 +153,6 @@ export default function TransactionTable() {
   );
 
   const { pageIndex } = state;
-  useEffect(() => {}, [isConnected]);
 
   return (
     <div className="">

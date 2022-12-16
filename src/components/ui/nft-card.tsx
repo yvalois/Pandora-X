@@ -18,7 +18,6 @@ import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import ActiveLink from './links/active-link';
 import Button from '@/components/ui/button';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
-import { useAccount } from 'wagmi';
 
 type NFTGridProps = {
   image: StaticImageData;
@@ -77,7 +76,6 @@ export default function NFTGrid({
 
   const Usuario = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
-  const { isConnected, address } = useAccount();
 
   const GlassCard = styled.div`
     background: rgba(255, 255, 255, 0.093);
@@ -230,10 +228,10 @@ export default function NFTGrid({
   };
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnect) {
       setCuenta(accountAddress);
     }
-  }, [isConnected]);
+  }, [isConnect]);
 
   return (
     <div className="relative w-[300px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xxs:w-[160px] xs:w-[220px] sm:w-[260px] md:w-[220px] xl:w-[280px] 2xl:w-[240px] 3xl:w-[340px]">

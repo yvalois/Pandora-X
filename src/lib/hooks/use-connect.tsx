@@ -163,12 +163,12 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   };*/
   // seteamos el provider
-  const connectToWallet = async (address) => {
+  const connectToWallet = async () => {
     //request();
     try {
       setLoading(true);
       //checkIfExtensionIsAvailable();
-      await dispatch(connectWallet(address));
+      await dispatch(connectWallet());
       setLoading(false);
       setAddress(accountAddress);
       //conectar()

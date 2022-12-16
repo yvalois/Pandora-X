@@ -38,17 +38,6 @@ import {
 /*type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };*/
-const projectId = 'd293c0c6bb189c2b2a02c81a0dec03c9';
-const chains = [polygon];
-export const { provider } = configureChains(chains, [
-  walletConnectProvider({ projectId }),
-]);
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: modalConnectors({ appName: 'web3Modal', chains }),
-  provider,
-});
-export const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);

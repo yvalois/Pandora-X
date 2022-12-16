@@ -8,9 +8,8 @@ import inversionMinterAbi from '../../abi/InversionMinter.json';
 import stakingAbi from '../../abi/staking.json';
 import { items } from '../../utils/constant'; //Buscar
 import { setProvider } from '../../NFTROL';
-import { ethereumClient } from '../../pages/_app';
+
 import { flatMap } from 'lodash';
-import { useAccount } from 'wagmi';
 
 //import WalletLink from 'walletlink'
 
@@ -816,7 +815,7 @@ export const update = (accountAddress) => async (dispatch) => {
     });
 };
 
-export const connectWallet = (address) => async (dispatch) => {
+export const connectWallet = () => async (dispatch) => {
   dispatch(loading());
   try {
     /*const web3Modal =

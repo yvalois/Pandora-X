@@ -15,7 +15,6 @@ import TopupButton from '@/components/ui/topup-button';
 import NftSlider from '@/components/ui/nftSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMintedNftProducts } from '../redux/Minted/MintedAction';
-import { useAccount } from 'wagmi';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
@@ -135,8 +134,6 @@ const HomePage: NextPageWithLayout<
     staking,
     tokenContract,
   } = useSelector((state: any) => state.blockchain);
-
-  const { isConnected, address } = useAccount();
 
   const inventory = async () => {
     if (accountAddress !== '') {

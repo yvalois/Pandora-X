@@ -10,8 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useWeb3Modal, Web3Button, Web3Modal } from '@web3modal/react';
 import { ClientCtrl, ModalCtrl } from '@web3modal/core';
-import { useAccount } from 'wagmi';
-import { ethereumClient } from '../../pages/_app';
+
 import { useDispatch } from 'react-redux';
 
 export default function WalletConnect() {
@@ -26,7 +25,6 @@ export default function WalletConnect() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { isConnected, address } = useAccount();
   const { open } = useWeb3Modal();
   const desconectar = async () => {
     ClientCtrl?.client().disconnect();
@@ -48,14 +46,6 @@ export default function WalletConnect() {
       closeModal();
     }
   }, [isUser]);
-
-  useEffect(() => {
-    if (isConnected) {
-      connectToWallet(address);
-    } else if (!isConnected) {
-      disconnectWallet();
-    }
-  }, [isConnected]);
 
   return (
     <>
