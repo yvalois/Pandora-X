@@ -23,14 +23,6 @@ export default function WalletConnect() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { open } = useWeb3Modal();
-  const desconectar = async () => {
-    ClientCtrl?.client().disconnect();
-
-    disconnectWallet();
-    console.log(ClientCtrl);
-  };
-
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
