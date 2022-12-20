@@ -19,6 +19,7 @@ export default function ModalRegister() {
 
   const NewUser = {
     Nombre: '',
+    Apellido: '',
     Id: '',
     Correo: '',
     Address: accountAddress,
@@ -33,6 +34,7 @@ export default function ModalRegister() {
 
   const Err = {
     ErrNombre: '',
+    ErrApellido: '',
     ErrId: '',
     ErrCorreo: '',
     ErrTelefono: '',
@@ -57,6 +59,8 @@ export default function ModalRegister() {
   const ChangeInfo = (Dato: string, valor: string) => {
     if (Dato == 'Nombre') {
       setValue((prevState) => ({ ...prevState, Nombre: valor }));
+    } else if (Dato == 'Apellido') {
+      setValue((prevState) => ({ ...prevState, Apellido: valor }));
     } else if (Dato == 'Correo') {
       setValue((prevState) => ({ ...prevState, Correo: valor }));
     } else if (Dato == 'Telefono') {
@@ -115,6 +119,25 @@ export default function ModalRegister() {
       setErrorMsg((prevState) => ({ ...prevState, ErrNombre: '' }));
     }
 
+    if (value.Apellido.length < 3) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrApellido: 'El nombre debe tener minimo 3 caracteres',
+      }));
+    } else if (!validator.isAlpha(value.Apellido, 'en-US', { ignore: ' ' })) {
+      setError(true);
+      setErrorMsg((prevState) => ({
+        ...prevState,
+        ErrApellido: 'solo se permiten letras',
+      }));
+    } else if (
+      value.Apellido.length >= 3 &&
+      validator.isAlpha(value.Apellido, 'en-US', { ignore: ' ' })
+    ) {
+      setErrorMsg((prevState) => ({ ...prevState, ErrApellido: '' }));
+    }
+
     if (!validator.isEmail(value.Correo)) {
       setError(true);
       setErrorMsg((prevState) => ({
@@ -145,11 +168,10 @@ export default function ModalRegister() {
     }
 
     if (
-      value1 >= 10 &&
-      validator.isNumeric(value1) &&
-      validator.isEmail(value.Correo) &&
-      value.Nombre.length >= 3 &&
-      validator.isAlpha(value.Nombre)
+      errorMsg.ErrNombre.length == 0 &&
+      errorMsg.ErrApellido.length == 0 &&
+      errorMsg.ErrCorreo.length == 0 &&
+      errorMsg.ErrTelefono.length == 0
     ) {
       setError(false);
       await RegistrarBD();
@@ -267,9 +289,31 @@ export default function ModalRegister() {
           </span>
         )}
 
-        {error == true && errorMsg.ErrId.length > 0 && (
+        <label className=" mt-[20px] block text-sm font-bold text-gray-700 dark:text-white">
+          Apellido
+        </label>
+
+        {errorMsg.ErrApellido.length == 0 ? (
+          <input
+            onChange={(e) => ChangeInfo('Apellido', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Apellido"
+          />
+        ) : (
+          <input
+            onChange={(e) => ChangeInfo('Apellido', e.target.value)}
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            id="username"
+            type="text"
+            placeholder="Apellido"
+          />
+        )}
+
+        {error == true && errorMsg.ErrApellido.length > 0 && (
           <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
-            {errorMsg.ErrId}
+            {errorMsg.ErrApellido}
           </span>
         )}
 

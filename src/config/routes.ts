@@ -30,7 +30,7 @@ const routes = {
   cg: '/details/CG',
   comunidad: '/productos',
   inversion: '/inversiones',
-  _profile: '/pf',
+  _profile: '/frenchies',
   cien: '/details/100',
   unK: '/details/1K',
   cincoK: '/details/5K',
@@ -38,7 +38,6 @@ const routes = {
   veinteK: '/details/20K',
   cincuentaK: '/details/50K',
   cienK: '/details/100K',
-  pf: '/Pf',
 };
 
 export default routes;

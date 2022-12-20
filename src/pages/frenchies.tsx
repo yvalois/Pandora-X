@@ -389,7 +389,7 @@ function Filters() {
         <PriceRange />
       </Collapse>
       <Collapse label="Collection" initialOpen>
-        <CollectionSelect onSelect={(value) => console.log(value)} tipo={0} />
+        <CollectionSelect onSelect={(value) => console.log(value)} tipo={2} />
       </Collapse>
     </>
   );
@@ -452,7 +452,7 @@ const BuyButton = styled.button`
 //let inversionI = [];
 //let productoP = [];
 
-const ProductosPage: NextPageWithLayout<
+const Frenchies: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
   const a = {
@@ -668,64 +668,14 @@ const ProductosPage: NextPageWithLayout<
             <ParamTab
               tabMenu={[
                 {
-                  title: 'Productos',
-                  path: 'productos',
-                },
-                /*{
-                  title: 'Inversiones',
-                  path: 'inversiones',
-                },
-                {
-                  title: 'Nueva Coleccion',
+                  title: 'NFT MarketPlace',
                   path: 'coleccion',
-                },*/
+                },
               ]}
             >
-              <TabPanel className=" focus:outline-none">
-                <div
-                  className={
-                    isGridCompact
-                      ? 'grid w-full gap-5 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                      : 'grid w-full gap-6 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
-                  }
-                >
-                  {productos.map((producto) => (
-                    <NFTGrid
-                      key={producto.Nombre}
-                      name={producto.Nombre}
-                      image={producto.img}
-                      price={producto.precio}
-                      number={producto.tipo}
-                      alldata={true}
-                      type={'comprap'}
-                    />
-                  ))}
-                </div>
-              </TabPanel>
-              {/* <TabPanel className="focus:outline-none">
-                <div
-                  className={
-                    isGridCompact
-                      ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                      : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
-                  }
-                >
-                  {inversiones.map((inversion) => (
-                    <NFTGrid
-                      key={inversion.Nombre}
-                      name={inversion.Nombre}
-                      image={inversion.img}
-                      price={inversion.precio}
-                      number={inversion.tipo}
-                      alldata={true}
-                      type={'comprai'}
-                    />
-                  ))}
-                </div>
-              </TabPanel>
               <TabPanel className="focus:outline-none">
                 <div>Pronto</div>
-                  </TabPanel> */}
+              </TabPanel>
             </ParamTab>
           </div>
         </div>
@@ -739,8 +689,8 @@ const ProductosPage: NextPageWithLayout<
   );
 };
 
-ProductosPage.getLayout = function getLayout(page) {
+Frenchies.getLayout = function getLayout(page) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
 
-export default ProductosPage;
+export default Frenchies;
