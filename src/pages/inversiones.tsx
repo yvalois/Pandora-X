@@ -638,10 +638,8 @@ const InversionesPage: NextPageWithLayout<
         title="Explore NTF"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="grid sm:pt-5 2xl:grid-cols-[280px_minmax(auto,_1fr)] 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
-        <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block">
-          <Filters />
-        </div>
+      <div className="grid sm:pt-5  4xl:grid-cols-4">
+        <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block"></div>
         <div className="2xl:ltr:pl-10 2xl:rtl:pr-10 4xl:ltr:pl-12 4xl:rtl:pr-12">
           <div className="relative z-10 mb-6 flex items-center justify-between">
             {/*<span className="text-xs font-medium text-gray-900 dark:text-white sm:text-sm">
@@ -677,8 +675,8 @@ const InversionesPage: NextPageWithLayout<
                 <div
                   className={
                     isGridCompact
-                      ? 'grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5'
-                      : 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 3xl:grid-cols-3 4xl:grid-cols-4'
+                      ? 'grid w-full gap-5 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
+                      : 'grid w-full gap-6 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
                   }
                 >
                   {inversiones.map((inversion) => (

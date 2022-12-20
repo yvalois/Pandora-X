@@ -22,7 +22,7 @@ export const collectionList = [
   {
     icon: CollectionImage3,
     name: 'Nueva Coleccion',
-    value: 'coleccion',
+    value: 'Frenchies Blue',
   },
 ];
 

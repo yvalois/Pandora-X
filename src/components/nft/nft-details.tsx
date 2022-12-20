@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
-import router from 'next/router';
+import { Router } from 'next/router';
 
 interface NftFooterProps {
   className?: string;
@@ -149,9 +149,10 @@ function NftFooter({
           } else if (Usuario.range == 'blockcreator') {
             porcentaje = 400;
           }
-
+          const supply = await productoMinter.supply();
           const tx = await productoMinter.buyTokenWithReferido(
             tipoN,
+            supply,
             tokenContract.address,
             referidor,
             porcentaje
@@ -550,12 +551,10 @@ export default function NftDetails({ tipo }) {
           setType('inversion');
         }
       });
-    }, 500);
-  }, [dataloaded, productos, inversiones]);
+    }, 3000);
+  }, [dataloaded, productos, inversiones, tipo]);
 
   useEffect(() => {
-    const id = router.query.id;
-
     inventoryp.map((inv) => {
       if (inv.id == id) {
         setNft(inv);
@@ -569,7 +568,7 @@ export default function NftDetails({ tipo }) {
         setType(tipo);
       }
     });
-  }, []);
+  }, [tipo]);
 
   useEffect(() => {
     setTimeout(() => {

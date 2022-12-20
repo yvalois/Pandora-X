@@ -298,7 +298,7 @@ export default function Sidebar({ className }: SidebarProps) {
               (UsuarioR !== 'Admin' &&
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&
-                item.name == 'Staking') ? (
+                item.name == 'Inversiones') ? (
                 <div key={index}></div>
               ) : (
                 <MenuItem
