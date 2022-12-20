@@ -78,7 +78,7 @@ export default function Layout({
   return (
     <div className="ltr:xl:px-72 ltr:2xl:px-8">
       <Header />
-      <Sidebar className="z-50 hidden xl:block 2xl:w-[350px]" />
+      <Sidebar className="z-50 hidden 2xl:block 3xl:block" />
       <main
         className={cn(
           'min-h-[100vh] px-4 pt-20 pb-16 sm:px-6 sm:pt-24 sm:pb-20 lg:px-4 xl:pb-24 ltr:xl:px-7 rtl:xl:px-[320px]  ltr:2xl:px-[350px] rtl:2xl:px-[380px]',

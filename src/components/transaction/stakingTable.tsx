@@ -156,12 +156,12 @@ export default function StakingTable() {
             onClick={() => claim(value)}
             className="focus:shadow-outline  rounded"
           >
-            Claim Rewards
+            Reclamar
           </Button>
         </div>
       ),
-      minWidth: 230,
-      maxWidth: 290,
+      minWidth: 150,
+      maxWidth: 220,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
@@ -246,7 +246,7 @@ export default function StakingTable() {
       <div className="rounded-tl-lg rounded-tr-lg bg-white px-4 pt-6 dark:bg-light-dark md:px-8 md:pt-8">
         <div className="flex flex-col items-center justify-between border-b border-dashed border-gray-200 pb-5 dark:border-gray-700 md:flex-row">
           <h2 className="mb-3 shrink-0 text-lg font-medium uppercase text-black dark:text-white sm:text-xl md:mb-0 md:text-2xl">
-            Staking
+            Transaction History
           </h2>
         </div>
       </div>
@@ -278,7 +278,7 @@ export default function StakingTable() {
                               }`}
                             />
                           )}
-                          <span className="ltr:ml-1 rtl:mr-1">
+                          <span className="ltr:ml-1">
                             {column.isSorted ? (
                               column.isSortedDesc ? (
                                 <ChevronDown />
@@ -358,33 +358,6 @@ export default function StakingTable() {
           </Button>
         </div>
       </div>
-
-      {loading && (
-        <div
-          className="absolute top-[770px] right-[140px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
-          role="alert"
-        >
-          <span className="self-center font-medium">Loading...</span>
-        </div>
-      )}
-
-      {statusC && (
-        <div
-          className="absolute top-[770px] right-[140px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">{alertMsg}</span>
-        </div>
-      )}
-
-      {statusW && (
-        <div
-          className="absolute top-[770px] right-[140px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">{alertMsg}</span>
-        </div>
-      )}
     </div>
   );
 }

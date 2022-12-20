@@ -203,7 +203,7 @@ const NFTDetailsPage: NextPageWithLayout<
         title="NFT details"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <NftDetails product={nft} type={'invcomprado'} />
+      <NftDetails tipo={'invcomprado'} />
     </>
   );
 };

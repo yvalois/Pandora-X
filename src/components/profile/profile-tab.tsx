@@ -19,7 +19,7 @@ export default function ProfileTab() {
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
 
-  const { inventoryp, inventoryi, producto } = useSelector(
+  const { inventoryp, inventoryi } = useSelector(
     (state: any) => state.blockchain
   );
 
@@ -40,7 +40,7 @@ export default function ProfileTab() {
           path: 'inversiones',
         },
         {
-          title: 'Nueva Coleccion',
+          title: 'NFTs',
           path: 'coleccion',
         },
         {
@@ -121,8 +121,9 @@ export default function ProfileTab() {
           </div>
         </div>
       </TabPanel>
-      <TabPanel className="focus:outline-none">
-        <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
+
+      <TabPanel className="w-full focus:outline-none  ">
+        <div className="grid h-full w-full  gap-4 xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-1 4xl:grid-cols-1">
           <StakingTable />
         </div>
       </TabPanel>

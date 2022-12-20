@@ -938,7 +938,7 @@ export const connectWallet = () => async (dispatch) => {
         });
       }
 
-      nftpBalance.map(async (item) => {
+      nftpBalance.map(async (item, index) => {
         const tipo = await productoMinterContract.getTipo(item);
         var type = '';
         if (tipo == 1) {
@@ -958,23 +958,27 @@ export const connectWallet = () => async (dispatch) => {
         } else if (tipo == 8) {
           var type = 'AP';
         }
+
         const price = await productoMinterContract.buyPrice(
           tipo,
           tokenContract.address
         );
-        const precio = ethers.utils.formatUnits(price, 6);
-        if (Productos[tipo - 1].tipo == type) {
-          const prod = {
-            Nombre: Productos[tipo - 1].Nombre,
-            img: Productos[tipo - 1].img,
-            precio: parseInt(precio),
-            tipo: Productos[tipo - 1].tipo,
-            descripcion: Productos[tipo - 1].descripcion,
-            id: item,
-          };
 
-          inventoryp.push(prod);
-        }
+        const precio = ethers.utils.formatUnits(price, 6);
+        Productos.map((item) => {
+          if (item.tipo == type) {
+            const prod = {
+              Nombre: item.Nombre,
+              img: item.img,
+              precio: parseInt(precio),
+              tipo: item.tipo,
+              tipoN: item.tipoN,
+              descripcion: item.descripcion,
+              id: item.tipoN,
+            };
+            inventoryp.push(prod);
+          }
+        });
       });
 
       nftiBalance.map(async (item) => {

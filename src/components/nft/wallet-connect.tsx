@@ -8,8 +8,10 @@ import { PowerIcon } from '@/components/icons/power';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import { Copy } from '@/components/icons/copy';
+import { Check } from '@/components/icons/check';
 import { useDispatch } from 'react-redux';
+import AnchorLink from '../ui/links/anchor-link';
 
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
@@ -22,8 +24,24 @@ export default function WalletConnect() {
   );
 
   const dispatch = useDispatch<AppDispatch>();
+  const [link, setLink] = useState('');
+  let [copyButtonStatus, setCopyButtonStatus] = useState(false);
 
   const [domLoaded, setDomLoaded] = useState(false);
+  const Usuario = useSelector((state: any) => state.Usuario);
+
+  const copiar = () => {
+    const aux = window.location.href;
+    const a = aux.split('profile');
+    const e = a[0];
+    setLink(e);
+    navigator.clipboard.writeText(`${e}principal/${accountAddress}`);
+
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
+  };
 
   useEffect(() => {
     setDomLoaded(true);
@@ -40,7 +58,7 @@ export default function WalletConnect() {
   return (
     <>
       {accountAddress !== '' ? (
-        <div className="flex items-center gap-3 sm:gap-6 lg:gap-8">
+        <div className="flex items-center">
           <div className="relative">
             <Menu>
               <Menu.Button className="block h-10 w-10 overflow-hidden rounded-full border-3 border-solid border-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-main transition-all hover:-translate-y-0.5 hover:shadow-large dark:border-gray-700 sm:h-12 sm:w-12"></Menu.Button>
@@ -60,33 +78,63 @@ export default function WalletConnect() {
                         className="flex items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
                       >
                         <span className="h-8 w-8 rounded-full border-2 border-solid border-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:border-gray-700"></span>
-                        <span className="grow uppercase">
-                          View Your Profile
-                        </span>
+                        <AnchorLink href="/profile">
+                          <span className="grow uppercase">
+                            View Your Profile
+                          </span>
+                        </AnchorLink>
+
                         <ChevronForward />
                       </ActiveLink>
                     </div>
                   </Menu.Item>
-                  <Menu.Item>
+                  {Usuario.rol == 'Admin' && (
                     <Menu.Item>
-                      <div className="border-b border-dashed border-gray-200 px-6 py-5 dark:border-gray-700">
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="text-sm font-medium -tracking-tighter text-gray-600 dark:text-gray-400">
-                            Balance
-                          </span>
-                          <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
-                            {/*{address.slice(0, 6)}
-                            {'...'}
-      {address.slice(address.length - 6)}*/}
-                          </span>
+                      <div className="m-3 inline-flex h-9  items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
+                        <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
+                          Referido
                         </div>
-                        <div className="mt-3 font-medium uppercase tracking-wider text-gray-900 dark:text-white">
-                          {balance} ETH
+                        <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
+                          {`${link}principal/${accountAddress}`}
+                        </div>
+                        <div
+                          className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                          title="Copy Address"
+                          onClick={copiar}
+                        >
+                          {copyButtonStatus ? (
+                            <Check className="h-auto w-3.5 text-green-500" />
+                          ) : (
+                            <Copy className="h-auto w-3.5" />
+                          )}
                         </div>
                       </div>
                     </Menu.Item>
-                  </Menu.Item>
-                  <Menu.Item></Menu.Item>
+                  )}
+
+                  {Usuario.rol == 'usuario' && (
+                    <Menu.Item>
+                      <div className="m-3 inline-flex h-9  items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
+                        <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
+                          Referido
+                        </div>
+                        <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
+                          {`${link}principal/${accountAddress}`}
+                        </div>
+                        <div
+                          className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                          title="Copy Address"
+                          onClick={copiar}
+                        >
+                          {copyButtonStatus ? (
+                            <Check className="h-auto w-3.5 text-green-500" />
+                          ) : (
+                            <Copy className="h-auto w-3.5" />
+                          )}
+                        </div>
+                      </div>
+                    </Menu.Item>
+                  )}
                 </Menu.Items>
               </Transition>
             </Menu>

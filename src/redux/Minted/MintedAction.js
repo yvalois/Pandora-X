@@ -42,7 +42,7 @@ const getProductos = async () => {
   })
     .then((res) => res.json())
     .then((response) => {
-      response.map(async (item) => {
+      response.map(async (item, index) => {
         const precio = await productosMinter.buyPrice(
           item.tipoN,
           '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
@@ -50,8 +50,8 @@ const getProductos = async () => {
         const price = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(
           2
         );
-        Productos[item.tipoN - 1] = item;
-        Productos[item.tipoN - 1].precio = price;
+        Productos[index] = item;
+        Productos[index].precio = price;
       });
     })
     .catch((error) => console.error('Error:', error));
@@ -96,13 +96,14 @@ export const getMintedNftProducts = () => async (dispatch) => {
     await getProductos();
 
     await getInversiones();
-
-    await dispatch(
-      mintedLoaded({
-        productos: Productos,
-        inversiones: Inversiones,
-      })
-    );
+    setTimeout(async function () {
+      await dispatch(
+        mintedLoaded({
+          productos: Productos,
+          inversiones: Inversiones,
+        })
+      );
+    }, 500);
   } catch (error) {
     dispatch(mintedError(error.message));
   }

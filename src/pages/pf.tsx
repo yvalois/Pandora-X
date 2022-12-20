@@ -389,7 +389,7 @@ function Filters() {
         <PriceRange />
       </Collapse>
       <Collapse label="Collection" initialOpen>
-        <CollectionSelect onSelect={(value) => console.log(value)} />
+        <CollectionSelect onSelect={(value) => console.log(value)} tipo={0} />
       </Collapse>
     </>
   );
@@ -452,7 +452,7 @@ const BuyButton = styled.button`
 //let inversionI = [];
 //let productoP = [];
 
-const SearchPage: NextPageWithLayout<
+const ProductosPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
   const a = {
@@ -671,14 +671,14 @@ const SearchPage: NextPageWithLayout<
                   title: 'Productos',
                   path: 'productos',
                 },
-                {
+                /*{
                   title: 'Inversiones',
                   path: 'inversiones',
                 },
                 {
                   title: 'Nueva Coleccion',
                   path: 'coleccion',
-                },
+                },*/
               ]}
             >
               <TabPanel className=" focus:outline-none">
@@ -702,7 +702,7 @@ const SearchPage: NextPageWithLayout<
                   ))}
                 </div>
               </TabPanel>
-              <TabPanel className="focus:outline-none">
+              {/* <TabPanel className="focus:outline-none">
                 <div
                   className={
                     isGridCompact
@@ -725,7 +725,7 @@ const SearchPage: NextPageWithLayout<
               </TabPanel>
               <TabPanel className="focus:outline-none">
                 <div>Pronto</div>
-              </TabPanel>
+                  </TabPanel> */}
             </ParamTab>
           </div>
         </div>
@@ -739,8 +739,8 @@ const SearchPage: NextPageWithLayout<
   );
 };
 
-SearchPage.getLayout = function getLayout(page) {
+ProductosPage.getLayout = function getLayout(page) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
 
-export default SearchPage;
+export default ProductosPage;

@@ -30,11 +30,11 @@ const NFTDetailsPage: NextPageWithLayout<
   const [type, setType] = useState('');
   const [nft, setNft] = useState(nftdata);
   const Usuario = useSelector((state: any) => state.Usuario);
-  const { productos, inversiones } = useSelector((state) => state.minted);
+  const { productos, inversiones, dataloaded } = useSelector(
+    (state) => state.minted
+  );
 
   const dispatch = useDispatch<AppDispatch>();
-
-  const t = Router;
 
   const getNft = async () => {
     await dispatch(getMintedNftProducts());
@@ -43,28 +43,12 @@ const NFTDetailsPage: NextPageWithLayout<
   useEffect(() => {
     const fetch = async () => {
       await getNft();
+
+      const tipo = Router.query.tipo;
+      setType(tipo);
     };
     fetch();
-  }, []);
-
-  useEffect(() => {
-    //Router.query.id
-    const tipo = Router.query.tipo;
-
-    productos.map((producto) => {
-      if (producto.tipo == tipo) {
-        setNft(producto);
-        setType('producto');
-      }
-    });
-
-    inversiones.map((inversion) => {
-      if (inversion.tipo == tipo) {
-        setNft(inversion);
-        setType('inversion');
-      }
-    });
-  }, []);
+  }, [dataloaded, productos, inversiones]);
 
   /*useEffect(() => {
     if (
@@ -82,7 +66,7 @@ const NFTDetailsPage: NextPageWithLayout<
         title="NFT details"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <NftDetails product={nft} type={type} />
+      <NftDetails tipo={type} />
     </>
   );
 };

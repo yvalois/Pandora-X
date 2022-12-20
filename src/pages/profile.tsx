@@ -507,7 +507,7 @@ const AuthorProfilePage: NextPageWithLayout<
         )}
         {/* Profile Info */}
         <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row xl:pt-12">
-          <div className="shrink-0 border-dashed border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
+          <div className="shrink-2 .0.order-dashed  border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
             <div className="text-center ltr:md:text-left rtl:md:text-right ">
               {/*Name */}
               <div>
@@ -521,7 +521,7 @@ const AuthorProfilePage: NextPageWithLayout<
                       {!editIsActivated && (
                         <div onClick={activate}>
                           <Image
-                            className="h-2"
+                            className="dark:color-white h-2 dark:text-white"
                             src={edit}
                             alt="Criptic"
                             priority

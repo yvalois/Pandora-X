@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { Dialog } from '@/components/ui/dialog';
 import { Transition } from '@/components/ui/transition';
 import { DRAWER_VIEW, useDrawer } from '@/components/drawer-views/context';
-import { DrawerFilters } from '@/pages/search';
+import { DrawerFilters } from '@/pages/productos';
 
 const Sidebar = dynamic(() => import('@/layouts/sidebar/_default'));
 const DrawerMenu = dynamic(() => import('@/layouts/_layout-menu'));
@@ -61,7 +61,7 @@ export default function DrawersContainer() {
           leaveFrom="translate-x-0"
           leaveTo="-translate-x-full"
         >
-          <div className="fixed inset-y-0 left-0 flex w-full max-w-full xs:w-auto">
+          <div className="fixed inset-y-0 left-0 flex w-full max-w-full xl:w-auto">
             {view && renderDrawerContent(view)}
           </div>
         </Transition.Child>

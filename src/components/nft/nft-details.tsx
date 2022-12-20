@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import router from 'next/router';
 
 interface NftFooterProps {
   className?: string;
@@ -256,11 +257,26 @@ function NftFooter({
                 Aprobar
               </Button>
             )}
-            {!isBuy && !loading && price <= approvedToken && (
-              <Button shape="rounded" onClick={() => buyNft()}>
-                {`Comprar por ${price} `}
+            {!isBuy &&
+              !loading &&
+              parseInt(price) <= approvedToken &&
+              tipoN != 6 && (
+                <Button shape="rounded" onClick={() => buyNft()}>
+                  {`Comprar por ${price} `}
+                </Button>
+              )}
+
+            {tipoN == 6 && (
+              <Button
+                shape="rounded"
+                onClick={() =>
+                  window.open('https://discord.com/invite/bybu984z')
+                }
+              >
+                ir al discord
               </Button>
             )}
+
             {isBuy && (
               <Button shape="rounded">
                 <AnchorLink href="/" className="w-full">
@@ -370,8 +386,17 @@ function NftFooter({
   );
 }
 
-export default function NftDetails({ product, type }) {
-  const { img, Nombre, descripcion, precio, id, tipo, tipoN } = product;
+export default function NftDetails({ tipo }) {
+  const nftdata = {
+    Nombre: '',
+    img: '',
+    precio: 0,
+    tipoN: 0,
+    descripcion: '',
+  };
+  const [nft, setNft] = useState(nftdata);
+  const [type, setType] = useState('');
+  const { img, Nombre, descripcion, precio, id, tipoN } = nft;
 
   const [tokenAddress, setTokenAddress] = useState('');
   const [loading, setLoading] = useState(false);
@@ -380,6 +405,12 @@ export default function NftDetails({ product, type }) {
   const [approvedToken, setApprovedToken] = useState(0);
   const [status, setStatus] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
+  const { productos, inversiones, dataloaded } = useSelector(
+    (state) => state.minted
+  );
+  const { inventoryp, inventoryi, producto } = useSelector(
+    (state: any) => state.blockchain
+  );
 
   const Usuario = useSelector((state) => state.Usuario);
 
@@ -506,17 +537,54 @@ export default function NftDetails({ product, type }) {
 
   useEffect(() => {
     setTimeout(() => {
+      productos.map((producto) => {
+        if (producto.tipo == tipo) {
+          setNft(producto);
+          setType('producto');
+        }
+      });
+
+      inversiones.map((inversion) => {
+        if (inversion.tipo == tipo) {
+          setNft(inversion);
+          setType('inversion');
+        }
+      });
+    }, 500);
+  }, [dataloaded, productos, inversiones]);
+
+  useEffect(() => {
+    const id = router.query.id;
+
+    inventoryp.map((inv) => {
+      if (inv.id == id) {
+        setNft(inv);
+        setType(tipo);
+      }
+    });
+
+    inventoryi.map((invI) => {
+      if (invI.id == id) {
+        setNft(invI);
+        setType(tipo);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
       setStatus(false);
     }, 5000);
   }, [status]);
+
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
-        <div className="relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 rtl:md:pr-6 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
+        <div className="rtl:md:t-6 relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
           <div className="flex h-full max-h-full w-full items-center justify-center lg:max-w-[768px]">
             <div className="relative aspect-square max-h-full w-full overflow-hidden rounded-lg">
               <Image
-                src={img}
+                src={nft.img}
                 //placeholder="blur"
                 layout="fill"
                 objectFit="cover"
@@ -532,7 +600,7 @@ export default function NftDetails({ product, type }) {
             <div className="block">
               <div className="flex justify-between">
                 <h2 className="text-xl font-medium leading-[1.45em] -tracking-wider text-gray-900 dark:text-white md:text-2xl xl:text-3xl">
-                  {Nombre}
+                  {nft.Nombre}
                 </h2>
               </div>
             </div>
@@ -552,7 +620,7 @@ export default function NftDetails({ product, type }) {
                         Description
                       </h3>
                       <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
-                        {descripcion}
+                        {nft.descripcion}
                       </div>
                     </div>
                     <div className="block">
@@ -625,10 +693,10 @@ export default function NftDetails({ product, type }) {
                     )*/}
                     <NftFooter
                       className="hidden md:block"
-                      price={precio}
+                      price={nft.precio}
                       tipo={type}
-                      tipoN={tipoN}
-                      id={id}
+                      tipoN={nft.tipoN}
+                      id={nft.id}
                     />
                   </div>
                 </TabPanel>

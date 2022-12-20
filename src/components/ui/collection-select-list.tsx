@@ -28,9 +28,13 @@ export const collectionList = [
 
 interface CollectionSelectTypes {
   onSelect: (value: string) => void;
+  tipo: number;
 }
 
-export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
+export default function CollectionSelect({
+  onSelect,
+  tipo,
+}: CollectionSelectTypes) {
   const [link, setLink] = useState('');
   let [searchKeyword, setSearchKeyword] = useState('');
   let coinListData = collectionList;
@@ -67,34 +71,21 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
         />
       </div>
       <ul role="listbox" className="py-3">
-        {coinListData.length > 0 ? (
-          coinListData.map((item, index) => (
-            <AnchorLink
-              href={`search?view=${item.value}`}
-              key={index}
-              className="w-full"
-            >
-              <li
-                role="listitem"
-                tabIndex={index}
-                onClick={() => handleSelectedCoin(item.value)}
-                className="mb-1 flex cursor-pointer items-center gap-3 py-1.5 px-6 outline-none hover:bg-gray-100 focus:bg-gray-200 dark:hover:bg-gray-700 dark:focus:bg-gray-600"
-              >
-                <Avatar image={item.icon} size="xs" alt={item.name} />
-                <span className="text-sm tracking-tight text-gray-600 dark:text-white">
-                  {item.name}
-                </span>
-              </li>
-            </AnchorLink>
-          ))
-        ) : (
-          // FIXME: need coin not found svg from designer
-          <li className="px-6 py-5 text-center">
-            <h3 className="mb-2 text-sm text-gray-600 dark:text-white">
-              Ops! not found
-            </h3>
-          </li>
-        )}
+        <li
+          role="listitem"
+          tabIndex={1}
+          //  onClick={() => handleSelectedCoin(item.value)}
+          className="mb-1 flex cursor-pointer items-center gap-3 py-1.5 px-6 outline-none hover:bg-gray-100 focus:bg-gray-200 dark:hover:bg-gray-700 dark:focus:bg-gray-600"
+        >
+          <Avatar
+            image={collectionList[tipo].icon}
+            size="xs"
+            alt={collectionList[tipo].name}
+          />
+          <span className="text-sm tracking-tight text-gray-600 dark:text-white">
+            {collectionList[tipo].value}
+          </span>
+        </li>
       </ul>
     </div>
   );

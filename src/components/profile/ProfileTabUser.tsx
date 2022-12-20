@@ -31,20 +31,13 @@ export default function ProfileTabUser() {
   const Usuario = useSelector((state: any) => state.blockchain.rol);
   const dispatch = useDispatch<AppDispatch>();
 
-  const getNft = async () => {
-    await dispatch(getMintedNftProducts());
-  };
-
   useEffect(() => {
-    const fetchItems = async () => {
-      await getNft();
-      //const itemsPerPage = 6
-      //const start = (currentPage - 1) * itemsPerPage
-      setCurrentItems(inventoryp);
-      setCurrentInv(inventoryi);
-    };
-    fetchItems();
-  }, [currentItems, dataloaded]);
+    //const itemsPerPage = 6
+    //const start = (currentPage - 1) * itemsPerPage
+
+    setCurrentItems(inventoryp);
+    setCurrentInv(inventoryi);
+  }, [currentItems]);
 
   return (
     <ParamTab
@@ -58,25 +51,28 @@ export default function ProfileTabUser() {
           path: 'inversiones',
         },
         {
-          title: 'Nueva Coleccion',
+          title: 'NFTs',
           path: 'coleccion',
         },
         {
           title: 'Staking',
           path: 'staking',
         },
+        {
+          title: 'Pagos',
+          path: 'pagos',
+        },
       ]}
     >
       <TabPanel className="w-full focus:outline-none">
-        <div className="grid w-full gap-4 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
+        <div className="grid w-full gap-10 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-20 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentItems?.map((nft) => (
             <NFTGrid
               key={nft.Nombre}
               name={nft.Nombre}
               image={nft.img}
-              price={13}
+              price={nft.precio}
               number={nft.id}
-              tipo={nft.tipoN}
               alldata={false}
               type={'productos'}
             />
@@ -135,14 +131,14 @@ export default function ProfileTabUser() {
           </div>
         </div>
       </TabPanel>
-      <TabPanel className="focus:outline-none">
-        <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
+
+      <TabPanel className="w-full focus:outline-none  ">
+        <div className="grid h-full w-full  gap-4 xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-1 4xl:grid-cols-1">
           <StakingTable />
         </div>
       </TabPanel>
-
       <TabPanel className="focus:outline-none">
-        <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
+        <div className="grid h-full w-full  gap-4 xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-1 4xl:grid-cols-1">
           <TransactionUserTable />
         </div>
       </TabPanel>

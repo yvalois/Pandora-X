@@ -578,9 +578,6 @@ const HomePage: NextPageWithLayout<
         <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
           {Transactions.length > 0 && <TransactionTable />}
         </div>
-        <div className="order-first mb-8 grid w-full grid-cols-1 gap-6 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
-          {/*<TopPools />*/}
-        </div>
       </div>
     </>
   );

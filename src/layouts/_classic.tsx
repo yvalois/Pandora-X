@@ -76,9 +76,9 @@ export default function Layout({
   contentClassName,
 }: React.PropsWithChildren<DashboardLayoutProps>) {
   return (
-    <div className="ltr:xl:pl-28 rtl:xl:pr-28 ltr:2xl:pl-28 rtl:2xl:pr-28">
+    <div className="lftr:2xl:pl-28 ltr:xl:pl-28 rtl:xl:pr-28 rtl:2xl:pr-28">
       <Header />
-      <Sidebar className="hidden xl:block" />
+      <Sidebar className="hidden 2xl:block" />
       <main
         className={cn(
           'min-h-[100vh] px-4 pt-24 pb-16 sm:px-6 sm:pb-20 lg:px-8 xl:px-10 xl:pb-24 3xl:px-12',

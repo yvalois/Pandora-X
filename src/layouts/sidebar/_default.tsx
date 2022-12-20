@@ -76,7 +76,7 @@ export const menuItems = [
   {
     name: 'NFT Marketplace',
     icon: <CompassIcon />,
-    href: routes.search,
+    href: routes._profile,
   },
   /*{
     name: 'Staking',
@@ -86,11 +86,11 @@ export const menuItems = [
   {
     name: 'Comunidad',
     icon: <VoteIcon />,
-    href: '/search',
+    href: routes.comunidad,
     dropdownItems: [
       {
-        name: 'Discord',
-        href: 'https://discord.gg/bybu984z',
+        name: 'Comunidad Gratuita',
+        href: routes.cg,
       },
       {
         name: 'Academia X',
@@ -114,6 +114,42 @@ export const menuItems = [
       },
     ],
   },
+  {
+    name: 'Inversiones',
+    icon: <VoteIcon />,
+    href: routes.inversion,
+    dropdownItems: [
+      {
+        name: '100',
+        href: routes.cien,
+      },
+      {
+        name: '1k',
+        href: routes.unK,
+      },
+      {
+        name: '5k',
+        href: routes.cincoK,
+      },
+      {
+        name: '10K',
+        href: routes.diezK,
+      },
+      {
+        name: '20k',
+        href: routes.veinteK,
+      },
+      {
+        name: '50k',
+        href: routes.cincuentaK,
+      },
+      {
+        name: '100k',
+        href: routes.cienK,
+      },
+    ],
+  },
+
   /*{
     name: 'NFT Details',
     icon: <DiskIcon />,
@@ -276,6 +312,7 @@ export default function Sidebar({ className }: SidebarProps) {
             )}
           </div>
         </div>
+        <div className="ml-10 h-[50%] w-[80%] bg-blue-200"></div>
       </Scrollbar>
     </aside>
   );

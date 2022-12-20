@@ -39,15 +39,15 @@ export function Header() {
 
   return (
     <nav
-      className={`fixed top-0 z-30 w-full transition-all duration-300 ltr:right-0 rtl:left-0 ltr:xl:pl-72 rtl:xl:pr-72 ltr:2xl:pl-80 rtl:2xl:pr-80 ${
+      className={`fixed top-0 z-30 w-full transition-all duration-300 ltr:right-0 rtl:left-0 ltr:2xl:pl-72 rtl:2xl:pr-72  ${
         isMounted && windowScroll.y > 10
           ? 'h-16 bg-gradient-to-b from-white to-white/80 shadow-card backdrop-blur dark:from-dark dark:to-dark/80 sm:h-20'
           : 'h-16 sm:h-24'
       }`}
     >
-      <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-10 3xl:px-12">
+      <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8 2xl:px-10 3xl:px-12">
         <div className="flex items-center">
-          <div className="block ltr:mr-1 rtl:ml-1 ltr:sm:mr-3 rtl:sm:ml-3 xl:hidden">
+          <div className="block ltr:mr-1 rtl:ml-1 ltr:sm:mr-3 rtl:sm:ml-3 2xl:hidden">
             <Hamburger
               isOpen={isOpen}
               onClick={() => openDrawer('DASHBOARD_SIDEBAR')}
@@ -74,12 +74,12 @@ export default function Layout({
   contentClassName,
 }: React.PropsWithChildren<DashboardLayoutProps>) {
   return (
-    <div className="ltr:xl:pl-72 rtl:xl:pr-72 ltr:2xl:pl-80 rtl:2xl:pr-80">
+    <div className="ltr:2xl:pl-72 rtl:2xl:pr-72 ">
       <Header />
-      <Sidebar className="hidden xl:block" />
+      <Sidebar className="hidden 2xl:block" />
       <main
         className={cn(
-          'min-h-[100vh] px-4 pt-24 pb-16 sm:px-6 sm:pb-20 lg:px-8 xl:px-10 xl:pb-24 3xl:px-12',
+          'min-h-[100vh] px-4 pt-24 pb-16 sm:px-6 sm:pb-20 lg:px-8 2xl:px-10 2xl:pb-24 3xl:px-12',
           contentClassName
         )}
       >
