@@ -25,8 +25,16 @@ type CardProps = {
 };
 
 export default function CollectionCard({ item, className = '' }: CardProps) {
-  const { nombre, slug, title, cover_image, image, number_of_artwork, user } =
-    item ?? {};
+  const {
+    nombre,
+    slug,
+    title,
+    cover_image,
+    image,
+    number_of_artwork,
+    user,
+    tipo,
+  } = item ?? {};
   return (
     <div
       className={cn(
@@ -46,7 +54,7 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
       </div>
       <div className="absolute top-0 left-0 z-[5] flex h-full w-full flex-col justify-between bg-gradient-to-t from-black p-5 md:p-6">
         <AnchorLink
-          href={'/search'}
+          href={`/details/${tipo}`}
           className="absolute top-0 left-0 z-10 h-full w-full"
         />
         <div className="flex justify-between gap-3">
