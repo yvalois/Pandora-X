@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import {
   FacebookShareButton,
@@ -15,8 +15,8 @@ import { Telegram } from '../icons/brands/telegram';
 interface Props {
   nftSlug?: string;
 }
-export default function ShareView({ nftSlug = '#' }: Props) {
-  const nftUrl = `${process.env.NEXT_PUBLIC_WEBSITE_URL}`;
+export default function ShareView({ nftSlug }: Props) {
+  const [nftUrl, setnftUrl] = useState('');
   let [copyButtonStatus, setCopyButtonStatus] = useState('Copy');
   let [_, copyToClipboard] = useCopyToClipboard();
   const handleCopyToClipboard = () => {
@@ -26,6 +26,10 @@ export default function ShareView({ nftSlug = '#' }: Props) {
       setCopyButtonStatus(copyButtonStatus);
     }, 1000);
   };
+  useEffect(() => {
+    setnftUrl(window.location.href);
+  }, []);
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-5 pt-5 pb-7 dark:border-gray-700 dark:bg-light-dark sm:px-7 sm:pb-8 sm:pt-6">
       <div className="text-lg font-medium uppercase -tracking-wide text-gray-900 ltr:text-left rtl:text-right dark:text-white lg:text-xl">
