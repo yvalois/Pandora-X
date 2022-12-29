@@ -38,6 +38,7 @@ const routes = {
   veinteK: '/details/20K',
   cincuentaK: '/details/50K',
   cienK: '/details/100K',
+  admin: '/AdminPanel',
 };
 
 export default routes;

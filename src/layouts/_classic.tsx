@@ -58,7 +58,7 @@ export function Header() {
             />
           </div>
 
-          <SearchButton variant="transparent" className="dark:text-white" />
+          {/* <SearchButton variant="transparent" className="dark:text-white" />  */}
         </div>
 
         <HeaderRightArea />

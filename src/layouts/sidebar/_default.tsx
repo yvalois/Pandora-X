@@ -191,6 +191,12 @@ export const menuItems = [
     icon: <PlusCircle />,
     href: routes.createuser,
   },
+
+  {
+    name: 'Admin Panel',
+    icon: <PlusCircle />,
+    href: routes.admin,
+  },
   /*{
     name: 'Configuracion',
     icon: <PlusCircle />,
@@ -291,6 +297,7 @@ export default function Sidebar({ className }: SidebarProps) {
             {menuItems.map((item, index) =>
               (UsuarioR !== 'Admin' && item.name == 'Referidos') ||
               (UsuarioR !== 'Admin' && item.name == 'Crear NFT') ||
+              (UsuarioR !== 'Admin' && item.name == 'Admin Panel') ||
               (UsuarioR !== 'Admin' &&
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&

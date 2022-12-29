@@ -204,7 +204,7 @@ const CreateUser: NextPageWithLayout<
       let categoria = value.Categoria;
       let rango = value.Rango;
 
-      //const txResult = await mint(address, categoria, rango);
+      const txResult = await mint(address, categoria, rango);
       //const a = await getType(address);
       //const b = await getRange(address);
 
