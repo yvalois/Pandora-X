@@ -18,8 +18,9 @@ const AdminPanelPage: NextPageWithLayout<
 > = () => {
   const [userData, setUserData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [userPerPage, setUserPerPage] = useState(8);
+  const [userPerPage, setUserPerPage] = useState(7);
   const [pages, setPages] = useState([]);
+  const [busqueda, setBusqueda] = useState('');
   const lastUserIndex = currentPage * userPerPage;
   const firstUserIndex = lastUserIndex - userPerPage;
   const { openModal } = useModal();
@@ -84,18 +85,69 @@ const AdminPanelPage: NextPageWithLayout<
     }
   });
 
+  const search = (e) => {
+    setBusqueda(e.target.value);
+    filtrar(e.target.value);
+  };
+
+  const filtrar = (busqueda) => {
+    var resultadoBusqueda = userData.filter((elemento) => {
+      if (
+        elemento.Address.toString()
+          .toLowerCase()
+          .includes(busqueda.toLowerCase()) ||
+        elemento.Nombre.toString()
+          .toLowerCase()
+          .includes(busqueda.toLowerCase())
+      ) {
+        return elemento;
+      }
+    });
+    setUserData(resultadoBusqueda);
+
+    if (busqueda.length == 0) {
+      getUsers();
+    }
+  };
+
   return (
     <>
       <NextSeo
         title="Panel de control"
         description="Administracion de Usuarios"
       />
+
+      <form>
+        <label
+          for="default-search"
+          className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Search
+        </label>
+        <div className="row flex w-full justify-center">
+          <div className="mb-10 flex  w-[40%]">
+            <input
+              onChange={(e) => search(e)}
+              type="search"
+              id="default-search"
+              className="block h-12 w-full border border-gray-300 bg-gray-50 p-4 pl-10 text-sm text-gray-900  focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              placeholder="Buscar Address"
+            />
+            <Button
+              onClick={() => alert('Buscando Address,' + busqueda)}
+              className="font-small rounded-tl-sm  rounded-bl-sm px-4 py-2 text-sm focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Search
+            </Button>
+          </div>
+        </div>
+      </form>
       <div className="flex flex-col">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
             <div className="overflow-hidden">
               <table className="w-full table-auto ">
-                <thead className=" border-b">
+                <thead className="border-b">
                   <tr>
                     <th scope="col">Nombre</th>
                     <th scope="col">Address</th>
@@ -109,25 +161,25 @@ const AdminPanelPage: NextPageWithLayout<
                     <tr key={index} className=" border-b ">
                       <td
                         key={index}
-                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900"
+                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900 dark:text-white"
                       >
                         {item.Nombre}
                       </td>
                       <td
                         key={index}
-                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900"
+                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900 dark:text-white"
                       >
                         {item.Address}
                       </td>
                       <td
                         key={index}
-                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900"
+                        className="whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900 dark:text-white"
                       >
                         {item.Rol}
                       </td>
                       <td
                         key={index}
-                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900"
+                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900 dark:text-white"
                       >
                         {!item.Ban ? (
                           <Button onClick={() => openM(item.Address, 'ban')}>
@@ -143,7 +195,7 @@ const AdminPanelPage: NextPageWithLayout<
                       </td>
                       <td
                         key={index}
-                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900"
+                        className=" whitespace-nowrap py-4 text-center text-sm font-medium text-gray-900 dark:text-white"
                       >
                         <Button onClick={() => openMC(item.Address)}>
                           {' '}

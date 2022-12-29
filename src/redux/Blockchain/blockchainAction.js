@@ -781,6 +781,7 @@ const conectar =
               perfil: response.Perfil,
               banner: response.Banner,
               descripcion: response.Descripcion,
+              ban: response.Ban,
             })
           );
         } else {

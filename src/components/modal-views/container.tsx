@@ -25,6 +25,7 @@ const TransferI = dynamic(() => import('@/components/modalTransfer/modalTI'));
 
 const Ban = dynamic(() => import('@/components/modal-ban/ModalBan'));
 const Change = dynamic(() => import('@/components/modal-change/ModalChange'));
+const Banned = dynamic(() => import('@/components/Banned-views/ModalBanned'));
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
@@ -48,6 +49,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Ban />;
     case 'CHANGE':
       return <Change />;
+    case 'BAN_VIEW':
+      return <Banned />;
     default:
       return null;
   }
@@ -70,7 +73,12 @@ export default function ModalContainer() {
         as="div"
         className="fixed inset-0 z-50 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12"
         onClose={() => {
-          if (view && view !== 'REGISTER_VIEW' && view !== 'STAKING_VIEW') {
+          if (
+            view &&
+            view !== 'REGISTER_VIEW' &&
+            view !== 'STAKING_VIEW' &&
+            view !== 'BAN_VIEW'
+          ) {
             closeModal();
           }
         }}

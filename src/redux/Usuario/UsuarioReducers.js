@@ -15,6 +15,7 @@ const initialState = {
   perfil: '',
   banner: '',
   descripcion: '',
+  ban: false,
 };
 
 const UsuariosReducer = (state = initialState, action) => {
@@ -66,6 +67,7 @@ const UsuariosReducer = (state = initialState, action) => {
         perfil: action.payload.perfil,
         banner: action.payload.banner,
         descripcion: action.payload.descripcion,
+        ban: action.payload.ban,
       };
     case 'UPDATE_MONGO':
       return {

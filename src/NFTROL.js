@@ -15,6 +15,7 @@ export const mint = async (address, type, range) => {
   const signer = provider.getSigner();
   const NFTROLPROVIDER = NFTROL.connect(signer);
   tx = await NFTROLPROVIDER.mint(address, type, range);
+  await tx.wait();
   const txReceipt = await provider.waitForTransaction(tx.hash, 3);
   return { status: txReceipt.status, txHash: tx.hash };
 };

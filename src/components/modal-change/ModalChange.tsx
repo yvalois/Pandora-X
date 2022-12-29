@@ -60,15 +60,9 @@ export default function ModalChange() {
       let _address = address;
       let categoria = tipo;
       let _rango = rango;
+      await mint(_address, categoria, _rango);
 
-      const txResult = await mint(_address, categoria, _rango);
-
-      if (1 == 1) {
-        update();
-        //  setStatus(200)
-      } else {
-        //  setStatus(100);
-      }
+      update();
     } catch (error) {
       console.log(error);
     }

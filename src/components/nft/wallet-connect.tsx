@@ -30,6 +30,8 @@ export default function WalletConnect() {
   const [domLoaded, setDomLoaded] = useState(false);
   const Usuario = useSelector((state: any) => state.Usuario);
 
+  const { ban } = useSelector((state: any) => state.Usuario);
+
   const copiar = () => {
     const aux = window.location.href;
     const a = aux.split('profile');
@@ -54,6 +56,12 @@ export default function WalletConnect() {
       closeModal();
     }
   }, [isUser]);
+
+  useEffect(() => {
+    if (ban) {
+      openModal('BAN_VIEW');
+    }
+  }, [ban]);
 
   return (
     <>
