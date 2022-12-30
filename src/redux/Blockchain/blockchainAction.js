@@ -827,7 +827,7 @@ export const connectWallet = () => async (dispatch) => {
 
     const _web3Modal = new Web3Modal({
       network: 'Polygon',
-      cacheProvider: false,
+      cacheProvider: true,
       disableInjectedProvider: false,
       providerOptions: providerOptions,
     });

@@ -4,11 +4,12 @@ import type { NextPageWithLayout } from '@/types';
 import DashboardLayout from '@/layouts/_dashboard';
 import NftDetails from '@/components/nft/nft-details';
 import { nftData } from '@/data/static/single-nft';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { ethers } from 'ethers';
 import { getMintedNftProducts } from '@/redux/Minted/MintedAction';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -33,6 +34,8 @@ const NFTDetailsPage: NextPageWithLayout<
   const { productos, inversiones, dataloaded } = useSelector(
     (state) => state.minted
   );
+  const { disconnectWallet, balance, connectToWallet, error } =
+    useContext(WalletContext);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -48,6 +51,8 @@ const NFTDetailsPage: NextPageWithLayout<
       setType(tipo);
     };
     fetch();
+
+    connectToWallet();
   }, [dataloaded, productos, inversiones]);
 
   /*useEffect(() => {
