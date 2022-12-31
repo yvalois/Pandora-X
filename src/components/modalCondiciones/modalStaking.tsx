@@ -12,6 +12,8 @@ export default function ModalWithdraw() {
   const [id, setId] = useState(0);
   const [succes, setSuccess] = useState(false);
   const [msg, setMsg] = useState(false);
+  const [msg2, setMsg2] = useState(false);
+
   const [alert, setAlert] = useState('');
 
   const close = () => {
@@ -19,7 +21,7 @@ export default function ModalWithdraw() {
   };
 
   const verify = () => {
-    if (msg == true) {
+    if (msg == true && msg2 == true) {
       close();
     } else {
       setAlert('Debes aceptar los terminos');
@@ -30,9 +32,13 @@ export default function ModalWithdraw() {
     setMsg(!msg);
   };
 
+  const change2 = () => {
+    setMsg2(!msg2);
+  };
+
   return (
     <>
-      <div className="column relative z-50 mx-auto h-auto w-[430px]  max-w-full items-center justify-center rounded-lg bg-white px-8 py-8 dark:bg-light-dark">
+      <div className="column relative z-50 mx-auto h-auto w-[480px]  max-w-full items-center justify-center rounded-lg bg-white px-8 py-8 dark:bg-light-dark">
         <div className="width-full mb-8 flex items-center justify-center">
           <Warning className="text-[#2a52be] " />
         </div>
@@ -69,12 +75,41 @@ export default function ModalWithdraw() {
             for="link-checkbox"
             className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            I agree with the{' '}
+            Estoy de acuerdo con{' '}
             <a
+              onClick={() => {
+                window.open('https://pandorax.co/privacy-policy');
+              }}
               href="#"
               className="text-blue-600 hover:underline dark:text-blue-500"
             >
-              terms and conditions
+              Policitcas de privacidad
+            </a>
+            .
+          </label>
+        </div>
+
+        <div className="mb-0 flex items-center">
+          <input
+            id="link-checkbox"
+            type="checkbox"
+            value={msg2}
+            onChange={change2}
+            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+          />
+          <label
+            for="link-checkbox"
+            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Estoy de acuerdo con{' '}
+            <a
+              onClick={() => {
+                window.open('https://pandorax.co/terms-of-use');
+              }}
+              href=""
+              className="text-blue-600 hover:underline dark:text-blue-500"
+            >
+              Terminos de uso
             </a>
             .
           </label>

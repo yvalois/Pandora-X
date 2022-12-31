@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
-import { Router } from 'next/router';
+import router from 'next/router';
 
 interface NftFooterProps {
   className?: string;
@@ -555,15 +555,16 @@ export default function NftDetails({ tipo }) {
   }, [dataloaded, productos, inversiones, tipo]);
 
   useEffect(() => {
+    const _id = router.query.id;
     inventoryp.map((inv) => {
-      if (inv.id == id) {
+      if (inv.id == _id) {
         setNft(inv);
         setType(tipo);
       }
     });
 
     inventoryi.map((invI) => {
-      if (invI.id == id) {
+      if (invI.id == _id) {
         setNft(invI);
         setType(tipo);
       }
