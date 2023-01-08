@@ -42,16 +42,16 @@ export default function ProfileTabUser() {
   return (
     <ParamTab
       tabMenu={[
-        {
+        /*{
           title: 'Mis productos',
           path: 'productos',
-        },
+        },*/
         {
           title: 'Inversiones',
           path: 'inversiones',
         },
         {
-          title: 'NFTs',
+          title: 'My NFTs',
           path: 'coleccion',
         },
         {
@@ -64,7 +64,7 @@ export default function ProfileTabUser() {
         },
       ]}
     >
-      <TabPanel className="w-full focus:outline-none">
+      {/* <TabPanel className="w-full focus:outline-none">
         <div className="grid w-full gap-10 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-20 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentItems?.map((nft) => (
             <NFTGrid
@@ -91,7 +91,7 @@ export default function ProfileTabUser() {
             </div>
           )}
         </div>
-      </TabPanel>
+          </TabPanel> */}
       <TabPanel className="h-full w-full focus:outline-none">
         <div className="grid h-full w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentInv?.map((nft) => (

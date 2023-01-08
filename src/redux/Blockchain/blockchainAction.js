@@ -5,6 +5,10 @@ import { contract } from '../blockchainRoutes';
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
 import productoMinterAbi from '../../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../../abi/InversionMinter.json';
+import stakingPAbi from '../../abi/StakingETH.json';
+import stakingErAbi from '../../abi/StakingETH.json';
+import frenchiesAbi from '../../abi/FrenchiesBlues.json';
+
 import stakingAbi from '../../abi/staking.json';
 import { items } from '../../utils/constant'; //Buscar
 import { setProvider } from '../../NFTROL';
@@ -20,6 +24,10 @@ const TokenPrueba_ADDRESS = router.tokenPrueba;
 const PRODUCTOS_MINTER_ADDRESS = router.productoMinter;
 const INVERSION_MINTER_ADDRESS = router.inversionMinter;
 const STAKING_ADDRESS = router.staking;
+const STAKINGE_ADDRESS = router.stakingETH;
+const STAKINGP_ADDRESS = router.stakingPOL;
+const FRENCHIES_ADDRESS = router.frenchies;
+
 const RPC_URL = router.RPC_URL;
 
 const options = new WalletConnectProvider({
@@ -869,16 +877,35 @@ export const connectWallet = () => async (dispatch) => {
         signer
       );
 
+      /*  const frenchiesMinter = new ethers.Contract(
+        INVERSION_MINTER_ADDRESS,
+        frenchiesAbi,
+        signer
+      );  */
+
       const stakingContract = new ethers.Contract(
         STAKING_ADDRESS,
         stakingAbi,
         signer
       );
+      /*  const stakingfrenEContract = new ethers.Contract(
+        STAKING_ADDRESS,
+        stakingErAbi,
+        signer
+      );
+
+      const stakingfrenPContract = new ethers.Contract(
+        STAKING_ADDRESS, 
+        stakingPAbi,
+        signer
+      );  */
 
       await getProductos();
       await getInversiones();
 
       const nftStaking = await stakingContract.getNfts();
+
+      // const nftStakingF = await stakingfrenEContract.getNfts();
 
       const nftpBalance = await productoMinterContract.getMyInventory(
         accounts[0]
@@ -888,10 +915,18 @@ export const connectWallet = () => async (dispatch) => {
         accounts[0]
       );
 
+      /*  const nftfBalance = await frenchiesMinterContract.getMyInventory(
+        accounts[0]
+      );  */
+
       const inventoryp = [];
       const inventoryi = [];
       const inventorys = [];
+      //  const inventoryf = [];
+      // const inventorysf = [];
+
       let aux = true;
+
       if (nftStaking.length != undefined) {
         nftStaking.map(async (item) => {
           function toDateTime(secs) {
@@ -938,6 +973,53 @@ export const connectWallet = () => async (dispatch) => {
           }
         });
       }
+
+      /* if (nftStakingF.length != undefined) {
+        nftStakingF.map(async (item) => {
+          function toDateTime(secs) {
+            var t = new Date(1970, 0, 1); // Epoch
+            t.setSeconds(secs);
+            return t;
+          }
+
+          const is = await stakingfrenEContract.NftIsStaking(accounts[0], item);
+
+          const pr = await stakingfrenEContract.getPosition(item);
+          const pre = await frenchiesMinterContract.getPricePlusFee(item); //getPrice 
+          const ap = await stakingfrenEContract.getApr(item);
+          const cpa = await stakingfrenEContract.rewardPerToken(item);
+          const ind = await stakingfrenEContract.getIndice(item);
+          const dat = await stakingfrenEContract.getDate(ind);
+          const precio = parseFloat(ethers.utils.formatUnits(pre, 6)).toFixed(
+            2
+          );
+          const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 6)).toFixed(
+            2
+          );
+          const apr = ethers.utils.formatUnits(ap, 8);
+          const i = 0;
+          const date = toDateTime(dat);
+
+          if (is == true && aux == true) {
+            if (parseInt(item) == 0) {
+              aux = false;
+            }
+            const stak = {
+              id: parseInt(item),
+              position: parseInt(i),
+              positionR: parseInt(pr), //llamar funcion
+              precio: precio, //getpricePlusfee
+              fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+              Apr: parseInt(apr), // getApr
+              cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
+              idCR: parseInt(item),
+              idW: parseInt(item),
+            };
+            i++;
+            inventorysf.push(stak);
+          }
+        });
+      } */
 
       nftpBalance.map(async (item, index) => {
         const tipo = await productoMinterContract.getTipo(item);
@@ -1020,6 +1102,27 @@ export const connectWallet = () => async (dispatch) => {
         }
       });
 
+      /* nftfBalance.map(async (item, index) => {
+
+        const price = await productoMinterContract.buyPrice(
+          tipo,
+          tokenContract.address
+        ); //getPrice
+
+        const precio = ethers.utils.formatUnits(price, 6);
+
+
+            const prod = {
+              Nombre: item.Nombre, //nombre colecion + id
+              img: item.img,
+              precio: parseInt(precio),
+              descripcion: item.descripcion,
+              id: item.tipoN,
+            };
+            inventoryf.push(prod);
+
+      }); */
+
       let balancei = [];
       balancei[0] = 0;
       nftiBalance.map(async (item) => {
@@ -1062,13 +1165,18 @@ export const connectWallet = () => async (dispatch) => {
           tokenContract,
           productoMinter: productoMinterContract,
           inversionMinter: inversionMinterContract,
+          //  frenchiesMinter: frenchiesMinter,
           staking: stakingContract,
+          // stakinfETH: stakingfrenEContract,
+          // stakingPOL: stakingfrenPContract,
           accountAddress: accounts[0],
           //usdtBalance: balanceFormat,
           //tokenBalance: balanceFormat2,
           inventoryp: inventoryp,
           inventoryi: inventoryi,
           inventorys: inventorys,
+          //  inventoryf: inventoryf,
+          //  inventorysf: inventorysf,
           instance: null,
           balancei: balancei,
         })

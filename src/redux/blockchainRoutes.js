@@ -8,6 +8,10 @@ export const contract = () => {
     productoMinter: '0x40ED3Adb3E97f72bE5f85A69bf0be3371cad78E2',
     inversionMinter: '0x8fA9365bCcc4C554FE1D7c004ff46b7A05d4de2C',
     staking: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
+    stakingETH: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
+    stakingPOL: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
+    frenchies: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
+
     RPC_URL:
       'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', //aqui ponemos el usdt

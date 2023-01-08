@@ -671,10 +671,17 @@ const Frenchies: NextPageWithLayout<
                   title: 'NFT MarketPlace',
                   path: 'coleccion',
                 },
+                {
+                  title: 'Adquiere tu frenchie blue',
+                  path: 'buy',
+                },
               ]}
             >
               <TabPanel className="focus:outline-none">
                 <div>Pronto</div>
+              </TabPanel>
+              <TabPanel className="focus:outline-none">
+                <div>MINT</div>
               </TabPanel>
             </ParamTab>
           </div>

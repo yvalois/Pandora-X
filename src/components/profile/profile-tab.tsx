@@ -31,16 +31,16 @@ export default function ProfileTab() {
   return (
     <ParamTab
       tabMenu={[
-        {
+        /*{
           title: 'Mis productos',
           path: 'productos',
         },
         {
           title: 'Inversiones',
           path: 'inversiones',
-        },
+        }, */
         {
-          title: 'NFTs',
+          title: 'My NFTs',
           path: 'coleccion',
         },
         {
@@ -49,7 +49,7 @@ export default function ProfileTab() {
         },
       ]}
     >
-      <TabPanel className="vw-[100%] focus:outline-none">
+      {/* <TabPanel className="vw-[100%] focus:outline-none">
         <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentItems?.map((nft) => (
             <NFTGrid
@@ -69,15 +69,15 @@ export default function ProfileTab() {
                   <span>
                     <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
                       No tienes Nft's de productos
-                    </h1>
+                    </h1> 
                   </span>
                 </div>
               </div>
             </div>
           )}
         </div>
-      </TabPanel>
-      <TabPanel className="focus:outline-none">
+          </TabPanel> */}
+      {/* <TabPanel className="focus:outline-none">
         <div className="grid h-[100%] w-[100%] gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentInv?.map((nft) => (
             <NFTGrid
@@ -105,7 +105,7 @@ export default function ProfileTab() {
             </div>
           )}
         </div>
-      </TabPanel>
+          </TabPanel> */}
       <TabPanel className="focus:outline-none">
         <div className="grid h-[100%] w-[100%] gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
           <div className=" flex h-full  w-full justify-center self-center">

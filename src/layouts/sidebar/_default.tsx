@@ -230,7 +230,13 @@ export default function Sidebar({ className }: SidebarProps) {
       )}
     >
       <div className="relative flex h-24 w-full items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
-        <Logo />
+        <div>
+          <h1 className="text-4xl font-bold">
+            <bol>NFT STUDIO</bol>{' '}
+          </h1>
+          <p className="text-xs">by pandoraX</p>
+        </div>
+        {/* <Logo /> */}
         <div className="md:hidden">
           <Button
             title="Close"
@@ -304,7 +310,6 @@ export default function Sidebar({ className }: SidebarProps) {
                 item.name == 'Profile') ||
               (UsuarioR !== 'Admin' &&
                 UsuarioR !== 'usuario' &&
-                UsuarioR !== 'cliente' &&
                 item.name == 'Inversiones') ? (
                 <div key={index}></div>
               ) : (

@@ -18,6 +18,8 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
+
 import router from 'next/router';
 
 interface NftFooterProps {
@@ -244,18 +246,32 @@ function NftFooter({
               className="mt-2 hidden items-center text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:inline-flex"
             >
               <div className="h-6 w-6 rounded-full ltr:mr-2 rtl:ml-2">
-                <Image src={Avatar1} alt="avatar" width={24} height={24} />
+                <Image src={pandorax} alt="avatar" width={24} height={24} />
               </div>
               @PandoraX
             </AnchorLink>
           </div>
         </div>
 
-        {tipo == 'producto' && (
+        <Button shape="rounded" onClick={() => alert('dirigiendo')}>
+          Ir al curso
+        </Button>
+
+        <Button
+          shape="rounded"
+          variant="solid"
+          color="gray"
+          className="dark:bg-gray-800"
+          onClick={() => openModal('SHARE_VIEW')}
+        >
+          Compartir
+        </Button>
+
+        {/* {tipo == 'producto' && (
           <div className="grid grid-cols-2 gap-3">
             {!isBuy && !loading && price > approvedToken && (
               <Button shape="rounded" onClick={() => approve()}>
-                Aprobar
+                Ir al curso
               </Button>
             )}
             {!isBuy &&
@@ -364,7 +380,7 @@ function NftFooter({
               </Button>
             </AnchorLink>
           </div>
-        )}
+        )} */}
       </div>
       {status && (
         <div

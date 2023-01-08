@@ -168,7 +168,7 @@ export default function WalletConnect() {
       ) : (
         <>
           <Button
-            onClick={connectToWallet}
+            onClick={() => openModal('WALLET_CONNECT_VIEW')}
             className="shadow-main hover:shadow-large"
           >
             CONNECT
