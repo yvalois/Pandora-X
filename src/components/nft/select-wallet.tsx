@@ -4,6 +4,7 @@ import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
 import ModalRegister from '@/components/modal-Register/ModalRegister';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 export default function SelectWallet({ ...props }) {
   const { address, connectToWallet, error, isUser } = useContext(WalletContext);
@@ -56,6 +57,9 @@ export default function SelectWallet({ ...props }) {
           <span className="h-auto w-9">
             <Image src={metamaskLogo} alt="metamask" />
           </span>
+          <MobileView>
+            <h1>XD</h1>
+          </MobileView>
         </div>
 
         {error && (
