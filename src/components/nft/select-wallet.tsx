@@ -22,7 +22,7 @@ import { mainnet, polygon, goerli } from 'wagmi/chains';
 import { ConnectKitButton, useModal as hola } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
-  // const { address, connectToWallet, error, isUser } = useContext(WalletContext);
+  const { disconnectWallet } = useContext(WalletContext);
   const dispatch = useDispatch<AppDispatch>();
   const error = false;
   const { setOpen } = hola();
@@ -41,6 +41,7 @@ export default function SelectWallet({ ...props }) {
   };
 
   useEffect(() => {
+    disconnectWallet();
     console.log(activeChain);
     console.log(provider);
     dispatch(connectWallet(address, provider));

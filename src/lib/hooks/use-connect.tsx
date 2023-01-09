@@ -152,6 +152,12 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const disconnectWallet = async () => {
     //setAddress('');
     disconnect();
+    window.localStorage.removeItem('wagmi.cache');
+    window.localStorage.removeItem('wagmi.wallet');
+    window.localStorage.removeItem('wagmi.store');
+    window.localStorage.setItem('wagmi.connected', 'false');
+    window.localStorage.setItem('wagmi.injected.shimDisconnect', 'false');
+
     await dispatch(disconectWallet());
     //disconect();
   };
