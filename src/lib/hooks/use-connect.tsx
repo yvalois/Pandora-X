@@ -14,6 +14,7 @@ import {
   connectWallet,
   disconectWallet,
 } from '../../redux/Blockchain/blockchainAction';
+import { useDisconnect } from 'wagmi';
 
 const web3modalStorageKey = 'WEB3_CONNECT_CACHED_PROVIDER';
 
@@ -148,7 +149,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const disconnectWallet = async () => {
     //setAddress('');
-
     await dispatch(disconectWallet());
     //disconect();
   };
