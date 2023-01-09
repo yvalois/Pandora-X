@@ -11,6 +11,8 @@ import {
   createClient,
   WagmiConfig,
   useProvider,
+  useNetwork,
+  useSwitchNetwork,
 } from 'wagmi';
 import { useDispatch } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
@@ -25,6 +27,8 @@ export default function SelectWallet({ ...props }) {
   const error = false;
   const { setOpen } = hola();
   const { address } = useAccount();
+  const { chain: activeChain } = useNetwork();
+  const { switchNetwork, isLoading } = useSwitchNetwork();
 
   const { closeModal } = useModal();
   useEffect(() => {
@@ -37,8 +41,12 @@ export default function SelectWallet({ ...props }) {
   };
 
   useEffect(() => {
+    console.log(activeChain);
     console.log(provider);
     dispatch(connectWallet(address, provider));
+    if (address?.length > 1) {
+      setOpen(false);
+    }
   }, [address]);
 
   return (
@@ -80,12 +88,12 @@ export default function SelectWallet({ ...props }) {
           className="mt-12 flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
           onClick={abrir}
         >
-          <span>Conectar Cartera</span>
-          {/* <span className="h-auto w-9">
+          {/*<span>Conectar Cartera</span>
+           <span className="h-auto w-9">
             <Image src={metamaskLogo} alt="metamask" />
           </span> */}
         </div>
-        {/* <ConnectKitButton /> */}
+        <ConnectKitButton />
 
         {/* <MobileView>
             <h1>XD</h1>

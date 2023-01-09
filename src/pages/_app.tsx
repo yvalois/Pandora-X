@@ -51,14 +51,14 @@ import {
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const { chains, provider, webSocketProvider } = configureChains(
-    [polygon],
+    [polygon, mainnet],
     [alchemyProvider({ apiKey: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn' })]
   );
 
   const [domLoaded, setDomLoaded] = useState(false);
 
-  const client = createClient({
-    autoConnect: true,
+  /*const client = createClient({
+    autoConnect: false,
     connectors: [
       new MetaMaskConnector({
         chains,
@@ -70,6 +70,7 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
         chains,
         options: {
           appName: 'wagmi',
+          headlessMode: true,
         },
       }),
       new WalletConnectConnector({
@@ -88,7 +89,16 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
     ],
     provider,
     webSocketProvider,
-  });
+  }); */
+
+  const client = createClient(
+    getDefaultClient({
+      appName: 'ConnectKit CRA demo',
+      //infuraId: process.env.REACT_APP_INFURA_ID,
+      //alchemyId:  process.env.REACT_APP_ALCHEMY_ID,
+      chains: [polygon],
+    })
+  );
 
   useEffect(() => {
     setDomLoaded(true);
