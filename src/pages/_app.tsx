@@ -12,6 +12,7 @@ import SettingsDrawer from '@/components/settings/settings-drawer';
 import { WalletProvider } from '@/lib/hooks/use-connect';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import { ConnectKitProvider, getDefaultClient } from 'connectkit';
+
 // base css file
 import 'swiper/css';
 import '@/assets/css/scrollbar.css';
@@ -19,6 +20,13 @@ import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+
 import {
   EthereumClient,
   modalConnectors,
@@ -34,6 +42,7 @@ import {
   mainnet,
   optimism,
   polygon,
+  goerli,
 } from 'wagmi/chains';
 
 /*type AppPropsWithLayout = AppProps & {
@@ -42,7 +51,54 @@ import {
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
-  const [client, setClient] = useState({});
+
+  const { chains, provider, webSocketProvider } = configureChains(
+    [polygon, mainnet],
+    [alchemyProvider({ apiKey: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn' })]
+  );
+
+  const client = createClient({
+    autoConnect: false,
+    connectors: [
+      new MetaMaskConnector({
+        chains,
+        options: {
+          UNSTABLE_shimOnConnectSelectAccount: true,
+        },
+      }),
+      /*  new CoinbaseWalletConnector({
+        chains,
+        options: {
+          appName: 'wagmi',
+          headlessMode: true,
+        },
+      }),
+      new WalletConnectConnector({
+        chains,
+        options: {
+          qrcode: true,
+        },
+      }),
+      new InjectedConnector({
+        chains,
+        options: {
+          name: 'Injected',
+          shimDisconnect: true,
+        },
+      }), */
+    ],
+    provider,
+    webSocketProvider,
+  });
+
+  /*  const client = createClient(
+    getDefaultClient({
+      appName: 'NFT Studio',
+      //infuraId: process.env.REACT_APP_INFURA_ID,
+      alchemyId:  'gcYJsxItcYNjfy01aHklipg1J6foSUFn',
+      chains: [polygon],
+    })
+  ); */
 
   useEffect(() => {
     setDomLoaded(true);
@@ -61,22 +117,24 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
         />
       </Head>
       <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <ThemeProvider
-              attribute="class"
-              enableSystem={false}
-              defaultTheme="light"
-            >
-              <WalletProvider>
-                {getLayout(<Component {...pageProps} />)}
-                <SettingsButton />
-                <SettingsDrawer />
-                <ModalsContainer />
-                <DrawersContainer />
-              </WalletProvider>
-            </ThemeProvider>
-            {/* <Web3Modal
+        <WagmiConfig client={client}>
+          <ConnectKitProvider theme="auto">
+            <QueryClientProvider client={queryClient}>
+              <Hydrate state={pageProps.dehydratedState}>
+                <ThemeProvider
+                  attribute="class"
+                  enableSystem={false}
+                  defaultTheme="light"
+                >
+                  <WalletProvider>
+                    {getLayout(<Component {...pageProps} />)}
+                    <SettingsButton />
+                    <SettingsDrawer />
+                    <ModalsContainer />
+                    <DrawersContainer />
+                  </WalletProvider>
+                </ThemeProvider>
+                {/* <Web3Modal
         ethereumClient={ethereumClient}
         // Custom Linking Mobile Wallets
         mobileWallets={[
@@ -145,9 +203,14 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
           42161: '/images/chain_arbitrum.webp'
         }}
       /> */}
-          </Hydrate>
-          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-        </QueryClientProvider>
+              </Hydrate>
+              <ReactQueryDevtools
+                initialIsOpen={false}
+                position="bottom-right"
+              />
+            </QueryClientProvider>
+          </ConnectKitProvider>
+        </WagmiConfig>
       </Provider>
     </>
   );
