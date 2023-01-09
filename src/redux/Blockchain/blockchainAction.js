@@ -826,6 +826,11 @@ export const update = (accountAddress) => async (dispatch) => {
 
 export const connectWallet = (address, provider) => async (dispatch) => {
   dispatch(loading());
+
+  await window.ethereum.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: `0x${Number(137).toString(16)}` }],
+  });
   try {
     /*const web3Modal =
       typeof window !== 'undefined' &&

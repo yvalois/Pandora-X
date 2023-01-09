@@ -51,7 +51,7 @@ import {
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const { chains, provider, webSocketProvider } = configureChains(
-    [mainnet, goerli, polygon],
+    [polygon],
     [alchemyProvider({ apiKey: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn' })]
   );
 
