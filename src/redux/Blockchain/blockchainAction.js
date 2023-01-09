@@ -7,7 +7,6 @@ import productoMinterAbi from '../../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../../abi/InversionMinter.json';
 import stakingAbi from '../../abi/staking.json';
 import { items } from '../../utils/constant'; //Buscar
-import { BrowserView, MobileView, isMobile } from 'react-device-detect';
 import { setProvider } from '../../NFTROL';
 
 import { flatMap } from 'lodash';
@@ -825,231 +824,218 @@ export const connectWallet = () => async (dispatch) => {
       new Web3Modal({
         cacheProvider: true,
       });*/
-    if (isMobile) {
-      if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
-      } else {
-        // Code for HttpProvider remains unchanged
-      }
-      await window.ethereum.send('eth_requestAccounts');
-    } else {
-      const _web3Modal = new Web3Modal({
-        network: 'Polygon',
-        cacheProvider: true,
-        disableInjectedProvider: false,
-        providerOptions: providerOptions,
-      });
-      const instance = await _web3Modal.connect();
 
-      /*let aux1Provider =ethereumClient.wagmi
+    const _web3Modal = new Web3Modal({
+      network: 'Polygon',
+      cacheProvider: true,
+      disableInjectedProvider: false,
+      providerOptions: providerOptions,
+    });
+    const instance = await _web3Modal.connect();
+
+    /*let aux1Provider =ethereumClient.wagmi
     let aux2Provider = aux1Provider.providers
     let aux3Provider = aux2Provider.get(137)
     let provider =  aux3Provider*/
 
-      const provider = new ethers.providers.Web3Provider(instance);
+    const provider = new ethers.providers.Web3Provider(instance);
 
-      setProvider(provider);
-      const signer = provider.getSigner();
+    setProvider(provider);
+    const signer = provider.getSigner();
 
-      //signer._address =  "0x"
+    //signer._address =  "0x"
 
-      const accounts = await provider.listAccounts();
+    const accounts = await provider.listAccounts();
 
-      //  const networkId = await provider.getNetwork();
+    //  const networkId = await provider.getNetwork();
 
-      if (1 == 1) {
-        const usdtContract = new ethers.Contract(
-          USDT_ADDRESS,
-          abiErc20,
-          signer
-        );
-        const tokenContract = new ethers.Contract(
-          TokenPrueba_ADDRESS,
-          abiErc20,
-          signer
-        );
+    if (1 == 1) {
+      const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
+      const tokenContract = new ethers.Contract(
+        TokenPrueba_ADDRESS,
+        abiErc20,
+        signer
+      );
 
-        const productoMinterContract = new ethers.Contract(
-          PRODUCTOS_MINTER_ADDRESS,
-          productoMinterAbi,
-          signer
-        );
+      const productoMinterContract = new ethers.Contract(
+        PRODUCTOS_MINTER_ADDRESS,
+        productoMinterAbi,
+        signer
+      );
 
-        const inversionMinterContract = new ethers.Contract(
-          INVERSION_MINTER_ADDRESS,
-          inversionMinterAbi,
-          signer
-        );
+      const inversionMinterContract = new ethers.Contract(
+        INVERSION_MINTER_ADDRESS,
+        inversionMinterAbi,
+        signer
+      );
 
-        const stakingContract = new ethers.Contract(
-          STAKING_ADDRESS,
-          stakingAbi,
-          signer
-        );
+      const stakingContract = new ethers.Contract(
+        STAKING_ADDRESS,
+        stakingAbi,
+        signer
+      );
 
-        await getProductos();
-        await getInversiones();
+      await getProductos();
+      await getInversiones();
 
-        const nftStaking = await stakingContract.getNfts();
+      const nftStaking = await stakingContract.getNfts();
 
-        const nftpBalance = await productoMinterContract.getMyInventory(
-          accounts[0]
-        );
+      const nftpBalance = await productoMinterContract.getMyInventory(
+        accounts[0]
+      );
 
-        const nftiBalance = await inversionMinterContract.getMyInventory(
-          accounts[0]
-        );
+      const nftiBalance = await inversionMinterContract.getMyInventory(
+        accounts[0]
+      );
 
-        const inventoryp = [];
-        const inventoryi = [];
-        const inventorys = [];
-        let aux = true;
-        if (nftStaking.length != undefined) {
-          nftStaking.map(async (item) => {
-            function toDateTime(secs) {
-              var t = new Date(1970, 0, 1); // Epoch
-              t.setSeconds(secs);
-              return t;
-            }
-
-            const is = await stakingContract.NftIsStaking(accounts[0], item);
-
-            const pr = await stakingContract.getPosition(item);
-            const pre = await inversionMinterContract.getPricePlusFee(item);
-            const ap = await stakingContract.getApr(item);
-            const cpa = await stakingContract.rewardPerToken(item);
-            const ind = await stakingContract.getIndice(item);
-            const dat = await stakingContract.getDate(ind);
-            const precio = parseFloat(ethers.utils.formatUnits(pre, 6)).toFixed(
-              2
-            );
-            const cantpago = parseFloat(
-              ethers.utils.formatUnits(cpa, 6)
-            ).toFixed(2);
-            const apr = ethers.utils.formatUnits(ap, 8);
-            const i = 0;
-            const date = toDateTime(dat);
-
-            if (is == true && aux == true) {
-              if (parseInt(item) == 0) {
-                aux = false;
-              }
-              const stak = {
-                id: parseInt(item),
-                position: parseInt(i),
-                positionR: parseInt(pr), //llamar funcion
-                precio: precio, //getpricePlusfee
-                fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
-                Apr: parseInt(apr), // getApr
-                cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
-                idCR: parseInt(item),
-                idW: parseInt(item),
-              };
-              i++;
-              inventorys.push(stak);
-            }
-          });
-        }
-
-        nftpBalance.map(async (item, index) => {
-          const tipo = await productoMinterContract.getTipo(item);
-          var type = '';
-          if (tipo == 1) {
-            var type = 'PS';
-          } else if (tipo == 2) {
-            var type = 'PA';
-          } else if (tipo == 3) {
-            var type = 'NS';
-          } else if (tipo == 4) {
-            var type = 'IV';
-          } else if (tipo == 5) {
-            var type = 'CP';
-          } else if (tipo == 6) {
-            var type = 'CG';
-          } else if (tipo == 7) {
-            var type = 'NC';
-          } else if (tipo == 8) {
-            var type = 'AP';
+      const inventoryp = [];
+      const inventoryi = [];
+      const inventorys = [];
+      let aux = true;
+      if (nftStaking.length != undefined) {
+        nftStaking.map(async (item) => {
+          function toDateTime(secs) {
+            var t = new Date(1970, 0, 1); // Epoch
+            t.setSeconds(secs);
+            return t;
           }
 
-          const price = await productoMinterContract.buyPrice(
-            tipo,
-            tokenContract.address
-          );
+          const is = await stakingContract.NftIsStaking(accounts[0], item);
 
-          const precio = ethers.utils.formatUnits(price, 6);
-          Productos.map((item) => {
-            if (item.tipo == type) {
-              const prod = {
-                Nombre: item.Nombre,
-                img: item.img,
-                precio: parseInt(precio),
-                tipo: item.tipo,
-                tipoN: item.tipoN,
-                descripcion: item.descripcion,
-                id: item.tipoN,
-              };
-              inventoryp.push(prod);
-            }
-          });
-        });
-
-        nftiBalance.map(async (item) => {
-          const tipo = await inversionMinterContract.getTipo(item);
-          var type = '';
-          if (tipo == 1) {
-            var type = '100';
-          } else if (tipo == 2) {
-            var type = '1K';
-          } else if (tipo == 3) {
-            var type = '5K';
-          } else if (tipo == 4) {
-            var type = '10K';
-          } else if (tipo == 5) {
-            var type = '20K';
-          } else if (tipo == 6) {
-            var type = '50K';
-          } else if (tipo == 7) {
-            var type = '100K';
-          }
-
-          const price = await inversionMinterContract.buyPrice(
-            tipo,
-            tokenContract.address
-          );
-
-          const precio = ethers.utils.formatUnits(price, 6);
-          if (Inversiones[tipo - 1]?.tipo == type) {
-            const inv = {
-              Nombre: Inversiones[tipo - 1].Nombre,
-              img: Inversiones[tipo - 1].img,
-              precio: parseInt(precio),
-              tipo: Inversiones[tipo - 1].tipo,
-              descripcion: Inversiones[tipo - 1].descripcion,
-              id: item,
-            };
-            inventoryi.push(inv);
-          }
-        });
-
-        let balancei = [];
-        balancei[0] = 0;
-        nftiBalance.map(async (item) => {
-          const precio = await inversionMinterContract.getPricePlusFee(item);
-          const aux = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(
+          const pr = await stakingContract.getPosition(item);
+          const pre = await inversionMinterContract.getPricePlusFee(item);
+          const ap = await stakingContract.getApr(item);
+          const cpa = await stakingContract.rewardPerToken(item);
+          const ind = await stakingContract.getIndice(item);
+          const dat = await stakingContract.getDate(ind);
+          const precio = parseFloat(ethers.utils.formatUnits(pre, 6)).toFixed(
             2
           );
-          const auxiliar = balancei[0];
-          balancei[0] = parseFloat(auxiliar) + parseFloat(aux);
+          const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 6)).toFixed(
+            2
+          );
+          const apr = ethers.utils.formatUnits(ap, 8);
+          const i = 0;
+          const date = toDateTime(dat);
+
+          if (is == true && aux == true) {
+            if (parseInt(item) == 0) {
+              aux = false;
+            }
+            const stak = {
+              id: parseInt(item),
+              position: parseInt(i),
+              positionR: parseInt(pr), //llamar funcion
+              precio: precio, //getpricePlusfee
+              fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+              Apr: parseInt(apr), // getApr
+              cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
+              idCR: parseInt(item),
+              idW: parseInt(item),
+            };
+            i++;
+            inventorys.push(stak);
+          }
         });
+      }
 
-        //const usdtBalance = await usdtContract.balanceOf(address);
-        //const tokenBalance = await tokenContract.balanceOf(address);
+      nftpBalance.map(async (item, index) => {
+        const tipo = await productoMinterContract.getTipo(item);
+        var type = '';
+        if (tipo == 1) {
+          var type = 'PS';
+        } else if (tipo == 2) {
+          var type = 'PA';
+        } else if (tipo == 3) {
+          var type = 'NS';
+        } else if (tipo == 4) {
+          var type = 'IV';
+        } else if (tipo == 5) {
+          var type = 'CP';
+        } else if (tipo == 6) {
+          var type = 'CG';
+        } else if (tipo == 7) {
+          var type = 'NC';
+        } else if (tipo == 8) {
+          var type = 'AP';
+        }
 
-        //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
-        //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 6);
+        const price = await productoMinterContract.buyPrice(
+          tipo,
+          tokenContract.address
+        );
 
-        /*let preciosP =[]
+        const precio = ethers.utils.formatUnits(price, 6);
+        Productos.map((item) => {
+          if (item.tipo == type) {
+            const prod = {
+              Nombre: item.Nombre,
+              img: item.img,
+              precio: parseInt(precio),
+              tipo: item.tipo,
+              tipoN: item.tipoN,
+              descripcion: item.descripcion,
+              id: item.tipoN,
+            };
+            inventoryp.push(prod);
+          }
+        });
+      });
+
+      nftiBalance.map(async (item) => {
+        const tipo = await inversionMinterContract.getTipo(item);
+        var type = '';
+        if (tipo == 1) {
+          var type = '100';
+        } else if (tipo == 2) {
+          var type = '1K';
+        } else if (tipo == 3) {
+          var type = '5K';
+        } else if (tipo == 4) {
+          var type = '10K';
+        } else if (tipo == 5) {
+          var type = '20K';
+        } else if (tipo == 6) {
+          var type = '50K';
+        } else if (tipo == 7) {
+          var type = '100K';
+        }
+
+        const price = await inversionMinterContract.buyPrice(
+          tipo,
+          tokenContract.address
+        );
+
+        const precio = ethers.utils.formatUnits(price, 6);
+        if (Inversiones[tipo - 1]?.tipo == type) {
+          const inv = {
+            Nombre: Inversiones[tipo - 1].Nombre,
+            img: Inversiones[tipo - 1].img,
+            precio: parseInt(precio),
+            tipo: Inversiones[tipo - 1].tipo,
+            descripcion: Inversiones[tipo - 1].descripcion,
+            id: item,
+          };
+          inventoryi.push(inv);
+        }
+      });
+
+      let balancei = [];
+      balancei[0] = 0;
+      nftiBalance.map(async (item) => {
+        const precio = await inversionMinterContract.getPricePlusFee(item);
+        const aux = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(2);
+        const auxiliar = balancei[0];
+        balancei[0] = parseFloat(auxiliar) + parseFloat(aux);
+      });
+
+      //const usdtBalance = await usdtContract.balanceOf(address);
+      //const tokenBalance = await tokenContract.balanceOf(address);
+
+      //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
+      //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 6);
+
+      /*let preciosP =[]
       let preciosI =[]
 
 
@@ -1068,38 +1054,36 @@ export const connectWallet = () => async (dispatch) => {
         preciosP.push(price)
       })*/
 
-        //  dispatch(subscribeProvider(instance));
+      //  dispatch(subscribeProvider(instance));
 
-        await dispatch(
-          dataLoaded({
-            usdtContract,
-            tokenContract,
-            productoMinter: productoMinterContract,
-            inversionMinter: inversionMinterContract,
-            staking: stakingContract,
-            accountAddress: accounts[0],
-            //usdtBalance: balanceFormat,
-            //tokenBalance: balanceFormat2,
-            inventoryp: inventoryp,
-            inventoryi: inventoryi,
-            inventorys: inventorys,
-            instance: null,
-            balancei: balancei,
-          })
-        );
+      await dispatch(
+        dataLoaded({
+          usdtContract,
+          tokenContract,
+          productoMinter: productoMinterContract,
+          inversionMinter: inversionMinterContract,
+          staking: stakingContract,
+          accountAddress: accounts[0],
+          //usdtBalance: balanceFormat,
+          //tokenBalance: balanceFormat2,
+          inventoryp: inventoryp,
+          inventoryi: inventoryi,
+          inventorys: inventorys,
+          instance: null,
+          balancei: balancei,
+        })
+      );
 
-        dispatch(
-          conectar(accounts[0], productoMinterContract, stakingContract)
-        );
+      dispatch(conectar(accounts[0], productoMinterContract, stakingContract));
 
-        /*instance.on('close',() => {
+      /*instance.on('close',() => {
       web3Modal && web3Modal.clearCachedProvider();
       dispatch(disconectWallet())
   });*/
 
-        //esto se llama desde el use-connect
+      //esto se llama desde el use-connect
 
-        /* instance.on('accountsChanged', async (accounts) => {
+      /* instance.on('accountsChanged', async (accounts) => {
 
      // const usdtBalance = await usdtContract.balanceOf(accounts[0]);
       //const tokenBalance = aw ait tokenContract.balanceOf(accounts[0]);
@@ -1128,70 +1112,69 @@ export const connectWallet = () => async (dispatch) => {
       dispatch(userChange());
       dispatch(adminChange());
     });*/
-      } else {
-        if (process.env.NODE_ENV === 'production') {
-          try {
-            await provider.provider.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: `0x${Number(5).toString(16)}` }],
-            });
-          } catch (switchError) {
-            if (switchError.code === 4902) {
-              try {
-                await provider.provider.request({
-                  method: 'wallet_addEthereumChain',
-                  params: [
-                    {
-                      chainId: `0x${Number(5).toString(16)}`,
-                      chainName: 'Red de prueba Goerli',
-                      nativeCurrency: {
-                        name: 'Red de prueba Goerli',
-                        symbol: 'GoerliETH',
-                        decimals: 18,
-                      },
-                      rpcUrls: [RPC_URL],
-                      blockExplorerUrls: [
-                        'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
-                      ],
+    } else {
+      if (process.env.NODE_ENV === 'production') {
+        try {
+          await provider.provider.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: `0x${Number(5).toString(16)}` }],
+          });
+        } catch (switchError) {
+          if (switchError.code === 4902) {
+            try {
+              await provider.provider.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: `0x${Number(5).toString(16)}`,
+                    chainName: 'Red de prueba Goerli',
+                    nativeCurrency: {
+                      name: 'Red de prueba Goerli',
+                      symbol: 'GoerliETH',
+                      decimals: 18,
                     },
-                  ],
-                });
-              } catch (addError) {
-                console.log(addError);
-              }
+                    rpcUrls: [RPC_URL],
+                    blockExplorerUrls: [
+                      'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
+                    ],
+                  },
+                ],
+              });
+            } catch (addError) {
+              console.log(addError);
             }
           }
         }
-        if (process.env.NODE_ENV === 'development') {
-          try {
-            await provider.provider.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: `0x${Number(5).toString(16)}` }],
-            });
-          } catch (switchError) {
-            if (switchError.code === 4902) {
-              try {
-                await provider.provider.request({
-                  method: 'wallet_addEthereumChain',
-                  params: [
-                    {
-                      chainId: `0x${Number(5).toString(16)}`,
-                      chainName: 'Red de prueba Goerli',
-                      nativeCurrency: {
-                        name: 'Red de prueba Goerli',
-                        symbol: 'GoerliETH',
-                        decimals: 18,
-                      },
-                      rpcUrls: [RPC_URL],
-                      blockExplorerUrls: [
-                        'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
-                      ],
+      }
+      if (process.env.NODE_ENV === 'development') {
+        try {
+          await provider.provider.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: `0x${Number(5).toString(16)}` }],
+          });
+        } catch (switchError) {
+          if (switchError.code === 4902) {
+            try {
+              await provider.provider.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: `0x${Number(5).toString(16)}`,
+                    chainName: 'Red de prueba Goerli',
+                    nativeCurrency: {
+                      name: 'Red de prueba Goerli',
+                      symbol: 'GoerliETH',
+                      decimals: 18,
                     },
-                  ],
-                });
-              } catch (addError) {
-                console.log(addError);
-              }
+                    rpcUrls: [RPC_URL],
+                    blockExplorerUrls: [
+                      'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
+                    ],
+                  },
+                ],
+              });
+            } catch (addError) {
+              console.log(addError);
             }
           }
         }
