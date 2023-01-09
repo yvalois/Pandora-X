@@ -41,7 +41,6 @@ export default function SelectWallet({ ...props }) {
   };
 
   useEffect(() => {
-    disconnectWallet();
     console.log(activeChain);
     console.log(provider);
     dispatch(connectWallet(address, provider));

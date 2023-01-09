@@ -53,7 +53,7 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   const { chains, provider, webSocketProvider } = configureChains(
-    [polygon, mainnet],
+    [polygon],
     [alchemyProvider({ apiKey: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn' })]
   );
 
