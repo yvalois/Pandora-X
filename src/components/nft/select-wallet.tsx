@@ -5,23 +5,40 @@ import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
 import ModalRegister from '@/components/modal-Register/ModalRegister';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { useAccount } from 'wagmi';
+import {
+  useAccount,
+  configureChains,
+  createClient,
+  WagmiConfig,
+  useProvider,
+} from 'wagmi';
+import { useDispatch } from 'react-redux';
+import { connectWallet } from '../../redux/Blockchain/blockchainAction';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { mainnet, polygon, goerli } from 'wagmi/chains';
 
-import { ConnectKitButton } from 'connectkit';
+import { ConnectKitButton, useModal as hola } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
   // const { address, connectToWallet, error, isUser } = useContext(WalletContext);
+  const dispatch = useDispatch<AppDispatch>();
   const error = false;
-
+  const { setOpen } = hola();
   const { address } = useAccount();
 
   const { closeModal } = useModal();
   useEffect(() => {
     if (address) closeModal();
   }, [address, closeModal]);
+  const provider = useProvider();
+
+  const abrir = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
-    alert(address);
+    console.log(provider);
+    dispatch(connectWallet(address, provider));
   }, [address]);
 
   return (
@@ -60,15 +77,15 @@ export default function SelectWallet({ ...props }) {
         </div>
 
         <div
-          className="mt-12 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
-          //  onClick={connectToWallet}
+          className="mt-12 flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
+          onClick={abrir}
         >
-          <span>MetaMask</span>
-          <span className="h-auto w-9">
+          <span>Conectar Cartera</span>
+          {/* <span className="h-auto w-9">
             <Image src={metamaskLogo} alt="metamask" />
-          </span>
+          </span> */}
         </div>
-        <ConnectKitButton />
+        {/* <ConnectKitButton /> */}
 
         {/* <MobileView>
             <h1>XD</h1>

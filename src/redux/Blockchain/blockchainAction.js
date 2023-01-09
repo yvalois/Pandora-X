@@ -824,7 +824,7 @@ export const update = (accountAddress) => async (dispatch) => {
     });
 };
 
-export const connectWallet = () => async (dispatch) => {
+export const connectWallet = (address, provider) => async (dispatch) => {
   dispatch(loading());
   try {
     /*const web3Modal =
@@ -833,7 +833,7 @@ export const connectWallet = () => async (dispatch) => {
         cacheProvider: true,
       });*/
 
-    const _web3Modal = new Web3Modal({
+    /*const _web3Modal = new Web3Modal({
       network: 'Polygon',
       cacheProvider: true,
       disableInjectedProvider: false,
@@ -844,62 +844,67 @@ export const connectWallet = () => async (dispatch) => {
     /*let aux1Provider =ethereumClient.wagmi
     let aux2Provider = aux1Provider.providers
     let aux3Provider = aux2Provider.get(137)
-    let provider =  aux3Provider*/
+    let provider =  aux3Provider
 
-    const provider = new ethers.providers.Web3Provider(instance);
+    const provider = new ethers.providers.Web3Provider(instance);*/
 
     setProvider(provider);
-    const signer = provider.getSigner();
+    console.log(provider);
+
+    //  const signer = provider.getSigner();
 
     //signer._address =  "0x"
 
-    const accounts = await provider.listAccounts();
+    // const accounts = await provider.listAccounts();
 
     //  const networkId = await provider.getNetwork();
 
     if (1 == 1) {
-      const usdtContract = new ethers.Contract(USDT_ADDRESS, abiErc20, signer);
+      const usdtContract = new ethers.Contract(
+        USDT_ADDRESS,
+        abiErc20,
+        provider
+      );
       const tokenContract = new ethers.Contract(
         TokenPrueba_ADDRESS,
         abiErc20,
-        signer
+        provider
       );
 
       const productoMinterContract = new ethers.Contract(
         PRODUCTOS_MINTER_ADDRESS,
         productoMinterAbi,
-        signer
+        provider
       );
 
       const inversionMinterContract = new ethers.Contract(
         INVERSION_MINTER_ADDRESS,
         inversionMinterAbi,
-        signer
+        provider
       );
 
       /*  const frenchiesMinter = new ethers.Contract(
         INVERSION_MINTER_ADDRESS,
         frenchiesAbi,
-        signer
+        provider
       );  */
 
       const stakingContract = new ethers.Contract(
         STAKING_ADDRESS,
         stakingAbi,
-        signer
+        provider
       );
       /*  const stakingfrenEContract = new ethers.Contract(
         STAKING_ADDRESS,
         stakingErAbi,
-        signer
+        provider
       );
 
       const stakingfrenPContract = new ethers.Contract(
         STAKING_ADDRESS, 
         stakingPAbi,
-        signer
+        provider
       );  */
-
       await getProductos();
       await getInversiones();
 
@@ -907,16 +912,12 @@ export const connectWallet = () => async (dispatch) => {
 
       // const nftStakingF = await stakingfrenEContract.getNfts();
 
-      const nftpBalance = await productoMinterContract.getMyInventory(
-        accounts[0]
-      );
+      const nftpBalance = await productoMinterContract.getMyInventory(address);
 
-      const nftiBalance = await inversionMinterContract.getMyInventory(
-        accounts[0]
-      );
+      const nftiBalance = await inversionMinterContract.getMyInventory(address);
 
       /*  const nftfBalance = await frenchiesMinterContract.getMyInventory(
-        accounts[0]
+        address
       );  */
 
       const inventoryp = [];
@@ -935,7 +936,7 @@ export const connectWallet = () => async (dispatch) => {
             return t;
           }
 
-          const is = await stakingContract.NftIsStaking(accounts[0], item);
+          const is = await stakingContract.NftIsStaking(address, item);
 
           const pr = await stakingContract.getPosition(item);
           const pre = await inversionMinterContract.getPricePlusFee(item);
@@ -982,7 +983,7 @@ export const connectWallet = () => async (dispatch) => {
             return t;
           }
 
-          const is = await stakingfrenEContract.NftIsStaking(accounts[0], item);
+          const is = await stakingfrenEContract.NftIsStaking(address, item);
 
           const pr = await stakingfrenEContract.getPosition(item);
           const pre = await frenchiesMinterContract.getPricePlusFee(item); //getPrice 
@@ -1169,7 +1170,7 @@ export const connectWallet = () => async (dispatch) => {
           staking: stakingContract,
           // stakinfETH: stakingfrenEContract,
           // stakingPOL: stakingfrenPContract,
-          accountAddress: accounts[0],
+          accountAddress: address,
           //usdtBalance: balanceFormat,
           //tokenBalance: balanceFormat2,
           inventoryp: inventoryp,
@@ -1182,7 +1183,7 @@ export const connectWallet = () => async (dispatch) => {
         })
       );
 
-      dispatch(conectar(accounts[0], productoMinterContract, stakingContract));
+      dispatch(conectar(address, productoMinterContract, stakingContract));
 
       /*instance.on('close',() => {
       web3Modal && web3Modal.clearCachedProvider();
