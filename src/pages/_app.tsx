@@ -11,6 +11,7 @@ import SettingsButton from '@/components/settings/settings-button';
 import SettingsDrawer from '@/components/settings/settings-drawer';
 import { WalletProvider } from '@/lib/hooks/use-connect';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
+import { ConnectKitProvider, getDefaultClient } from 'connectkit';
 // base css file
 import 'swiper/css';
 import '@/assets/css/scrollbar.css';
@@ -41,7 +42,14 @@ import {
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
-  const [client, setClient] = useState({});
+  const client = createClient(
+    getDefaultClient({
+      appName: 'ConnectKit CRA demo',
+      //infuraId: process.env.REACT_APP_INFURA_ID,
+      //alchemyId:  process.env.REACT_APP_ALCHEMY_ID,
+      chains: [mainnet, polygon, optimism, arbitrum],
+    })
+  );
 
   useEffect(() => {
     setDomLoaded(true);
@@ -60,22 +68,24 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
         />
       </Head>
       <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <ThemeProvider
-              attribute="class"
-              enableSystem={false}
-              defaultTheme="light"
-            >
-              <WalletProvider>
-                {getLayout(<Component {...pageProps} />)}
-                <SettingsButton />
-                <SettingsDrawer />
-                <ModalsContainer />
-                <DrawersContainer />
-              </WalletProvider>
-            </ThemeProvider>
-            {/* <Web3Modal
+        <WagmiConfig client={client}>
+          <ConnectKitProvider theme="auto">
+            <QueryClientProvider client={queryClient}>
+              <Hydrate state={pageProps.dehydratedState}>
+                <ThemeProvider
+                  attribute="class"
+                  enableSystem={false}
+                  defaultTheme="light"
+                >
+                  <WalletProvider>
+                    {getLayout(<Component {...pageProps} />)}
+                    <SettingsButton />
+                    <SettingsDrawer />
+                    <ModalsContainer />
+                    <DrawersContainer />
+                  </WalletProvider>
+                </ThemeProvider>
+                {/* <Web3Modal
         ethereumClient={ethereumClient}
         // Custom Linking Mobile Wallets
         mobileWallets={[
@@ -144,9 +154,14 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
           42161: '/images/chain_arbitrum.webp'
         }}
       /> */}
-          </Hydrate>
-          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-        </QueryClientProvider>
+              </Hydrate>
+              <ReactQueryDevtools
+                initialIsOpen={false}
+                position="bottom-right"
+              />
+            </QueryClientProvider>
+          </ConnectKitProvider>
+        </WagmiConfig>
       </Provider>
     </>
   );

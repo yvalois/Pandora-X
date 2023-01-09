@@ -5,14 +5,24 @@ import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
 import ModalRegister from '@/components/modal-Register/ModalRegister';
 import { BrowserView, MobileView } from 'react-device-detect';
+import { useAccount } from 'wagmi';
+
+import { ConnectKitButton } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
-  const { address, connectToWallet, error, isUser } = useContext(WalletContext);
+  // const { address, connectToWallet, error, isUser } = useContext(WalletContext);
+  const error = false;
+
+  const { address } = useAccount();
 
   const { closeModal } = useModal();
   useEffect(() => {
     if (address) closeModal();
   }, [address, closeModal]);
+
+  useEffect(() => {
+    alert(address);
+  }, [address]);
 
   return (
     <>
@@ -21,7 +31,7 @@ export default function SelectWallet({ ...props }) {
         {...props}
       >
         <h2
-          onClick={connectToWallet}
+          // onClick={connectToWallet}
           className="mb-4 text-center text-2xl font-medium uppercase text-gray-900 dark:text-white"
         >
           Connect Wallet
@@ -51,16 +61,18 @@ export default function SelectWallet({ ...props }) {
 
         <div
           className="mt-12 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
-          onClick={connectToWallet}
+          //  onClick={connectToWallet}
         >
           <span>MetaMask</span>
           <span className="h-auto w-9">
             <Image src={metamaskLogo} alt="metamask" />
           </span>
-          <MobileView>
-            <h1>XD</h1>
-          </MobileView>
         </div>
+        <ConnectKitButton />
+
+        {/* <MobileView>
+            <h1>XD</h1>
+          </MobileView> */}
 
         {error && (
           <p className="mt-3 text-center text-xs text-red-500">
