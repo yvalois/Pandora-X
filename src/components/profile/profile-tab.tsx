@@ -24,30 +24,6 @@ export default function ProfileTab() {
     (state: any) => state.blockchain
   );
 
-  const getData = async () => {
-    //const item = currentF[0].id
-    const data = await frenchiesMinter.tokenURI(0);
-
-    const _data = data.toString();
-
-    setTimeout(() => {
-      console.log(_data);
-      fetch(
-        'https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmckrnsqYqVAP8E281xCL8WBebMgcqxbo8aZUDEY3jZ8az',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((response) => {
-          console.log(response);
-        });
-    }, 5000);
-  };
-
   useEffect(() => {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
@@ -140,9 +116,7 @@ export default function ProfileTab() {
             <NFTGrid
               key={nft.Nombre}
               name={nft.Nombre}
-              image={
-                'https://gateway.pinata.cloud/ipfs/QmaCeYr88rrDvjxMPHfKtihuq7DmYYzfjkeKC2A4BD8EfW'
-              }
+              image={nft.img}
               price={13}
               number={nft.id}
               alldata={false}

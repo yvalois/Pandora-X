@@ -125,9 +125,7 @@ export default function ProfileTabUser() {
             <NFTGrid
               key={nft.Nombre}
               name={nft.Nombre}
-              image={
-                'https://gateway.pinata.cloud/ipfs/QmaCeYr88rrDvjxMPHfKtihuq7DmYYzfjkeKC2A4BD8EfW'
-              }
+              image={nft.img}
               price={13}
               number={nft.id}
               alldata={false}
@@ -160,7 +158,4 @@ export default function ProfileTabUser() {
       </TabPanel>
     </ParamTab>
   );
-}
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
 }

@@ -1116,10 +1116,10 @@ export const connectWallet =
           const precio = 1;
 
           const prod = {
-            Nombre: item.Nombre,
-            img: item.img,
+            Nombre: 'HUEVO52',
+            img: 'https://gateway.pinata.cloud/ipfs/QmaCeYr88rrDvjxMPHfKtihuq7DmYYzfjkeKC2A4BD8EfW',
             precio: parseInt(precio),
-            descripcion: item.descripcion,
+            descripcion: '',
             id: item,
           };
           inventoryf.push(prod);
