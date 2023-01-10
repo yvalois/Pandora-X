@@ -10,7 +10,7 @@ import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import { useModal as hola } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
-  // const { disconnectWallet } = useContext(WalletContext);
+  const { disconnectWallet } = useContext(WalletContext);
   const dispatch = useDispatch<AppDispatch>();
   const error = false;
   const { setOpen } = hola();

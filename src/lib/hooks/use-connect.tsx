@@ -4,12 +4,7 @@ import { ethers } from 'ethers';
 //import { setProvider } from '../../NFTROL';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  connectRequest,
-  connectSuccess,
-  //disconectWallet,
-  connectSuccessToMongo,
-} from '../../redux/Usuario/UsuarioActions';
+
 import {
   connectWallet,
   disconectWallet,
