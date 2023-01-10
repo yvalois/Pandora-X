@@ -3,8 +3,6 @@ import metamaskLogo from '@/assets/images/metamask.svg';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
-import ModalRegister from '@/components/modal-Register/ModalRegister';
-import { BrowserView, MobileView } from 'react-device-detect';
 import {
   useAccount,
   configureChains,
@@ -17,8 +15,6 @@ import {
 } from 'wagmi';
 import { useDispatch } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { mainnet, polygon, goerli } from 'wagmi/chains';
 
 import { ConnectKitButton, useModal as hola } from 'connectkit';
 

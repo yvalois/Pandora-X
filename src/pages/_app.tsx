@@ -11,7 +11,7 @@ import SettingsButton from '@/components/settings/settings-button';
 import SettingsDrawer from '@/components/settings/settings-drawer';
 import { WalletProvider } from '@/lib/hooks/use-connect';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
-import { ConnectKitProvider, getDefaultClient } from 'connectkit';
+import { ConnectKitProvider } from 'connectkit';
 
 // base css file
 import 'swiper/css';

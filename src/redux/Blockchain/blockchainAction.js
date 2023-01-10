@@ -8,13 +8,9 @@ import inversionMinterAbi from '../../abi/InversionMinter.json';
 import stakingPAbi from '../../abi/StakingETH.json';
 import stakingErAbi from '../../abi/StakingETH.json';
 import frenchiesAbi from '../../abi/FrenchiesBlues.json';
-import { useSigner, useProvider } from 'wagmi';
 
 import stakingAbi from '../../abi/staking.json';
-import { items } from '../../utils/constant'; //Buscar
 import { setProvider } from '../../NFTROL';
-
-import { flatMap } from 'lodash';
 
 //import WalletLink from 'walletlink'
 
