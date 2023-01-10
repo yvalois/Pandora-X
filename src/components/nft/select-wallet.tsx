@@ -3,14 +3,14 @@ import metamaskLogo from '@/assets/images/metamask.svg';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
-import { useAccount, useSigner } from 'wagmi';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useDispatch } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 
 import { useModal as hola } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
-  const { disconnectWallet } = useContext(WalletContext);
+  // const { disconnectWallet } = useContext(WalletContext);
   const dispatch = useDispatch<AppDispatch>();
   const error = false;
   const { setOpen } = hola();
