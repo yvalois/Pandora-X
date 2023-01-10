@@ -20,8 +20,9 @@ import { getMintedNftProducts } from '@/redux/Minted/MintedAction';
 export default function ProfileTabUser() {
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
+  const [currentF, setCurrentF] = useState([]);
 
-  const { inventoryp, inventoryi } = useSelector(
+  const { inventoryp, inventoryi, inventoryf, frenchiesMinter } = useSelector(
     (state: any) => state.blockchain
   );
 
@@ -32,12 +33,12 @@ export default function ProfileTabUser() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    //const itemsPerPage = 6
-    //const start = (currentPage - 1) * itemsPerPage
-
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
-  }, [currentItems]);
+    setCurrentF(inventoryf);
+
+    setTimeout(() => {}, 5000);
+  }, [inventoryp, inventoryi, inventoryf]);
 
   return (
     <ParamTab
@@ -120,15 +121,30 @@ export default function ProfileTabUser() {
       </TabPanel>
       <TabPanel className="h-full w-full focus:outline-none">
         <div className="grid h-full w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
-          <div className="flex h-full w-full  items-center justify-center ">
-            <div className=" h-full w-full">
-              <span>
-                <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
-                  Nueva Coleccion
-                </h1>
-              </span>
+          {currentF?.map((nft) => (
+            <NFTGrid
+              key={nft.Nombre}
+              name={nft.Nombre}
+              image={
+                'https://gateway.pinata.cloud/ipfs/QmaCeYr88rrDvjxMPHfKtihuq7DmYYzfjkeKC2A4BD8EfW'
+              }
+              price={13}
+              number={nft.id}
+              alldata={false}
+              type={'Frenchies Blues'}
+            />
+          ))}
+          {currentF.length == 0 && (
+            <div className="flex h-full w-full  items-center justify-center ">
+              <div className=" h-full w-full">
+                <span>
+                  <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                    No tienes Nft's
+                  </h1>
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </TabPanel>
 

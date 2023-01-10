@@ -351,6 +351,14 @@ export default function NFTGrid({
               <Verified className="ltr:ml-1 rtl:mr-1" />
             </div>
           )}
+
+          <div
+            href={`/infoinv/${number}`}
+            className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
+          >
+            {type}
+            <Verified className="ltr:ml-1 rtl:mr-1" />
+          </div>
         </div>
 
         {alldata && (

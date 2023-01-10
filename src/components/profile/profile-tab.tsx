@@ -18,15 +18,43 @@ import { useEffect, useState } from 'react';
 export default function ProfileTab() {
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
+  const [currentF, setCurrentF] = useState([]);
 
-  const { inventoryp, inventoryi } = useSelector(
+  const { inventoryp, inventoryi, inventoryf, frenchiesMinter } = useSelector(
     (state: any) => state.blockchain
   );
+
+  const getData = async () => {
+    //const item = currentF[0].id
+    const data = await frenchiesMinter.tokenURI(0);
+
+    const _data = data.toString();
+
+    setTimeout(() => {
+      console.log(_data);
+      fetch(
+        'https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmckrnsqYqVAP8E281xCL8WBebMgcqxbo8aZUDEY3jZ8az',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((response) => {
+          console.log(response);
+        });
+    }, 5000);
+  };
 
   useEffect(() => {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
-  }, [inventoryp, inventoryi]);
+    setCurrentF(inventoryf);
+
+    setTimeout(() => {}, 5000);
+  }, [inventoryp, inventoryi, inventoryf]);
 
   return (
     <ParamTab
@@ -107,18 +135,31 @@ export default function ProfileTab() {
         </div>
           </TabPanel> */}
       <TabPanel className="focus:outline-none">
-        <div className="grid h-[100%] w-[100%] gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
-          <div className=" flex h-full  w-full justify-center self-center">
-            <div className="w-full items-center justify-center">
+        <div className="grid h-full w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
+          {currentF?.map((nft) => (
+            <NFTGrid
+              key={nft.Nombre}
+              name={nft.Nombre}
+              image={
+                'https://gateway.pinata.cloud/ipfs/QmaCeYr88rrDvjxMPHfKtihuq7DmYYzfjkeKC2A4BD8EfW'
+              }
+              price={13}
+              number={nft.id}
+              alldata={false}
+              type={'Frenchies Blues'}
+            />
+          ))}
+          {currentF.length == 0 && (
+            <div className="flex h-full w-full  items-center justify-center ">
               <div className=" h-full w-full">
                 <span>
                   <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
-                    Nueva Coleccion
+                    No tienes Nft's
                   </h1>
                 </span>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </TabPanel>
 

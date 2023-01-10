@@ -39,4 +39,5 @@ module.exports = withPWA({
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  loaders: [{ test: /\.css$/, loader: 'ignore-loader' }],
 });

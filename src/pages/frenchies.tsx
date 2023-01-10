@@ -35,135 +35,6 @@ import {
   uInvertion,
   connectWallet,
 } from '../redux/Blockchain/blockchainAction';
-import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
-import inversionMinterAbi from '../abi/InversionMinter.json';
-
-const productos = [
-  {
-    nombre: 'Pandora X NFT - Podcast-Streaming',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Streaming%20%282%29.gif',
-    precio: 100,
-    tipo: 'PS',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Academia X',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Academia X%20%281%29.gif',
-    precio: 100,
-    tipo: 'PA',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - NFT Studio',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20NFT%20Studio%20%282%29.gif',
-    precio: 100,
-    tipo: 'NS',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Investing Value',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Investing%20Value%20%282%29.gif',
-    precio: 100,
-    tipo: 'IV',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Comunidad Privada',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Privada.gif',
-    precio: 100,
-    tipo: 'CP',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Comunidad Gratuita',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Gratuita.gif',
-    precio: 100,
-    tipo: 'CG',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Coaching',
-
-    precio: 100,
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Coaching.gif',
-    tipo: 'NC',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Alpha Report',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Alpha%20Report.gif',
-    precio: 100,
-    tipo: 'AP',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-];
-
-const inversion = [
-  {
-    nombre: 'UBX Card 100',
-    img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100.gif',
-    precio: 100,
-    tipo: '100',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'UBX Card 1K',
-    img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%201k%20%281%29.gif',
-    precio: 100,
-    tipo: '1K',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'UBX Card 5K',
-    img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%205k.gif',
-    precio: 100,
-    tipo: '5K',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'UBX Card 10K',
-    img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2010k.gif',
-    precio: 100,
-    tipo: '10K',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'UBX Card 20K',
-    img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2020k.gif',
-    precio: 100,
-    tipo: '20K',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'UBX Card 50K',
-    img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%2050k.gif',
-    precio: 100,
-    tipo: '50K',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'UBX Card 100K',
-    img: 'https://gateway.pinata.cloud/ipfs/QmNZiL3puhFyLYqqX9rL8WD9GoWDbBfuQn6azgZ1MFaCK6/UBX%20Card%20-%20100k.gif',
-    precio: 100,
-    tipo: '100K',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-];
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -472,165 +343,96 @@ const Frenchies: NextPageWithLayout<
   const [cuenta, setCuenta] = useState('');
   const [approvedToken, setApprovedToken] = useState(0);
   const Usuario = useSelector((state) => state.Usuario);
-  const { dataloaded, inversiones, productos } = useSelector(
-    (state: any) => state.minted
+
+  const { frenchiesMinter, accountAddress, tokenContract } = useSelector(
+    (state) => state.blockchain
   );
 
-  const {
-    productoMinter,
-    inversionMinter,
-    isConnect,
-    accountAddress,
-    tokenContract,
-  } = useSelector((state) => state.blockchain);
+  const precio = 1;
 
   const { referidor } = useSelector((state) => state.Usuario);
 
   const getNft = async () => {
     await dispatch(getMintedNftProducts());
   };
-  const verifyApprove = async (type) => {
+  const verifyApprove = async () => {
     try {
-      if (type == 'producto') {
-        const usdt = await tokenContract.allowance(
-          accountAddress,
-          productoMinter.address
-        ); //MarketPlace
-        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
-      } else if (type == 'inversion') {
-        const usdt = await tokenContract.allowance(
-          accountAddress,
-          inversionMinter.address
-        ); //MarketPlace
-        //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-        setApprovedToken(ethers.utils.formatUnits(usdt, 6));
-      }
+      const usdt = await tokenContract.allowance(
+        accountAddress,
+        frenchiesMinter.address
+      ); //MarketPlace
+      //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
+      setApprovedToken(ethers.utils.formatUnits(usdt, 6));
+      alert(usdt);
     } catch (e) {
       console.log(e);
     }
   };
 
-  const approve = async (type, precio) => {
+  const approve = async () => {
     setLoading(true);
 
     try {
-      if (type == 'producto') {
-        setTokenAddress(tokenContract.address);
+      console.log(tokenContract);
+      setTokenAddress(tokenContract.address);
 
-        const decimals = 6;
+      const decimals = 6;
 
-        const tx = await tokenContract.approve(
-          productoMinter.address,
-          ethers.utils.parseUnits(precio.toString(), decimals)
-        );
+      const tx = await tokenContract.approve(
+        frenchiesMinter.address,
+        ethers.utils.parseUnits(precio.toString(), decimals)
+      );
 
-        await tx.wait();
-        await verifyApprove(type);
-        setLoading(false);
-      } else if (type == 'inversion') {
-        setTokenAddress(tokenContract.address);
-        const decimals = 6;
-        const tx = await tokenContract.approve(
-          inversionMinter.address,
-          ethers.utils.parseUnits(precio.toString(), decimals)
-        );
+      console.log(tx);
 
-        await tx.wait();
-        await verifyApprove(type);
-        setLoading(false);
-      }
+      await tx.wait();
+      await verifyApprove();
+      setLoading(false);
     } catch (e) {
       setLoading(false);
+      console.log(e);
     }
   };
 
-  const buyNft = async (type, tipoN) => {
+  const buyNft = async () => {
     setLoading(true);
 
     try {
-      if (type == 'producto') {
-        if (!Usuario.isReferido && Usuario.type == 'Agente X') {
-          let porcentaje = 0;
-          if (Usuario.range == 'peerx') {
-            porcentaje = 200;
-          } else if (Usuario.range == 'blockelite') {
-            porcentaje = 250;
-          } else if (Usuario.range == 'blockmaster') {
-            porcentaje = 350;
-          } else if (Usuario.range == 'blockcreator') {
-            porcentaje = 400;
-          }
-
-          const tx = await productoMinter.buyTokenWithReferido(
-            tipoN,
-            tokenContract.address,
-            referidor,
-            porcentaje
-          );
-          //referidos
-          await tx.wait();
-          setLoading(false);
-          setApprovedToken(0);
-          dispatch(uProduct());
-        } else {
-          const tx = await productoMinter.buyToken(
-            tipoN,
-            tokenContract.address
-          );
-
-          await tx.wait(); //tener en cuenta para los proximos cambios
-          setLoading(false);
-          setApprovedToken(0);
-          dispatch(uProduct());
+      if (!Usuario.isReferido && Usuario.type == 'Agente X') {
+        let porcentaje = 0;
+        if (Usuario.range == 'peerx') {
+          porcentaje = 200;
+        } else if (Usuario.range == 'blockelite') {
+          porcentaje = 250;
+        } else if (Usuario.range == 'blockmaster') {
+          porcentaje = 350;
+        } else if (Usuario.range == 'blockcreator') {
+          porcentaje = 400;
         }
-      } else if (type == 'inversion') {
-        const tx = await inversionMinter.buyToken(tipoN, tokenContract.address);
+
+        const tx = await frenchiesMinter.buyTokenWithReferido(
+          tokenContract.address,
+          referidor,
+          porcentaje
+        );
+        //referidos
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uInvertion());
+        dispatch(uProduct());
+      } else {
+        console.log(frenchiesMinter.address);
+        const tx = await frenchiesMinter.buyToken(tokenContract.address);
+
+        await tx.wait(); //tener en cuenta para los proximos cambios
+        setLoading(false);
+        setApprovedToken(0);
+        dispatch(uProduct());
       }
     } catch (err) {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      await getNft();
-
-      //const itemsPerPage = 6
-      //const start = (currentPage - 1) * itemsPerPage
-      setCurrentItems(productos);
-      setCurrentInv(inversiones);
-    };
-    fetchItems();
-  }, [dataloaded, inversiones, productos]);
-
-  /*useEffect(() => {
-    const fetchItems = async () => {
-      if(isConnect){
-        productoP.map(async(item)=>{
-
-          const precio = await productoMinter.buyPrice(item.tipoN)
-
-          const price = ethers.utils.formatUnits(precio, 18)
-          productoP[item.tipoN-1].precio = parseInt(price)
-  
-        })
-        inversionI.map(async(item)=>{
-
-          const precio = await inversionMinter.buyPrice(item.tipoN)
-          const price = ethers.utils.formatUnits(precio, 18)
-          inversionI[item.tipoN-1].precio = parseInt(price)
-  
-        })
-        console.log(productoP)
-      }
-    }
-    fetchItems();
-  },[inversionI]);*/
 
   return (
     <>
@@ -664,7 +466,7 @@ const Frenchies: NextPageWithLayout<
               </div>
             </div>
           </div>
-          <div className=" w-[100%]">
+          <div className=" h-[100%] w-[100%]">
             <ParamTab
               tabMenu={[
                 {
@@ -672,7 +474,7 @@ const Frenchies: NextPageWithLayout<
                   path: 'coleccion',
                 },
                 {
-                  title: 'Adquiere tu frenchie blue',
+                  title: 'Frenchies',
                   path: 'buy',
                 },
               ]}
@@ -680,8 +482,35 @@ const Frenchies: NextPageWithLayout<
               <TabPanel className="focus:outline-none">
                 <div>Pronto</div>
               </TabPanel>
-              <TabPanel className="focus:outline-none">
-                <div>MINT</div>
+              <TabPanel className="h-full focus:outline-none">
+                <div className="h-full flex-col justify-between">
+                  <div className=" flex justify-center  align-middle">
+                    <Image
+                      src={
+                        'https://cdn-icons-png.flaticon.com/512/3097/3097257.png'
+                      }
+                      alt="wallet"
+                      width={300}
+                      height={300}
+                      className="rounded-none"
+                    />
+                  </div>
+                  <h1 className="mb-[200px] flex  justify-center align-middle font-bold">
+                    Frenchies Blues
+                  </h1>
+
+                  <div className="flex justify-center align-middle">
+                    {approvedToken < precio && !loading && (
+                      <Button onClick={approve}>Aprobar</Button>
+                    )}
+
+                    {loading && <Button>Cargando...</Button>}
+
+                    {approvedToken >= precio && !loading && (
+                      <Button onClick={buyNft}>Comprar</Button>
+                    )}
+                  </div>
+                </div>
               </TabPanel>
             </ParamTab>
           </div>

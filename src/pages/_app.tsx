@@ -22,6 +22,8 @@ import { Provider } from 'react-redux';
 import store from '@/redux/store';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 
+import { infuraProvider } from 'wagmi/providers/infura';
+
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -54,7 +56,7 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
 
   const { chains, provider, webSocketProvider } = configureChains(
     [polygon],
-    [alchemyProvider({ apiKey: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn' })]
+    [infuraProvider({ apiKey: 'ba420f8124134644bf232c4bbebd051d' })]
   );
 
   const client = createClient({
@@ -90,15 +92,6 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
     provider,
     webSocketProvider,
   });
-
-  /*  const client = createClient(
-    getDefaultClient({
-      appName: 'NFT Studio',
-      //infuraId: process.env.REACT_APP_INFURA_ID,
-      alchemyId:  'gcYJsxItcYNjfy01aHklipg1J6foSUFn',
-      chains: [polygon],
-    })
-  ); */
 
   useEffect(() => {
     setDomLoaded(true);

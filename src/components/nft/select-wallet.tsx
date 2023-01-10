@@ -13,6 +13,7 @@ import {
   useProvider,
   useNetwork,
   useSwitchNetwork,
+  useSigner,
 } from 'wagmi';
 import { useDispatch } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
@@ -35,20 +36,31 @@ export default function SelectWallet({ ...props }) {
     if (address) closeModal();
   }, [address, closeModal]);
   const provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const abrir = () => {
     setOpen(true);
   };
 
-  useEffect(() => {
-    console.log(activeChain);
-    console.log(provider);
-    dispatch(connectWallet(address, provider));
+  /*  useEffect(() => {
+
     if (address?.length > 1) {
+    dispatch(connectWallet(address, provider));
+
       //  location.reload()
       setOpen(false);
     }
-  }, [address]);
+  }, [address]);  */
+
+  useEffect(() => {
+    if (!arroz && signer !== undefined) {
+      console.log(signer);
+      dispatch(connectWallet(address, provider, signer));
+
+      //  location.reload()
+      setOpen(false);
+    }
+  }, [signer, arroz]);
 
   return (
     <>
