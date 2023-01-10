@@ -6,18 +6,15 @@ import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button';
 import Image from '@/components/ui/image';
-import AnchorLink from '@/components/ui/links/anchor-link';
 import { Copy } from '@/components/icons/copy';
 import { Check } from '@/components/icons/check';
 import AuthorInformation from '@/components/author/author-information';
 import ProfileTab from '@/components/profile/profile-tab';
 import ProfileTabUser from '@/components/profile/ProfileTabUser';
 import AvatarP from '@/components/ui/AvatarP';
-import { LinkIcon } from '@/components/icons/link-icon';
 // static data
 import { authorData } from '@/data/static/author';
 import { useDispatch, useSelector } from 'react-redux';
-import router from 'next/router';
 import Banner from '@/assets/images/Banner/Banner-Profile.jpg';
 import PeerX from '@/assets/images/profile/PEER-X.jpg';
 import BlockCreator from '@/assets/images/profile/BLOCKCREATOR.jpg';

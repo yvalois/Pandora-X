@@ -22,7 +22,7 @@ export default function ProfileTabUser() {
   const [currentInv, setCurrentInv] = useState([]);
   const [currentF, setCurrentF] = useState([]);
 
-  const { inventoryp, inventoryi, inventoryf, frenchiesMinter } = useSelector(
+  const { inventoryp, inventoryi, inventoryf } = useSelector(
     (state: any) => state.blockchain
   );
 

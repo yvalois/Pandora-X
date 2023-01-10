@@ -21,24 +21,12 @@ import '@/assets/css/range-slider.css';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
 
-import { infuraProvider } from 'wagmi/providers/infura';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
 
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
-import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import {
-  arbitrum,
-  avalanche,
-  bsc,
-  fantom,
-  mainnet,
-  optimism,
-  polygon,
-  goerli,
-} from 'wagmi/chains';
+import { mainnet, polygon } from 'wagmi/chains';
 
 /*type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -49,7 +37,7 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
 
   const { chains, provider, webSocketProvider } = configureChains(
     [polygon],
-    [infuraProvider({ apiKey: 'ba420f8124134644bf232c4bbebd051d' })]
+    [alchemyProvider({ apiKey: 'ba420f8124134644bf232c4bbebd051d' })]
   );
 
   const client = createClient({

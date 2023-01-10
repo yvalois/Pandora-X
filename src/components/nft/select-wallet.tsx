@@ -3,29 +3,18 @@ import metamaskLogo from '@/assets/images/metamask.svg';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
-import {
-  useAccount,
-  configureChains,
-  createClient,
-  WagmiConfig,
-  useProvider,
-  useNetwork,
-  useSwitchNetwork,
-  useSigner,
-} from 'wagmi';
+import { useAccount, useSigner } from 'wagmi';
 import { useDispatch } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 
-import { ConnectKitButton, useModal as hola } from 'connectkit';
+import { useModal as hola } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
-  const { disconnectWallet } = useContext(WalletContext);
+  // const { disconnectWallet } = useContext(WalletContext);
   const dispatch = useDispatch<AppDispatch>();
   const error = false;
   const { setOpen } = hola();
   const { address } = useAccount();
-  const { chain: activeChain } = useNetwork();
-  const { switchNetwork, isLoading } = useSwitchNetwork();
 
   const { closeModal } = useModal();
   useEffect(() => {
