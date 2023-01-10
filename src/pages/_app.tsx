@@ -20,7 +20,6 @@ import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
 
 import { infuraProvider } from 'wagmi/providers/infura';
 
@@ -28,12 +27,6 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-
-import {
-  EthereumClient,
-  modalConnectors,
-  walletConnectProvider,
-} from '@web3modal/ethereum';
 
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import {
