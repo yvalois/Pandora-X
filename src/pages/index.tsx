@@ -18,7 +18,7 @@ import { getMintedNftProducts } from '../redux/Minted/MintedAction';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { ethers } from 'ethers';
 import coaching from '@/assets/images/prod/coaching.jpeg';
 import streaming from '@/assets/images/prod/streaming.jpeg';
@@ -36,6 +36,7 @@ import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
 import { transations } from '../redux/Transactions/TransactionsActions';
 import AvatarP from '@/components/ui/AvatarP';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -461,6 +462,13 @@ const HomePage: NextPageWithLayout<
   useEffect(() => {
     setBalance(balanceI[0]);
   }, [balanceI]);
+
+  const { disconnectWallet } = useContext(WalletContext);
+  useEffect(() => {
+    if (!isConnect) {
+      disconnectWallet();
+    }
+  }, []);
 
   return (
     <>

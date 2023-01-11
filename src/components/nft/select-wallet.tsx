@@ -4,17 +4,19 @@ import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
 import { useAccount, useProvider, useSigner } from 'wagmi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 
 import { useModal as hola } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
-  // const { disconnectWallet } = useContext(WalletContext);
+  const { disconnectWallet } = useContext(WalletContext);
   const dispatch = useDispatch<AppDispatch>();
   const error = false;
   const { setOpen } = hola();
   const { address } = useAccount();
+
+  const { isConnect } = useSelector((state) => state.blockchain);
 
   const { closeModal } = useModal();
   useEffect(() => {
@@ -46,6 +48,12 @@ export default function SelectWallet({ ...props }) {
       setOpen(false);
     }
   }, [signer, arroz]);
+
+  useEffect(() => {
+    if (isConnect) {
+      disconnectWallet();
+    }
+  }, []);
 
   return (
     <>

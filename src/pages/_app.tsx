@@ -36,12 +36,12 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   const { chains, provider, webSocketProvider } = configureChains(
-    [polygon],
-    [alchemyProvider({ apiKey: 'ba420f8124134644bf232c4bbebd051d' })]
+    [polygon, mainnet],
+    [alchemyProvider({ apiKey: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn' })]
   );
 
   const client = createClient({
-    autoConnect: false,
+    autoConnect: true,
     connectors: [
       new MetaMaskConnector({
         chains,
