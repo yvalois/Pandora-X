@@ -35,6 +35,9 @@ import {
   uInvertion,
   connectWallet,
 } from '../redux/Blockchain/blockchainAction';
+import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useModal as hola } from 'connectkit';
+import { useModal } from '@/components/modal-views/context';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -344,13 +347,14 @@ const Frenchies: NextPageWithLayout<
   const [approvedToken, setApprovedToken] = useState(0);
   const Usuario = useSelector((state) => state.Usuario);
 
-  const { frenchiesMinter, accountAddress, tokenContract } = useSelector(
-    (state) => state.blockchain
-  );
+  const { frenchiesMinter, accountAddress, tokenContract, isConnect } =
+    useSelector((state) => state.blockchain);
 
   const precio = 1;
 
   const { referidor } = useSelector((state) => state.Usuario);
+
+  const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const getNft = async () => {
     await dispatch(getMintedNftProducts());
@@ -434,6 +438,25 @@ const Frenchies: NextPageWithLayout<
     }
   };
 
+  const { openModal } = useModal();
+
+  const provider = useProvider();
+  const { address } = useAccount();
+  const { setOpen } = hola();
+
+  const abrir = () => {
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    if (!arroz && signer !== undefined) {
+      console.log(signer);
+      dispatch(connectWallet(address, provider, signer));
+
+      setOpen(false);
+    }
+  }, [signer, arroz]);
+
   return (
     <>
       <NextSeo
@@ -500,14 +523,20 @@ const Frenchies: NextPageWithLayout<
                   </h1>
 
                   <div className="flex justify-center align-middle">
-                    {approvedToken < precio && !loading && (
+                    {isConnect && approvedToken < precio && !loading && (
                       <Button onClick={approve}>Aprobar</Button>
                     )}
 
-                    {loading && <Button>Cargando...</Button>}
+                    {isConnect && loading && <Button>Cargando...</Button>}
 
-                    {approvedToken >= precio && !loading && (
+                    {isConnect && approvedToken >= precio && !loading && (
                       <Button onClick={buyNft}>Comprar</Button>
+                    )}
+
+                    {!isConnect && (
+                      <Button onClick={() => openModal('WALLET_CONNECT_VIEW')}>
+                        Conectar
+                      </Button>
                     )}
                   </div>
                 </div>

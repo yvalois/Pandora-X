@@ -39,65 +39,6 @@ const providerOptions = new WalletConnectProvider({
   rpc: 'https://matic-mainnet.chainstacklabs.com',
 });
 
-const productosAR = [
-  {
-    nombre: 'Pandora X NFT - Podcast-Streaming',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Streaming%20%282%29.gif',
-    tipo: 'PS',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Academia X',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Academia X%20%281%29.gif',
-    tipo: 'PA',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - NFT Studio',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20NFT%20Studio%20%282%29.gif',
-    tipo: 'NS',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Investing Value',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Investing%20Value%20%282%29.gif',
-    tipo: 'IV',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Comunidad Privada',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Privada.gif',
-    tipo: 'CP',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Comunidad Gratuita',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Gratuita.gif',
-    tipo: 'CG',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Coaching',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Coaching.gif',
-    tipo: 'NC',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    nombre: 'Pandora X NFT - Alpha Report',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Alpha%20Report.gif',
-    tipo: 'AP',
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-];
-
 const inversionesAR = [
   {
     nombre: 'UBX Card 100',
@@ -153,6 +94,7 @@ let Pagos = [];
 
 let Productos = [];
 let Inversiones = [];
+let data = [];
 
 const loading = () => ({
   type: 'LOADING',
@@ -1109,16 +1051,35 @@ export const connectWallet =
         });
 
         nftfBalance.map(async (item, index) => {
-          const precio = 1;
-
-          const prod = {
-            Nombre: 'HUEVO52',
-            img: 'https://gateway.pinata.cloud/ipfs/QmaCeYr88rrDvjxMPHfKtihuq7DmYYzfjkeKC2A4BD8EfW',
-            precio: parseInt(precio),
-            descripcion: '',
-            id: item,
+          const options = {
+            method: 'GET',
+            headers: { accept: 'application/json' },
           };
-          inventoryf.push(prod);
+          fetch(
+            `https://api.rarible.org/v0.1/items/byOwner/?owner=ETHEREUM:${address}`,
+            options
+          )
+            .then((response) => response.json())
+            .then((response) => {
+              for (let i = 0; i < response.items.length; i++) {
+                if (
+                  response.items[i].collection ===
+                  `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
+                ) {
+                  const split = response.items[i].id.split(':');
+                  console.log(split[2]);
+                  const precio = 1;
+                  const prod = {
+                    Nombre: response.items[i].meta.name,
+                    img: response.items[i].meta.content[0].url,
+                    precio: parseInt(precio),
+                    descripcion: response.items[i].description,
+                    id: split[2],
+                  };
+                  inventoryf.push(prod);
+                }
+              }
+            });
         });
 
         let balancei = [];
