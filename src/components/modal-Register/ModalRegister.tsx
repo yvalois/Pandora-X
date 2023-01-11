@@ -245,14 +245,16 @@ export default function ModalRegister() {
   }, [referidor]);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (status == 0) {
-        closeModal();
-        setStatus(0);
-      } else {
-        setStatus(0);
-      }
-    }, 3000);
+    if (status != 0) {
+      setTimeout(() => {
+        if (status == 200) {
+          closeModal();
+          setStatus(0);
+        } else {
+          setStatus(0);
+        }
+      }, 3000);
+    }
   }, [status]);
 
   //botton y state
