@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
+import { WalletContext } from '@/lib/hooks/use-connect';
 import { disconectWallet } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch, useSelector } from 'react-redux';
 import Web3Modal from 'web3modal';
@@ -213,15 +214,14 @@ export default function ModalRegister() {
     },
   };
 
-  const web3Modal =
-    typeof window !== 'undefined' &&
-    new Web3Modal({ cacheProvider: true, providerOptions }); //agregar provider options
-
   const disconnectWallet = async () => {
     //setAddress('');
-    web3Modal && web3Modal.clearCachedProvider();
-    dispatch(disconectWallet());
-    closeModal();
+    if (status != 200) {
+      disconnectWallet;
+    } else {
+      closeModal();
+    }
+
     //disconect();
   };
 
@@ -243,6 +243,17 @@ export default function ModalRegister() {
     }
     fetchData();
   }, [referidor]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (status == 0) {
+        closeModal();
+        setStatus(0);
+      } else {
+        setStatus(0);
+      }
+    }, 3000);
+  }, [status]);
 
   //botton y state
   return (
