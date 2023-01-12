@@ -54,16 +54,6 @@ export default function SelectWallet({ ...props }) {
   }, []);
 
   useEffect(() => {
-    if (address?.length > 0) {
-      console.log('entrando address');
-
-      setTimeout(() => {
-        dispatch(connectWallet(address, provider, signer));
-      }, 5000);
-    }
-  }, [address]);
-
-  useEffect(() => {
     if (isConnect) {
       closeModal();
     }

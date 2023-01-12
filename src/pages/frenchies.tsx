@@ -336,6 +336,12 @@ const Frenchies: NextPageWithLayout<
     tipo: '',
   };
 
+  const { openModal } = useModal();
+
+  const provider = useProvider();
+  const { address } = useAccount();
+  const { setOpen } = hola();
+
   const pricesP = [];
   const pricesI = [];
   const { isGridCompact } = useGridSwitcher();
@@ -378,6 +384,7 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     try {
+      console.log('es aqui');
       console.log(tokenContract);
       setTokenAddress(tokenContract.address);
 
@@ -424,26 +431,20 @@ const Frenchies: NextPageWithLayout<
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uFrench(provider, address));
+        dispatch(uFrench(provider, accountAddress));
       } else {
         const tx = await frenchiesMinter.buyToken(tokenContract.address);
 
         await tx.wait(); //tener en cuenta para los proximos cambios
         setLoading(false);
-        setApprovedToken(0);
+        dispatch(uFrench(provider, accountAddress));
 
-        dispatch(uFrench(provider, address));
+        setApprovedToken(0);
       }
     } catch (err) {
       setLoading(false);
     }
   };
-
-  const { openModal } = useModal();
-
-  const provider = useProvider();
-  const { address } = useAccount();
-  const { setOpen } = hola();
 
   const abrir = () => {
     setOpen(true);

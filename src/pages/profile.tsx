@@ -23,8 +23,13 @@ import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
 import edit from '@/assets/images/edit-svgrepo-com.svg';
 import Input from '@/components/ui/forms/input';
-import { update } from '@/redux/Blockchain/blockchainAction';
+import {
+  uFrench,
+  uInvertion,
+  update,
+} from '@/redux/Blockchain/blockchainAction';
 import { WalletContext } from '@/lib/hooks/use-connect';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {

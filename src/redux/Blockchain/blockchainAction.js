@@ -183,12 +183,12 @@ export const update_s = (payload) => {
 };
 
 export const uFrench = (provider, address) => async (dispatch) => {
+  console.log(provider);
   const frenchiesMinterContract = new ethers.Contract(
     FRENCHIES_ADDRESS,
-    productoMinterAbi,
+    frenchiesAbi,
     provider
   );
-
   const nftfBalance = await frenchiesMinterContract.getMyInventory(address);
   const inventoryf = [];
   nftfBalance.map(async (item, index) => {
@@ -207,17 +207,19 @@ export const uFrench = (provider, address) => async (dispatch) => {
             response.items[i].collection ===
             `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
           ) {
-            const split = response.items[i].id.split(':');
-            console.log(split[2]);
-            const precio = 1;
-            const prod = {
-              Nombre: response.items[i].meta.name,
-              img: response.items[i].meta.content[0].url,
-              precio: parseInt(precio),
-              descripcion: response.items[i].description,
-              id: split[2],
-            };
-            inventoryf.push(prod);
+            if (inventoryf.length < nftfBalance.length) {
+              const split = response.items[i].id.split(':');
+              console.log(split[2]);
+              const precio = 1;
+              const prod = {
+                Nombre: response.items[i].meta.name,
+                img: response.items[i].meta.content[0].url,
+                precio: parseInt(precio),
+                descripcion: response.items[i].description,
+                id: split[2],
+              };
+              inventoryf.push(prod);
+            }
           }
         }
       });
@@ -1094,7 +1096,6 @@ export const connectWallet =
             inventoryi.push(inv);
           }
         });
-
         nftfBalance.map(async (item, index) => {
           const options = {
             method: 'GET',
@@ -1111,22 +1112,23 @@ export const connectWallet =
                   response.items[i].collection ===
                   `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
                 ) {
-                  const split = response.items[i].id.split(':');
-                  console.log(split[2]);
-                  const precio = 1;
-                  const prod = {
-                    Nombre: response.items[i].meta.name,
-                    img: response.items[i].meta.content[0].url,
-                    precio: parseInt(precio),
-                    descripcion: response.items[i].description,
-                    id: split[2],
-                  };
-                  inventoryf.push(prod);
+                  if (inventoryf.length < nftfBalance.length) {
+                    const split = response.items[i].id.split(':');
+                    console.log(split[2]);
+                    const precio = 1;
+                    const prod = {
+                      Nombre: response.items[i].meta.name,
+                      img: response.items[i].meta.content[0].url,
+                      precio: parseInt(precio),
+                      descripcion: response.items[i].description,
+                      id: split[2],
+                    };
+                    inventoryf.push(prod);
+                  }
                 }
               }
             });
         });
-
         let balancei = [];
         balancei[0] = 0;
         nftiBalance.map(async (item) => {
@@ -1199,6 +1201,8 @@ export const connectWallet =
           stakingAbi,
           signer
         );
+
+        console.log('ya');
 
         await dispatch(
           dataLoaded({

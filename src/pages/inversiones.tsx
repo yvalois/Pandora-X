@@ -576,7 +576,6 @@ const InversionesPage: NextPageWithLayout<
           await tx.wait();
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
         } else {
           const tx = await productoMinter.buyToken(
             tipoN,
@@ -586,14 +585,12 @@ const InversionesPage: NextPageWithLayout<
           await tx.wait(); //tener en cuenta para los proximos cambios
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
         }
       } else if (type == 'inversion') {
         const tx = await inversionMinter.buyToken(tipoN, tokenContract.address);
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uInvertion(provider, address));
       }
     } catch (err) {
       setLoading(false);
