@@ -28,6 +28,7 @@ import NoProfile from '@/assets/images/profile/NoProfile.jpg';
 //images
 import AuthorImage from '@/assets/images/author.jpg';
 import { useEffect } from 'react';
+import AnchorLink from '@/components/ui/links/anchor-link';
 
 export const menuItems = [
   {
@@ -325,26 +326,43 @@ export default function Sidebar({ className }: SidebarProps) {
           </div>
         </div>
 
-        <div
-          className=" relative; pt-[190.0000%]; padding-bottom: 0;
+        <div className="ml-10 h-[50%] w-[80%] cursor-pointer bg-blue-200">
+          <a
+            href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?utm_content=DAFVhreHv0g&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link"
+            target="_blank"
+            rel="noopener noreferrer"
+            className=" absolute h-full w-full cursor-pointer"
+          />
+          <div
+            className=" relative; pt-[190.0000%]; padding-bottom: 0;
  box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden; border-radius: 8px;
- will-change: transform; h-[0] w-[100%]"
-        >
-          <iframe
-            loading="lazy"
-            className=" absolute; t-0; l-0 none m-0; h-[100%] w-[100%] p-0"
-            src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?embed"
-            allowfullscreen="allowfullscreen"
-            allow="fullscreen"
-          ></iframe>
+ will-change: transform; z-100 h-[100%] w-[100%]"
+          >
+            <iframe
+              loading="lazy"
+              className=" absolute; t-0; l-0 none m-0; h-[100%] w-[100%] p-0"
+              src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?embed"
+            ></iframe>
+          </div>
         </div>
-        <a
-          href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?utm_content=DAFVhreHv0g&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="ml-10 h-[50%] w-[80%] bg-blue-200"></div>
-        </a>
+
+        {/*
+
+            <iframe
+              loading="lazy"
+              className=" absolute; t-0; l-0 none m-0; h-[100%] w-[100%] p-0"
+              src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?embed"
+              allowfullscreen="allowfullscreen"
+              allow="fullscreen"
+            ></iframe>
+          </div>
+          <a
+            href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?utm_content=DAFVhreHv0g&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+        <div className="ml-10 h-[50%] w-[80%] bg-blue-200"></div>
+        </a>*/}
       </Scrollbar>
     </aside>
   );

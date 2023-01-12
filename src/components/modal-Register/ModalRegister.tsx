@@ -216,11 +216,9 @@ export default function ModalRegister() {
 
   const disconnectWallet = async () => {
     //setAddress('');
-    if (status != 200) {
-      disconnectWallet;
-    } else {
-      closeModal();
-    }
+
+    disconnectWallet;
+    closeModal();
 
     //disconect();
   };
