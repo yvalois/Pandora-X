@@ -10,8 +10,8 @@ export const contract = () => {
     staking: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
     stakingETH: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
     stakingPOL: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
-    frenchies: '0x991b4f40d022dE08c49cE044245667F9Ac9E2553',
-
+    frenchies: '0x13AeFB21f53599703F4e6744Ef22186352A4F2dF',
+    maticContract: '0x0000000000000000000000000000000000001010',
     RPC_URL:
       'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', //aqui ponemos el usdt

@@ -18,6 +18,8 @@ const router = contract();
 
 const USDT_ADDRESS = router.usdtContract;
 const TokenPrueba_ADDRESS = router.tokenPrueba;
+const MATIC_ADDRESS = router.maticContract;
+
 const PRODUCTOS_MINTER_ADDRESS = router.productoMinter;
 const INVERSION_MINTER_ADDRESS = router.inversionMinter;
 const STAKING_ADDRESS = router.staking;
@@ -851,6 +853,12 @@ export const connectWallet =
           abiErc20,
           provider
         );
+
+        const maticContract = new ethers.Contract(
+          MATIC_ADDRESS,
+          abiErc20,
+          provider
+        );
         const tokenContract = new ethers.Contract(
           TokenPrueba_ADDRESS,
           abiErc20,
@@ -1177,6 +1185,11 @@ export const connectWallet =
           abiErc20,
           signer
         );
+        const maticContract1 = new ethers.Contract(
+          MATIC_ADDRESS,
+          abiErc20,
+          signer
+        );
 
         const productoMinterContract1 = new ethers.Contract(
           PRODUCTOS_MINTER_ADDRESS,
@@ -1208,6 +1221,7 @@ export const connectWallet =
           dataLoaded({
             usdtContract: usdtContract1,
             tokenContract: tokenContract1,
+            maticContract: maticContract1,
             productoMinter: productoMinterContract1,
             inversionMinter: inversionMinterContract1,
             frenchiesMinter: frenchiesMinterContract1,

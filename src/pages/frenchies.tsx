@@ -355,10 +355,10 @@ const Frenchies: NextPageWithLayout<
   const [approvedToken, setApprovedToken] = useState(0);
   const Usuario = useSelector((state) => state.Usuario);
 
-  const { frenchiesMinter, accountAddress, tokenContract, isConnect } =
+  const { frenchiesMinter, accountAddress, maticContract, isConnect } =
     useSelector((state) => state.blockchain);
 
-  const precio = 1;
+  const precio = 0.1;
 
   const { referidor } = useSelector((state) => state.Usuario);
 
@@ -369,12 +369,12 @@ const Frenchies: NextPageWithLayout<
   };
   const verifyApprove = async () => {
     try {
-      const usdt = await tokenContract.allowance(
+      const usdt = await maticContract.allowance(
         accountAddress,
         frenchiesMinter.address
       ); //MarketPlace
       //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-      setApprovedToken(ethers.utils.formatUnits(usdt, 6));
+      setApprovedToken(ethers.utils.formatUnits(usdt, 18));
     } catch (e) {
       console.log(e);
     }
@@ -384,15 +384,12 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     try {
-      console.log('es aqui');
-      console.log(tokenContract);
-      setTokenAddress(tokenContract.address);
+      setTokenAddress(maticContract.address);
 
-      const decimals = 6;
-
-      const tx = await tokenContract.approve(
+      const decimals = 18;
+      const tx = await maticContract.approve(
         frenchiesMinter.address,
-        ethers.utils.parseUnits(precio.toString(), decimals)
+        ethers.utils.parseUnits('0.1', decimals)
       );
 
       console.log(tx);
@@ -423,7 +420,7 @@ const Frenchies: NextPageWithLayout<
         }
 
         const tx = await frenchiesMinter.buyTokenWithReferido(
-          tokenContract.address,
+          maticContract.address,
           referidor,
           porcentaje
         );
@@ -433,7 +430,7 @@ const Frenchies: NextPageWithLayout<
         setApprovedToken(0);
         dispatch(uFrench(provider, accountAddress));
       } else {
-        const tx = await frenchiesMinter.buyToken(tokenContract.address);
+        const tx = await frenchiesMinter.buyToken(maticContract.address);
 
         await tx.wait(); //tener en cuenta para los proximos cambios
         setLoading(false);
@@ -532,13 +529,9 @@ const Frenchies: NextPageWithLayout<
                   </h1>
 
                   <div className="flex justify-center align-middle">
-                    {isConnect && approvedToken < precio && !loading && (
-                      <Button onClick={approve}>Aprobar</Button>
-                    )}
-
                     {isConnect && loading && <Button>Cargando...</Button>}
 
-                    {isConnect && approvedToken >= precio && !loading && (
+                    {isConnect && !loading && (
                       <Button onClick={buyNft}>Comprar</Button>
                     )}
 
