@@ -53,11 +53,13 @@ export default function SelectWallet({ ...props }) {
     disconnectWallet();
   }, []);
 
+  const { chain } = useNetwork();
+
   useEffect(() => {
-    if (isConnect) {
+    if (isConnect && !chain?.unsupported) {
       closeModal();
     }
-  }, [isConnect]);
+  }, [isConnect, chain]);
 
   return (
     <>
