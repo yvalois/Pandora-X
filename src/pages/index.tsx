@@ -37,6 +37,7 @@ import Generic from '@/assets/images/profile/GENERIC.jpg';
 import { transations } from '../redux/Transactions/TransactionsActions';
 import AvatarP from '@/components/ui/AvatarP';
 import { WalletContext } from '@/lib/hooks/use-connect';
+import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -463,12 +464,12 @@ const HomePage: NextPageWithLayout<
     setBalance(balanceI[0]);
   }, [balanceI]);
 
-  const { disconnectWallet } = useContext(WalletContext);
+  /*  const { disconnectWallet } = useContext(WalletContext);
   useEffect(() => {
     if (!isConnect) {
       disconnectWallet();
     }
-  }, []);
+  }, []); */
 
   return (
     <>

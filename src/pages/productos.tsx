@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { atom, useAtom } from 'jotai';
 import { NextSeo } from 'next-seo';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -37,6 +37,7 @@ import {
 } from '../redux/Blockchain/blockchainAction';
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 const productos = [
   {
@@ -607,6 +608,13 @@ const ProductosPage: NextPageWithLayout<
     };
     fetchItems();
   }, [dataloaded, inversiones, productos]);
+
+  const { disconnectWallet } = useContext(WalletContext);
+  useEffect(() => {
+    if (!isConnect) {
+      disconnectWallet();
+    }
+  }, []);
 
   /*useEffect(() => {
     const fetchItems = async () => {

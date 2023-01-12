@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import Web3Modal from 'web3modal';
+
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { contract } from '../blockchainRoutes';
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
@@ -176,7 +176,7 @@ export const update_s = (payload) => {
   };
 };
 
-export const uProduct = () => async (dispatch) => {
+/*export const uProduct = () => async (dispatch) => {
   const web3Modal = new Web3Modal({
     cacheProvider: true,
     // providerOptions // required
@@ -243,9 +243,9 @@ export const uProduct = () => async (dispatch) => {
       inventoryp: inventoryp,
     })
   );
-};
+};*/
 
-export const uInvertion = () => async (dispatch) => {
+/*export const uInvertion = () => async (dispatch) => {
   const web3Modal = new Web3Modal({
     cacheProvider: true,
     // providerOptions // required
@@ -313,9 +313,9 @@ export const uInvertion = () => async (dispatch) => {
       inventoryi: inventoryi,
     })
   );
-};
+};*/
 
-export const uStaking = () => async (dispatch) => {
+/*export const uStaking = () => async (dispatch) => {
   const web3Modal = new Web3Modal({
     cacheProvider: true,
     // providerOptions // required
@@ -392,7 +392,7 @@ export const uStaking = () => async (dispatch) => {
       inventorys: inventorys,
     })
   );
-};
+};*/
 
 const subscribeProvider = (connection) => async (dispatch) => {
   connection.on('close', () => {
@@ -803,39 +803,38 @@ export const connectWallet =
         const usdtContract = new ethers.Contract(
           USDT_ADDRESS,
           abiErc20,
-          signer
+          provider
         );
         const tokenContract = new ethers.Contract(
           TokenPrueba_ADDRESS,
           abiErc20,
-          signer
+          provider
         );
 
         const productoMinterContract = new ethers.Contract(
           PRODUCTOS_MINTER_ADDRESS,
           productoMinterAbi,
-          signer
+          provider
         );
 
         const inversionMinterContract = new ethers.Contract(
           INVERSION_MINTER_ADDRESS,
           inversionMinterAbi,
-          signer
+          provider
         );
 
         const frenchiesMinterContract = new ethers.Contract(
           FRENCHIES_ADDRESS,
           frenchiesAbi,
-          signer
+          provider
         );
 
         const stakingContract = new ethers.Contract(
           STAKING_ADDRESS,
           stakingAbi,
-          signer
+          provider
         );
 
-        console.log(stakingContract);
         /*  const stakingfrenEContract = new ethers.Contract(
         STAKING_ADDRESS,
         stakingErAbi,
@@ -866,6 +865,8 @@ export const connectWallet =
         const nftfBalance = await frenchiesMinterContract.getMyInventory(
           address
         );
+
+        console.log('aqui');
 
         const inventoryp = [];
         const inventoryi = [];
@@ -1120,14 +1121,49 @@ export const connectWallet =
 
         //  dispatch(subscribeProvider(instance));
 
+        const usdtContract1 = new ethers.Contract(
+          USDT_ADDRESS,
+          abiErc20,
+          signer
+        );
+        const tokenContract1 = new ethers.Contract(
+          TokenPrueba_ADDRESS,
+          abiErc20,
+          signer
+        );
+
+        const productoMinterContract1 = new ethers.Contract(
+          PRODUCTOS_MINTER_ADDRESS,
+          productoMinterAbi,
+          signer
+        );
+
+        const inversionMinterContract1 = new ethers.Contract(
+          INVERSION_MINTER_ADDRESS,
+          inversionMinterAbi,
+          signer
+        );
+
+        const frenchiesMinterContract1 = new ethers.Contract(
+          FRENCHIES_ADDRESS,
+          frenchiesAbi,
+          signer
+        );
+
+        const stakingContract1 = new ethers.Contract(
+          STAKING_ADDRESS,
+          stakingAbi,
+          signer
+        );
+
         await dispatch(
           dataLoaded({
-            usdtContract,
-            tokenContract,
-            productoMinter: productoMinterContract,
-            inversionMinter: inversionMinterContract,
-            frenchiesMinter: frenchiesMinterContract,
-            staking: stakingContract,
+            usdtContract: usdtContract1,
+            tokenContract: tokenContract1,
+            productoMinter: productoMinterContract1,
+            inversionMinter: inversionMinterContract1,
+            frenchiesMinter: frenchiesMinterContract1,
+            staking: stakingContract1,
             // stakinfETH: stakingfrenEContract,
             // stakingPOL: stakingfrenPContract,
             accountAddress: address,

@@ -1,7 +1,7 @@
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button';
@@ -24,6 +24,7 @@ import Generic from '@/assets/images/profile/GENERIC.jpg';
 import edit from '@/assets/images/edit-svgrepo-com.svg';
 import Input from '@/components/ui/forms/input';
 import { update } from '@/redux/Blockchain/blockchainAction';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -212,6 +213,15 @@ const AuthorProfilePage: NextPageWithLayout<
     }, 2000);
   }, [copiado]);
 
+  const { isConnect } = useSelector((state) => state.blockchain);
+
+  const { disconnectWallet } = useContext(WalletContext);
+  useEffect(() => {
+    if (!isConnect) {
+      disconnectWallet();
+    }
+  }, []);
+
   return (
     <>
       <NextSeo
@@ -221,68 +231,49 @@ const AuthorProfilePage: NextPageWithLayout<
       {/* Profile Cover Image */}
       <div className="relative h-36 w-full overflow-hidden rounded-lg sm:h-44 sm:w-[100%] md:h-64 md:w-[100%] xl:h-80 xl:w-[100%] 2xl:h-96 3xl:h-[448px]">
         <div className="relative h-full w-full">
+          {Usuario.banner?.length > 0 && prevBanner.length == 0 ? (
+            <Image
+              src={Usuario.banner}
+              //placeholder="blur"
+              layout="fill"
+              objectFit="cover"
+              alt="Cover Image"
+            />
+          ) : Usuario.banner?.length > 0 && prevBanner.length > 0 ? (
+            <Image
+              src={prevBanner}
+              //placeholder="blur"
+              layout="fill"
+              objectFit="cover"
+              alt="Cover Image"
+            />
+          ) : (
+            <Image
+              src={Banner}
+              //placeholder="blur"
+              layout="fill"
+              objectFit="cover"
+              alt="Cover Image"
+            />
+          )}
+
           <div
-            className=" relative; pt-[190.0000%]; padding-bottom: 0;
- box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden; border-radius: 8px;
- will-change: transform; h-[0] w-[100%]"
+            aria-hidden="true"
+            className="group absolute inset-0 hidden h-full w-full cursor-pointer items-center  justify-center opacity-60 transition duration-500 hover:bg-gray-200 lg:flex xl:flex"
           >
-            <iframe
-              loading="lazy"
-              className=" absolute; t-0; l-0 none m-0; h-[100%] w-[100%] p-0"
-              src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?embed"
-              allowfullscreen="allowfullscreen"
-              allow="fullscreen"
-            ></iframe>
+            <Button className="z-10 hidden group-hover:block">
+              <label htmlFor="bgfile">Cambiar Imagen</label>
+            </Button>
+
+            <input
+              type="file"
+              id="bgfile"
+              onChange={(e) => {
+                editphotoB(e);
+              }}
+              className="  file:border-1 absolute z-10 hidden text-transparent opacity-0 file:rounded file:border-gray-400 group-hover:block"
+            />
           </div>
-          <a
-            href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?utm_content=DAFVhreHv0g&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {Usuario.banner?.length > 0 && prevBanner.length == 0 ? (
-              <Image
-                src={Usuario.banner}
-                //placeholder="blur"
-                layout="fill"
-                objectFit="cover"
-                alt="Cover Image"
-              />
-            ) : Usuario.banner?.length > 0 && prevBanner.length > 0 ? (
-              <Image
-                src={prevBanner}
-                //placeholder="blur"
-                layout="fill"
-                objectFit="cover"
-                alt="Cover Image"
-              />
-            ) : (
-              <Image
-                src={Banner}
-                //placeholder="blur"
-                layout="fill"
-                objectFit="cover"
-                alt="Cover Image"
-              />
-            )}
-
-            <div
-              aria-hidden="true"
-              className="group absolute inset-0 hidden h-full w-full cursor-pointer items-center  justify-center opacity-60 transition duration-500 hover:bg-gray-200 lg:flex xl:flex"
-            >
-              <Button className="z-10 hidden group-hover:block">
-                <label htmlFor="bgfile">Cambiar Imagen</label>
-              </Button>
-
-              <input
-                type="file"
-                id="bgfile"
-                onChange={(e) => {
-                  editphotoB(e);
-                }}
-                className="  file:border-1 absolute z-10 hidden text-transparent opacity-0 file:rounded file:border-gray-400 group-hover:block"
-              />
-            </div>
-          </a>
         </div>
         {/* <div className="relative h-full w-full">
           {Usuario.banner?.length > 0 && prevBanner.length == 0 ? (

@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, ReactNode } from 'react';
-import Web3Modal from 'web3modal';
+
 import { ethers } from 'ethers';
 //import { setProvider } from '../../NFTROL';
 import WalletConnectProvider from '@walletconnect/web3-provider';
@@ -38,13 +38,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     },
   };
 
-  const web3Modal =
-    typeof window !== 'undefined' &&
-    new Web3Modal({
-      disableInjectedProvider: false,
-      cacheProvider: false,
-      providerOptions,
-    });
   //agregar provider options
 
   const { accountAddress, isUSer } = useSelector((state) => state.blockchain);
@@ -147,7 +140,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const disconnectWallet = async () => {
     //setAddress('');
     disconnect();
-    window.localStorage.clear();
     /*  window.localStorage.removeItem('wagmi.cache');
     window.localStorage.removeItem('wagmi.wallet');
     window.localStorage.removeItem('wagmi.store');

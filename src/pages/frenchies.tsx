@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { atom, useAtom } from 'jotai';
 import { NextSeo } from 'next-seo';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -38,6 +38,7 @@ import {
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useModal as hola } from 'connectkit';
 import { useModal } from '@/components/modal-views/context';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -367,7 +368,6 @@ const Frenchies: NextPageWithLayout<
       ); //MarketPlace
       //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
       setApprovedToken(ethers.utils.formatUnits(usdt, 6));
-      alert(usdt);
     } catch (e) {
       console.log(e);
     }
@@ -456,6 +456,13 @@ const Frenchies: NextPageWithLayout<
       setOpen(false);
     }
   }, [signer, arroz]);
+
+  /*  const { disconnectWallet } = useContext(WalletContext);
+  useEffect(() => {
+    if (!isConnect) {
+      disconnectWallet();
+    }
+  }, []); */
 
   return (
     <>

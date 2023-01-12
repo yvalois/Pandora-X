@@ -3,7 +3,7 @@ import { useModal } from '@/components/modal-views/context';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { disconectWallet } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch, useSelector } from 'react-redux';
-import Web3Modal from 'web3modal';
+
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import validator from 'validator';

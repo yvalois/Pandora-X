@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import { disconectWallet } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch, useSelector } from 'react-redux';
-import Web3Modal from 'web3modal';
+
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import Button from '@/components/ui/button';

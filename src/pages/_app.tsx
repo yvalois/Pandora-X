@@ -36,12 +36,12 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   const { chains, provider, webSocketProvider } = configureChains(
-    [polygon, mainnet],
+    [polygon],
     [alchemyProvider({ apiKey: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn' })]
   );
 
   const client = createClient({
-    autoConnect: true,
+    autoConnect: false,
     connectors: [
       new MetaMaskConnector({
         chains,
@@ -90,8 +90,8 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
           content="width=device-width, initial-scale=1 maximum-scale=1"
         />
       </Head>
-      <Provider store={store}>
-        <WagmiConfig client={client}>
+      <WagmiConfig client={client}>
+        <Provider store={store}>
           <ConnectKitProvider theme="auto">
             <QueryClientProvider client={queryClient}>
               <Hydrate state={pageProps.dehydratedState}>
@@ -108,75 +108,6 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
                     <DrawersContainer />
                   </WalletProvider>
                 </ThemeProvider>
-                {/* <Web3Modal
-        ethereumClient={ethereumClient}
-        // Custom Linking Mobile Wallets
-        mobileWallets={[
-          {
-            id: 'trust',
-            name: 'Trust Wallet',
-            links: { native: 'trust://', universal: 'https://link.trustwallet.com' }
-          },
-          {
-            id: 'rainbow',
-            name: 'Rainbow',
-            links: { native: 'rainbow://', universal: 'https://rainbow.me' }
-          },
-          {
-            id: 'zerion',
-            name: 'Zerion',
-            links: { native: 'zerion://', universal: 'https://wallet.zerion.io' }
-          },
-          {
-            id: 'tokenary',
-            name: 'Tokenary',
-            links: { native: 'tokenary://', universal: 'https://tokenary.io' }
-          }
-        ]}
-        // Custom Linking Desktop Wallets
-        desktopWallets={[
-          {
-            id: 'ledger',
-            name: 'Ledger',
-            links: { native: 'ledgerlive://', universal: 'https://www.ledger.com' }
-          },
-          {
-            id: 'zerion',
-            name: 'Zerion',
-            links: { native: 'zerion://', universal: 'https://wallet.zerion.io' }
-          },
-          {
-            id: 'tokenary',
-            name: 'Tokenary',
-            links: { native: 'tokenary://', universal: 'https://tokenary.io' }
-          },
-          {
-            id: 'oreid',
-            name: 'OREID',
-            links: {
-              native: '',
-              universal: 'https://www.oreid.io/'
-            }
-          }
-        ]}
-        // Custom Wallet Images
-        walletImages={{
-          metaMask: '../../assets/images/images.jpg',
-          brave: '/images/wallet_brave.webp',
-          ledger: '/images/wallet_ledger.webp',
-          coinbaseWallet: '/images/wallet_coinbase.webp',
-          zerion: '/images/wallet_zerion.webp',
-          trust: '/images/wallet_trust.webp',
-          rainbow: '/images/wallet_rainbow.webp',
-          oreid: '/images/wallet_oreid.svg'
-        }}
-        // Custom Chain Images
-        chainImages={{
-          137: '/images/chain_polygon.webp',
-          10: '/images/chain_optimism.webp',
-          42161: '/images/chain_arbitrum.webp'
-        }}
-      /> */}
               </Hydrate>
               <ReactQueryDevtools
                 initialIsOpen={false}
@@ -184,8 +115,8 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
               />
             </QueryClientProvider>
           </ConnectKitProvider>
-        </WagmiConfig>
-      </Provider>
+        </Provider>
+      </WagmiConfig>
     </>
   );
 }

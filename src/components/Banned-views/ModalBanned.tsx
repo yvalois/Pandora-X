@@ -3,7 +3,6 @@ import { useModal } from '@/components/modal-views/context';
 import Button from '../ui/button/button';
 import { disconectWallet } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch } from 'react-redux';
-import Web3Modal from 'web3modal';
 
 import WalletConnectProvider from '@walletconnect/web3-provider';
 export default function ModalBanned() {
@@ -24,18 +23,6 @@ export default function ModalBanned() {
         chainId: 31337,
       },
     },
-  };
-
-  const web3Modal =
-    typeof window !== 'undefined' &&
-    new Web3Modal({ cacheProvider: true, providerOptions }); //agregar provider options
-
-  const disconnectWallet = async () => {
-    //setAddress('');
-    web3Modal && web3Modal.clearCachedProvider();
-    dispatch(disconectWallet());
-    closeModal();
-    //disconect();
   };
 
   return (

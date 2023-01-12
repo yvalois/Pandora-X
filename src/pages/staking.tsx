@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/types';
 import cn from 'classnames';
 import { NextSeo } from 'next-seo';
@@ -30,6 +30,7 @@ import { MintProducts, MintInversion } from '@/redux/Minted/MintedAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMintedNftProducts } from '../redux/Minted/MintedAction';
 import NftSlider from '@/components/ui/nftSlider';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 const StakingPage: NextPageWithLayout = () => {
   //la idea es mostrar los nfts de staking del usuario
@@ -114,6 +115,15 @@ const StakingPage: NextPageWithLayout = () => {
       setStatus(0);
     }, 5000);
   }, [status]);
+
+  const { isConnect } = useSelector((state) => state.blockchain);
+
+  const { disconnectWallet } = useContext(WalletContext);
+  useEffect(() => {
+    if (!isConnect) {
+      disconnectWallet();
+    }
+  }, []);
 
   return (
     <>

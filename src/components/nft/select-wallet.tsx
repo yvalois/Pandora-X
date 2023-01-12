@@ -2,26 +2,26 @@ import Image from '@/components/ui/image';
 import metamaskLogo from '@/assets/images/metamask.svg';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
-import { useContext, useEffect } from 'react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useContext, useEffect, useState } from 'react';
+import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 import { useDispatch, useSelector } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 
-import { useModal as hola } from 'connectkit';
+import { ConnectKitButton, useModal as hola } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
   const { disconnectWallet } = useContext(WalletContext);
   const dispatch = useDispatch<AppDispatch>();
   const error = false;
-  const { setOpen } = hola();
+  const { setOpen, open } = hola();
   const { address } = useAccount();
 
-  const { isConnect } = useSelector((state) => state.blockchain);
+  const { isConnect, accountAddress } = useSelector(
+    (state) => state.blockchain
+  );
 
   const { closeModal } = useModal();
-  useEffect(() => {
-    if (address) closeModal();
-  }, [address, closeModal]);
+
   const provider = useProvider();
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
@@ -41,19 +41,33 @@ export default function SelectWallet({ ...props }) {
 
   useEffect(() => {
     if (!arroz && signer !== undefined) {
+      console.log(provider);
       console.log(signer);
       dispatch(connectWallet(address, provider, signer));
 
-      //  location.reload()
       setOpen(false);
     }
   }, [signer, arroz]);
 
   useEffect(() => {
-    if (isConnect) {
-      disconnectWallet();
-    }
+    disconnectWallet();
   }, []);
+
+  useEffect(() => {
+    if (address?.length > 0) {
+      console.log('entrando address');
+
+      setTimeout(() => {
+        dispatch(connectWallet(address, provider, signer));
+      }, 5000);
+    }
+  }, [address]);
+
+  useEffect(() => {
+    if (isConnect) {
+      closeModal();
+    }
+  }, [isConnect]);
 
   return (
     <>
@@ -91,15 +105,15 @@ export default function SelectWallet({ ...props }) {
         </div>
 
         <div
-          className="mt-12 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
+          className="mt-12 flex h-14 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l "
           onClick={abrir}
         >
-          <span>Conectar con metamask</span>
+          {/*<span>Conectar con metamask</span>
           <span className="h-auto w-9">
             <Image src={metamaskLogo} alt="metamask" />
-          </span>
+          </span> */}
+          <ConnectKitButton />
         </div>
-        {/* <ConnectKitButton />  */}
 
         {/* <MobileView>
             <h1>XD</h1>

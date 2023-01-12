@@ -1,11 +1,12 @@
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button/button';
 import { useModal } from '@/components/modal-views/context';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -109,6 +110,15 @@ const AdminPanelPage: NextPageWithLayout<
       getUsers();
     }
   };
+
+  const { isConnect } = useSelector((state) => state.blockchain);
+
+  const { disconnectWallet } = useContext(WalletContext);
+  useEffect(() => {
+    if (!isConnect) {
+      disconnectWallet();
+    }
+  }, []);
 
   return (
     <>
