@@ -37,6 +37,7 @@ import {
 } from '../redux/Blockchain/blockchainAction';
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
+import { useAccount, useProvider } from 'wagmi';
 
 const productos = [
   {
@@ -476,6 +477,9 @@ const InversionesPage: NextPageWithLayout<
     (state: any) => state.minted
   );
 
+  const provider = useProvider();
+  const { address } = useAccount();
+
   const {
     productoMinter,
     inversionMinter,
@@ -589,7 +593,7 @@ const InversionesPage: NextPageWithLayout<
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uInvertion());
+        dispatch(uInvertion(provider, address));
       }
     } catch (err) {
       setLoading(false);

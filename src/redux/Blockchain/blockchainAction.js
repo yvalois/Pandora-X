@@ -161,6 +161,12 @@ export const update_p = (payload) => {
     payload: payload,
   };
 };
+export const update_f = (payload) => {
+  return {
+    type: 'UPDATE_FRENCH',
+    payload: payload,
+  };
+};
 
 export const update_i = (payload) => {
   return {
@@ -174,6 +180,53 @@ export const update_s = (payload) => {
     type: 'UPDATE_STAKING',
     payload: payload,
   };
+};
+
+export const uFrench = (provider, address) => async (dispatch) => {
+  const frenchiesMinterContract = new ethers.Contract(
+    FRENCHIES_ADDRESS,
+    productoMinterAbi,
+    provider
+  );
+
+  const nftfBalance = await frenchiesMinterContract.getMyInventory(address);
+  const inventoryf = [];
+  nftfBalance.map(async (item, index) => {
+    const options = {
+      method: 'GET',
+      headers: { accept: 'application/json' },
+    };
+    fetch(
+      `https://api.rarible.org/v0.1/items/byOwner/?owner=ETHEREUM:${address}`,
+      options
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        for (let i = 0; i < response.items.length; i++) {
+          if (
+            response.items[i].collection ===
+            `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
+          ) {
+            const split = response.items[i].id.split(':');
+            console.log(split[2]);
+            const precio = 1;
+            const prod = {
+              Nombre: response.items[i].meta.name,
+              img: response.items[i].meta.content[0].url,
+              precio: parseInt(precio),
+              descripcion: response.items[i].description,
+              id: split[2],
+            };
+            inventoryf.push(prod);
+          }
+        }
+      });
+  });
+  await dispatch(
+    update_f({
+      inventoryf: inventoryf,
+    })
+  );
 };
 
 /*export const uProduct = () => async (dispatch) => {
@@ -245,29 +298,20 @@ export const update_s = (payload) => {
   );
 };*/
 
-/*export const uInvertion = () => async (dispatch) => {
-  const web3Modal = new Web3Modal({
-    cacheProvider: true,
-    // providerOptions // required
-  });
-
-  const instance = await web3Modal.connect(providerOptions);
-  const provider = new ethers.providers.Web3Provider(instance);
-
+export const uInvertion = (provider, address) => async (dispatch) => {
   setProvider(provider);
-  const signer = provider.getSigner();
-  const accounts = await provider.listAccounts();
+
   const inversionMinterContract = new ethers.Contract(
     INVERSION_MINTER_ADDRESS,
     inversionMinterAbi,
-    signer
+    provider
   );
   const tokenContract = new ethers.Contract(
     TokenPrueba_ADDRESS,
     abiErc20,
-    signer
+    provider
   );
-  const nftiBalance = await inversionMinterContract.getMyInventory(accounts[0]);
+  const nftiBalance = await inversionMinterContract.getMyInventory(address);
   const inventoryi = [];
   nftiBalance.map(async (item) => {
     const tipo = await inversionMinterContract.getTipo(item);
@@ -313,9 +357,9 @@ export const update_s = (payload) => {
       inventoryi: inventoryi,
     })
   );
-};*/
+};
 
-/*export const uStaking = () => async (dispatch) => {
+export const uStaking = () => async (dispatch) => {
   const web3Modal = new Web3Modal({
     cacheProvider: true,
     // providerOptions // required
@@ -392,7 +436,7 @@ export const update_s = (payload) => {
       inventorys: inventorys,
     })
   );
-};*/
+};
 
 const subscribeProvider = (connection) => async (dispatch) => {
   connection.on('close', () => {

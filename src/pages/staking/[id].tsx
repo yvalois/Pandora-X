@@ -35,6 +35,7 @@ import { setISODay } from 'date-fns';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { useModal } from '@/components/modal-views/context';
+import { useAccount, useProvider } from 'wagmi';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -106,6 +107,10 @@ const StakingPage: NextPageWithLayout = () => {
     descripcion: '',
     id: 0,
   };
+
+  const provider = useProvider();
+  const { address } = useAccount();
+
   const [type, setType] = useState('');
   const [nft, setNft] = useState(nftdata);
 
@@ -158,7 +163,7 @@ const StakingPage: NextPageWithLayout = () => {
     //  .send({ gas: '1000000', gasPrice: '2000000000', from: accountAddress });
 
     await tx.wait();
-    dispatch(uInvertion());
+    dispatch(uInvertion(provider, address));
     dispatch(uStaking());
 
     //redirigir a tabla

@@ -13,6 +13,7 @@ import { ethers } from 'ethers';
 import { setISODay } from 'date-fns';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import { useWindowScroll } from 'react-use';
+import { useAccount, useProvider } from 'wagmi';
 
 export default function ModalWithdraw() {
   const { closeModal } = useModal();
@@ -63,13 +64,16 @@ export default function ModalWithdraw() {
     }
   };
 
+  const provider = useProvider();
+  const { address } = useAccount();
+
   const withdraw = async () => {
     setLoading(true);
     const tx = await staking.withdrawP(id, tokenContract.address);
     await tx.wait();
 
     dispatch(uStaking());
-    dispatch(uInvertion());
+    dispatch(uInvertion(provider, address));
     setLoading(false);
     closeModal('Withdraw_VIEW');
     setSuccess(true);

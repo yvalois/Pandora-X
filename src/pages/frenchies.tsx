@@ -34,6 +34,7 @@ import {
   uProduct,
   uInvertion,
   connectWallet,
+  uFrench,
 } from '../redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useModal as hola } from 'connectkit';
@@ -423,15 +424,15 @@ const Frenchies: NextPageWithLayout<
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uProduct());
+        dispatch(uFrench(provider, address));
       } else {
-        console.log(frenchiesMinter.address);
         const tx = await frenchiesMinter.buyToken(tokenContract.address);
 
         await tx.wait(); //tener en cuenta para los proximos cambios
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uProduct());
+
+        dispatch(uFrench(provider, address));
       }
     } catch (err) {
       setLoading(false);

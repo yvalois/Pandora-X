@@ -21,6 +21,7 @@ import { useModal } from '@/components/modal-views/context';
 import { useSelector, useDispatch } from 'react-redux';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import { useWindowScroll } from 'react-use';
+import { useAccount, useProvider } from 'wagmi';
 
 export default function StakingTable() {
   const { inversionMinter } = useSelector((state) => state.blockchain);
@@ -46,6 +47,9 @@ export default function StakingTable() {
   const { inventorys, staking, tokenContract } = useSelector(
     (state) => state.blockchain
   );
+
+  const provider = useProvider();
+  const { address } = useAccount();
 
   const Usuario = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
@@ -89,7 +93,7 @@ export default function StakingTable() {
       await tx.wait();
 
       dispatch(uStaking());
-      dispatch(uInvertion());
+      dispatch(uInvertion(provider, address));
       setLoading(false);
       setStatusW(true);
       setAlertMsg('Transacion cumplida');

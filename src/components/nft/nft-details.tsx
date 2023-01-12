@@ -21,6 +21,7 @@ import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 
 import router from 'next/router';
+import { useAccount, useProvider } from 'wagmi';
 
 interface NftFooterProps {
   className?: string;
@@ -70,6 +71,9 @@ function NftFooter({
 
   const { referidor } = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
+
+  const provider = useProvider();
+  const { address } = useAccount();
 
   const verifyApprove = async () => {
     try {
@@ -190,7 +194,7 @@ function NftFooter({
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uInvertion());
+        dispatch(uInvertion(provider, address));
         setStatus(true);
         setAlertMsg('Nft comprado exitosamente');
         setIsBuy(true);
@@ -429,6 +433,9 @@ export default function NftDetails({ tipo }) {
     (state: any) => state.blockchain
   );
 
+  const provider = useProvider();
+  const { address } = useAccount();
+
   const Usuario = useSelector((state) => state.Usuario);
 
   const {
@@ -543,7 +550,7 @@ export default function NftDetails({ tipo }) {
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uInvertion());
+        dispatch(uInvertion(provider, address));
         setStatus(true);
         setAlertMsg('Nft comprado exitosamente');
       }

@@ -5,6 +5,7 @@ import Button from '../ui/button';
 import { Warning } from '@/components/icons/warning';
 import { useSelector, useDispatch } from 'react-redux';
 import validator from 'validator';
+import { useAccount, useProvider } from 'wagmi';
 
 import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
 
@@ -49,12 +50,14 @@ export default function ModalTP() {
       setError('Wallet incorrecta');
     }
   };
+  const provider = useProvider();
+  const { address } = useAccount();
 
   const transfer = async () => {
     setLoading(true);
     const tx = await inversionMinter.transferFrom(accountAddress, value, id);
     await tx.wait();
-    dispatch(uInvertion());
+    dispatch(uInvertion(provider, address));
     window.localStorage.removeItem('TransferIId');
     setLoading(false);
     setStatus(true);

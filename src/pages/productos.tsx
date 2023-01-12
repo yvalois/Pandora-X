@@ -38,6 +38,7 @@ import {
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
 import { WalletContext } from '@/lib/hooks/use-connect';
+import { useAccount, useProvider } from 'wagmi';
 
 const productos = [
   {
@@ -477,6 +478,9 @@ const ProductosPage: NextPageWithLayout<
     (state: any) => state.minted
   );
 
+  const provider = useProvider();
+  const { address } = useAccount();
+
   const {
     productoMinter,
     inversionMinter,
@@ -590,7 +594,7 @@ const ProductosPage: NextPageWithLayout<
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
-        dispatch(uInvertion());
+        dispatch(uInvertion(provider, address));
       }
     } catch (err) {
       setLoading(false);

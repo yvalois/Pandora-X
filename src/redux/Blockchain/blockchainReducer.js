@@ -21,7 +21,7 @@ const initialState = {
   //daiBalance: null,
   inventoryp: [],
   inventoryi: [],
-  //  inventoryf:[],
+  inventoryf: [],
   inventorys: [],
   //  inventorysf:[],
   isConnect: false,
@@ -131,6 +131,11 @@ const blockchainReducer = (state = initialState, action) => {
       return {
         ...state,
         inventorys: action.payload.inventorys,
+      };
+    case 'UPDATE_FRENCH':
+      return {
+        ...state,
+        inventoryf: action.payload.inventoryf,
       };
     default:
       return state;
