@@ -30,6 +30,9 @@ import { Verified } from '@/components/icons/verified';
 import styled from 'styled-components';
 import ActiveLink from '@/components/ui/links/active-link';
 import { ethers } from 'ethers';
+import validator from 'validator';
+import frenchiesAbi from '../abi/FrenchiesBlues.json';
+
 import {
   uProduct,
   uInvertion,
@@ -353,7 +356,10 @@ const Frenchies: NextPageWithLayout<
   const [loading, setLoading] = useState(false);
   const [cuenta, setCuenta] = useState('');
   const [approvedToken, setApprovedToken] = useState(0);
+  const [cantidad, setCantidad] = useState(0);
   const Usuario = useSelector((state) => state.Usuario);
+  const [supply, setSupply] = useState(0);
+  const [status, setStatus] = useState(0);
 
   const { frenchiesMinter, accountAddress, maticContract, isConnect } =
     useSelector((state) => state.blockchain);
@@ -422,24 +428,31 @@ const Frenchies: NextPageWithLayout<
         const tx = await frenchiesMinter.buyTokenWithReferido(
           maticContract.address,
           referidor,
-          porcentaje
+          porcentaje,
+          cantidad
         );
         //referidos
         await tx.wait();
         setLoading(false);
         setApprovedToken(0);
         dispatch(uFrench(provider, accountAddress));
+        setStatus(200);
       } else {
-        const tx = await frenchiesMinter.buyToken(maticContract.address);
+        const tx = await frenchiesMinter.buyToken(
+          maticContract.address,
+          cantidad
+        );
 
         await tx.wait(); //tener en cuenta para los proximos cambios
         setLoading(false);
         dispatch(uFrench(provider, accountAddress));
-
+        setStatus(200);
+        setCantidad(cantidad - cantidad);
         setApprovedToken(0);
       }
     } catch (err) {
       setLoading(false);
+      setStatus(100);
     }
   };
 
@@ -462,6 +475,48 @@ const Frenchies: NextPageWithLayout<
       disconnectWallet();
     }
   }, []); */
+
+  const changeCantidad = (type) => {
+    if (type == '-' && cantidad > 0) {
+      setCantidad(cantidad - 1);
+    } else if (type == '+') {
+      setCantidad(cantidad + 1);
+    }
+  };
+
+  const changeCantidadM = (e) => {
+    let cant = e.target.value;
+    if (validator.isNumeric(cant)) {
+      if (cantidad == 0) {
+        setCantidad(cantidad + parseInt(cant));
+      } else {
+        setCantidad(cant);
+      }
+    }
+  };
+
+  const setearSupply = async () => {
+    const frenchiesMinterContract = new ethers.Contract(
+      '0x9E34CDEC8f0763DfB3D7652d9a60246Ff3BBee5b',
+      frenchiesAbi,
+      provider
+    );
+    const supp = await frenchiesMinterContract.totalSupply();
+
+    setSupply(parseInt(supp));
+  };
+
+  useEffect(() => {
+    setearSupply();
+  }, [cantidad]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (status != 0) {
+        setStatus(0);
+      }
+    }, 3000);
+  }, [status]);
 
   return (
     <>
@@ -513,7 +568,10 @@ const Frenchies: NextPageWithLayout<
               </TabPanel>
               <TabPanel className="h-full focus:outline-none">
                 <div className="h-full flex-col justify-between">
-                  <div className=" flex justify-center  align-middle">
+                  <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
+                    Frenchies Blues
+                  </h1>
+                  <div className=" mb-[10px] flex  justify-center align-middle">
                     <Image
                       src={
                         'https://cdn-icons-png.flaticon.com/512/3097/3097257.png'
@@ -524,21 +582,72 @@ const Frenchies: NextPageWithLayout<
                       className="rounded-none"
                     />
                   </div>
-                  <h1 className="mb-[200px] flex  justify-center align-middle font-bold">
-                    Frenchies Blues
-                  </h1>
+
+                  <div className="mb-[30px] flex justify-center align-middle">
+                    <div className="h-10 w-32 focus:outline-0">
+                      <label
+                        for="custom-input-number"
+                        className="flex w-full justify-center self-center text-sm font-semibold text-gray-700"
+                      >
+                        Cantidad
+                      </label>
+                      <div className="relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent">
+                        <button
+                          onClick={() => changeCantidad('-')}
+                          data-action="decrement"
+                          className=" h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-gray-400 hover:text-gray-700"
+                        >
+                          <span className="m-auto text-2xl font-thin">−</span>
+                        </button>
+                        <input
+                          onChange={(e) => changeCantidadM(e)}
+                          className="text-md md:text-basecursor-default flex w-full items-center bg-gray-300 text-center font-semibold text-gray-700  outline-none outline-0 hover:text-black focus:text-black  focus:outline-none"
+                          name="custom-input-number"
+                          value={cantidad}
+                        />
+                        <button
+                          onClick={() => changeCantidad('+')}
+                          data-action="increment"
+                          className="h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
+                        >
+                          <span className="m-auto text-2xl font-thin">+</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-[80px] flex justify-center align-middle">
+                    <label htmlFor="">Precio: {precio * cantidad}</label>
+                  </div>
 
                   <div className="flex justify-center align-middle">
                     {isConnect && loading && <Button>Cargando...</Button>}
 
                     {isConnect && !loading && (
-                      <Button onClick={buyNft}>Comprar</Button>
+                      <Button disabled={cantidad == 0} onClick={buyNft}>
+                        Comprar
+                      </Button>
                     )}
 
                     {!isConnect && (
                       <Button onClick={() => openModal('WALLET_CONNECT_VIEW')}>
                         Conectar
                       </Button>
+                    )}
+                  </div>
+
+                  <h1 className="flex  justify-center align-middle font-bold">
+                    {supply}/121
+                  </h1>
+                  <div className="mt-10 flex w-full justify-center align-middle">
+                    {status == 200 && (
+                      <div
+                        className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+                        role="alert"
+                      >
+                        <span className="font-medium">
+                          Frenchie obtenido de manera exitosa
+                        </span>
+                      </div>
                     )}
                   </div>
                 </div>
