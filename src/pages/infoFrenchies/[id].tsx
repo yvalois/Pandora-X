@@ -2,14 +2,12 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
 import DashboardLayout from '@/layouts/_dashboard';
-import NftDetails from '@/components/nft/nft-detailsI';
+import NftDetailsF from '@/components/nft/nft-detailsF';
 import { nftData } from '@/data/static/single-nft';
-import { useContext, useEffect, useState } from 'react';
-import Router from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import router from 'next/router';
+import { useSelector } from 'react-redux';
 import { ethers } from 'ethers';
-import { getMintedNftProducts } from '@/redux/Minted/MintedAction';
-import { WalletContext } from '@/lib/hooks/use-connect';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -20,42 +18,31 @@ export const getStaticProps: GetStaticProps = async () => {
 const NFTDetailsPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
+  const { inventoryf } = useSelector((state: any) => state.blockchain);
+
   const nftdata = {
     Nombre: '',
     img: '',
     precio: 0,
-    tipo: '',
-    tipoN: 0,
     descripcion: '',
+    id: 0,
   };
-  const [type, setType] = useState('');
+
   const [nft, setNft] = useState(nftdata);
-  const Usuario = useSelector((state: any) => state.Usuario);
-  const { productos, inversiones, dataloaded } = useSelector(
-    (state) => state.minted
-  );
-  const { disconnectWallet, balance, connectToWallet, error } =
-    useContext(WalletContext);
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  const getNft = async () => {
-    await dispatch(getMintedNftProducts());
-  };
 
   useEffect(() => {
-    const fetch = async () => {
-      await getNft();
+    //router.query.id
+    const id = router.query.id;
 
-      const tipo = Router.query.tipo;
-      setType(tipo);
-    };
-    fetch();
+    inventoryf.map((inv) => {
+      if (inv.id == id) {
+        setNft(inv);
+      }
+    });
+  }, []);
 
-    connectToWallet();
-  }, [dataloaded, productos, inversiones]);
-
-  /*useEffect(() => {
+  const Usuario = useSelector((state: any) => state.Usuario);
+  useEffect(() => {
     if (
       Usuario.rol !== 'Admin' &&
       Usuario.rol !== 'usuario' &&
@@ -63,7 +50,7 @@ const NFTDetailsPage: NextPageWithLayout<
     ) {
       window.location.href = '/';
     }
-  });*/
+  });
 
   return (
     <>
@@ -71,7 +58,7 @@ const NFTDetailsPage: NextPageWithLayout<
         title="NFT details"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <NftDetails tipo={type} />
+      <NftDetailsF Nft={nft} />
     </>
   );
 };

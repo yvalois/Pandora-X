@@ -744,9 +744,9 @@ const AuthorProfilePage: NextPageWithLayout<
 
           <div className="ml-10 grow">
             {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (
-              <ProfileTabUser />
-            ) : (
               <ProfileTab />
+            ) : (
+              <ProfileTabUser />
             )}
           </div>
           <AuthorInformation data={authorData} />

@@ -705,7 +705,7 @@ const ProductosPage: NextPageWithLayout<
                       name={producto.Nombre}
                       image={producto.img}
                       price={producto.precio}
-                      number={producto.tipo}
+                      number={producto.tipoN}
                       alldata={true}
                       type={'comprap'}
                     />

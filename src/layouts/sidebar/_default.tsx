@@ -94,6 +94,10 @@ export const menuItems = [
         href: routes.cg,
       },
       {
+        name: 'Comunidad Privada',
+        href: routes.comunidadp,
+      },
+      {
         name: 'Academia X',
         href: routes.academiaX,
       },
@@ -112,6 +116,10 @@ export const menuItems = [
       {
         name: 'Podcast',
         href: routes.podcast,
+      },
+      {
+        name: 'Nft Studio',
+        href: routes.nft,
       },
     ],
   },
@@ -308,10 +316,7 @@ export default function Sidebar({ className }: SidebarProps) {
               (UsuarioR !== 'Admin' &&
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&
-                item.name == 'Profile') ||
-              (UsuarioR !== 'Admin' &&
-                UsuarioR !== 'usuario' &&
-                item.name == 'Inversiones') ? (
+                item.name == 'Profile') ? (
                 <div key={index}></div>
               ) : (
                 <MenuItem
@@ -345,24 +350,6 @@ export default function Sidebar({ className }: SidebarProps) {
             ></iframe>
           </div>
         </div>
-
-        {/*
-
-            <iframe
-              loading="lazy"
-              className=" absolute; t-0; l-0 none m-0; h-[100%] w-[100%] p-0"
-              src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?embed"
-              allowfullscreen="allowfullscreen"
-              allow="fullscreen"
-            ></iframe>
-          </div>
-          <a
-            href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFVhreHv0g&#x2F;view?utm_content=DAFVhreHv0g&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-        <div className="ml-10 h-[50%] w-[80%] bg-blue-200"></div>
-        </a>*/}
       </Scrollbar>
     </aside>
   );

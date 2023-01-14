@@ -2,7 +2,7 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
 import DashboardLayout from '@/layouts/_dashboard';
-import NftDetails from '@/components/nft/nft-details';
+import NftDetails from '@/components/nft/nft-detailsI';
 import { nftData } from '@/data/static/single-nft';
 import { useEffect, useState } from 'react';
 import router from 'next/router';

@@ -360,9 +360,17 @@ const Frenchies: NextPageWithLayout<
   const Usuario = useSelector((state) => state.Usuario);
   const [supply, setSupply] = useState(0);
   const [status, setStatus] = useState(0);
+  const [count, setCount] = useState(0);
+  const [errormsg, setErrorMSG] = useState('');
+  const [pan, setPan] = useState(true);
 
-  const { frenchiesMinter, accountAddress, maticContract, isConnect } =
-    useSelector((state) => state.blockchain);
+  const {
+    frenchiesMinter,
+    accountAddress,
+    maticContract,
+    isConnect,
+    tokenContract,
+  } = useSelector((state) => state.blockchain);
 
   const precio = 0.1;
 
@@ -370,19 +378,20 @@ const Frenchies: NextPageWithLayout<
 
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
-  const getNft = async () => {
-    await dispatch(getMintedNftProducts());
-  };
   const verifyApprove = async () => {
     try {
-      const usdt = await maticContract.allowance(
+      const usdt = await tokenContract.allowance(
         accountAddress,
         frenchiesMinter.address
       ); //MarketPlace
       //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-      setApprovedToken(ethers.utils.formatUnits(usdt, 18));
+      setApprovedToken(ethers.utils.formatUnits(usdt, 6));
+      setPan(false);
+      setPan(true);
     } catch (e) {
       console.log(e);
+      setPan(false);
+      setPan(true);
     }
   };
 
@@ -390,12 +399,12 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     try {
-      setTokenAddress(maticContract.address);
+      setTokenAddress(tokenContract.address);
 
-      const decimals = 18;
-      const tx = await maticContract.approve(
+      const decimals = 6;
+      const tx = await tokenContract.approve(
         frenchiesMinter.address,
-        ethers.utils.parseUnits('0.1', decimals)
+        ethers.utils.parseUnits('1000', decimals)
       );
 
       console.log(tx);
@@ -403,56 +412,79 @@ const Frenchies: NextPageWithLayout<
       await tx.wait();
       await verifyApprove();
       setLoading(false);
+      setPan(false);
+      setPan(true);
     } catch (e) {
       setLoading(false);
       console.log(e);
+      setPan(false);
+      setPan(true);
     }
   };
 
   const buyNft = async () => {
     setLoading(true);
 
-    try {
-      if (!Usuario.isReferido && Usuario.type == 'Agente X') {
-        let porcentaje = 0;
-        if (Usuario.range == 'peerx') {
-          porcentaje = 200;
-        } else if (Usuario.range == 'blockelite') {
-          porcentaje = 250;
-        } else if (Usuario.range == 'blockmaster') {
-          porcentaje = 350;
-        } else if (Usuario.range == 'blockcreator') {
-          porcentaje = 400;
+    const balance = await tokenContract.balanceOf(accountAddress);
+    const realBalance = ethers.utils.formatUnits(balance, 6);
+    alert(realBalance);
+    alert(precio * cantidad - precio * count);
+    if (realBalance > precio * cantidad - precio * count) {
+      try {
+        if (!Usuario.isReferido && Usuario.type == 'Agente X') {
+          let porcentaje = 0;
+          if (Usuario.range == 'peerx') {
+            porcentaje = 200;
+          } else if (Usuario.range == 'blockelite') {
+            porcentaje = 250;
+          } else if (Usuario.range == 'blockmaster') {
+            porcentaje = 350;
+          } else if (Usuario.range == 'blockcreator') {
+            porcentaje = 400;
+          }
+
+          const tx = await frenchiesMinter.buyTokenWithReferido(
+            tokenContract.address,
+            referidor,
+            porcentaje,
+            cantidad
+          );
+          //referidos
+          await tx.wait();
+          setLoading(false);
+          setApprovedToken(0);
+          dispatch(uFrench(provider, accountAddress));
+          setStatus(200);
+          setPan(false);
+          setPan(true);
+        } else {
+          const tx = await frenchiesMinter.buyToken(
+            tokenContract.address,
+            cantidad
+          );
+
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          setLoading(false);
+          dispatch(uFrench(provider, accountAddress));
+          setStatus(200);
+          setCantidad(cantidad - cantidad);
+          setApprovedToken(0);
+          setPan(false);
+          setPan(true);
         }
-
-        const tx = await frenchiesMinter.buyTokenWithReferido(
-          maticContract.address,
-          referidor,
-          porcentaje,
-          cantidad
-        );
-        //referidos
-        await tx.wait();
+      } catch (err) {
         setLoading(false);
-        setApprovedToken(0);
-        dispatch(uFrench(provider, accountAddress));
-        setStatus(200);
-      } else {
-        const tx = await frenchiesMinter.buyToken(
-          maticContract.address,
-          cantidad
-        );
-
-        await tx.wait(); //tener en cuenta para los proximos cambios
-        setLoading(false);
-        dispatch(uFrench(provider, accountAddress));
-        setStatus(200);
-        setCantidad(cantidad - cantidad);
-        setApprovedToken(0);
+        setStatus(100);
+        setErrorMSG('Error en el minteo');
+        setPan(false);
+        setPan(true);
       }
-    } catch (err) {
-      setLoading(false);
+    } else {
       setStatus(100);
+      setErrorMSG('Saldo insuficientes');
+      setPan(false);
+      setPan(true);
+      setLoading(false);
     }
   };
 
@@ -469,12 +501,33 @@ const Frenchies: NextPageWithLayout<
     }
   }, [signer, arroz]);
 
+  const getWhithelist = async () => {
+    const w = await frenchiesMinter.getWhitelist();
+    if (w == true) {
+      const c = await frenchiesMinter.getCountWl();
+      alert(c);
+      setCount(c);
+    }
+  };
+
   /*  const { disconnectWallet } = useContext(WalletContext);
   useEffect(() => {
     if (!isConnect) {
       disconnectWallet();
     }
   }, []); */
+
+  useEffect(() => {
+    if (isConnect) {
+      verifyApprove();
+      getWhithelist();
+    }
+  }, [isConnect, pan]);
+
+  useEffect(() => {
+    setPan(false);
+    setPan(true);
+  }, []);
 
   const changeCantidad = (type) => {
     if (type == '-' && cantidad > 0) {
@@ -497,7 +550,7 @@ const Frenchies: NextPageWithLayout<
 
   const setearSupply = async () => {
     const frenchiesMinterContract = new ethers.Contract(
-      '0x9E34CDEC8f0763DfB3D7652d9a60246Ff3BBee5b',
+      '0x08238797Ff99c8e4cb945203C5f137A167023213',
       frenchiesAbi,
       provider
     );
@@ -508,6 +561,7 @@ const Frenchies: NextPageWithLayout<
 
   useEffect(() => {
     setearSupply();
+    verifyApprove();
   }, [cantidad]);
 
   useEffect(() => {
@@ -616,17 +670,30 @@ const Frenchies: NextPageWithLayout<
                     </div>
                   </div>
                   <div className="mb-[80px] flex justify-center align-middle">
-                    <label htmlFor="">Precio: {precio * cantidad}</label>
+                    <label htmlFor="">
+                      Precio: {precio * cantidad - precio * count}
+                    </label>
                   </div>
 
                   <div className="flex justify-center align-middle">
+                    {(isConnect &&
+                      approvedToken < precio * cantidad - precio * count &&
+                      !loading &&
+                      count == 0) ||
+                      (count > 0 &&
+                        cantidad > count &&
+                        approvedToken < precio * cantidad - precio * count &&
+                        !loading && <Button onClick={approve}>Aprobar</Button>)}
+
                     {isConnect && loading && <Button>Cargando...</Button>}
 
-                    {isConnect && !loading && (
-                      <Button disabled={cantidad == 0} onClick={buyNft}>
-                        Comprar
-                      </Button>
-                    )}
+                    {isConnect &&
+                      !loading &&
+                      approvedToken >= precio * cantidad - precio * count && (
+                        <Button disabled={cantidad == 0} onClick={buyNft}>
+                          Comprar
+                        </Button>
+                      )}
 
                     {!isConnect && (
                       <Button onClick={() => openModal('WALLET_CONNECT_VIEW')}>
@@ -647,6 +714,15 @@ const Frenchies: NextPageWithLayout<
                         <span className="font-medium">
                           Frenchie obtenido de manera exitosa
                         </span>
+                      </div>
+                    )}
+
+                    {status == 100 && (
+                      <div
+                        className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+                        role="alert"
+                      >
+                        <span className="font-medium">{errormsg}</span>
                       </div>
                     )}
                   </div>

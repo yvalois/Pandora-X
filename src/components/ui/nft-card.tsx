@@ -250,14 +250,14 @@ export default function NFTGrid({
       </div>
       {type == 'comprap' ? (
         <AnchorLink
-          href={`/details/${number}`}
+          href={`/productosbd/nft-detailsP${number}`}
           className="relative block w-full pb-full"
         >
           <Image src={image} layout="fill" objectFit="cover" alt="" />
         </AnchorLink>
-      ) : type == 'comprai' ? (
+      ) : type == 'compraI' ? (
         <AnchorLink
-          href={`/details/${number}`}
+          href={`/inversionbd/nft-detailsI${number}`}
           className="relative block w-full pb-full"
         >
           <Image src={image} layout="fill" objectFit="cover" alt="" />
@@ -265,6 +265,13 @@ export default function NFTGrid({
       ) : type == 'productos' ? (
         <AnchorLink
           href={`/info/${number}`}
+          className="relative block w-full pb-full"
+        >
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
+      ) : type == 'Frenchies Blues' ? (
+        <AnchorLink
+          href={`/infoFrenchies/${number}`}
           className="relative block w-full pb-full"
         >
           <Image src={image} layout="fill" objectFit="cover" alt="" />
@@ -281,14 +288,14 @@ export default function NFTGrid({
       <div className="p-5">
         {type == 'comprap' ? (
           <AnchorLink
-            href={`/details/${number}`}
+            href={`/productosbd/nft-detailsP${number}`}
             className="text-sm font-medium text-black dark:text-white"
           >
             {name}
           </AnchorLink>
-        ) : type == 'comprai' ? (
+        ) : type == 'compraI' ? (
           <AnchorLink
-            href={`/details/${number}`}
+            href={`/inversionbd/nft-detailsI${number}`}
             className="text-sm font-medium text-black dark:text-white"
           >
             {name}
@@ -311,23 +318,23 @@ export default function NFTGrid({
 
         <div className="mt-1.5 flex">
           {type == 'comprap' && (
-            <div
-              href="/nft-details"
+            <AnchorLink
+              href={`/productosbd/nft-detailsP${number}`}
               className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
             >
               Productos
               <Verified className="ltr:ml-1 rtl:mr-1" />
-            </div>
+            </AnchorLink>
           )}
 
-          {type == 'comprai' && (
-            <div
-              href="/nft-details"
+          {type == 'compraI' && (
+            <AnchorLink
+              href={`/inversionbd/nft-detailsI${number}`}
               className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
             >
               Inversiones
               <Verified className="ltr:ml-1 rtl:mr-1" />
-            </div>
+            </AnchorLink>
           )}
         </div>
 
@@ -351,14 +358,6 @@ export default function NFTGrid({
               <Verified className="ltr:ml-1 rtl:mr-1" />
             </div>
           )}
-
-          <div
-            href={`/infoinv/${number}`}
-            className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
-          >
-            {type}
-            <Verified className="ltr:ml-1 rtl:mr-1" />
-          </div>
         </div>
 
         {alldata && (

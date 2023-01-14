@@ -686,9 +686,9 @@ const InversionesPage: NextPageWithLayout<
                       name={inversion.Nombre}
                       image={inversion.img}
                       price={inversion.precio}
-                      number={inversion.tipo}
+                      number={inversion.tipoN}
                       alldata={true}
-                      type={'comprai'}
+                      type={'compraI'}
                     />
                   ))}
                 </div>

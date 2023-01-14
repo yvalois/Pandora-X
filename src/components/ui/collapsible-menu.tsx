@@ -30,7 +30,6 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
     if (isChildrenActive) {
       setIsOpen(true);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -42,7 +41,7 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
             href={href}
             className={cn(
               'relative flex h-12 cursor-pointer items-center justify-between whitespace-nowrap  rounded-lg px-4 text-sm transition-all',
-              href === pathname
+              isChildrenActive
                 ? 'text-white'
                 : 'text-gray-500 hover:text-brand dark:hover:text-white'
             )}
@@ -62,7 +61,7 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
               <ChevronDown />
             </span>
 
-            {href === pathname && (
+            {isChildrenActive && (
               <motion.span
                 className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
                 layoutId="menu-item-active-indicator"
@@ -79,15 +78,13 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
             <ul ref={ref}>
               {dropdownItems.map((item, index) => (
                 <li className="first:pt-2" key={index}>
-                  <div
-                    onClick={() => {
-                      window.location.href = item.href;
-                    }}
-                    className="flex cursor-pointer items-center rounded-lg p-3 text-sm text-gray-500 transition-all before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-brand ltr:pl-6 before:ltr:mr-5 rtl:pr-6 before:rtl:ml-5 dark:hover:text-white"
+                  <ActiveLink
+                    href={item.href}
+                    className="flex items-center rounded-lg p-3 text-sm text-gray-500 transition-all before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-brand ltr:pl-6 before:ltr:mr-5 rtl:pr-6 before:rtl:ml-5 dark:hover:text-white"
                     activeClassName="!text-brand dark:!text-white dark:before:!bg-white before:!bg-brand before:!w-2 before:!h-2 before:-ml-0.5 before:ltr:!mr-[18px] before:rtl:!ml-[18px] !font-medium"
                   >
                     {item.name}
-                  </div>
+                  </ActiveLink>
                 </li>
               ))}
             </ul>
