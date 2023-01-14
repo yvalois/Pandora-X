@@ -109,12 +109,12 @@ function NftFooter({
 
 function NftDetails6Page() {
   const url = [
-    'https://discord.gg/bybu984z',
-    'https://academy.pandorax.co/offers/HzPLpzk6/checkout',
-    'https://academy.pandorax.co/offers/Sf3awR87/checkout',
     'https://academy.pandorax.co/offers/KLDhtczq/checkout',
+    'https://academy.pandorax.co/offers/Sf3awR87/checkout',
     'https://academy.pandorax.co/offers/SvAjzFcZ/checkout',
     'https://academy.pandorax.co/offers/GMoLiq82/checkout',
+    'https://academy.pandorax.co/offers/HzPLpzk6/checkout',
+    'https://discord.gg/bybu984z',
     'https://academy.pandorax.co/offers/Ne4xqLqa/checkout',
     'https://academy.pandorax.co/offers/JDnEzntz/checkout',
   ];

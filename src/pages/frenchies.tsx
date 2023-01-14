@@ -427,8 +427,6 @@ const Frenchies: NextPageWithLayout<
 
     const balance = await tokenContract.balanceOf(accountAddress);
     const realBalance = ethers.utils.formatUnits(balance, 6);
-    alert(realBalance);
-    alert(precio * cantidad - precio * count);
     if (realBalance > precio * cantidad - precio * count) {
       try {
         if (!Usuario.isReferido && Usuario.type == 'Agente X') {
@@ -505,7 +503,6 @@ const Frenchies: NextPageWithLayout<
     const w = await frenchiesMinter.getWhitelist();
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
-      alert(c);
       setCount(c);
     }
   };
