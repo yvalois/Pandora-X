@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { disconectWallet } from '../../redux/Blockchain/blockchainAction';
@@ -54,6 +54,7 @@ export default function ModalRegister() {
   const { closeModal } = useModal();
 
   const dispatch = useDispatch<AppDispatch>();
+  const { disconnectWallet } = useContext(WalletContext);
 
   //const Usuario = useSelector((state: any) => state.Usuario);
 
@@ -214,10 +215,10 @@ export default function ModalRegister() {
     },
   };
 
-  const disconnectWallet = async () => {
+  const _disconnectWallet = async () => {
     //setAddress('');
     closeModal();
-    disconnectWallet;
+    disconnectWallet();
 
     //disconect();
   };
@@ -260,7 +261,7 @@ export default function ModalRegister() {
       <div className="relative z-50 mx-auto h-auto w-[400px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark">
         <button
           className="absolute right-[25px] top-[25px] mb-2 flex h-[20px] w-[20px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white"
-          onClick={() => disconnectWallet()}
+          onClick={() => _disconnectWallet()}
         >
           <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
             X

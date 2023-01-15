@@ -104,6 +104,7 @@ const HomePage: NextPageWithLayout<
   const [currentInv, setCurrentInv] = useState([]);
   const [balance, setBalance] = useState(0);
   const Usuario = useSelector((state: any) => state.Usuario);
+  const [ready, setReady] = useState(false);
   let Contador = 0;
   const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
     useSelector((state: any) => state.minted);
@@ -128,7 +129,7 @@ const HomePage: NextPageWithLayout<
   const {
     inventoryp,
     inventoryi,
-    productoMinter,
+    frenchiesMinter,
     accountAddress,
     balanceI,
     isConnect,
@@ -137,15 +138,6 @@ const HomePage: NextPageWithLayout<
     tokenContract,
   } = useSelector((state: any) => state.blockchain);
 
-  const inventory = async () => {
-    if (accountAddress !== '') {
-      const tx = await productoMinter.getMyInventory(accountAddress);
-
-      return tx;
-    }
-
-    return 0;
-  };
   const getInvertionTrans = async () => {
     fetch(
       `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${inversionMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
@@ -168,9 +160,10 @@ const HomePage: NextPageWithLayout<
         arr = response.result;
         if (arr.length > 0) {
           arr.map(async (item) => {
-            if (item.from == '0x0000000000000000000000000000000000000000') {
-              const cant = arr.length;
-              Contador += cant;
+            if (
+              item.from == '0x0000000000000000000000000000000000000000' &&
+              item.to == accountAddress.toLowerCase()
+            ) {
               const dat = item.timeStamp;
               const date = toDateTime(dat);
               const pre = await inversionMinter.getPricePlusFee(item.tokenID);
@@ -180,20 +173,19 @@ const HomePage: NextPageWithLayout<
                 inversionMinter.address.length - 6
               );
               const wall = w1 + '...' + w;
-              if (cant >= Data.length || cant == 0) {
-                const Tx = {
-                  Id: item.tokenID,
-                  Tipo: 'Compra Inversion',
-                  Hash: item.hash,
-                  Time: dat,
-                  Fecha: date.toDateString(),
-                  Asset: 'Tether',
-                  Status: 'Exitosa',
-                  Address: wall,
-                  Precio: precio,
-                };
-                Data.push(Tx);
-              }
+
+              const Tx = {
+                Id: item.tokenID,
+                Tipo: 'Compra Inversion',
+                Hash: item.hash,
+                Time: dat,
+                Fecha: date.toDateString(),
+                Asset: 'Tether',
+                Status: 'Exitosa',
+                Address: wall,
+                Precio: precio,
+              };
+              Data.push(Tx);
             }
           });
         }
@@ -202,7 +194,7 @@ const HomePage: NextPageWithLayout<
 
   const getProductosTrans = async () => {
     fetch(
-      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${productoMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
+      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${frenchiesMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
  `,
       {
         method: 'GET',
@@ -218,17 +210,21 @@ const HomePage: NextPageWithLayout<
           t.setSeconds(secs);
           return t;
         }
+
         let arr = [];
         arr = response.result;
         if (arr.length > 0) {
           arr.map(async (item) => {
-            if (item.from == '0x0000000000000000000000000000000000000000') {
+            if (
+              item.from == '0x0000000000000000000000000000000000000000' &&
+              item.to == accountAddress.toLowerCase()
+            ) {
               const cant = arr.length + Data.length;
               Contador += cant;
               const dat = item.timeStamp;
               const date = toDateTime(dat);
-              const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-              const precio = ethers.utils.formatUnits(pre, 6);
+              //const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+              //const precio = ethers.utils.formatUnits(pre, 6);
               const w1 = inversionMinter.address.slice(0, 6);
               const w = inversionMinter.address.slice(
                 inversionMinter.address.length - 6
@@ -237,14 +233,14 @@ const HomePage: NextPageWithLayout<
               if (cant >= Data.length || cant == 0) {
                 const Tx = {
                   Id: item.tokenID,
-                  Tipo: 'Compra Producto',
+                  Tipo: 'Compra Frenchie',
                   Hash: item.hash,
                   Time: dat,
                   Fecha: date.toDateString(),
                   Asset: 'Tether',
                   Status: 'Exitosa',
                   Address: wall,
-                  Precio: precio,
+                  Precio: 0.1,
                 };
                 Data.push(Tx);
               }
@@ -278,21 +274,20 @@ const HomePage: NextPageWithLayout<
           arr.map(async (item) => {
             if (
               item.from == accountAddress.toLowerCase() ||
-              item.to.toString() == accountAddress.toLowerCase()
+              item.to == accountAddress.toLowerCase()
             ) {
               const cant = arr.length + Data.length;
               Contador += cant;
               const dat = item.timeStamp;
               const date = toDateTime(dat);
-              const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-              const precio = ethers.utils.formatUnits(pre, 6);
+              //const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+              //const precio = ethers.utils.formatUnits(pre, 6);
               const w1 = inversionMinter.address.slice(0, 6);
               const w = inversionMinter.address.slice(
                 inversionMinter.address.length - 6
               );
               const wall = w1 + '...' + w;
               const from = item.from;
-              const to = item.to;
               if (cant >= Data.length || cant == 0) {
                 if (from == accountAddress.toLowerCase()) {
                   const Tx = {
@@ -304,7 +299,7 @@ const HomePage: NextPageWithLayout<
                     Asset: 'Tether',
                     Status: 'Exitosa',
                     Address: wall,
-                    Precio: 'NP',
+                    Precio: 'NA',
                   };
                   Data.push(Tx);
                 } else {
@@ -317,7 +312,7 @@ const HomePage: NextPageWithLayout<
                     Asset: 'Tether',
                     Status: 'Exitosa',
                     Address: wall,
-                    Precio: precio,
+                    Precio: 'NA',
                   };
                   Data.push(Tx);
                 }
@@ -413,7 +408,7 @@ const HomePage: NextPageWithLayout<
 
   setTimeout(async () => {
     await getPrices();
-  }, 3600000);
+  }, 1000);
 
   const setData = async () => {
     dispatch(
@@ -433,14 +428,18 @@ const HomePage: NextPageWithLayout<
     fetchItems();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     setCurrentItems(prod);
     const fetchItems = async () => {
-      if (isConnect) {
-        await getInvertionTrans();
-        await getProductosTrans();
-        await getStakingsTrans();
-        await getClaimsTrans();
+      if (isConnect&& Data.length == 0) {
+        alert("a")
+        getInvertionTrans();
+        getProductosTrans();
+        getStakingsTrans();
+        getClaimsTrans();
+        setTimeout(() => {
+          setReady(true)
+      }, 3000);
       } else {
         Data = [];
       }
@@ -448,17 +447,41 @@ const HomePage: NextPageWithLayout<
       //setBalance(balanceI);
     };
     fetchItems();
-  }, [accountAddress]);
+  }, [accountAddress]);*/
+
+  useEffect(() => {
+    setCurrentItems(prod);
+    const fetchItems = async () => {
+      if (isConnect && Data.length == 0) {
+        await getInvertionTrans();
+        await getProductosTrans();
+        await getStakingsTrans();
+        await getClaimsTrans();
+
+        setTimeout(() => {
+          setReady(true);
+        }, 1000);
+      } else {
+        Data = [];
+      }
+      //setCurrentInv(inventoryi);
+      //setBalance(balanceI);
+    };
+    fetchItems();
+  }, []);
 
   useEffect(() => {
     const fetchItems = async () => {
-      await setData();
+      if (ready) {
+        await setData();
+        setReady(false);
+      }
 
       //setCurrentInv(inventoryi);
       //setBalance(balanceI);
     };
     fetchItems();
-  }, [Data]);
+  }, [ready]);
 
   useEffect(() => {
     setBalance(balanceI[0]);
@@ -585,7 +608,7 @@ const HomePage: NextPageWithLayout<
 
       <div className="flex flex-wrap">
         <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
-          {Transactions.length > 0 && <TransactionTable />}
+          {Transactions.length > 0 && isConnect && <TransactionTable />}
         </div>
       </div>
     </>

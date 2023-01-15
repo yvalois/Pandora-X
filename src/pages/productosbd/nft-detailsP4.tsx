@@ -75,7 +75,7 @@ function NftFooter({
               ></AnchorLink>
             </h3>
             <div className="text-lg font-medium -tracking-wider md:text-xl xl:text-2xl">
-              {price} USDT
+              {price} USD
             </div>
             <AnchorLink
               href={'#'}
@@ -148,14 +148,10 @@ function NftDetails4Page() {
         .then((response) => {
           response.map(async (res) => {
             if (res.tipoN == 4) {
-              const precio = await productoMinterContract.buyPrice(
-                res.tipoN,
-                '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
-              );
               const nftdata = {
                 Nombre: res.Nombre,
                 img: res.img,
-                precio: parseInt(ethers.utils.formatUnits(precio, 6)),
+                precio: 997,
                 tipoN: res.tipoN,
                 descripcion: res.descripcion,
                 url: url[res.tipoN - 1],

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import Button from '../ui/button/button';
 import { disconectWallet } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch } from 'react-redux';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 import WalletConnectProvider from '@walletconnect/web3-provider';
 export default function ModalBanned() {
@@ -16,14 +17,7 @@ export default function ModalBanned() {
 
   //botton y state
 
-  const providerOptions = {
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        chainId: 31337,
-      },
-    },
-  };
+  const { disconnectWallet } = useContext(WalletContext);
 
   return (
     <>

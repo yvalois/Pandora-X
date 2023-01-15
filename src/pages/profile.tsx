@@ -769,3 +769,6 @@ AuthorProfilePage.getLayout = function getLayout(page) {
 };
 
 export default AuthorProfilePage;
+function dispatch(arg0: (dispatch: any) => Promise<void>) {
+  throw new Error('Function not implemented.');
+}

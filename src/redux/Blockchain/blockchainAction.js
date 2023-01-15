@@ -185,7 +185,6 @@ export const update_s = (payload) => {
 };
 
 export const uFrench = (provider, address) => async (dispatch) => {
-  console.log(provider);
   const frenchiesMinterContract = new ethers.Contract(
     FRENCHIES_ADDRESS,
     frenchiesAbi,
@@ -204,26 +203,27 @@ export const uFrench = (provider, address) => async (dispatch) => {
     )
       .then((response) => response.json())
       .then((response) => {
-        for (let i = 0; i < response.items.length; i++) {
+        const french = response.items;
+        french.map((item) => {
           if (
-            response.items[i].collection ===
+            item.collection ===
             `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
           ) {
             if (inventoryf.length < nftfBalance.length) {
-              const split = response.items[i].id.split(':');
+              const split = item.id.split(':');
               console.log(split[2]);
               const precio = 1;
               const prod = {
-                Nombre: response.items[i].meta.name,
-                img: response.items[i].meta.content[0].url,
+                Nombre: item.meta.name,
+                img: item.meta.content[0].url,
                 precio: parseInt(precio),
-                descripcion: response.items[i].description,
+                descripcion: item.description,
                 id: split[2],
               };
               inventoryf.push(prod);
             }
           }
-        }
+        });
       });
   });
   await dispatch(
@@ -1115,26 +1115,27 @@ export const connectWallet =
           )
             .then((response) => response.json())
             .then((response) => {
-              for (let i = 0; i < response.items.length; i++) {
+              const french = response.items;
+              french.map((item) => {
                 if (
-                  response.items[i].collection ===
+                  item.collection ===
                   `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
                 ) {
                   if (inventoryf.length < nftfBalance.length) {
-                    const split = response.items[i].id.split(':');
+                    const split = item.id.split(':');
                     console.log(split[2]);
                     const precio = 1;
                     const prod = {
-                      Nombre: response.items[i].meta.name,
-                      img: response.items[i].meta.content[0].url,
+                      Nombre: item.meta.name,
+                      img: item.meta.content[0].url,
                       precio: parseInt(precio),
-                      descripcion: response.items[i].description,
+                      descripcion: item.description,
                       id: split[2],
                     };
                     inventoryf.push(prod);
                   }
                 }
-              }
+              });
             });
         });
         let balancei = [];

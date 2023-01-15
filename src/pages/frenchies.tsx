@@ -673,14 +673,12 @@ const Frenchies: NextPageWithLayout<
                   </div>
 
                   <div className="flex justify-center align-middle">
-                    {(isConnect &&
+                    {isConnect &&
                       approvedToken < precio * cantidad - precio * count &&
                       !loading &&
-                      count == 0) ||
-                      (count > 0 &&
-                        cantidad > count &&
-                        approvedToken < precio * cantidad - precio * count &&
-                        !loading && <Button onClick={approve}>Aprobar</Button>)}
+                      cantidad > count &&
+                      approvedToken < precio * cantidad - precio * count &&
+                      !loading && <Button onClick={approve}>Aprobar</Button>}
 
                     {isConnect && loading && <Button>Cargando...</Button>}
 

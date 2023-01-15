@@ -111,7 +111,6 @@ export default function TransactionTable() {
     for (let i = 1; i < orden.length; i++) {
       let length = orden.length - 1;
       for (let j = length; j >= i; j--) {
-        console.log(orden[j].Time);
         if (parseInt(orden[j - 1].Time) < parseInt(orden[j].Time)) {
           const temp = orden[j - 1];
           orden[j - 1] = orden[j];

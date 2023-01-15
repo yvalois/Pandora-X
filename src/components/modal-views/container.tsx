@@ -23,6 +23,8 @@ const TransferP = dynamic(() => import('@/components/modalTransfer/modalTP'));
 
 const TransferI = dynamic(() => import('@/components/modalTransfer/modalTI'));
 
+const TransferF = dynamic(() => import('@/components/modalTransfer/modalTF'));
+
 const Ban = dynamic(() => import('@/components/modal-ban/ModalBan'));
 const Change = dynamic(() => import('@/components/modal-change/ModalChange'));
 const Banned = dynamic(() => import('@/components/Banned-views/ModalBanned'));
@@ -45,6 +47,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <TransferP />;
     case 'TRANSFER_I':
       return <TransferI />;
+    case 'TRANSFER_F':
+      return <TransferF />;
     case 'BAN':
       return <Ban />;
     case 'CHANGE':

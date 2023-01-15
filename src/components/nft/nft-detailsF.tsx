@@ -66,10 +66,10 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
   const provider = useProvider();
   const { address } = useAccount();
 
-  /*const open = () => {
-    window.localStorage.setItem('TransferPId', id);
-    openModal('TRANSFER_P');
-  };*/
+  const open = () => {
+    window.localStorage.setItem('TransferFId', id);
+    openModal('TRANSFER_F');
+  };
   /* Transferir */
 
   useEffect(() => {
@@ -230,7 +230,9 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
           </div>
         )} */}
         <div className="grid w-full grid-cols-2 gap-3">
-          <Button shape="rounded">Transferir</Button>
+          <Button onClick={open} shape="rounded">
+            Transferir
+          </Button>
           <AnchorLink href={`/staking/${id}`}>
             <Button
               shape="rounded"
