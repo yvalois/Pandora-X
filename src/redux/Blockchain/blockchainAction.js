@@ -8,6 +8,8 @@ import inversionMinterAbi from '../../abi/InversionMinter.json';
 import stakingPAbi from '../../abi/StakingETH.json';
 import stakingErAbi from '../../abi/StakingETH.json';
 import frenchiesAbi from '../../abi/FrenchiesBlues.json';
+import Moralis from 'moralis';
+import { EvmChain } from '@moralisweb3/evm-utils';
 
 import stakingAbi from '../../abi/staking.json';
 import { setProvider } from '../../NFTROL';
@@ -31,6 +33,11 @@ const RPC_URL = router.RPC_URL;
 
 const options = new WalletConnectProvider({
   infuraId: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn',
+});
+
+Moralis.start({
+  apiKey: 'lZlG5FYAIhPCSsvVNoQx2qZBv7SlJGAWaGYJZ3PAEZidTn5yoCrJHy2bzqdiOKtK',
+  // ...and any other configuration
 });
 
 const providerOptions = new WalletConnectProvider({
@@ -185,52 +192,39 @@ export const update_s = (payload) => {
 };
 
 export const uFrench = (provider, address) => async (dispatch) => {
-  const frenchiesMinterContract = new ethers.Contract(
-    FRENCHIES_ADDRESS,
-    frenchiesAbi,
-    provider
-  );
-  const nftfBalance = await frenchiesMinterContract.getMyInventory(address);
-  const inventoryf = [];
-  nftfBalance.map(async (item, index) => {
-    const options = {
-      method: 'GET',
-      headers: { accept: 'application/json' },
-    };
-    fetch(
-      `https://api.rarible.org/v0.1/items/byOwner/?owner=ETHEREUM:${address}`,
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        const french = response.items;
-        french.map((item) => {
-          if (
-            item.collection ===
-            `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
-          ) {
-            if (inventoryf.length < nftfBalance.length) {
-              const split = item.id.split(':');
-              console.log(split[2]);
-              const precio = 1;
-              const prod = {
-                Nombre: item.meta.name,
-                img: item.meta.content[0].url,
-                precio: parseInt(precio),
-                descripcion: item.description,
-                id: split[2],
-              };
-              inventoryf.push(prod);
-            }
-          }
-        });
-      });
-  });
-  await dispatch(
-    update_f({
-      inventoryf: inventoryf,
-    })
-  );
+  try {
+    const inventoryf = [];
+
+    const chain = EvmChain.POLYGON;
+
+    const response = await Moralis.EvmApi.nft.getWalletNFTs({
+      address,
+      chain,
+    });
+
+    const token = response?.result;
+    token.map((item) => {
+      if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
+        const nft = item._data.metadata;
+        const prod = {
+          Nombre: nft.name,
+          img: nft.image,
+          precio: 0.1,
+          descripcion: nft.image,
+          id: item._data.tokenId,
+        };
+        inventoryf.push(prod);
+      }
+    });
+    console.log(inventoryf);
+    await dispatch(
+      update_f({
+        inventoryf: inventoryf,
+      })
+    );
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 /*export const uProduct = () => async (dispatch) => {
@@ -846,7 +840,6 @@ export const connectWallet =
       // const accounts = await provider.listAccounts();
 
       //  const networkId = await provider.getNetwork();
-
       if (1 == 1) {
         const usdtContract = new ethers.Contract(
           USDT_ADDRESS,
@@ -1104,40 +1097,29 @@ export const connectWallet =
             inventoryi.push(inv);
           }
         });
-        nftfBalance.map(async (item, index) => {
-          const options = {
-            method: 'GET',
-            headers: { accept: 'application/json' },
-          };
-          fetch(
-            `https://api.rarible.org/v0.1/items/byOwner/?owner=ETHEREUM:${address}`,
-            options
-          )
-            .then((response) => response.json())
-            .then((response) => {
-              const french = response.items;
-              french.map((item) => {
-                if (
-                  item.collection ===
-                  `POLYGON:${frenchiesMinterContract.address.toLowerCase()}`
-                ) {
-                  if (inventoryf.length < nftfBalance.length) {
-                    const split = item.id.split(':');
-                    console.log(split[2]);
-                    const precio = 1;
-                    const prod = {
-                      Nombre: item.meta.name,
-                      img: item.meta.content[0].url,
-                      precio: parseInt(precio),
-                      descripcion: item.description,
-                      id: split[2],
-                    };
-                    inventoryf.push(prod);
-                  }
-                }
-              });
-            });
+
+        const chain = EvmChain.POLYGON;
+
+        const response = await Moralis.EvmApi.nft.getWalletNFTs({
+          address,
+          chain,
         });
+
+        const token = response?.result;
+        token.map((item) => {
+          if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
+            const nft = item._data.metadata;
+            const prod = {
+              Nombre: nft.name,
+              img: nft.image,
+              precio: 0.1,
+              descripcion: nft.image,
+              id: item._data.tokenId,
+            };
+            inventoryf.push(prod);
+          }
+        });
+
         let balancei = [];
         balancei[0] = 0;
         nftiBalance.map(async (item) => {

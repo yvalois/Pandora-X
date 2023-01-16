@@ -33,12 +33,7 @@ import { ethers } from 'ethers';
 import validator from 'validator';
 import frenchiesAbi from '../abi/FrenchiesBlues.json';
 
-import {
-  uProduct,
-  uInvertion,
-  connectWallet,
-  uFrench,
-} from '../redux/Blockchain/blockchainAction';
+import { connectWallet, uFrench } from '../redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useModal as hola } from 'connectkit';
 import { useModal } from '@/components/modal-views/context';
@@ -363,7 +358,7 @@ const Frenchies: NextPageWithLayout<
   const [count, setCount] = useState(0);
   const [errormsg, setErrorMSG] = useState('');
   const [pan, setPan] = useState(true);
-
+  const [precio, setPrecio] = useState(0);
   const {
     frenchiesMinter,
     accountAddress,
@@ -372,7 +367,7 @@ const Frenchies: NextPageWithLayout<
     tokenContract,
   } = useSelector((state) => state.blockchain);
 
-  const precio = 0.1;
+  const valor = 0.1;
 
   const { referidor } = useSelector((state) => state.Usuario);
 
@@ -427,7 +422,7 @@ const Frenchies: NextPageWithLayout<
 
     const balance = await tokenContract.balanceOf(accountAddress);
     const realBalance = ethers.utils.formatUnits(balance, 6);
-    if (realBalance > precio * cantidad - precio * count) {
+    if (realBalance > precio) {
       try {
         if (!Usuario.isReferido && Usuario.type == 'Agente X') {
           let porcentaje = 0;
@@ -449,9 +444,10 @@ const Frenchies: NextPageWithLayout<
           );
           //referidos
           await tx.wait();
+          dispatch(uFrench(provider, accountAddress));
+
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uFrench(provider, accountAddress));
           setStatus(200);
           setPan(false);
           setPan(true);
@@ -462,8 +458,8 @@ const Frenchies: NextPageWithLayout<
           );
 
           await tx.wait(); //tener en cuenta para los proximos cambios
-          setLoading(false);
           dispatch(uFrench(provider, accountAddress));
+          setLoading(false);
           setStatus(200);
           setCantidad(cantidad - cantidad);
           setApprovedToken(0);
@@ -503,6 +499,7 @@ const Frenchies: NextPageWithLayout<
     const w = await frenchiesMinter.getWhitelist();
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
+      console.log(c);
       setCount(c);
     }
   };
@@ -529,8 +526,18 @@ const Frenchies: NextPageWithLayout<
   const changeCantidad = (type) => {
     if (type == '-' && cantidad > 0) {
       setCantidad(cantidad - 1);
+      if (count <= cantidad - 1) {
+        setPrecio(valor * (cantidad - 1 - count));
+      } else {
+        setPrecio(0);
+      }
     } else if (type == '+') {
       setCantidad(cantidad + 1);
+      if (count < cantidad + 1) {
+        setPrecio(valor * (cantidad + 1 - count));
+      } else {
+        setPrecio(0);
+      }
     }
   };
 
@@ -625,7 +632,7 @@ const Frenchies: NextPageWithLayout<
                   <div className=" mb-[10px] flex  justify-center align-middle">
                     <Image
                       src={
-                        'https://cdn-icons-png.flaticon.com/512/3097/3097257.png'
+                        'https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmTky2X6pewiEtnxtNcXXLrmcZ84jjAoB1NWAtbszxpcLG'
                       }
                       alt="wallet"
                       width={300}
@@ -667,9 +674,7 @@ const Frenchies: NextPageWithLayout<
                     </div>
                   </div>
                   <div className="mb-[80px] flex justify-center align-middle">
-                    <label htmlFor="">
-                      Precio: {precio * cantidad - precio * count}
-                    </label>
+                    <label htmlFor="">Precio: {precio}</label>
                   </div>
 
                   <div className="flex justify-center align-middle">

@@ -23,13 +23,10 @@ import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
 import edit from '@/assets/images/edit-svgrepo-com.svg';
 import Input from '@/components/ui/forms/input';
-import {
-  uFrench,
-  uInvertion,
-  update,
-} from '@/redux/Blockchain/blockchainAction';
+import { uFrench, update } from '@/redux/Blockchain/blockchainAction';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useAccount, useProvider, useSigner } from 'wagmi';
+import { provider } from '@/NFTROL';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -225,6 +222,10 @@ const AuthorProfilePage: NextPageWithLayout<
     if (!isConnect) {
       disconnectWallet();
     }
+  }, []);
+
+  useEffect(() => {
+    dispatch(uFrench(provider, accountAddress));
   }, []);
 
   return (
