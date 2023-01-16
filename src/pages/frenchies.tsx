@@ -357,7 +357,7 @@ const Frenchies: NextPageWithLayout<
   const [status, setStatus] = useState(0);
   const [count, setCount] = useState(0);
   const [errormsg, setErrorMSG] = useState('');
-  const [pan, setPan] = useState(true);
+  const [pan, setPan] = useState(false);
   const [precio, setPrecio] = useState(0);
   const [multiplicador, setMultiplicador] = useState(0);
   const {
@@ -450,8 +450,9 @@ const Frenchies: NextPageWithLayout<
           setLoading(false);
           setApprovedToken(0);
           setStatus(200);
-          setPan(false);
-          setPan(true);
+          setearSupply();
+          verifyApprove();
+          getWhithelist();
         } else {
           const options = {
             value: ethers.utils.parseUnits(
@@ -464,25 +465,23 @@ const Frenchies: NextPageWithLayout<
 
           await tx.wait(); //tener en cuenta para los proximos cambios
           dispatch(uFrench(provider, accountAddress));
-          setLoading(false);
           setStatus(200);
           setCantidad(cantidad - cantidad);
           setApprovedToken(0);
-          setPan(false);
-          setPan(true);
+          setearSupply();
+          verifyApprove();
+          if (count > 0) {
+            setCount(count - 1);
+          }
         }
       } catch (err) {
         setLoading(false);
         setStatus(100);
         setErrorMSG('Error en el minteo');
-        setPan(false);
-        setPan(true);
       }
     } else {
       setStatus(100);
       setErrorMSG('Saldo insuficientes');
-      setPan(false);
-      setPan(true);
       setLoading(false);
     }
   };
@@ -501,10 +500,15 @@ const Frenchies: NextPageWithLayout<
   }, [signer, arroz]);
 
   const getWhithelist = async () => {
+    setLoading(true);
+
     const w = await frenchiesMinter.getWhitelist();
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
       setCount(c);
+      setLoading(false);
+    } else {
+      setLoading(false);
     }
   };
 
@@ -518,12 +522,13 @@ const Frenchies: NextPageWithLayout<
   useEffect(() => {
     if (isConnect) {
       verifyApprove();
+      setearSupply();
+      verifyApprove();
       getWhithelist();
     }
-  }, [isConnect, pan]);
+  }, [pan]);
 
   useEffect(() => {
-    setPan(false);
     setPan(true);
   }, []);
 
@@ -560,20 +565,18 @@ const Frenchies: NextPageWithLayout<
   };
 
   const setearSupply = async () => {
+    setLoading(true);
+
     const frenchiesMinterContract = new ethers.Contract(
-      '0xdc7e0C15E9f2d34b01c337A65207c689cA3580f3',
+      '0x84071f086Dc1E02B5023B9fB5E280a8711C9CA7D',
       frenchiesAbi,
       provider
     );
     const supp = await frenchiesMinterContract.totalSupply();
+    setLoading(false);
 
     setSupply(parseInt(supp));
   };
-
-  useEffect(() => {
-    setearSupply();
-    verifyApprove();
-  }, [cantidad]);
 
   useEffect(() => {
     setTimeout(() => {
