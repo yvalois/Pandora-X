@@ -519,6 +519,16 @@ const Frenchies: NextPageWithLayout<
       getWhithelist();
     }
   }, [pan]);
+  useEffect(() => {
+    if (isConnect) {
+      verifyApprove();
+      setearSupply();
+      verifyApprove();
+      getWhithelist();
+    } else if (!isConnect) {
+      setCount(0);
+    }
+  }, [isConnect]);
 
   useEffect(() => {
     setPan(true);
