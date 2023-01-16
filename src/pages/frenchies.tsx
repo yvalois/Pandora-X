@@ -38,6 +38,7 @@ import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useModal as hola } from 'connectkit';
 import { useModal } from '@/components/modal-views/context';
 import { WalletContext } from '@/lib/hooks/use-connect';
+import AnchorLink from '@/components/ui/links/anchor-link';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -570,7 +571,7 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     const frenchiesMinterContract = new ethers.Contract(
-      '0x84071f086Dc1E02B5023B9fB5E280a8711C9CA7D',
+      '0x50d47650d4af79729418735FdEbE5e5Cf2800837',
       frenchiesAbi,
       provider
     );

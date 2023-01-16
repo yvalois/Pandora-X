@@ -1,5 +1,4 @@
 export const contract = () => {
-  //if (process.env.NODE_ENV === 'development') {
   return {
     usdtContract: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
     usdcContract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
@@ -10,25 +9,13 @@ export const contract = () => {
     staking: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
     stakingETH: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
     stakingPOL: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
-    frenchies: '0x84071f086Dc1E02B5023B9fB5E280a8711C9CA7D',
+    frenchies: '0x50d47650d4af79729418735FdEbE5e5Cf2800837',
     maticContract: '0x0000000000000000000000000000000000001010',
     RPC_URL:
       'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', //aqui ponemos el usdt
   };
-  // }
-
-  /*if (process.env.NODE_ENV === 'production') {
-    return {
-      usdtContract: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-      usdcContract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-      busdContract: '0xdAb529f40E671A1D4bF91361c21bf9f0C9712ab7',
-      daiContract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-      productoMinter: '0x02d87E80F288353D8e4AaCE36202caB4017dc5A0',
-      inversionMinter: '0x9595fAaC6D9da7759DD41B5bBD8C1aB236409381',
-      RPC_URL:
-        'https://eth-goerli.g.alchemy.com/v2/__HJ4LpJdyM1YHBkGqQf9-SRJ1ZVjP0s',
-      tokenPrueba: '0xB797D01EA243bCBFAd70c1c57fB12953e5e4043F',
-    };
-  }*/
 };
+
+// https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmTkB8HcCfeAwXmSPX1xD2Gp6ra4VGH8nUJYMymd2Pc2fB/
+// https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmfViBtWDQpkT1r6NCFyphHQ2scJCRFu41VkfXeVLeNsFt/

@@ -1,12 +1,6 @@
 [
     {
-        "inputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "_token",
-                "type": "address"
-            }
-        ],
+        "inputs": [],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
@@ -216,38 +210,6 @@
     {
         "inputs": [
             {
-                "internalType": "contract IERC20",
-                "name": "_tokenAddress",
-                "type": "address"
-            }
-        ],
-        "name": "acceptToken",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "acceptedErc20",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -318,60 +280,11 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_referidor",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "porcentaje",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "cant",
-                "type": "uint256"
-            }
-        ],
-        "name": "buyTokenWithReferido",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "cantPagos",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
                 "name": "_newAdmin",
                 "type": "address"
             }
         ],
         "name": "denyAdmin",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "_tokenAddress",
-                "type": "address"
-            }
-        ],
-        "name": "denyToken",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -460,44 +373,6 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
-        "name": "getPagoUser",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
-        "name": "getWallet",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "name": "getWhitelist",
         "outputs": [
@@ -508,13 +383,6 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "hideCollection",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -531,25 +399,6 @@
             }
         ],
         "name": "isApprovedForAll",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "isReferido",
         "outputs": [
             {
                 "internalType": "bool",
@@ -619,53 +468,8 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "rangeReferidor",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "referidor",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "revealCollection",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -684,25 +488,6 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "rolReferidor",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
             }
         ],
         "stateMutability": "view",
@@ -806,53 +591,12 @@
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_referidor",
-                "type": "address"
-            },
-            {
-                "internalType": "string",
-                "name": "_range",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "_rol",
-                "type": "string"
-            }
-        ],
-        "name": "setReferidor",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "uint256",
                 "name": "cant",
                 "type": "uint256"
             }
         ],
         "name": "setTotalSupply",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_user",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_rol",
-                "type": "uint256"
-            }
-        ],
-        "name": "setUserRol",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -997,6 +741,13 @@
             }
         ],
         "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "withdraw",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
