@@ -421,68 +421,60 @@ const Frenchies: NextPageWithLayout<
   const buyNft = async () => {
     setLoading(true);
 
-    const balance = await tokenContract.balanceOf(accountAddress);
-    const realBalance = ethers.utils.formatUnits(balance, 6);
-    if (realBalance > precio) {
-      try {
-        if (!Usuario.isReferido && Usuario.type == 'Agente X') {
-          let porcentaje = 0;
-          if (Usuario.range == 'peerx') {
-            porcentaje = 200;
-          } else if (Usuario.range == 'blockelite') {
-            porcentaje = 250;
-          } else if (Usuario.range == 'blockmaster') {
-            porcentaje = 350;
-          } else if (Usuario.range == 'blockcreator') {
-            porcentaje = 400;
-          }
-
-          const tx = await frenchiesMinter.buyTokenWithReferido(
-            tokenContract.address,
-            referidor,
-            porcentaje,
-            cantidad
-          );
-          //referidos
-          await tx.wait();
-          dispatch(uFrench(provider, accountAddress));
-
-          setLoading(false);
-          setApprovedToken(0);
-          setStatus(200);
-          setearSupply();
-          verifyApprove();
-          getWhithelist();
-        } else {
-          const options = {
-            value: ethers.utils.parseUnits(
-              (0.1 * multiplicador).toString(),
-              'ether'
-            ),
-          };
-
-          const tx = await frenchiesMinter.buyToken(cantidad, options);
-
-          await tx.wait(); //tener en cuenta para los proximos cambios
-          dispatch(uFrench(provider, accountAddress));
-          setStatus(200);
-          setCantidad(cantidad - cantidad);
-          setApprovedToken(0);
-          setearSupply();
-          verifyApprove();
-          if (count > 0) {
-            setCount(count - 1);
-          }
+    try {
+      if (!Usuario.isReferido && Usuario.type == 'Agente X') {
+        let porcentaje = 0;
+        if (Usuario.range == 'peerx') {
+          porcentaje = 200;
+        } else if (Usuario.range == 'blockelite') {
+          porcentaje = 250;
+        } else if (Usuario.range == 'blockmaster') {
+          porcentaje = 350;
+        } else if (Usuario.range == 'blockcreator') {
+          porcentaje = 400;
         }
-      } catch (err) {
+
+        const tx = await frenchiesMinter.buyTokenWithReferido(
+          tokenContract.address,
+          referidor,
+          porcentaje,
+          cantidad
+        );
+        //referidos
+        await tx.wait();
+        dispatch(uFrench(provider, accountAddress));
+
         setLoading(false);
-        setStatus(100);
-        setErrorMSG('Error en el minteo');
+        setApprovedToken(0);
+        setStatus(200);
+        setearSupply();
+        verifyApprove();
+        getWhithelist();
+      } else {
+        const options = {
+          value: ethers.utils.parseUnits(
+            (0.1 * multiplicador).toString(),
+            'ether'
+          ),
+        };
+
+        const tx = await frenchiesMinter.buyToken(cantidad, options);
+
+        await tx.wait(); //tener en cuenta para los proximos cambios
+        dispatch(uFrench(provider, accountAddress));
+        setStatus(200);
+        setCantidad(cantidad - cantidad);
+        setApprovedToken(0);
+        setearSupply();
+        verifyApprove();
+        if (count > 0) {
+          setCount(count - 1);
+        }
       }
-    } else {
-      setStatus(100);
-      setErrorMSG('Saldo insuficientes');
+    } catch (err) {
       setLoading(false);
+      setStatus(100);
+      setErrorMSG('Error en el minteo');
     }
   };
 
