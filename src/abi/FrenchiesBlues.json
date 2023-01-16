@@ -304,11 +304,6 @@
     {
         "inputs": [
             {
-                "internalType": "contract IERC20",
-                "name": "_token",
-                "type": "address"
-            },
-            {
                 "internalType": "uint256",
                 "name": "cant",
                 "type": "uint256"
@@ -316,16 +311,11 @@
         ],
         "name": "buyToken",
         "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "payable",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "_token",
-                "type": "address"
-            },
             {
                 "internalType": "address",
                 "name": "_referidor",
@@ -344,7 +334,7 @@
         ],
         "name": "buyTokenWithReferido",
         "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -796,6 +786,19 @@
             }
         ],
         "name": "setApprovalForAll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_base",
+                "type": "string"
+            }
+        ],
+        "name": "setBaseUri",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

@@ -359,6 +359,7 @@ const Frenchies: NextPageWithLayout<
   const [errormsg, setErrorMSG] = useState('');
   const [pan, setPan] = useState(true);
   const [precio, setPrecio] = useState(0);
+  const [multiplicador, setMultiplicador] = useState(0);
   const {
     frenchiesMinter,
     accountAddress,
@@ -452,10 +453,14 @@ const Frenchies: NextPageWithLayout<
           setPan(false);
           setPan(true);
         } else {
-          const tx = await frenchiesMinter.buyToken(
-            tokenContract.address,
-            cantidad
-          );
+          const options = {
+            value: ethers.utils.parseUnits(
+              (0.1 * multiplicador).toString(),
+              'ether'
+            ),
+          };
+
+          const tx = await frenchiesMinter.buyToken(cantidad, options);
 
           await tx.wait(); //tener en cuenta para los proximos cambios
           dispatch(uFrench(provider, accountAddress));
@@ -499,7 +504,6 @@ const Frenchies: NextPageWithLayout<
     const w = await frenchiesMinter.getWhitelist();
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
-      console.log(c);
       setCount(c);
     }
   };
@@ -528,13 +532,16 @@ const Frenchies: NextPageWithLayout<
       setCantidad(cantidad - 1);
       if (count <= cantidad - 1) {
         setPrecio(valor * (cantidad - 1 - count));
+        setMultiplicador(multiplicador - 1);
       } else {
         setPrecio(0);
+        setMultiplicador(0);
       }
     } else if (type == '+') {
       setCantidad(cantidad + 1);
       if (count < cantidad + 1) {
         setPrecio(valor * (cantidad + 1 - count));
+        setMultiplicador(multiplicador + 1);
       } else {
         setPrecio(0);
       }
@@ -554,7 +561,7 @@ const Frenchies: NextPageWithLayout<
 
   const setearSupply = async () => {
     const frenchiesMinterContract = new ethers.Contract(
-      '0x08238797Ff99c8e4cb945203C5f137A167023213',
+      '0xdc7e0C15E9f2d34b01c337A65207c689cA3580f3',
       frenchiesAbi,
       provider
     );
@@ -678,22 +685,23 @@ const Frenchies: NextPageWithLayout<
                   </div>
 
                   <div className="flex justify-center align-middle">
-                    {isConnect &&
+                    {/*isConnect &&
                       approvedToken < precio * cantidad - precio * count &&
                       !loading &&
                       cantidad > count &&
                       approvedToken < precio * cantidad - precio * count &&
-                      !loading && <Button onClick={approve}>Aprobar</Button>}
+                    !loading && <Button onClick={approve}>Aprobar</Button>*/}
 
                     {isConnect && loading && <Button>Cargando...</Button>}
 
-                    {isConnect &&
-                      !loading &&
-                      approvedToken >= precio * cantidad - precio * count && (
-                        <Button disabled={cantidad == 0} onClick={buyNft}>
-                          Comprar
-                        </Button>
-                      )}
+                    {isConnect && !loading && (
+                      /*approvedToken >= precio * cantidad - precio * count && */ <Button
+                        disabled={cantidad == 0}
+                        onClick={buyNft}
+                      >
+                        Comprar
+                      </Button>
+                    )}
 
                     {!isConnect && (
                       <Button onClick={() => openModal('WALLET_CONNECT_VIEW')}>
