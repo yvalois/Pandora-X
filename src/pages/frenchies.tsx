@@ -627,7 +627,7 @@ const Frenchies: NextPageWithLayout<
               <TabPanel className="h-full focus:outline-none">
                 <div className="h-full flex-col justify-between">
                   <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
-                    Frenchies Blues
+                    Frenchies Blue
                   </h1>
                   <div className=" mb-[10px] flex  justify-center align-middle">
                     <Image
@@ -674,7 +674,7 @@ const Frenchies: NextPageWithLayout<
                     </div>
                   </div>
                   <div className="mb-[80px] flex justify-center align-middle">
-                    <label htmlFor="">Precio: {precio}</label>
+                    <label htmlFor="">Precio: {precio.toFixed(1)}</label>
                   </div>
 
                   <div className="flex justify-center align-middle">
