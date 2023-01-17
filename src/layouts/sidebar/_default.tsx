@@ -238,14 +238,9 @@ export default function Sidebar({ className }: SidebarProps) {
         className
       )}
     >
-      <div className="relative flex h-24 w-full items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
-        <div>
-          <h1 className="text-4xl font-bold">
-            <bol>NFT STUDIO</bol>{' '}
-          </h1>
-          <p className="text-xs">by pandoraX</p>
-        </div>
-        {/* <Logo /> */}
+      <Logo />
+
+      <div className="relative mb-12 flex h-24 w-full items-center justify-between overflow-hidden px-6 py-4 2xl:px-8 ">
         <div className="md:hidden">
           <Button
             title="Close"

@@ -4,7 +4,7 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useIsDarkMode } from '@/lib/hooks/use-is-dark-mode';
 import lightLogo from '@/assets/images/logo.svg';
 import darkLogo from '@/assets/images/logo-white.svg';
-import logo from '@/assets/images/PandoraX.png'
+import logo from '@/assets/images/NFT STUDIO-01.png';
 
 const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
   const isMounted = useIsMounted();
@@ -13,15 +13,13 @@ const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <AnchorLink
       href="/"
-      className="flex w-38 outline-none sm:w-38 4xl:w-45"
+      className="w-38 sm:w-38 4xl:w-45 mb-[-250px] mt-[-70px] flex outline-none"
       {...props}
     >
       <span className="relative flex overflow-hidden">
-        {isMounted && isDarkMode && (
-          <Image  src={logo} alt="Criptic" priority />
-        )}
+        {isMounted && isDarkMode && <Image src={logo} alt="Criptic" priority />}
         {isMounted && !isDarkMode && (
-          <Image  src={logo} alt="Criptic" priority />
+          <Image src={logo} alt="Criptic" priority />
         )}
       </span>
     </AnchorLink>
