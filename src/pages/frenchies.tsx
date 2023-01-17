@@ -574,7 +574,7 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     const frenchiesMinterContract = new ethers.Contract(
-      '0x50d47650d4af79729418735FdEbE5e5Cf2800837',
+      '0x87969DE19c7363bA2005B269f548221A031db7d9',
       frenchiesAbi,
       provider
     );
