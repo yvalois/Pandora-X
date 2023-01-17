@@ -566,7 +566,7 @@ const AuthorProfilePage: NextPageWithLayout<
         {/* Profile Info */}
         <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row xl:pt-12">
           <div className="shrink-2 .0.order-dashed  border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
-            <div className="text-center ltr:md:text-left rtl:md:text-right ">
+            <div className="mb-4 md:mb-0 md:text-center ltr:md:text-left rtl:md:text-right ">
               {/*Name */}
               <div>
                 {!editIsActivated && (
@@ -619,13 +619,6 @@ const AuthorProfilePage: NextPageWithLayout<
                   </div>
                 )}
               </div>
-              {/*Username */}
-              {/*<div className="mt-1 text-sm font-medium tracking-tighter text-gray-600 dark:text-gray-400 xl:mt-3">
-                @{authorData?.user_name}
-        </div>*/}
-
-              {/* User ID and Address */}
-              {/* que se muestre unicamente si es ususuario */}
 
               {Usuario.rol == 'usuario' && (
                 <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
@@ -649,8 +642,8 @@ const AuthorProfilePage: NextPageWithLayout<
                 </div>
               )}
 
-              {Usuario.rol == 'Admin' && (
-                <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
+              {Usuario.rol == 'cliente' && (
+                <div className="  mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
                   <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
                     Referido
                   </div>
@@ -743,11 +736,11 @@ const AuthorProfilePage: NextPageWithLayout<
             }
           </div>
 
-          <div className="ml-10 grow">
+          <div className=" flex-column grow justify-center align-middle md:ml-10">
             {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (
-              <ProfileTabUser />
-            ) : (
               <ProfileTab />
+            ) : (
+              <ProfileTabUser />
             )}
           </div>
           <AuthorInformation data={authorData} />

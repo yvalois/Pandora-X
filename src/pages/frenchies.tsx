@@ -361,6 +361,7 @@ const Frenchies: NextPageWithLayout<
   const [pan, setPan] = useState(false);
   const [precio, setPrecio] = useState(0);
   const [multiplicador, setMultiplicador] = useState(0);
+  const [vendido, setVendido] = useState(false);
   const {
     frenchiesMinter,
     accountAddress,
@@ -448,6 +449,7 @@ const Frenchies: NextPageWithLayout<
         setLoading(false);
         setApprovedToken(0);
         setStatus(200);
+        setVendido(true);
         setearSupply();
         verifyApprove();
         getWhithelist();
@@ -464,6 +466,7 @@ const Frenchies: NextPageWithLayout<
         await tx.wait(); //tener en cuenta para los proximos cambios
         dispatch(uFrench(provider, accountAddress));
         setStatus(200);
+        setVendido(true);
         setCantidad(cantidad - cantidad);
         setApprovedToken(0);
         setearSupply();
@@ -642,6 +645,9 @@ const Frenchies: NextPageWithLayout<
                   <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
                     Frenchies Blue
                   </h1>
+                  <p className="mb-[15px] flex justify-center align-middle">
+                    PRECIO DE VENTA: 0.30 ETH
+                  </p>
                   <div className=" mb-[10px] flex  justify-center align-middle">
                     <Image
                       src={
@@ -713,6 +719,13 @@ const Frenchies: NextPageWithLayout<
                       <Button onClick={() => openModal('WALLET_CONNECT_VIEW')}>
                         Conectar
                       </Button>
+                    )}
+                  </div>
+                  <div className="mt-4 flex justify-center align-middle">
+                    {vendido && (
+                      <AnchorLink href={'/profile'}>
+                        <Button>ver mis nfts</Button>
+                      </AnchorLink>
                     )}
                   </div>
 

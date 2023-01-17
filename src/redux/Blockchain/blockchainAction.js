@@ -1109,7 +1109,6 @@ export const connectWallet =
         token.map((item) => {
           if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
             const nft = item._data.metadata;
-            console.log(nft);
             const prod = {
               Nombre: nft.name,
               img: nft.image,

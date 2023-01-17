@@ -147,12 +147,12 @@ export default function ProfileTabUser() {
       </TabPanel>
 
       <TabPanel className="w-full focus:outline-none  ">
-        <div className="grid h-full w-full  gap-4 xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-1 4xl:grid-cols-1">
+        <div className="grid h-full w-full grid-cols-1 gap-4 lg:gap-5 xl:gap-6 xl:space-x-8">
           <StakingTable />
         </div>
       </TabPanel>
       <TabPanel className="focus:outline-none">
-        <div className="grid h-full w-full  gap-4 xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-1 4xl:grid-cols-1">
+        <div className="grid h-full w-full grid-cols-1 gap-4 lg:gap-5 xl:gap-6 xl:space-x-8">
           <TransactionUserTable />
         </div>
       </TabPanel>
