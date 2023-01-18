@@ -534,8 +534,10 @@ const Frenchies: NextPageWithLayout<
       if (cantidad == 0) {
         setCantidad(cantidad + parseInt(cant));
       } else {
-        setCantidad(cant);
+        setCantidad(parseInt(cant));
       }
+    } else if (cant == '') {
+      setCantidad(0);
     }
   };
 
