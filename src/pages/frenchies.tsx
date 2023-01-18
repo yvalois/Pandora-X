@@ -39,6 +39,7 @@ import { useModal as hola } from 'connectkit';
 import { useModal } from '@/components/modal-views/context';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import AnchorLink from '@/components/ui/links/anchor-link';
+import Back from '@/assets/images/FR3 back3.jpeg';
 
 const gridCompactViewAtom = atom(false);
 function useGridSwitcher() {
@@ -450,13 +451,11 @@ const Frenchies: NextPageWithLayout<
           setPrecio(0);
         }
       } else {
-        const options = {
-          value: ethers.utils.parseUnits(
-            (0.3 * (multiplicador - count)).toString(),
-            'ether'
-          ),
+        const price = (0.3 * (multiplicador - count)).toString();
+        const options_ = {
+          value: ethers.utils.parseUnits(price, 'ether'),
         };
-        const tx = await frenchiesMinter.buyToken(cantidad, options);
+        const tx = await frenchiesMinter.buyToken(cantidad, options_);
 
         await tx.wait(); //tener en cuenta para los proximos cambios
         dispatch(uFrench(provider, accountAddress));
@@ -671,9 +670,7 @@ const Frenchies: NextPageWithLayout<
                   </p>
                   <div className=" mb-[10px] flex  justify-center align-middle">
                     <Image
-                      src={
-                        'https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmTky2X6pewiEtnxtNcXXLrmcZ84jjAoB1NWAtbszxpcLG'
-                      }
+                      src={Back}
                       alt="wallet"
                       width={300}
                       height={300}
