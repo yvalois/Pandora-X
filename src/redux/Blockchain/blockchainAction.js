@@ -195,7 +195,7 @@ export const uFrench = (provider, address) => async (dispatch) => {
   try {
     const inventoryf = [];
 
-    const chain = EvmChain.POLYGON;
+    const chain = EvmChain.ETHEREUM;
 
     const response = await Moralis.EvmApi.nft.getWalletNFTs({
       address,
@@ -1103,7 +1103,7 @@ export const connectWallet =
           }
         });*/
 
-        const chain = EvmChain.POLYGON;
+        const chain = EvmChain.ETHEREUM;
 
         const response = await Moralis.EvmApi.nft.getWalletNFTs({
           address,
