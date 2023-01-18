@@ -424,7 +424,7 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     try {
-      if (count - multiplicador > 0) {
+      if (count - multiplicador >= 0) {
         const options = {
           value: ethers.utils.parseUnits('0', 'ether'),
         };
