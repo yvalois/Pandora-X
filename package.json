@@ -20,6 +20,7 @@
     "@moralisweb3/evm-utils": "^2.11.1",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.7",
+    "@thirdweb-dev/react": "^3.6.9",
     "@walletconnect/web3-provider": "^1.8.0",
     "all": "^0.0.0",
     "axios": "^0.27.2",

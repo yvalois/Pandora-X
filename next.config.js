@@ -10,7 +10,7 @@ const withPWA = require('next-pwa')({
 });
 
 module.exports = withPWA({
-  reactStrictMode: true,
+  reactStrictMode: false,
   ...(process.env.NODE_ENV === 'production' && {
     typescript: {
       ignoreBuildErrors: true,
@@ -25,7 +25,12 @@ module.exports = withPWA({
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'ipfs',
+        hostname: '**',
+      },
     ],
+    domains: ['ipfs.io/ipfs'],
   },
   env: {
     BACKEND_API: process.env.BACKEND_API,

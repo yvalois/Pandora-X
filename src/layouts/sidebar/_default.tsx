@@ -313,7 +313,7 @@ export default function Sidebar({ className }: SidebarProps) {
                 UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
               (UsuarioR !== 'Admin' &&
-                UsuarioR !== 'usuario' &&
+                //UsuarioR !== 'usuario' &&
                 item.name == 'Inversiones') ? (
                 <div key={index}></div>
               ) : (

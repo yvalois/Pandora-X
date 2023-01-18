@@ -370,7 +370,7 @@ const Frenchies: NextPageWithLayout<
     tokenContract,
   } = useSelector((state) => state.blockchain);
 
-  const valor = 0.1;
+  const valor = 0.3;
 
   const { referidor } = useSelector((state) => state.Usuario);
 
@@ -424,56 +424,25 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     try {
-      if (!Usuario.isReferido && Usuario.type == 'Agente X') {
-        let porcentaje = 0;
-        if (Usuario.range == 'peerx') {
-          porcentaje = 200;
-        } else if (Usuario.range == 'blockelite') {
-          porcentaje = 250;
-        } else if (Usuario.range == 'blockmaster') {
-          porcentaje = 350;
-        } else if (Usuario.range == 'blockcreator') {
-          porcentaje = 400;
-        }
+      const options = {
+        value: ethers.utils.parseUnits(
+          (valor * multiplicador).toString(),
+          'ether'
+        ),
+      };
 
-        const tx = await frenchiesMinter.buyTokenWithReferido(
-          tokenContract.address,
-          referidor,
-          porcentaje,
-          cantidad
-        );
-        //referidos
-        await tx.wait();
-        dispatch(uFrench(provider, accountAddress));
+      const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-        setLoading(false);
-        setApprovedToken(0);
-        setStatus(200);
-        setVendido(true);
-        setearSupply();
-        verifyApprove();
-        getWhithelist();
-      } else {
-        const options = {
-          value: ethers.utils.parseUnits(
-            (0.1 * multiplicador).toString(),
-            'ether'
-          ),
-        };
-
-        const tx = await frenchiesMinter.buyToken(cantidad, options);
-
-        await tx.wait(); //tener en cuenta para los proximos cambios
-        dispatch(uFrench(provider, accountAddress));
-        setStatus(200);
-        setVendido(true);
-        setCantidad(cantidad - cantidad);
-        setApprovedToken(0);
-        setearSupply();
-        verifyApprove();
-        if (count > 0) {
-          setCount(count - 1);
-        }
+      await tx.wait(); //tener en cuenta para los proximos cambios
+      dispatch(uFrench(provider, accountAddress));
+      setStatus(200);
+      setVendido(true);
+      setCantidad(cantidad - cantidad);
+      setApprovedToken(0);
+      setearSupply();
+      verifyApprove();
+      if (count > 0) {
+        setCount(count - 1);
       }
     } catch (err) {
       setLoading(false);
@@ -574,7 +543,7 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     const frenchiesMinterContract = new ethers.Contract(
-      '0x87969DE19c7363bA2005B269f548221A031db7d9',
+      '0x125F36815B9fB10B6164653bd57d9e8d42a0D33b',
       frenchiesAbi,
       provider
     );

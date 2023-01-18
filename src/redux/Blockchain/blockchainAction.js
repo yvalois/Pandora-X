@@ -203,14 +203,19 @@ export const uFrench = (provider, address) => async (dispatch) => {
     });
 
     const token = response?.result;
+
+    let a = nft.image.split('/');
+    console.log(a);
+
+    console.log(a[2]);
     token.map((item) => {
       if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
         const nft = item._data.metadata;
         const prod = {
           Nombre: nft.name,
-          img: nft.image,
-          precio: 0.1,
-          descripcion: nft.image,
+          img: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+          precio: 0.3,
+          descripcion: nft.description,
           id: item._data.tokenId,
         };
         inventoryf.push(prod);
@@ -1109,13 +1114,22 @@ export const connectWallet =
         token.map((item) => {
           if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
             const nft = item._data.metadata;
+
+            //const prefix = nft.image
+            //const pre = prefix.split("/")
+            //onsole.log(prefix)
+            let a = nft.image.split('/');
+
             const prod = {
               Nombre: nft.name,
-              img: nft.image,
-              precio: 0.1,
-              descripcion: nft.image,
+              img: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+              precio: 0.3,
+              descripcion: nft.description,
               id: item._data.tokenId,
             };
+
+            console.log(prod);
+
             inventoryf.push(prod);
           }
         });
