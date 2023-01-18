@@ -739,7 +739,7 @@ const getInversiones = async () => {
 };
 
 const conectar =
-  (accountAddress, productoMinterContract, stakingContract) =>
+  (accountAddress /*, productoMinterContract, stakingContract*/) =>
   async (dispatch) => {
     fetch(
       `https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`,
@@ -754,13 +754,13 @@ const conectar =
       .then((response) => {
         if (response !== null) {
           if (response.Categoria == 'Agente X') {
-            infoPagos(
+            /*infoPagos(
               productoMinterContract,
               response.Rango,
               response.Categoria
-            );
+            );*/
           } else if (response.Categoria == 'BlockMaker') {
-            infoPagosC(stakingContract, response.Rango, response.Categoria);
+            //infoPagosC(stakingContract, response.Rango, response.Categoria);
           }
           dispatch(
             connectSuccessToMongo({
@@ -846,7 +846,7 @@ export const connectWallet =
 
       //  const networkId = await provider.getNetwork();
       if (1 == 1) {
-        const usdtContract = new ethers.Contract(
+        /*const usdtContract = new ethers.Contract(
           USDT_ADDRESS,
           abiErc20,
           provider
@@ -902,7 +902,7 @@ export const connectWallet =
         await getProductos();
         await getInversiones();
 
-        const nftStaking = await stakingContract.getNfts();
+        /* const nftStaking = await stakingContract.getNfts();
 
         // const nftStakingF = await stakingfrenEContract.getNfts();
 
@@ -916,7 +916,7 @@ export const connectWallet =
 
         const nftfBalance = await frenchiesMinterContract.getMyInventory(
           address
-        );
+        );*/
 
         console.log('aqui');
 
@@ -928,7 +928,7 @@ export const connectWallet =
 
         let aux = true;
 
-        if (nftStaking.length != undefined) {
+        /*if (nftStaking.length != undefined) {
           nftStaking.map(async (item) => {
             function toDateTime(secs) {
               var t = new Date(1970, 0, 1); // Epoch
@@ -973,7 +973,7 @@ export const connectWallet =
               inventorys.push(stak);
             }
           });
-        }
+        }*/
 
         /* if (nftStakingF.length != undefined) {
         nftStakingF.map(async (item) => {
@@ -1022,7 +1022,7 @@ export const connectWallet =
         });
       } */
 
-        nftpBalance.map(async (item, index) => {
+        /*nftpBalance.map(async (item, index) => {
           const tipo = await productoMinterContract.getTipo(item);
           var type = '';
           if (tipo == 1) {
@@ -1063,9 +1063,9 @@ export const connectWallet =
               inventoryp.push(prod);
             }
           });
-        });
+        });*/
 
-        nftiBalance.map(async (item) => {
+        /*nftiBalance.map(async (item) => {
           const tipo = await inversionMinterContract.getTipo(item);
           var type = '';
           if (tipo == 1) {
@@ -1101,7 +1101,7 @@ export const connectWallet =
             };
             inventoryi.push(inv);
           }
-        });
+        });*/
 
         const chain = EvmChain.POLYGON;
 
@@ -1135,7 +1135,7 @@ export const connectWallet =
         });
 
         let balancei = [];
-        balancei[0] = 0;
+        /*balancei[0] = 0;
         nftiBalance.map(async (item) => {
           const precio = await inversionMinterContract.getPricePlusFee(item);
           const aux = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(
@@ -1143,7 +1143,7 @@ export const connectWallet =
           );
           const auxiliar = balancei[0];
           balancei[0] = parseFloat(auxiliar) + parseFloat(aux);
-        });
+        });*/
 
         //const usdtBalance = await usdtContract.balanceOf(address);
         //const tokenBalance = await tokenContract.balanceOf(address);
@@ -1216,13 +1216,13 @@ export const connectWallet =
 
         await dispatch(
           dataLoaded({
-            usdtContract: usdtContract1,
-            tokenContract: tokenContract1,
-            maticContract: maticContract1,
-            productoMinter: productoMinterContract1,
-            inversionMinter: inversionMinterContract1,
+            usdtContract: null,
+            tokenContract: null,
+            maticContract: null,
+            productoMinter: null,
+            inversionMinter: null,
             frenchiesMinter: frenchiesMinterContract1,
-            staking: stakingContract1,
+            staking: null,
             // stakinfETH: stakingfrenEContract,
             // stakingPOL: stakingfrenPContract,
             accountAddress: address,
@@ -1238,7 +1238,9 @@ export const connectWallet =
           })
         );
 
-        dispatch(conectar(address, productoMinterContract, stakingContract));
+        dispatch(
+          conectar(address /*, productoMinterContract, stakingContract*/)
+        );
 
         /*instance.on('close',() => {
       web3Modal && web3Modal.clearCachedProvider();
