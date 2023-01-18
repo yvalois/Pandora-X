@@ -426,7 +426,7 @@ const Frenchies: NextPageWithLayout<
     try {
       if (count - multiplicador >= 0) {
         const options = {
-          value: ethers.utils.parseUnits('0', 'ether'),
+          value: ethers.utils.parseUnits(precio.toString(), 'ether'),
         };
 
         const tx = await frenchiesMinter.buyToken(cantidad, options);
@@ -451,10 +451,7 @@ const Frenchies: NextPageWithLayout<
         }
       } else {
         const options = {
-          value: ethers.utils.parseUnits(
-            (valor * multiplicador).toString(),
-            'ether'
-          ),
+          value: ethers.utils.parseUnits(precio.toString(), 'ether'),
         };
         const tx = await frenchiesMinter.buyToken(cantidad, options);
 
