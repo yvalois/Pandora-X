@@ -424,25 +424,60 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     try {
-      const options = {
-        value: ethers.utils.parseUnits(
-          (valor * multiplicador).toString(),
-          'ether'
-        ),
-      };
+      if (count - multiplicador > 0) {
+        alert(count - multiplicador);
+        const options = {
+          value: ethers.utils.parseUnits('0', 'ether'),
+        };
 
-      const tx = await frenchiesMinter.buyToken(cantidad, options);
+        //const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-      await tx.wait(); //tener en cuenta para los proximos cambios
-      dispatch(uFrench(provider, accountAddress));
-      setStatus(200);
-      setVendido(true);
-      setCantidad(cantidad - cantidad);
-      setApprovedToken(0);
-      setearSupply();
-      verifyApprove();
-      if (count > 0) {
-        setCount(count - 1);
+        //await tx.wait(); //tener en cuenta para los proximos cambios
+        dispatch(uFrench(provider, accountAddress));
+        setStatus(200);
+        setVendido(true);
+        setCantidad(cantidad - cantidad);
+        setApprovedToken(0);
+        setearSupply();
+        verifyApprove();
+        if (count > 0) {
+          setCount(count - multiplicador);
+          setMultiplicador(0);
+          setCantidad(0);
+          setPrecio(0);
+        } else {
+          setMultiplicador(0);
+          setCantidad(0);
+          setPrecio(0);
+        }
+      } else {
+        const options = {
+          value: ethers.utils.parseUnits(
+            (valor * multiplicador).toString(),
+            'ether'
+          ),
+        };
+        alert(valor * (multiplicador - count));
+        //const tx = await frenchiesMinter.buyToken(cantidad, options);
+
+        //await tx.wait(); //tener en cuenta para los proximos cambios
+        dispatch(uFrench(provider, accountAddress));
+        setStatus(200);
+        setVendido(true);
+        setCantidad(cantidad - cantidad);
+        setApprovedToken(0);
+        setearSupply();
+        verifyApprove();
+        if (count > 0) {
+          setCount(count - multiplicador);
+          setMultiplicador(0);
+          setCantidad(0);
+          setPrecio(0);
+        } else {
+          setMultiplicador(0);
+          setCantidad(0);
+          setPrecio(0);
+        }
       }
     } catch (err) {
       setLoading(false);
@@ -471,8 +506,11 @@ const Frenchies: NextPageWithLayout<
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
       setCount(c);
+
       setLoading(false);
     } else {
+      setCount(50);
+
       setLoading(false);
     }
   };
@@ -524,6 +562,7 @@ const Frenchies: NextPageWithLayout<
         setMultiplicador(multiplicador + 1);
       } else {
         setPrecio(0);
+        setMultiplicador(0);
       }
     }
   };
@@ -534,12 +573,21 @@ const Frenchies: NextPageWithLayout<
       if (cantidad == 0) {
         setCantidad(cantidad + parseInt(cant));
         const cant_ = cantidad + parseInt(cant);
-        setPrecio(valor * (cant_ - count));
+        if (cant_ - count < 0) {
+          setPrecio(0);
+        } else {
+          setPrecio(valor * (cant_ - count));
+        }
         setMultiplicador(cant_);
       } else {
         setCantidad(parseInt(cant));
         const cant_ = parseInt(cant);
-        setPrecio(valor * (cant_ - count));
+
+        if (cant_ - count < 0) {
+          setPrecio(0);
+        } else {
+          setPrecio(valor * (cant_ - count));
+        }
         setMultiplicador(cant_);
       }
     } else if (cant == '') {
@@ -707,7 +755,7 @@ const Frenchies: NextPageWithLayout<
                   </div>
 
                   <h1 className="flex  justify-center align-middle font-bold">
-                    {supply}/121
+                    {supply}/10010
                   </h1>
                   <div className="mt-10 flex w-full justify-center align-middle">
                     {status == 200 && (
