@@ -452,7 +452,7 @@ const Frenchies: NextPageWithLayout<
       } else {
         const options = {
           value: ethers.utils.parseUnits(
-            (valor * (multiplicador - count)).toString(),
+            (0.3 * (multiplicador - count)).toString(),
             'ether'
           ),
         };
