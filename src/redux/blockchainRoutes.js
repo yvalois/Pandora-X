@@ -9,8 +9,8 @@ export const contract = () => {
     staking: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
     stakingETH: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
     stakingPOL: '0xf391Efb82e887190DBdC3d3c84D2365272b11ce4',
-    frenchies: '0x4dc723e5b08D761E8347441dA284CCB0DcCD6126',
-    //0x4dc723e5b08D761E8347441dA284CCB0DcCD6126
+    frenchies: '0x32bfb6790B3536a7269185278B482A0FA0385362',
+    //0x32bfb6790B3536a7269185278B482A0FA0385362
     maticContract: '0x0000000000000000000000000000000000001010',
     RPC_URL:
       'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
