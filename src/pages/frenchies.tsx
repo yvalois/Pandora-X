@@ -533,8 +533,14 @@ const Frenchies: NextPageWithLayout<
     if (validator.isNumeric(cant)) {
       if (cantidad == 0) {
         setCantidad(cantidad + parseInt(cant));
+        const cant_ = cantidad + parseInt(cant);
+        setPrecio(valor * (cant_ - count));
+        setMultiplicador(cant_);
       } else {
         setCantidad(parseInt(cant));
+        const cant_ = parseInt(cant);
+        setPrecio(valor * (cant_ - count));
+        setMultiplicador(cant_);
       }
     } else if (cant == '') {
       setCantidad(0);
