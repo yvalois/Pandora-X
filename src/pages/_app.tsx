@@ -36,7 +36,7 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   const { chains, provider, webSocketProvider } = configureChains(
-    [mainnet],
+    [goerli],
     [alchemyProvider({ apiKey: 'q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ' })]
   );
 

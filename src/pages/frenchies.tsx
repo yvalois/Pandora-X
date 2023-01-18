@@ -481,7 +481,21 @@ const Frenchies: NextPageWithLayout<
     } catch (err) {
       setLoading(false);
       setStatus(100);
-      setErrorMSG('Error en el minteo');
+      const mess = err.message.split('[');
+      //const messa = mess[1].split(":")
+      //const messag = messa[3].split(",")
+      //const messag_ = messag[0].split("-")
+      console.log(mess);
+      const rejected = mess[0].split(' ');
+      console.log(rejected);
+      if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+        setErrorMSG('Fondos insuficientes');
+      } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+        setErrorMSG('Transacion rechazada');
+      } else {
+        setErrorMSG('Error');
+      }
+      //
     }
   };
 

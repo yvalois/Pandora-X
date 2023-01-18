@@ -736,7 +736,7 @@ const AuthorProfilePage: NextPageWithLayout<
             }
           </div>
 
-          <div className=" flex-column grow justify-center align-middle md:ml-10">
+          <div className=" flex-column grow justify-center align-middle ">
             {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (
               <ProfileTabUser />
             ) : (
