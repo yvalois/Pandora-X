@@ -18,5 +18,8 @@ export const contract = () => {
   };
 };
 
+// 0x125F36815B9fB10B6164653bd57d9e8d42a0D33b
+// 0x32bfb6790B3536a7269185278B482A0FA0385362
+
 // https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmTkB8HcCfeAwXmSPX1xD2Gp6ra4VGH8nUJYMymd2Pc2fB/
 // https://aqua-many-alpaca-308.mypinata.cloud/ipfs/QmfViBtWDQpkT1r6NCFyphHQ2scJCRFu41VkfXeVLeNsFt/

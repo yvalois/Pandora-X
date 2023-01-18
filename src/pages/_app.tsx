@@ -26,7 +26,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, polygon } from 'wagmi/chains';
+import { mainnet, polygon, goerli } from 'wagmi/chains';
 
 /*type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;

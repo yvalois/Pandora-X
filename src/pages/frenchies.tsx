@@ -425,7 +425,7 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     try {
-      if (count - multiplicador >= 0) {
+      if (precio == 0) {
         const options = {
           value: ethers.utils.parseUnits('0', 'ether'),
         };
@@ -436,7 +436,7 @@ const Frenchies: NextPageWithLayout<
         dispatch(uFrench(provider, accountAddress));
         setStatus(200);
         setVendido(true);
-        setCantidad(cantidad - cantidad);
+        setCantidad(0);
         setApprovedToken(0);
         setearSupply();
         verifyApprove();
@@ -451,11 +451,11 @@ const Frenchies: NextPageWithLayout<
           setPrecio(0);
         }
       } else {
-        const price = (0.31 * (multiplicador - count)).toFixed(2);
-        const precio = price.toString();
-        const a = ethers.utils.parseUnits(precio, 'ether');
         const options_ = {
-          value: ethers.utils.parseUnits(precio, 'ether'),
+          value: ethers.utils.parseUnits(
+            (valor * (multiplicador - count)).toString(),
+            'ether'
+          ),
         };
         const tx = await frenchiesMinter.buyToken(cantidad, options_);
 
@@ -463,7 +463,7 @@ const Frenchies: NextPageWithLayout<
         dispatch(uFrench(provider, accountAddress));
         setStatus(200);
         setVendido(true);
-        setCantidad(cantidad - cantidad);
+        setCantidad(0);
         setApprovedToken(0);
         setearSupply();
         verifyApprove();
