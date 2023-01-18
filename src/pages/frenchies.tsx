@@ -425,14 +425,13 @@ const Frenchies: NextPageWithLayout<
 
     try {
       if (count - multiplicador > 0) {
-        alert(count - multiplicador);
         const options = {
           value: ethers.utils.parseUnits('0', 'ether'),
         };
 
-        //const tx = await frenchiesMinter.buyToken(cantidad, options);
+        const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-        //await tx.wait(); //tener en cuenta para los proximos cambios
+        await tx.wait(); //tener en cuenta para los proximos cambios
         dispatch(uFrench(provider, accountAddress));
         setStatus(200);
         setVendido(true);
@@ -457,10 +456,9 @@ const Frenchies: NextPageWithLayout<
             'ether'
           ),
         };
-        alert(valor * (multiplicador - count));
-        //const tx = await frenchiesMinter.buyToken(cantidad, options);
+        const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-        //await tx.wait(); //tener en cuenta para los proximos cambios
+        await tx.wait(); //tener en cuenta para los proximos cambios
         dispatch(uFrench(provider, accountAddress));
         setStatus(200);
         setVendido(true);
@@ -509,8 +507,6 @@ const Frenchies: NextPageWithLayout<
 
       setLoading(false);
     } else {
-      setCount(50);
-
       setLoading(false);
     }
   };
