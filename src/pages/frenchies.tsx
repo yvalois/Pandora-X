@@ -451,9 +451,11 @@ const Frenchies: NextPageWithLayout<
           setPrecio(0);
         }
       } else {
-        const price = (0.3 * (multiplicador - count)).toString();
+        const price = (0.31 * (multiplicador - count)).toFixed(2);
+        const precio = price.toString();
+        const a = ethers.utils.parseUnits(precio, 'ether');
         const options_ = {
-          value: ethers.utils.parseUnits(price, 'ether'),
+          value: ethers.utils.parseUnits(precio, 'ether'),
         };
         const tx = await frenchiesMinter.buyToken(cantidad, options_);
 
