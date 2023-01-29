@@ -11,7 +11,9 @@ const initialState = {
   //daiContract: null,
   productoMinter: null,
   inversionMinter: null,
-  //  frenchiesMinter: null,
+  frenchiesMinter: null,
+  stakingfrenPContract: null,
+  stakingfrenEContract: null,
   //  stakinfETH: null,
   //  stakingPOL: null,
   staking: null,
@@ -24,7 +26,7 @@ const initialState = {
   inventoryi: [],
   inventoryf: [],
   inventorys: [],
-  //  inventorysf:[],
+  inventorysf: [],
   isConnect: false,
   rol: '',
   nombre: '',
@@ -33,6 +35,7 @@ const initialState = {
   paid: [],
   paids: [],
   balanceI: [],
+  chainId: 1,
 };
 
 const blockchainReducer = (state = initialState, action) => {
@@ -56,6 +59,8 @@ const blockchainReducer = (state = initialState, action) => {
         productoMinter: action.payload.productoMinter,
         inversionMinter: action.payload.inversionMinter,
         frenchiesMinter: action.payload.frenchiesMinter,
+        stakingfrenPContract: action.payload.stakingfrenPContract,
+        stakingfrenEContract: action.payload.stakingfrenEContract,
         //stakinfETH: action.payload.stakinfETH,
         //stakingPOL: action.payload.stakingPOL,
         staking: action.payload.staking,
@@ -69,10 +74,11 @@ const blockchainReducer = (state = initialState, action) => {
         inventoryi: action.payload.inventoryi,
         inventorys: action.payload.inventorys,
         inventoryf: action.payload.inventoryf,
-        //inventorysf: action.payload.inventorysf,
+        inventorysf: action.payload.inventorysf,
         isConnect: true,
         isUser: true,
         balanceI: action.payload.balancei,
+        chainId: action.payload.chainId,
       };
     case 'ERROR':
       return {
@@ -133,6 +139,11 @@ const blockchainReducer = (state = initialState, action) => {
       return {
         ...state,
         inventorys: action.payload.inventorys,
+      };
+    case 'UPDATE_STAKINGF':
+      return {
+        ...state,
+        inventorysf: action.payload.inventorysf,
       };
     case 'UPDATE_FRENCH':
       return {

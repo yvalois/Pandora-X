@@ -172,8 +172,7 @@ function AuthorInformation(_a) {
           descripcion: newDescipcion,
         };
         fetch(
-          'https://shark-app-w9pvy.ondigitalocean.app/api/updatedescripcion/' +
-            accountAddress,
+          '${process.env.BACKEND_API}/updatedescripcion/' + accountAddress,
           {
             method: 'PUT',
             body: JSON.stringify(value),

@@ -77,16 +77,13 @@ function AvatarP({
     const value = {
       profile: prevProfile,
     };
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/updatebanner/${accountAddress}`,
-      {
-        method: 'POST',
-        body: JSON.stringify(value),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/updatebanner/${accountAddress}`, {
+      method: 'POST',
+      body: JSON.stringify(value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         res.json();
       })

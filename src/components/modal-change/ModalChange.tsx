@@ -34,16 +34,13 @@ export default function ModalChange() {
       Fecha: hoy.toLocaleDateString(),
       Rol: 'usuario',
     };
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/updateAccount/${address}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(newAccount),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/updateAccount/${address}`, {
+      method: 'PUT',
+      body: JSON.stringify(newAccount),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         res.json();
         if (res.status == 200) {

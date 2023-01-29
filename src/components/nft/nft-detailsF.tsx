@@ -51,14 +51,7 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
 
   const Usuario = useSelector((state) => state.Usuario);
   const [auxPrice, setAuxPrice] = useState(price);
-  const {
-    productoMinter,
-    inversionMinter,
-    isConnect,
-    accountAddress,
-    tokenContract,
-    usdtContract,
-  } = useSelector((state) => state.blockchain);
+  const { chainId } = useSelector((state) => state.blockchain);
 
   const { referidor } = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
@@ -71,6 +64,12 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
     openModal('TRANSFER_F');
   };
   /* Transferir */
+
+  const chain = async () => {
+    if (chainId != 1) {
+      openModal('NETWORK_VIEW');
+    }
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -233,7 +232,7 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
           <Button onClick={open} shape="rounded">
             Transferir
           </Button>
-          <AnchorLink href={`/staking/${id}`}>
+          {/*chainId == 1 ? (<AnchorLink href={`/stakingFrenchies/${id}`}>
             <Button
               shape="rounded"
               variant="solid"
@@ -242,7 +241,18 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
             >
               Stake
             </Button>
-          </AnchorLink>
+          </AnchorLink>):(
+            <Button
+            shape="rounded"
+            variant="solid"
+            color="gray"
+            className="dark:bg-gray-800"
+            onClick={()=>chain()}
+          >
+            Stake
+          </Button>
+          )
+          */}
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@ const routes = {
   history: '/profile?view=staking',
   classic: '/classic',
   createuser: '/createuser',
-  staking: '/staking',
+  staking: '/frenchStaking',
   principal: '/principal',
   comunidad: '/productos',
   productosbd: '/productosbd',
@@ -42,6 +42,8 @@ const routes = {
   cincuentaK: '/inversionbd/nft-detailsI6',
   cienK: '/inversionbd/nft-detailsI7',
   admin: '/AdminPanel',
+  stak: '/stake',
+  stakingF: '/staking',
 };
 
 export default routes;

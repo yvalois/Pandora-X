@@ -5,7 +5,7 @@ import TransactionHistory from '@/components/author/transaction-history';
 import CollectionCard from '@/components/ui/collection-card';
 import { useSelector } from 'react-redux';
 import NFTGrid from '@/components/ui/nft-card';
-import StakingTable from '@/components/transaction/stakingTable';
+import StakingTableF from '@/components/transaction/stakingTableF';
 // static data
 import { collections } from '@/data/static/collections';
 import {
@@ -46,10 +46,6 @@ export default function ProfileTab() {
         {
           title: 'My NFTs',
           path: 'coleccion',
-        },
-        {
-          title: 'Staking',
-          path: 'staking',
         },
       ]}
     >
@@ -111,12 +107,12 @@ export default function ProfileTab() {
         </div>
           </TabPanel> */}
       <TabPanel className="focus:outline-none">
-        <div className="grid h-full w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
+        <div className="ml-6 grid h-full   w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-4">
           {currentF?.map((nft) => (
             <NFTGrid
-              key={nft.Nombre}
-              name={nft.Nombre}
-              image={nft.img}
+              key={nft.name}
+              name={nft.name}
+              image={nft.image}
               price={13}
               number={nft.id}
               alldata={false}
@@ -134,12 +130,6 @@ export default function ProfileTab() {
               </div>
             </div>
           )}
-        </div>
-      </TabPanel>
-
-      <TabPanel className="w-full focus:outline-none  ">
-        <div className="grid h-full w-full  gap-4 xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-1 4xl:grid-cols-1">
-          <StakingTable />
         </div>
       </TabPanel>
     </ParamTab>

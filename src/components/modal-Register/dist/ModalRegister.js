@@ -242,7 +242,7 @@ function ModalRegister() {
     return __awaiter(_this, void 0, void 0, function () {
       return __generator(this, function (_a) {
         try {
-          fetch('https://shark-app-w9pvy.ondigitalocean.app/api/CrearUsuario', {
+          fetch('${process.env.BACKEND_API}/CrearUsuario', {
             method: 'POST',
             body: JSON.stringify(value),
             headers: {
@@ -364,7 +364,7 @@ function ModalRegister() {
     });
   };
   /*const conectar = (accountAddress) => {
-      fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`, {
+      fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

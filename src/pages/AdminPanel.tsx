@@ -30,7 +30,7 @@ const AdminPanelPage: NextPageWithLayout<
   const currentUser = userData.slice(firstUserIndex, lastUserIndex);
 
   const getUsers = async () => {
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api//getUsers`, {
+    fetch(`${process.env.BACKEND_API}/getUsers`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -138,7 +138,7 @@ function NftDetails4Page() {
 
   useEffect(() => {
     const getProductos = async () => {
-      fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getProducto`, {
+      fetch(`${process.env.BACKEND_API}/getProducto`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

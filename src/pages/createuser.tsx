@@ -140,16 +140,13 @@ const CreateUser: NextPageWithLayout<
       Fecha: hoy.toLocaleDateString(),
       Rol: 'usuario',
     };
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/updateAccount/${value.Address}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(newAccount),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/updateAccount/${value.Address}`, {
+      method: 'PUT',
+      body: JSON.stringify(newAccount),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         res.json();
         if (res.status == 200) {
@@ -162,15 +159,12 @@ const CreateUser: NextPageWithLayout<
   };
 
   const login = async () => {
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/login/${value.Address}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/login/${value.Address}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => res.json())
       .then((response) => {
         if (response?.Address == value.Address) {
@@ -182,7 +176,7 @@ const CreateUser: NextPageWithLayout<
   };
 
   const registrar = async () => {
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/CrearUsuario`, {
+    fetch(`${process.env.BACKEND_API}/CrearUsuario`, {
       method: 'POST',
       body: JSON.stringify(value),
       headers: {

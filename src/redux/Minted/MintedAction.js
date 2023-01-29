@@ -34,7 +34,7 @@ const getProductos = async () => {
     productoMinterAbi,
     provider
   );
-  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getProducto`, {
+  fetch(`${process.env.BACKEND_API}/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const getInversiones = async () => {
     inversionMinterAbi,
     provider
   );
-  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getInversion`, {
+  fetch(`${process.env.BACKEND_API}/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

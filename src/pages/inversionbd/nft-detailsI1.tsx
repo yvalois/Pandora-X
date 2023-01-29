@@ -258,7 +258,7 @@ const NftDetails1Page: NextPageWithLayout<
 
   useEffect(() => {
     const getInversiones = async () => {
-      fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getInversion`, {
+      fetch(`${process.env.BACKEND_API}/getInversion`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

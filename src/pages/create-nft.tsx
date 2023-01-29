@@ -302,7 +302,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   ];
 
   const getProductos = async () => {
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getProducto`, {
+    fetch(`${process.env.BACKEND_API}/getProducto`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -316,7 +316,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const getInversiones = async () => {
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getInversion`, {
+    fetch(`${process.env.BACKEND_API}/getInversion`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -330,7 +330,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearProducto = async (objeto) => {
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/CrearNftProducto`, {
+    fetch(`${process.env.BACKEND_API}/CrearNftProducto`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -350,7 +350,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearInversion = async (objeto) => {
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/CrearNftInversion`, {
+    fetch(`${process.env.BACKEND_API}/CrearNftInversion`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {

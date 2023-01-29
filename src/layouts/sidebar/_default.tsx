@@ -206,6 +206,36 @@ export const menuItems = [
     icon: <PlusCircle />,
     href: routes.admin,
   },
+
+  {
+    name: 'Stakear',
+    icon: <PlusCircle />,
+    href: '#',
+    dropdownItems: [
+      {
+        name: 'Frenchies',
+        icon: <PlusCircle />,
+        href: routes.stak,
+      },
+    ],
+  },
+  {
+    name: 'Staking',
+    icon: <PlusCircle />,
+    href: '#',
+    dropdownItems: [
+      {
+        name: 'Frenchies',
+        icon: <PlusCircle />,
+        href: routes.staking,
+      },
+    ],
+  },
+  {
+    name: 'Panel de retiro',
+    icon: <PlusCircle />,
+    href: '/panelretiro',
+  },
   /*{
     name: 'Configuracion',
     icon: <PlusCircle />,
@@ -230,6 +260,8 @@ export default function Sidebar({ className }: SidebarProps) {
     balanceI,
     isConnect,
     inversionMinter,
+    inventoryf,
+    inventorysf,
   } = useSelector((state: any) => state.blockchain);
   return (
     <aside
@@ -312,9 +344,12 @@ export default function Sidebar({ className }: SidebarProps) {
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
+              (inventoryf.length > 0 && item.name == 'Stakear') ||
+              (inventorysf.length > 0 && item.name == 'Staking') ||
               (UsuarioR !== 'Admin' &&
                 //UsuarioR !== 'usuario' &&
-                item.name == 'Inversiones') ? (
+                item.name == 'Inversiones') ||
+              (UsuarioR !== 'Admin' && item.name == 'Panel de retiro') ? (
                 <div key={index}></div>
               ) : (
                 <MenuItem

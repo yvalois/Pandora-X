@@ -34,7 +34,7 @@ export default function ModalBan() {
       Ban: action,
     };
 
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/ban/${address}`, {
+    fetch(`${process.env.BACKEND_API}/ban/${address}`, {
       method: 'PUT',
       body: JSON.stringify(value),
       headers: {

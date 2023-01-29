@@ -5,11 +5,12 @@ import { contract } from '../blockchainRoutes';
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
 import productoMinterAbi from '../../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../../abi/InversionMinter.json';
-import stakingPAbi from '../../abi/StakingETH.json';
+import stakingPAbi from '../../abi/StakingPOL.json';
 import stakingErAbi from '../../abi/StakingETH.json';
 import frenchiesAbi from '../../abi/FrenchiesBlues.json';
 import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
+import { ethereumClient } from 'wagmi';
 
 import stakingAbi from '../../abi/staking.json';
 import { setProvider } from '../../NFTROL';
@@ -30,10 +31,6 @@ const STAKINGP_ADDRESS = router.stakingPOL;
 const FRENCHIES_ADDRESS = router.frenchies;
 
 const RPC_URL = router.RPC_URL;
-
-const options = new WalletConnectProvider({
-  infuraId: 'gcYJsxItcYNjfy01aHklipg1J6foSUFn',
-});
 
 Moralis.start({
   apiKey: 'lZlG5FYAIhPCSsvVNoQx2qZBv7SlJGAWaGYJZ3PAEZidTn5yoCrJHy2bzqdiOKtK',
@@ -191,11 +188,18 @@ export const update_s = (payload) => {
   };
 };
 
-export const uFrench = (provider, address) => async (dispatch) => {
+export const update_sf = (payload) => {
+  return {
+    type: 'UPDATE_STAKINGF',
+    payload: payload,
+  };
+};
+
+export const uFrench = (address) => async (dispatch) => {
   try {
     const inventoryf = [];
 
-    const chain = EvmChain.ETHEREUM;
+    const chain = EvmChain.GOERLI;
 
     const response = await Moralis.EvmApi.nft.getWalletNFTs({
       address,
@@ -204,21 +208,22 @@ export const uFrench = (provider, address) => async (dispatch) => {
 
     const token = response?.result;
 
-    let a = nft.image.split('/');
-    console.log(a);
-
-    console.log(a[2]);
     token.map((item) => {
       if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
         const nft = item._data.metadata;
-        const prod = {
-          Nombre: nft.name,
-          img: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-          precio: 0.3,
-          descripcion: nft.description,
-          id: item._data.tokenId,
-        };
-        inventoryf.push(prod);
+
+        if (nft != undefined) {
+          let a = nft.image.split('/');
+          const prod = {
+            name: nft.name,
+            image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+            precio: 0.3,
+            descripcion: nft.description,
+            id: item._data.tokenId,
+          };
+          inventoryf.push(prod);
+          console.log(inventoryf);
+        }
       }
     });
     console.log(inventoryf);
@@ -360,6 +365,97 @@ export const uInvertion = (provider, address) => async (dispatch) => {
       inventoryi: inventoryi,
     })
   );
+};
+
+export const uStakingF = (_address) => async (dispatch) => {
+  const rpc_ETH =
+    'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
+
+  const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
+
+  const stakingfrenEContract = new ethers.Contract(
+    STAKINGE_ADDRESS,
+    stakingErAbi,
+    provider_ETH
+  );
+
+  const inventorysfc = [];
+
+  const nftStakingF = await stakingfrenEContract.getNftsInStaking(_address);
+  if (nftStakingF.length != undefined) {
+    const chain = EvmChain.ETHEREUM;
+    const address = STAKINGE_ADDRESS.toLowerCase();
+    const responses = await Moralis.EvmApi.nft.getWalletNFTs({
+      address,
+      chain,
+    });
+
+    const token = responses?.result;
+
+    let i = 0;
+    if (nftStakingF.length > 0) {
+      nftStakingF.map(async (item) => {
+        const is = true;
+        //const is = await stakingfrenEContract.nftIsStaking(address, item);
+
+        if (is == true) {
+          fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              token.map((itemt) => {
+                if (itemt._data.tokenId == item) {
+                  const nft = itemt._data.metadata;
+                  if (nft != undefined) {
+                    let a = nft.image.split('/');
+                    const dat = new Date(response.fechap);
+                    const date = dat.toLocaleDateString();
+                    const stak = {
+                      id: parseInt(item),
+                      fechaPago: {
+                        fecha: response.fechap,
+                        fechaM: date,
+                      }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+                      idCR: {
+                        id: parseInt(item),
+                        fechap: response.fechap,
+                        fechaM: date,
+                      },
+                      idW: parseInt(item),
+                      Nombre: nft.name,
+                      image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                      precio: 0.3,
+                      descripcion: nft.description,
+                    };
+                    inventorysfc.push(stak);
+                  }
+                  if (i == nftStakingF.length - 1) {
+                    dispatch(
+                      update_sf({
+                        inventorysf: inventorysfc,
+                      })
+                    );
+                  }
+                }
+              });
+
+              i++;
+            });
+        }
+      });
+    } else {
+      dispatch(
+        update_sf({
+          inventorysf: inventorysfc,
+        })
+      );
+    }
+  }
+  console.log(inventorysfc.length);
 };
 
 export const uStaking = () => async (dispatch) => {
@@ -629,7 +725,7 @@ const subscribeProvider = (connection) => async (dispatch) => {
 };
 
 const getProductos = async () => {
-  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getProducto`, {
+  fetch(`${process.env.BACKEND_API}/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -725,7 +821,7 @@ const infoPagosC = async (staking, rango, categoria) => {
 };
 
 const getInversiones = async () => {
-  fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/getInversion`, {
+  fetch(`${process.env.BACKEND_API}/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -741,15 +837,12 @@ const getInversiones = async () => {
 const conectar =
   (accountAddress /*, productoMinterContract, stakingContract*/) =>
   async (dispatch) => {
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => res.json())
       .then((response) => {
         if (response !== null) {
@@ -759,40 +852,70 @@ const conectar =
               response.Rango,
               response.Categoria
             );*/
+            dispatch(
+              connectSuccessToMongo({
+                rol: response.Rol,
+                nombre: response.Nombre,
+                isreferido: response.IsReferido,
+                referidor: response.Referidor,
+                range: response.Range,
+                type: response.Type,
+                rango: response.Rango,
+                paid: Pagos,
+                perfil: response.Perfil,
+                banner: response.Banner,
+                descripcion: response.Descripcion,
+                ban: response.Ban,
+              })
+            );
           } else if (response.Categoria == 'BlockMaker') {
             //infoPagosC(stakingContract, response.Rango, response.Categoria);
+            dispatch(
+              connectSuccessToMongo({
+                rol: response.Rol,
+                nombre: response.Nombre,
+                isreferido: response.IsReferido,
+                referidor: response.Referidor,
+                range: response.Range,
+                type: response.Type,
+                rango: response.Rango,
+                paid: Pagos,
+                perfil: response.Perfil,
+                banner: response.Banner,
+                descripcion: response.Descripcion,
+                ban: response.Ban,
+              })
+            );
+          } else {
+            dispatch(
+              connectSuccessToMongo({
+                rol: response.Rol,
+                nombre: response.Nombre,
+                isreferido: response.IsReferido,
+                referidor: response.Referidor,
+                range: response.Range,
+                type: response.Type,
+                rango: response.Rango,
+                paid: Pagos,
+                perfil: response.Perfil,
+                banner: response.Banner,
+                descripcion: response.Descripcion,
+                ban: response.Ban,
+              })
+            );
           }
-          dispatch(
-            connectSuccessToMongo({
-              rol: response.Rol,
-              nombre: response.Nombre,
-              isreferido: response.IsReferido,
-              referidor: response.Referidor,
-              range: response.Range,
-              type: response.Type,
-              rango: response.Rango,
-              paid: Pagos,
-              perfil: response.Perfil,
-              banner: response.Banner,
-              descripcion: response.Descripcion,
-              ban: response.Ban,
-            })
-          );
         } else {
           dispatch(register());
         }
       });
   };
 export const update = (accountAddress) => async (dispatch) => {
-  fetch(
-    `https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  )
+  fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
     .then((res) => res.json())
     .then((response) => {
       if (response !== null) {
@@ -814,99 +937,60 @@ export const connectWallet =
   (address, provider, signer) => async (dispatch) => {
     dispatch(loading());
     try {
-      /*const web3Modal =
-      typeof window !== 'undefined' &&
-      new Web3Modal({
-        cacheProvider: true,
-      });*/
+      const chainID = provider._network.chainId;
 
-      /*const _web3Modal = new Web3Modal({
-      network: 'Polygon',
-      cacheProvider: true,
-      disableInjectedProvider: false,
-      providerOptions: providerOptions,
-    });
-    const instance = await _web3Modal.connect();
+      //const rpc_ETH = "https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ" ;
+      const rpc_ETH =
+        'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
 
-    /*let aux1Provider =ethereumClient.wagmi
-    let aux2Provider = aux1Provider.providers
-    let aux3Provider = aux2Provider.get(137)
-    let provider =  aux3Provider
+      const rpc_MAC =
+        'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
+      const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
+      const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
-    const provider = new ethers.providers.Web3Provider(instance);*/
-
-      //const _provider = new ethers.providers.JsonRpcProvider('https://polygon-mainnet.infura.io/v3/ba420f8124134644bf232c4bbebd051d')
-      //const signer =  _provider.getSigner(address)
-
-      //  const signer = provider.getSigner();
-
-      //signer._address =  "0x"
-
-      // const accounts = await provider.listAccounts();
-
-      //  const networkId = await provider.getNetwork();
       if (1 == 1) {
-        /*const usdtContract = new ethers.Contract(
-          USDT_ADDRESS,
-          abiErc20,
-          provider
-        );
-
-        const maticContract = new ethers.Contract(
-          MATIC_ADDRESS,
-          abiErc20,
-          provider
-        );
         const tokenContract = new ethers.Contract(
           TokenPrueba_ADDRESS,
           abiErc20,
-          provider
-        );
-
-        const productoMinterContract = new ethers.Contract(
-          PRODUCTOS_MINTER_ADDRESS,
-          productoMinterAbi,
-          provider
+          provider_MAC
         );
 
         const inversionMinterContract = new ethers.Contract(
           INVERSION_MINTER_ADDRESS,
           inversionMinterAbi,
-          provider
+          provider_MAC
         );
 
         const frenchiesMinterContract = new ethers.Contract(
           FRENCHIES_ADDRESS,
           frenchiesAbi,
-          provider
+          provider_ETH
         );
 
         const stakingContract = new ethers.Contract(
           STAKING_ADDRESS,
           stakingAbi,
-          provider
+          provider_MAC
         );
 
-        /*  const stakingfrenEContract = new ethers.Contract(
-        STAKING_ADDRESS,
-        stakingErAbi,
-        provider
-      );
+        const stakingfrenEContract = new ethers.Contract(
+          STAKINGE_ADDRESS,
+          stakingErAbi,
+          provider_ETH
+        );
 
-      const stakingfrenPContract = new ethers.Contract(
-        STAKING_ADDRESS, 
-        stakingPAbi,
-        provider
-      );  */
+        const stakingfrenPContract = new ethers.Contract(
+          STAKINGP_ADDRESS,
+          stakingPAbi,
+          provider_ETH
+        );
 
         await getProductos();
         await getInversiones();
 
-        /* const nftStaking = await stakingContract.getNfts();
+        const nftStaking = await stakingContract.getNfts();
 
-        // const nftStakingF = await stakingfrenEContract.getNfts();
-
-        const nftpBalance = await productoMinterContract.getMyInventory(
+        const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
         );
 
@@ -914,21 +998,15 @@ export const connectWallet =
           address
         );
 
-        const nftfBalance = await frenchiesMinterContract.getMyInventory(
-          address
-        );*/
-
-        console.log('aqui');
-
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
         const inventoryf = [];
-        // const inventorysf = [];
+        const inventorysf = [];
 
         let aux = true;
 
-        /*if (nftStaking.length != undefined) {
+        if (nftStaking.length != undefined) {
           nftStaking.map(async (item) => {
             function toDateTime(secs) {
               var t = new Date(1970, 0, 1); // Epoch
@@ -973,7 +1051,64 @@ export const connectWallet =
               inventorys.push(stak);
             }
           });
-        }*/
+        }
+
+        if (nftStakingF.length != undefined) {
+          const chain = EvmChain.ETHEREUM;
+          const address = STAKINGE_ADDRESS.toLowerCase();
+          const responses = await Moralis.EvmApi.nft.getWalletNFTs({
+            address,
+            chain,
+          });
+
+          const token = responses?.result;
+
+          nftStakingF.map(async (item) => {
+            const is = true;
+            //const is = await stakingfrenEContract.nftIsStaking(address, item);
+
+            if (is == true) {
+              fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              })
+                .then((res) => res.json())
+                .then((response) => {
+                  token.map((itemt) => {
+                    if (itemt._data.tokenId == item) {
+                      const nft = itemt._data.metadata;
+                      if (nft != undefined) {
+                        let a = nft.image.split('/');
+                        const dat = new Date(response.fechap);
+                        const date = dat.toLocaleDateString();
+                        const stak = {
+                          id: parseInt(item),
+                          fechaPago: {
+                            fecha: response.fechap,
+                            fechaM: date,
+                            fechaL: response.fechald,
+                          }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+                          idCR: {
+                            id: parseInt(item),
+                            fechap: response.fechap,
+                            fechaM: date,
+                          },
+                          idW: parseInt(item),
+                          Nombre: nft.name,
+                          image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                          precio: 0.3,
+                          descripcion: nft.description,
+                        };
+                        inventorysf.push(stak);
+                      }
+                    }
+                  });
+                });
+            }
+          });
+        }
 
         /* if (nftStakingF.length != undefined) {
         nftStakingF.map(async (item) => {
@@ -1065,7 +1200,7 @@ export const connectWallet =
           });
         });*/
 
-        /*nftiBalance.map(async (item) => {
+        nftiBalance.map(async (item) => {
           const tipo = await inversionMinterContract.getTipo(item);
           var type = '';
           if (tipo == 1) {
@@ -1101,9 +1236,9 @@ export const connectWallet =
             };
             inventoryi.push(inv);
           }
-        });*/
+        });
 
-        const chain = EvmChain.ETHEREUM;
+        const chain = EvmChain.GOERLI;
 
         const response = await Moralis.EvmApi.nft.getWalletNFTs({
           address,
@@ -1115,27 +1250,23 @@ export const connectWallet =
           if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
             const nft = item._data.metadata;
 
-            //const prefix = nft.image
-            //const pre = prefix.split("/")
-            //onsole.log(prefix)
-            let a = nft.image.split('/');
+            if (nft != undefined) {
+              let a = nft.image.split('/');
+              const prod = {
+                Nombre: nft.name,
+                image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                precio: 0.3,
+                descripcion: nft.description,
+                id: item._data.tokenId,
+              };
 
-            const prod = {
-              Nombre: nft.name,
-              img: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-              precio: 0.3,
-              descripcion: nft.description,
-              id: item._data.tokenId,
-            };
-
-            console.log(prod);
-
-            inventoryf.push(prod);
+              inventoryf.push(prod);
+            }
           }
         });
 
         let balancei = [];
-        /*balancei[0] = 0;
+        balancei[0] = 0;
         nftiBalance.map(async (item) => {
           const precio = await inversionMinterContract.getPricePlusFee(item);
           const aux = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(
@@ -1143,7 +1274,7 @@ export const connectWallet =
           );
           const auxiliar = balancei[0];
           balancei[0] = parseFloat(auxiliar) + parseFloat(aux);
-        });*/
+        });
 
         //const usdtBalance = await usdtContract.balanceOf(address);
         //const tokenBalance = await tokenContract.balanceOf(address);
@@ -1212,17 +1343,29 @@ export const connectWallet =
           signer
         );
 
-        console.log('ya');
+        const stakingfrenEContract1 = new ethers.Contract(
+          STAKINGE_ADDRESS,
+          stakingErAbi,
+          signer
+        );
+
+        const stakingfrenPContract1 = new ethers.Contract(
+          STAKINGP_ADDRESS,
+          stakingPAbi,
+          signer
+        );
 
         await dispatch(
           dataLoaded({
-            usdtContract: null,
-            tokenContract: null,
-            maticContract: null,
-            productoMinter: null,
-            inversionMinter: null,
+            usdtContract: usdtContract1,
+            tokenContract: tokenContract1,
+            //maticContract: null,
+            productoMinter: productoMinterContract1,
+            inversionMinter: inversionMinterContract1,
             frenchiesMinter: frenchiesMinterContract1,
-            staking: null,
+            stakingfrenEContract: stakingfrenEContract1,
+            stakingfrenPContract: stakingfrenPContract1,
+            staking: stakingContract1,
             // stakinfETH: stakingfrenEContract,
             // stakingPOL: stakingfrenPContract,
             accountAddress: address,
@@ -1232,9 +1375,10 @@ export const connectWallet =
             inventoryi: inventoryi,
             inventorys: inventorys,
             inventoryf: inventoryf,
-            //  inventorysf: inventorysf,
+            inventorysf: inventorysf,
             instance: null,
             balancei: balancei,
+            chainId: chainID,
           })
         );
 

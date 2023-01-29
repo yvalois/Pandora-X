@@ -15,7 +15,7 @@ export default function SelectWallet({ ...props }) {
   const error = false;
   const { setOpen, open } = hola();
   const { address } = useAccount();
-
+  const [Id, setId] = useState(0);
   const { isConnect, accountAddress } = useSelector(
     (state) => state.blockchain
   );
@@ -27,6 +27,7 @@ export default function SelectWallet({ ...props }) {
 
   const abrir = () => {
     setOpen(true);
+    window.localStorage.removeItem('ChainId');
   };
 
   /*  useEffect(() => {
@@ -61,6 +62,11 @@ export default function SelectWallet({ ...props }) {
     }
   }, [isConnect, chain]);
 
+  useEffect(() => {
+    const id = window.localStorage.getItem('ChainId');
+    setId(id);
+  }, []);
+
   return (
     <>
       <div
@@ -94,6 +100,13 @@ export default function SelectWallet({ ...props }) {
             Privacy Policy
           </a>
           .
+          {Id != 0 && Id != undefined && (
+            <p className="font-bold">
+              <bold>
+                Recuerda cambiar la red a {Id == 1 ? 'Ethereum' : 'Polygon'}
+              </bold>
+            </p>
+          )}
         </div>
 
         <div

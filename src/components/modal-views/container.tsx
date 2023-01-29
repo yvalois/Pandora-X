@@ -28,6 +28,9 @@ const TransferF = dynamic(() => import('@/components/modalTransfer/modalTF'));
 const Ban = dynamic(() => import('@/components/modal-ban/ModalBan'));
 const Change = dynamic(() => import('@/components/modal-change/ModalChange'));
 const Banned = dynamic(() => import('@/components/Banned-views/ModalBanned'));
+const Network = dynamic(
+  () => import('@/components/SoporteNetwork-views/ModalNetwork')
+);
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
@@ -55,6 +58,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Change />;
     case 'BAN_VIEW':
       return <Banned />;
+    case 'NETWORK_VIEW':
+      return <Network />;
     default:
       return null;
   }

@@ -249,16 +249,9 @@ exports.WalletProvider = function (_a) {
             case 0:
               _a.trys.push([0, 5, , 6]);
 
-              if (!(window && window.ethereum))
-                return [
-                  3, /*break*/
-                  3,
-                ];
+              if (!(window && window.ethereum)) return [3 /*break*/, 3];
               if (!localStorage.getItem(web3modalStorageKey))
-                return [
-                  3, /*break*/
-                  2,
-                ];
+                return [3 /*break*/, 2];
               return [
                 4,
                 /*yield*/
@@ -271,28 +264,19 @@ exports.WalletProvider = function (_a) {
               _a.label = 2;
 
             case 2:
-              return [
-                3, /*break*/
-                4,
-              ];
+              return [3 /*break*/, 4];
 
             case 3:
               console.log('window or window.ethereum is not available');
               _a.label = 4;
 
             case 4:
-              return [
-                3, /*break*/
-                6,
-              ];
+              return [3 /*break*/, 6];
 
             case 5:
               error_1 = _a.sent();
               console.log(error_1, 'Catch error Account is not connected');
-              return [
-                3, /*break*/
-                6,
-              ];
+              return [3 /*break*/, 6];
 
             case 6:
               return [
@@ -325,7 +309,7 @@ exports.WalletProvider = function (_a) {
   //wallet address saldra
 
   /*const conectar = async () => {
-    fetch(`https://shark-app-w9pvy.ondigitalocean.app/api/login/${accountAddress}`, {
+    fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -415,10 +399,7 @@ exports.WalletProvider = function (_a) {
 
             setLoading(false);
             setAddress(accountAddress);
-            return [
-              3, /*break*/
-              3,
-            ];
+            return [3 /*break*/, 3];
 
           case 2:
             error_2 = _a.sent();
@@ -427,10 +408,7 @@ exports.WalletProvider = function (_a) {
               error_2,
               'got this error on connectToWallet catch block while connecting the wallet'
             );
-            return [
-              3, /*break*/
-              3,
-            ];
+            return [3 /*break*/, 3];
 
           case 3:
             return [

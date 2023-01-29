@@ -369,6 +369,7 @@ const Frenchies: NextPageWithLayout<
     maticContract,
     isConnect,
     tokenContract,
+    chainId,
   } = useSelector((state) => state.blockchain);
 
   const valor = 0.3;
@@ -377,125 +378,86 @@ const Frenchies: NextPageWithLayout<
 
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
-  const verifyApprove = async () => {
-    try {
-      const usdt = await tokenContract.allowance(
-        accountAddress,
-        frenchiesMinter.address
-      ); //MarketPlace
-      //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-      setApprovedToken(ethers.utils.formatUnits(usdt, 6));
-      setPan(false);
-      setPan(true);
-    } catch (e) {
-      console.log(e);
-      setPan(false);
-      setPan(true);
-    }
-  };
-
-  const approve = async () => {
-    setLoading(true);
-
-    try {
-      setTokenAddress(tokenContract.address);
-
-      const decimals = 6;
-      const tx = await tokenContract.approve(
-        frenchiesMinter.address,
-        ethers.utils.parseUnits('1000', decimals)
-      );
-
-      console.log(tx);
-
-      await tx.wait();
-      await verifyApprove();
-      setLoading(false);
-      setPan(false);
-      setPan(true);
-    } catch (e) {
-      setLoading(false);
-      console.log(e);
-      setPan(false);
-      setPan(true);
-    }
-  };
-
   const buyNft = async () => {
-    setLoading(true);
+    if (chainId == 1) {
+      setLoading(true);
 
-    try {
-      if (precio == 0) {
-        const options = {
-          value: ethers.utils.parseUnits('0', 'ether'),
-        };
+      try {
+        if (count - multiplicador >= 0) {
+          const options = {
+            value: ethers.utils.parseUnits('0', 'ether'),
+          };
 
-        const tx = await frenchiesMinter.buyToken(cantidad, options);
+          const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-        await tx.wait(); //tener en cuenta para los proximos cambios
-        dispatch(uFrench(provider, accountAddress));
-        setStatus(200);
-        setVendido(true);
-        setCantidad(0);
-        setApprovedToken(0);
-        setearSupply();
-        verifyApprove();
-        if (count > 0) {
-          setCount(count - multiplicador);
-          setMultiplicador(0);
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          dispatch(uFrench(accountAddress));
+          setStatus(200);
+          setVendido(true);
           setCantidad(0);
-          setPrecio(0);
+          setApprovedToken(0);
+          setearSupply();
+          //verifyApprove();
+          if (count > 0) {
+            setCount(count - multiplicador);
+            setMultiplicador(0);
+            setCantidad(0);
+            setPrecio(0);
+          } else {
+            setMultiplicador(0);
+            setCantidad(0);
+            setPrecio(0);
+          }
         } else {
-          setMultiplicador(0);
-          setCantidad(0);
-          setPrecio(0);
-        }
-      } else {
-        const options_ = {
-          value: ethers.utils.parseUnits(
-            (valor * (multiplicador - count)).toString(),
-            'ether'
-          ),
-        };
-        const tx = await frenchiesMinter.buyToken(cantidad, options_);
+          const options_ = {
+            value: ethers.utils.parseUnits(
+              (valor * (multiplicador - count)).toString(),
+              'ether'
+            ),
+          };
 
-        await tx.wait(); //tener en cuenta para los proximos cambios
-        dispatch(uFrench(provider, accountAddress));
-        setStatus(200);
-        setVendido(true);
-        setCantidad(0);
-        setApprovedToken(0);
-        setearSupply();
-        verifyApprove();
-        if (count > 0) {
-          setCount(count - multiplicador);
-          setMultiplicador(0);
+          const tx = await frenchiesMinter.buyToken(cantidad, options_);
+
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          dispatch(uFrench(accountAddress));
+          setStatus(200);
+          setVendido(true);
           setCantidad(0);
-          setPrecio(0);
-        } else {
-          setMultiplicador(0);
-          setCantidad(0);
-          setPrecio(0);
+          setApprovedToken(0);
+          setearSupply();
+          verifyApprove();
+          if (count > 0) {
+            setCount(count - multiplicador);
+            setMultiplicador(0);
+            setCantidad(0);
+            setPrecio(0);
+          } else {
+            setMultiplicador(0);
+            setCantidad(0);
+            setPrecio(0);
+          }
         }
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        //const messa = mess[1].split(":")
+        //const messag = messa[3].split(",")
+        //const messag_ = messag[0].split("-")
+        console.log(mess);
+        const rejected = mess[0].split(' ');
+        console.log(rejected);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setErrorMSG('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setErrorMSG('Transacion rechazada');
+        } else {
+          setErrorMSG('Error');
+        }
+        //
       }
-    } catch (err) {
-      setLoading(false);
-      setStatus(100);
-      const mess = err.message.split('[');
-      //const messa = mess[1].split(":")
-      //const messag = messa[3].split(",")
-      //const messag_ = messag[0].split("-")
-      console.log(mess);
-      const rejected = mess[0].split(' ');
-      console.log(rejected);
-      if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
-        setErrorMSG('Fondos insuficientes');
-      } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
-        setErrorMSG('Transacion rechazada');
-      } else {
-        setErrorMSG('Error');
-      }
-      //
+    } else if (chainId == 137) {
+      openModal('NETWORK_VIEW');
     }
   };
 
@@ -535,17 +497,13 @@ const Frenchies: NextPageWithLayout<
 
   useEffect(() => {
     if (isConnect) {
-      verifyApprove();
       setearSupply();
-      verifyApprove();
       getWhithelist();
     }
   }, [pan]);
   useEffect(() => {
     if (isConnect) {
-      verifyApprove();
       setearSupply();
-      verifyApprove();
       getWhithelist();
     } else if (!isConnect) {
       setCount(0);
@@ -607,15 +565,18 @@ const Frenchies: NextPageWithLayout<
   };
 
   const setearSupply = async () => {
-    setLoading(true);
+    //setLoading(true);
+    const rpc_ETH =
+      'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
+    const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
     const frenchiesMinterContract = new ethers.Contract(
-      '0x32bfb6790B3536a7269185278B482A0FA0385362',
+      '0x4DAA3f465f8C151225E07497F9dF34C4E1667BfC',
       frenchiesAbi,
-      provider
+      provider_ETH
     );
     const supp = await frenchiesMinterContract.totalSupply();
-    setLoading(false);
+    //setLoading(false);
 
     setSupply(parseInt(supp));
   };

@@ -49,6 +49,10 @@ export default function WalletConnect() {
     setDomLoaded(true);
   }, []);
 
+  const desconect = async () => {
+    disconnectWallet();
+  };
+
   useEffect(() => {
     if (isUser == false) {
       openModal('REGISTER_VIEW');
@@ -149,7 +153,7 @@ export default function WalletConnect() {
           <div className="p-3">
             <div
               className="flex cursor-pointer items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
-              onClick={disconnectWallet}
+              onClick={() => desconect()}
             >
               <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
                 {accountAddress?.slice(0, 6)}

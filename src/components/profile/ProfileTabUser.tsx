@@ -16,6 +16,7 @@ import {
 } from '@/data/static/author-profile';
 import { useEffect, useState } from 'react';
 import { getMintedNftProducts } from '@/redux/Minted/MintedAction';
+import StakingTableF from '../transaction/stakingTableF';
 
 export default function ProfileTabUser() {
   const [currentItems, setCurrentItems] = useState([]);
@@ -123,9 +124,9 @@ export default function ProfileTabUser() {
         <div className="grid h-full w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
           {currentF?.map((nft) => (
             <NFTGrid
-              key={nft.Nombre}
-              name={nft.Nombre}
-              image={nft.img}
+              key={nft.name}
+              name={nft.name}
+              image={nft.image}
               price={13}
               number={nft.id}
               alldata={false}

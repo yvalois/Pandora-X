@@ -19,11 +19,16 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import ModalWithdraw from '../modalWithdraw/modalWithdraw';
 import { useModal } from '@/components/modal-views/context';
 import { useSelector, useDispatch } from 'react-redux';
-import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import {
+  uStaking,
+  uInvertion,
+  uStakingF,
+  uFrench,
+} from '../../redux/Blockchain/blockchainAction';
 import { useWindowScroll } from 'react-use';
 import { useAccount, useProvider } from 'wagmi';
 
-export default function StakingTable() {
+export default function StakingTableF() {
   const { inversionMinter } = useSelector((state) => state.blockchain);
 
   const stakings = [];
@@ -41,11 +46,16 @@ export default function StakingTable() {
   const [stakes, setStakes] = useState(infoStakings);
   const [loading, setLoading] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
-  const [statusC, setStatusC] = useState(false);
-  const [statusW, setStatusW] = useState(false);
-  const { inventorys, staking, tokenContract } = useSelector(
-    (state) => state.blockchain
-  );
+  const [statusC, setStatusC] = useState(0);
+  const [statusW, setStatusW] = useState(0);
+  const {
+    inventorysf,
+    stakingfrenEContract,
+    tokenContract,
+    chainId,
+    stakingfrenPContract,
+    accountAddress,
+  } = useSelector((state) => state.blockchain);
 
   const provider = useProvider();
   const { address } = useAccount();
@@ -54,26 +64,94 @@ export default function StakingTable() {
   const dispatch = useDispatch<AppDispatch>();
 
   const claim = async (value) => {
-    if (Usuario.isreferido && Usuario.type == 'BlockMaker') {
-      setLoading(true); //usarlos como alerts de cargando y otro de realizado
-      const tx = await staking.wardWithReferido(
-        value,
-        Usuario.referidor,
-        tokenContract.address
-      );
-      await tx.wait();
+    setLoading(true);
+    const is = await stakingfrenEContract.nftIsStaking(
+      accountAddress,
+      value.id
+    );
 
-      setLoading(false);
-      setStatusC(true);
-      setAlertMsg('Transacion cumplida');
+    if (is) {
+      if (chainId == 1) {
+        const now = new Date();
+        const fecha = new Date(value.fechaM),
+          y = fecha.getFullYear(),
+          m = fecha.getMonth();
+
+        const paidDay = new Date(y, m + 1, 5);
+
+        const val = {
+          fechap: paidDay,
+        };
+        /*if(now > fecha){
+        alert(now)
+        alert(fecha)
+
+
+      }else{
+        alert("no")
+
+      }*/
+        setLoading(true);
+        try {
+          const tx = await stakingfrenPContract.claimReward(
+            'CONTRASENACLAIM',
+            '0x8aa436dFb04f325BBF191dAB9E557EB571DCA08F'
+          );
+
+          await tx.wait();
+
+          dispatch(uStakingF(accountAddress));
+
+          const fecha = new Date(value.fechaM),
+            y = fecha.getFullYear(),
+            m = fecha.getMonth();
+          const paidDay = new Date(y, m + 1, 5);
+
+          const val = {
+            fechap: paidDay,
+          };
+
+          fetch(`${process.env.BACKEND_API}/actualizarstaking/${value.id}`, {
+            method: 'PUT',
+            body: JSON.stringify(val),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          setLoading(false);
+          setStatusC(200);
+
+          setAlertMsg('Transaccion realizada de manera exitosa');
+        } catch (err) {
+          setLoading(false);
+          setStatusC(100);
+          const mess = err.message.split('[');
+          //const messa = mess[1].split(":")
+          //const messag = messa[3].split(",")
+          //const messag_ = messag[0].split("-")
+          console.log(mess);
+          const rejected = mess[0].split(' ');
+          console.log(rejected);
+          if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+            setAlertMsg('Fondos insuficientes');
+          } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+            setAlertMsg('Transacion rechazada');
+          } else {
+            setAlertMsg(
+              'El contracto no cuenta con el balance para realizar esta transaccion por favor intenta mas tarde'
+            );
+          }
+          //
+        }
+      } else {
+        openModal('NETWORK_VIEW');
+        setLoading(false);
+      }
     } else {
-      setLoading(true);
-      const tx = await staking.claimReward(value, tokenContract.address);
-      await tx.wait();
-
       setLoading(false);
       setStatusC(true);
-      setAlertMsg('Transacion cumplida');
+      setAlertMsg('Token no esta stakeado');
     }
   };
 
@@ -84,18 +162,46 @@ export default function StakingTable() {
     //si no lo esta lanza el modal
     //aprove del 10% del valor del nft
     // llamar a withdraw with punishment
-    const isOutTime = await staking.isOutTime(value);
-    if (isOutTime) {
-      window.localStorage.setItem('WithdrawID', value);
-      openModal('WITHDRAW_VIEW');
-    } else {
-      const tx = await staking.withdraw(value);
-      await tx.wait();
+    if (chainId == 1) {
+      try {
+        const tx = await stakingfrenEContract.withdraw(value);
+        await tx.wait();
+        dispatch(uStakingF(accountAddress));
+        dispatch(uFrench(accountAddress));
 
-      dispatch(uInvertion(provider, address));
+        fetch(`${process.env.BACKEND_API}/deleteStaking/${value}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        setLoading(false);
+        setLoading(false);
+        setStatusW(200);
+
+        setAlertMsg('Transaccion realizada de manera exitosa');
+      } catch (err) {
+        setLoading(false);
+        setStatusW(100);
+        const mess = err.message.split('[');
+        //const messa = mess[1].split(":")
+        //const messag = messa[3].split(",")
+        //const messag_ = messag[0].split("-")
+        console.log(mess);
+        const rejected = mess[0].split(' ');
+        console.log(rejected);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
       setLoading(false);
-      setStatusW(true);
-      setAlertMsg('Transacion cumplida');
     }
   };
 
@@ -103,18 +209,8 @@ export default function StakingTable() {
     {
       Header: 'ID',
       accessor: 'id',
-      minWidth: 60,
-      maxWidth: 80,
-    },
-    {
-      Header: () => <div className="ltr:ml-auto rtl:mr-auto">Valor</div>,
-      accessor: 'cantPago',
-      // @ts-ignore
-      Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value}</div>
-      ),
-      minWidth: 80,
-      maxWidth: 120,
+      minWidth: 20,
+      maxWidth: 30,
     },
     {
       Header: () => (
@@ -123,30 +219,10 @@ export default function StakingTable() {
       accessor: 'fechaPago',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value}</div>
-      ),
-      minWidth: 220,
-      maxWidth: 280,
-    },
-    {
-      Header: () => <div className="ltr:ml-auto rtl:mr-auto">Apr</div>,
-      accessor: 'Apr',
-      // @ts-ignore
-      Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value}</div>
-      ),
-      minWidth: 60,
-      maxWidth: 80,
-    },
-    {
-      Header: () => <div className="ltr:ml-auto rtl:mr-auto">Balance</div>,
-      accessor: 'precio',
-      // @ts-ignore
-      Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value}USDT</div>
+        <div className="ltr:text-right rtl:text-left">{value.fechaM}</div>
       ),
       minWidth: 100,
-      maxWidth: 190,
+      maxWidth: 180,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
@@ -163,8 +239,8 @@ export default function StakingTable() {
           </Button>
         </div>
       ),
-      minWidth: 150,
-      maxWidth: 220,
+      minWidth: 120,
+      maxWidth: 180,
     },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto"></div>,
@@ -181,12 +257,12 @@ export default function StakingTable() {
           </Button>
         </div>
       ),
-      minWidth: 80,
-      maxWidth: 170,
+      minWidth: 180,
+      maxWidth: 120,
     },
   ];
 
-  const data = inventorys;
+  const data = inventorysf;
   const columns = React.useMemo(() => COLUMNS, []);
 
   const {
@@ -243,6 +319,10 @@ export default function StakingTable() {
       setStatusW(false);
     }, 5000);
   }, [statusC, statusW]);
+
+  useEffect(() => {
+    console.log(inventorysf);
+  }, []);
 
   return (
     <div className="">
@@ -363,25 +443,43 @@ export default function StakingTable() {
       </div>
       {loading && (
         <div
-          className="absolute top-[770px] right-[140px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
+          className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
           role="alert"
         >
           <span className="self-center font-medium">Loading...</span>
         </div>
       )}
 
-      {statusC && (
+      {statusC == 200 && !loading && (
         <div
-          className="absolute top-[770px] right-[140px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute top-[250px] right-[50px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="font-medium">{alertMsg}</span>
         </div>
       )}
 
-      {statusW && (
+      {statusW == 200 && !loading && (
         <div
-          className="absolute top-[770px] right-[140px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          role="alert"
+        >
+          <span className="font-medium">{alertMsg}</span>
+        </div>
+      )}
+
+      {statusC == 100 && !loading && (
+        <div
+          className="absolute top-[250px] right-[50px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          role="alert"
+        >
+          <span className="font-medium">{alertMsg}</span>
+        </div>
+      )}
+
+      {statusW == 100 && !loading && (
+        <div
+          className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <span className="font-medium">{alertMsg}</span>

@@ -23,7 +23,11 @@ import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
 import edit from '@/assets/images/edit-svgrepo-com.svg';
 import Input from '@/components/ui/forms/input';
-import { uFrench, update } from '@/redux/Blockchain/blockchainAction';
+import {
+  uFrench,
+  update,
+  uStakingF,
+} from '@/redux/Blockchain/blockchainAction';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { provider } from '@/NFTROL';
@@ -125,16 +129,13 @@ const AuthorProfilePage: NextPageWithLayout<
       banner: hola,
     };
 
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/updatebanner/${accountAddress}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(banner),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/updatebanner/${accountAddress}`, {
+      method: 'PUT',
+      body: JSON.stringify(banner),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         res.json();
 
@@ -149,16 +150,13 @@ const AuthorProfilePage: NextPageWithLayout<
     const name = {
       nombre: newName,
     };
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/updatename/${accountAddress}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(name),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/updatename/${accountAddress}`, {
+      method: 'PUT',
+      body: JSON.stringify(name),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         res.json();
 
@@ -175,16 +173,13 @@ const AuthorProfilePage: NextPageWithLayout<
     const perfil = {
       perfil: aux,
     };
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/updateprofile/${accountAddress}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(perfil),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/updateprofile/${accountAddress}`, {
+      method: 'PUT',
+      body: JSON.stringify(perfil),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         res.json();
 
@@ -225,7 +220,8 @@ const AuthorProfilePage: NextPageWithLayout<
   }, []);
 
   useEffect(() => {
-    dispatch(uFrench(provider, accountAddress));
+    dispatch(uFrench(accountAddress));
+    dispatch(uStakingF(accountAddress));
   }, []);
 
   return (
@@ -736,7 +732,7 @@ const AuthorProfilePage: NextPageWithLayout<
             }
           </div>
 
-          <div className=" flex-column grow justify-center align-middle ">
+          <div className=" flex-column ml-6 grow justify-center align-middle ">
             {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (
               <ProfileTabUser />
             ) : (

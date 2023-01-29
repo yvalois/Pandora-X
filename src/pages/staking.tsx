@@ -119,6 +119,7 @@ const StakingPage: NextPageWithLayout = () => {
   const { isConnect } = useSelector((state) => state.blockchain);
 
   const { disconnectWallet } = useContext(WalletContext);
+
   useEffect(() => {
     if (!isConnect) {
       disconnectWallet();

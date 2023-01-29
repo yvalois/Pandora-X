@@ -33,16 +33,13 @@ export default function AuthorInformation({
     const value = {
       descripcion: newDescipcion,
     };
-    fetch(
-      `https://shark-app-w9pvy.ondigitalocean.app/api/updatedescripcion/${accountAddress}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(value),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    fetch(`${process.env.BACKEND_API}/updatedescripcion/${accountAddress}`, {
+      method: 'PUT',
+      body: JSON.stringify(value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         res.json();
 
