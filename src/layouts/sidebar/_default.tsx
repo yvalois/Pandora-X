@@ -27,7 +27,7 @@ import NoProfile from '@/assets/images/profile/NoProfile.jpg';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AnchorLink from '@/components/ui/links/anchor-link';
 
 export const menuItems = [
@@ -263,6 +263,9 @@ export default function Sidebar({ className }: SidebarProps) {
     inventoryf,
     inventorysf,
   } = useSelector((state: any) => state.blockchain);
+  const [nos, setNos] = useState(false);
+  const [noi, setNoi] = useState(false);
+
   return (
     <aside
       className={cn(
@@ -344,8 +347,8 @@ export default function Sidebar({ className }: SidebarProps) {
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
-              (inventoryf.length > 0 && item.name == 'Stakear') ||
-              (inventorysf.length > 0 && item.name == 'Staking') ||
+              (inventoryf.length == 0 && item.name == 'Stakear') ||
+              (inventorysf.length == 0 && item.name == 'Staking') ||
               (UsuarioR !== 'Admin' &&
                 //UsuarioR !== 'usuario' &&
                 item.name == 'Inversiones') ||
