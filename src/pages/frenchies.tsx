@@ -571,7 +571,7 @@ const Frenchies: NextPageWithLayout<
     const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
     const frenchiesMinterContract = new ethers.Contract(
-      '0x4DAA3f465f8C151225E07497F9dF34C4E1667BfC',
+      '0x32bfb6790B3536a7269185278B482A0FA0385362',
       frenchiesAbi,
       provider_ETH
     );
