@@ -46,10 +46,12 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
         className
       )}
     >
-      <div className="relative flex aspect-[11/11]  justify-center overflow-hidden rounded-lg">
+      <div className="relative flex aspect-[4/5] justify-center  overflow-hidden rounded-lg sm:aspect-[11/11]">
         {select == true && (
           <div className="column z-10 flex h-full w-full cursor-pointer items-center justify-center bg-black opacity-60 ">
-            <h1 className="text-3xl font-medium">Seleccionado</h1>
+            <h1 className="font-small text-xs   md:text-xl md:font-medium xl:text-3xl xl:font-medium ">
+              Seleccionado
+            </h1>
           </div>
         )}
         <Image

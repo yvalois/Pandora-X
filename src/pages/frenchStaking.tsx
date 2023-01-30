@@ -466,7 +466,7 @@ const StakeFPage: NextPageWithLayout = () => {
         title="Create NFT"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="mb-8 h-[430px] w-full sm:mb-0 sm:w-1/2 sm:w-[100%] sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]">
+      <div className="mb-[-180px] h-[430px] w-full sm:ltr:pr-6   sm:rtl:pl-6 md:mb-8 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]">
         {inventorysf.length != 0 ? (
           <NftSlider
             nfts={currentF}
@@ -479,7 +479,7 @@ const StakeFPage: NextPageWithLayout = () => {
           <div className="mb-8 h-[630px] w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]"></div>
         )}
       </div>
-      <div className="flex w-full justify-end">
+      <div className="mb-20 flex w-full justify-end md:mb-12">
         <Button onClick={selectAll}>
           {allSelect ? 'Deselecionar todos ' : 'Selecionar todos'}
         </Button>

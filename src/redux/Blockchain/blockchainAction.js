@@ -997,7 +997,6 @@ export const connectWallet =
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
-
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
