@@ -466,7 +466,7 @@ const StakeFPage: NextPageWithLayout = () => {
         title="Create NFT"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="mb-[-180px] h-[430px] w-full sm:ltr:pr-6   sm:rtl:pl-6 md:mb-8 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]">
+      <div className="mb-[-180px]  h-[430px]   w-full sm:ltr:pr-6   sm:rtl:pl-6 md:mb-8 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]">
         {inventorysf.length != 0 ? (
           <NftSlider
             nfts={currentF}

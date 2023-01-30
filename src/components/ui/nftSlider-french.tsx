@@ -28,12 +28,16 @@ interface CoinSliderProps {
 
 export default function NftSlider({ nfts, type, setNftSelect }) {
   const sliderBreakPoints = {
-    768: {
-      slidesPerView: 4,
+    200: {
+      slidesPerView: 2,
+      spaceBetween: 20,
+    },
+    500: {
+      slidesPerView: 3,
       spaceBetween: 20,
     },
     1080: {
-      slidesPerView: 4,
+      slidesPerView: 3,
       spaceBetween: 24,
     },
     1280: {
@@ -73,8 +77,8 @@ export default function NftSlider({ nfts, type, setNftSelect }) {
     <div>
       <Swiper
         modules={[Scrollbar, A11y]}
-        spaceBetween={24}
-        slidesPerView={4}
+        //spaceBetween={24}
+        //slidesPerView={4}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
         observer={true}
