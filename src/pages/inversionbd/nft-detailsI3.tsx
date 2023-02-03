@@ -70,6 +70,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
     accountAddress,
     tokenContract,
     usdtContract,
+    chainId,
   } = useSelector((state) => state.blockchain);
 
   const { referidor } = useSelector((state) => state.Usuario);
@@ -92,15 +93,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
   const approve = async () => {
     //setLoading(true);
 
-    const a = await tokenContract.balanceOf(accountAddress);
-    let prir = parseFloat(ethers.utils.formatUnits(a, 6)).toFixed(2);
-    const price1 = parseFloat(prir);
-    const price2 = parseFloat(price);
-
-    if (price1 < price) {
-      setAlertMsg2('no tienes balance suficiente');
-      setStatus2(true);
-    } else {
+    if (chainId == 137) {
       try {
         setLoading(true);
 
@@ -108,7 +101,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
         const decimals = 6;
         const tx = await tokenContract.approve(
           inversionMinter.address,
-          ethers.utils.parseUnits(price.toString(), decimals)
+          ethers.utils.parseUnits('10000000', decimals)
         );
 
         await tx.wait();
@@ -117,25 +110,58 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
       } catch (e) {
         setLoading(false);
       }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
     }
   };
 
   const buyNft = async () => {
-    setLoading(true);
-    try {
-      const tx = await inversionMinter.buyToken(
-        tipoN,
-        '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
-      );
+    //setLoading(true);
 
-      await tx.wait();
-      setLoading(false);
-      setApprovedToken(0);
-      dispatch(uInvertion(provider, address));
-      setStatus(true);
-      setAlertMsg('Nft comprado exitosamente');
-      setIsBuy(true);
-    } catch (err) {
+    if (chainId == 137) {
+      const a = await tokenContract.balanceOf(accountAddress);
+      let prir = parseFloat(ethers.utils.formatUnits(a, 6)).toFixed(2);
+      const price1 = parseFloat(prir);
+
+      if (price1 < price) {
+        setLoading(false);
+
+        setAlertMsg2('no tienes balance suficiente');
+        setStatus2(true);
+      } else {
+        try {
+          const tx = await inversionMinter.buyToken(
+            tipoN,
+            tokenContract.address
+          );
+
+          await tx.wait();
+          setLoading(false);
+          setApprovedToken(0);
+          setStatus(true);
+          setAlertMsg('Nft comprado exitosamente');
+          setIsBuy(true);
+          dispatch(uInvertion(accountAddress));
+
+          verifyApprove();
+        } catch (err) {
+          setLoading(false);
+          const errr = err.message.split(':');
+          const error = errr[15].split('"');
+          const error1 = errr[16].split('"');
+
+          if (
+            error[0] == ' transfer amount exceeds allowance' ||
+            error1[0] == ' transfer amount exceeds allowance'
+          ) {
+            setStatus2(true);
+            setAlertMsg2('No haz aprobado el balance');
+          }
+        }
+      }
+    } else {
+      openModal('NETWORK_VIEW');
       setLoading(false);
     }
   };
@@ -151,6 +177,16 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
       setStatus2(false);
     }, 5000);
   }, [status2]);
+
+  useEffect(() => {
+    verifyApprove();
+  }, []);
+
+  useEffect(() => {
+    if (Usuario.rol !== 'Admin' && Usuario.rol !== 'usuario') {
+      window.location.href = '/';
+    }
+  });
   return (
     <div
       className={cn(
@@ -158,9 +194,9 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
         className
       )}
     >
-      <div className="-mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
+      <div className="mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
         <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
-          <div className="block w-1/2 shrink-0 md:w-2/5">
+          <div className="flex-column  w-1/2 shrink-0 md:w-2/5">
             <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
               Precio <span className="md:hidden">by</span>{' '}
               <AnchorLink
@@ -182,40 +218,43 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
             </AnchorLink>
           </div>
         </div>
+        <div className="justify-ae flex w-full">
+          {isConnect && !isBuy && !loading && parseInt(price) > approvedToken && (
+            <Button shape="rounded" onClick={() => approve()}>
+              Aprobar
+            </Button>
+          )}
+          {isConnect && !isBuy && !loading && parseInt(price) <= approvedToken && (
+            <Button shape="rounded" onClick={() => buyNft()}>
+              {`Comprar por ${price} `}
+            </Button>
+          )}
 
-        {isConnect && !isBuy && !loading && parseInt(price) > approvedToken && (
-          <Button shape="rounded" onClick={() => approve()}>
-            Aprobar
-          </Button>
-        )}
-        {isConnect && !isBuy && !loading && parseInt(price) <= approvedToken && (
-          <Button shape="rounded" onClick={() => buyNft()}>
-            {`Comprar por ${price} `}
-          </Button>
-        )}
+          {!isConnect && (
+            <Button
+              shape="rounded"
+              onClick={() => openModal('WALLET_CONNECT_VIEW')}
+            >
+              Conectar
+            </Button>
+          )}
 
-        {!isConnect && (
+          {!isBuy && loading && <Button shape="rounded">Cargando...</Button>}
+
           <Button
             shape="rounded"
-            onClick={() => openModal('WALLET_CONNECT_VIEW')}
+            variant="solid"
+            color="gray"
+            className="dark:bg-gray-800"
+            onClick={() => openModal('SHARE_VIEW')}
           >
-            Conectar
+            Compartir
           </Button>
-        )}
-
-        <Button
-          shape="rounded"
-          variant="solid"
-          color="gray"
-          className="dark:bg-gray-800"
-          onClick={() => openModal('SHARE_VIEW')}
-        >
-          Compartir
-        </Button>
+        </div>
       </div>
       {status && (
         <div
-          className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute top-[170px] right-[100px] mb-4   mt-[0px] w-[400px] self-center rounded-lg  bg-green-200   p-4 text-center text-sm text-green-700 dark:bg-green-200 dark:text-green-800  md:top-[220px] md:right-[65px] md:w-[280px] xl:top-[250px] xl:right-[100px]"
           role="alert"
         >
           <span className="font-medium">{alertMsg}</span>
@@ -224,7 +263,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
 
       {status2 && (
         <div
-          className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute top-[170px] right-[100px] mb-4   mt-[0px] w-[400px] self-center rounded-lg  bg-red-200   p-4 text-center text-sm text-red-700 dark:bg-red-200  dark:text-red-800  md:top-[220px] md:right-[65px] md:w-[280px] xl:top-[250px] xl:right-[100px]"
           role="alert"
         >
           <span className="font-medium">{alertMsg2}</span>
@@ -245,12 +284,15 @@ const NftDetails3Page: NextPageWithLayout<
     descripcion: '',
   };
 
-  const provider = useProvider();
+  const rpc_MAC =
+    'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
+
+  const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const inversionMinterContract = new ethers.Contract(
-    '0x8fA9365bCcc4C554FE1D7c004ff46b7A05d4de2C',
+    '0x3870d08b787db776f2c6d8bee986Fe9A756652dC',
     inversionesAbi,
-    provider
+    provider_MAC
   );
   const [nft, setNft] = useState(nftdata);
 
@@ -266,10 +308,7 @@ const NftDetails3Page: NextPageWithLayout<
         .then((response) => {
           response.map(async (res) => {
             if (res.tipoN == 3) {
-              const precio = await inversionMinterContract.buyPrice(
-                res.tipoN,
-                '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
-              );
+              const precio = await inversionMinterContract.buyPrice(res.tipoN);
               const nftdata = {
                 Nombre: res.Nombre,
                 img: res.img,
@@ -374,7 +413,7 @@ const NftDetails3Page: NextPageWithLayout<
       )*/}
 
                       <NftFooter
-                        className="hidden md:block"
+                        className="w-full"
                         price={nft.precio}
                         tipoN={nft.tipoN}
                         id={nft.id}

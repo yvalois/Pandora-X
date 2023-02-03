@@ -95,7 +95,7 @@ export default function ProfileTabUser() {
         </div>
           </TabPanel> */}
       <TabPanel className="h-full w-full focus:outline-none">
-        <div className="grid h-full w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
+        <div className="ml-6 grid h-full   w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-4">
           {currentInv?.map((nft) => (
             <NFTGrid
               key={nft.Nombre}
@@ -121,7 +121,7 @@ export default function ProfileTabUser() {
         </div>
       </TabPanel>
       <TabPanel className="h-full w-full focus:outline-none">
-        <div className="grid h-full w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6 xl:space-x-8 3xl:grid-cols-3 4xl:grid-cols-4">
+        <div className="ml-6 grid h-full   w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-4">
           {currentF?.map((nft) => (
             <NFTGrid
               key={nft.name}

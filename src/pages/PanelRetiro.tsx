@@ -42,6 +42,7 @@ const RetiroPanelPage: NextPageWithLayout<
     accountAddress,
     frenchiesMinter,
     chainId,
+    inversionMinter,
   } = useSelector((state) => state.blockchain);
   const [tvl, setTvl] = useState('');
   const [sbalance, setSbalance] = useState(0);
@@ -160,6 +161,9 @@ const RetiroPanelPage: NextPageWithLayout<
             setStatus(100);
             setAlertMsg('Su saldo es de: 0');
           }
+        } else {
+          const tx = await inversionMinter.withdrawToken(tokenContract.address);
+          await tx.wait();
         }
       } catch (err) {
         setLoading(false);

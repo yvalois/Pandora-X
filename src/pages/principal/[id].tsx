@@ -14,11 +14,11 @@ import Avatar from '@/components/ui/avatar';
 import TopupButton from '@/components/ui/topup-button';
 import NftSlider from '@/components/ui/nftSlider';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMintedNftProducts } from '../../redux/Minted/MintedAction';
+import { getMintedNftProducts } from '../redux/Minted/MintedAction';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { ethers } from 'ethers';
 import coaching from '@/assets/images/prod/coaching.jpeg';
 import streaming from '@/assets/images/prod/streaming.jpeg';
@@ -34,8 +34,12 @@ import BlockCreator from '@/assets/images/profile/BLOCKCREATOR.jpg';
 import BlockElite from '@/assets/images/profile/BLOCKELITE.jpg';
 import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
-import { transations } from '../../redux/Transactions/TransactionsActions';
+import { transations } from '../redux/Transactions/TransactionsActions';
 import AvatarP from '@/components/ui/AvatarP';
+import { WalletContext } from '@/lib/hooks/use-connect';
+import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
+import router from 'next/router';
+
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
@@ -85,7 +89,7 @@ const prod = [
   },
 ];
 
-const AuthorProfilePage: NextPageWithLayout<
+const HomePage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
   const nftInfo = {
@@ -100,12 +104,14 @@ const AuthorProfilePage: NextPageWithLayout<
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
   const [balance, setBalance] = useState(0);
+  const Usuario = useSelector((state: any) => state.Usuario);
+  const [ready, setReady] = useState(false);
   let Contador = 0;
-
   const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
     useSelector((state: any) => state.minted);
-  const Usuario = useSelector((state: any) => state.Usuario);
+
   const { Transactions } = useSelector((state) => state.transaction);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const getNft = async () => {
@@ -124,7 +130,7 @@ const AuthorProfilePage: NextPageWithLayout<
   const {
     inventoryp,
     inventoryi,
-    productoMinter,
+    frenchiesMinter,
     accountAddress,
     balanceI,
     isConnect,
@@ -132,15 +138,7 @@ const AuthorProfilePage: NextPageWithLayout<
     staking,
     tokenContract,
   } = useSelector((state: any) => state.blockchain);
-  const inventory = async () => {
-    if (accountAddress !== '') {
-      const tx = await productoMinter.getMyInventory(accountAddress);
 
-      return tx;
-    }
-
-    return 0;
-  };
   const getInvertionTrans = async () => {
     fetch(
       `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${inversionMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
@@ -163,9 +161,10 @@ const AuthorProfilePage: NextPageWithLayout<
         arr = response.result;
         if (arr.length > 0) {
           arr.map(async (item) => {
-            if (item.from == '0x0000000000000000000000000000000000000000') {
-              const cant = arr.length;
-              Contador += cant;
+            if (
+              item.from == '0x0000000000000000000000000000000000000000' &&
+              item.to == accountAddress.toLowerCase()
+            ) {
               const dat = item.timeStamp;
               const date = toDateTime(dat);
               const pre = await inversionMinter.getPricePlusFee(item.tokenID);
@@ -175,20 +174,19 @@ const AuthorProfilePage: NextPageWithLayout<
                 inversionMinter.address.length - 6
               );
               const wall = w1 + '...' + w;
-              if (cant >= Data.length || cant == 0) {
-                const Tx = {
-                  Id: item.tokenID,
-                  Tipo: 'Compra Inversion',
-                  Hash: item.hash,
-                  Time: dat,
-                  Fecha: date.toDateString(),
-                  Asset: 'Tether',
-                  Status: 'Exitosa',
-                  Address: wall,
-                  Precio: precio,
-                };
-                Data.push(Tx);
-              }
+
+              const Tx = {
+                Id: item.tokenID,
+                Tipo: 'Compra Inversion',
+                Hash: item.hash,
+                Time: dat,
+                Fecha: date.toDateString(),
+                Asset: 'Tether',
+                Status: 'Exitosa',
+                Address: wall,
+                Precio: precio,
+              };
+              Data.push(Tx);
             }
           });
         }
@@ -197,7 +195,7 @@ const AuthorProfilePage: NextPageWithLayout<
 
   const getProductosTrans = async () => {
     fetch(
-      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${productoMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
+      `https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${frenchiesMinter.address}&address=${accountAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=Z79YU4A9GJPW8SIYPCKBW6AKFT4G55CG2T
  `,
       {
         method: 'GET',
@@ -213,17 +211,21 @@ const AuthorProfilePage: NextPageWithLayout<
           t.setSeconds(secs);
           return t;
         }
+
         let arr = [];
         arr = response.result;
         if (arr.length > 0) {
           arr.map(async (item) => {
-            if (item.from == '0x0000000000000000000000000000000000000000') {
+            if (
+              item.from == '0x0000000000000000000000000000000000000000' &&
+              item.to == accountAddress.toLowerCase()
+            ) {
               const cant = arr.length + Data.length;
               Contador += cant;
               const dat = item.timeStamp;
               const date = toDateTime(dat);
-              const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-              const precio = ethers.utils.formatUnits(pre, 6);
+              //const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+              //const precio = ethers.utils.formatUnits(pre, 6);
               const w1 = inversionMinter.address.slice(0, 6);
               const w = inversionMinter.address.slice(
                 inversionMinter.address.length - 6
@@ -232,14 +234,14 @@ const AuthorProfilePage: NextPageWithLayout<
               if (cant >= Data.length || cant == 0) {
                 const Tx = {
                   Id: item.tokenID,
-                  Tipo: 'Compra Producto',
+                  Tipo: 'Compra Frenchie',
                   Hash: item.hash,
                   Time: dat,
                   Fecha: date.toDateString(),
                   Asset: 'Tether',
                   Status: 'Exitosa',
                   Address: wall,
-                  Precio: precio,
+                  Precio: 0.1,
                 };
                 Data.push(Tx);
               }
@@ -273,21 +275,20 @@ const AuthorProfilePage: NextPageWithLayout<
           arr.map(async (item) => {
             if (
               item.from == accountAddress.toLowerCase() ||
-              item.to.toString() == accountAddress.toLowerCase()
+              item.to == accountAddress.toLowerCase()
             ) {
               const cant = arr.length + Data.length;
               Contador += cant;
               const dat = item.timeStamp;
               const date = toDateTime(dat);
-              const pre = await inversionMinter.getPricePlusFee(item.tokenID);
-              const precio = ethers.utils.formatUnits(pre, 6);
+              //const pre = await inversionMinter.getPricePlusFee(item.tokenID);
+              //const precio = ethers.utils.formatUnits(pre, 6);
               const w1 = inversionMinter.address.slice(0, 6);
               const w = inversionMinter.address.slice(
                 inversionMinter.address.length - 6
               );
               const wall = w1 + '...' + w;
               const from = item.from;
-              const to = item.to;
               if (cant >= Data.length || cant == 0) {
                 if (from == accountAddress.toLowerCase()) {
                   const Tx = {
@@ -299,7 +300,7 @@ const AuthorProfilePage: NextPageWithLayout<
                     Asset: 'Tether',
                     Status: 'Exitosa',
                     Address: wall,
-                    Precio: 'NP',
+                    Precio: 'NA',
                   };
                   Data.push(Tx);
                 } else {
@@ -312,7 +313,7 @@ const AuthorProfilePage: NextPageWithLayout<
                     Asset: 'Tether',
                     Status: 'Exitosa',
                     Address: wall,
-                    Precio: precio,
+                    Precio: 'NA',
                   };
                   Data.push(Tx);
                 }
@@ -408,7 +409,7 @@ const AuthorProfilePage: NextPageWithLayout<
 
   setTimeout(async () => {
     await getPrices();
-  }, 3600000);
+  }, 1000);
 
   const setData = async () => {
     dispatch(
@@ -428,14 +429,18 @@ const AuthorProfilePage: NextPageWithLayout<
     fetchItems();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     setCurrentItems(prod);
     const fetchItems = async () => {
-      if (isConnect) {
-        await getInvertionTrans();
-        await getProductosTrans();
-        await getStakingsTrans();
-        await getClaimsTrans();
+      if (isConnect&& Data.length == 0) {
+        alert("a")
+        getInvertionTrans();
+        getProductosTrans();
+        getStakingsTrans();
+        getClaimsTrans();
+        setTimeout(() => {
+          setReady(true)
+      }, 3000);
       } else {
         Data = [];
       }
@@ -443,21 +448,56 @@ const AuthorProfilePage: NextPageWithLayout<
       //setBalance(balanceI);
     };
     fetchItems();
-  }, [accountAddress]);
+  }, [accountAddress]);*/
+
+  useEffect(() => {
+    setCurrentItems(prod);
+    const fetchItems = async () => {
+      if (isConnect && Data.length == 0) {
+        await getInvertionTrans();
+        await getProductosTrans();
+        await getStakingsTrans();
+        await getClaimsTrans();
+
+        setTimeout(() => {
+          setReady(true);
+        }, 1000);
+      } else {
+        Data = [];
+      }
+      //setCurrentInv(inventoryi);
+      //setBalance(balanceI);
+    };
+    fetchItems();
+  }, []);
 
   useEffect(() => {
     const fetchItems = async () => {
-      await setData();
+      if (ready) {
+        await setData();
+        setReady(false);
+      }
 
       //setCurrentInv(inventoryi);
       //setBalance(balanceI);
     };
     fetchItems();
-  }, [Data]);
+  }, [ready]);
 
   useEffect(() => {
     setBalance(balanceI[0]);
   }, [balanceI]);
+
+  /*  const { disconnectWallet } = useContext(WalletContext);
+  useEffect(() => {
+    if (!isConnect) {
+      disconnectWallet();
+    }
+  }, []); */
+
+  useEffect(() => {
+    return window.localStorage.setItem('Wallet', router.query.id);
+  }, []);
 
   return (
     <>
@@ -547,7 +587,7 @@ const AuthorProfilePage: NextPageWithLayout<
               My Balance
             </h3>
             <div className="mb-7 text-center font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl 3xl:mb-8 3xl:text-[32px]">
-              ${balanceI[0]}
+              ${parseFloat(balanceI[0]).toFixed(1)}
             </div>
             <TopupButton />
           </div>
@@ -573,22 +613,15 @@ const AuthorProfilePage: NextPageWithLayout<
 
       <div className="flex flex-wrap">
         <div className="w-[100%] lg:w-[100%] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[100%] 3xl:w-[100%]">
-          {Transactions.length > 0 && <TransactionTable />}
+          {Transactions.length > 0 && isConnect && <TransactionTable />}
         </div>
       </div>
     </>
   );
 };
 
-AuthorProfilePage.getLayout = function getLayout(page) {
+HomePage.getLayout = function getLayout(page) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
 
-export default AuthorProfilePage;
-
-export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
-  return {
-    paths: [], //indicates that no page needs be created at build time
-    fallback: 'blocking', //indicates the type of fallback
-  };
-};
+export default HomePage;

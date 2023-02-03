@@ -18,6 +18,8 @@ import { connectWallet } from '../../redux/Blockchain/blockchainAction';
 import ActiveLink from './links/active-link';
 import Button from '@/components/ui/button';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
+import { BsCheckLg } from 'react-icons/bs';
+import { MdAdd } from 'react-icons/md';
 
 type NFTGridProps = {
   image: StaticImageData;
@@ -29,7 +31,7 @@ type NFTGridProps = {
   nftInfo?: object;
 };
 
-export default function NFTGrid({
+export default function NFTGrids({
   //author,
   //authorImage,
   image,
@@ -41,6 +43,8 @@ export default function NFTGrid({
   nftInfo,
   setNftInfo,
   tipo,
+  setNftSelect,
+  isSelect,
 }) {
   //const { isConnect, account } = useSelector((state) => state.Usuario);
   const {
@@ -126,9 +130,12 @@ export default function NFTGrid({
       color: #000;
     }
   `;
+  let iconStyles = { color: '#fffff', fontSize: '30px', fontWeight: 'bold' };
+
+  let iconStylesc = { color: '#fffff', fontSize: '20px', fontWeight: 'bold' };
 
   return (
-    <div className="relative w-[300px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xxs:w-[160px] xs:w-[220px] sm:w-[260px] md:w-[220px] xl:w-[280px] 2xl:w-[240px] 3xl:w-[340px]">
+    <div className="relative w-[120px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xxs:w-[160px] xs:w-[220px] sm:w-[260px] md:w-[220px] xl:w-[280px] 2xl:w-[240px] 3xl:w-[340px]">
       <div className="p-4">
         <div className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
           {
@@ -142,116 +149,43 @@ export default function NFTGrid({
           <span className="overflow-hidden text-ellipsis">@PandoraX</span>
         </div>
       </div>
-      {type == 'comprap' ? (
-        <AnchorLink
-          href={`/productosbd/nft-detailsP${number}`}
-          className="relative block w-full pb-full"
-        >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
-        </AnchorLink>
-      ) : type == 'compraI' ? (
-        <AnchorLink
-          href={`/inversionbd/nft-detailsI${number}`}
-          className="relative block w-full pb-full"
-        >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
-        </AnchorLink>
-      ) : type == 'productos' ? (
-        <AnchorLink
-          href={`/info/${number}`}
-          className="relative block w-full pb-full"
-        >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
-        </AnchorLink>
-      ) : type == 'Frenchies Blues' ? (
-        <AnchorLink
-          href={`/infoFrenchies/${number}`}
-          className="relative block w-full pb-full"
-        >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
-        </AnchorLink>
-      ) : (
-        <AnchorLink
-          href={`/infoinv/${number}`}
-          className="relative block w-full pb-full"
-        >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
-        </AnchorLink>
-      )}
+
+      <div
+        onClick={() => {
+          setNftSelect(number);
+        }}
+        className="relative block w-full pb-full"
+      >
+        {!isSelect ? (
+          <div className="absolute top-[5px] right-[5px] z-10 h-[40px]  w-[40px] cursor-pointer   rounded-3xl bg-[#d2ad67] xs:h-[50px] xs:w-[50px] ">
+            <div className="flex h-full w-full items-center justify-center">
+              <span className='bg-["#3B5998"]'>
+                <MdAdd style={iconStyles} />
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div className="absolute top-[5px] right-[5px] z-10  h-[40px] w-[40px] cursor-pointer   rounded-3xl bg-[#b9bba5] xs:h-[50px] xs:w-[50px] ">
+            <div className="flex h-full w-full items-center justify-center">
+              <span className='bg-["#3B5998"]'>
+                <BsCheckLg style={iconStylesc} />
+              </span>
+            </div>
+          </div>
+        )}
+        <Image src={image} layout="fill" objectFit="cover" alt="" />
+      </div>
 
       <div className="p-5">
-        {type == 'comprap' ? (
-          <AnchorLink
-            href={`/productosbd/nft-detailsP${number}`}
-            className="text-sm font-medium text-black dark:text-white"
-          >
-            {name}
-          </AnchorLink>
-        ) : type == 'compraI' ? (
-          <AnchorLink
-            href={`/inversionbd/nft-detailsI${number}`}
-            className="text-sm font-medium text-black dark:text-white"
-          >
-            {name}
-          </AnchorLink>
-        ) : type == 'productos' ? (
-          <AnchorLink
-            href={`/info/${number}`}
-            className="text-sm font-medium text-black dark:text-white"
-          >
-            {name}
-          </AnchorLink>
-        ) : (
-          <AnchorLink
-            href={`/infoinv/${number}`}
-            className="text-sm font-medium text-black dark:text-white"
-          >
-            {name}
-          </AnchorLink>
-        )}
-
-        <div className="mt-1.5 flex">
-          {type == 'comprap' && (
-            <AnchorLink
-              href={`/productosbd/nft-detailsP${number}`}
-              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
-            >
-              Productos
-              <Verified className="ltr:ml-1 rtl:mr-1" />
-            </AnchorLink>
-          )}
-
-          {type == 'compraI' && (
-            <AnchorLink
-              href={`/inversionbd/nft-detailsI${number}`}
-              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
-            >
-              Inversiones
-              <Verified className="ltr:ml-1 rtl:mr-1" />
-            </AnchorLink>
-          )}
+        <div className="text-sm font-medium text-black dark:text-white">
+          {name}
         </div>
 
         <div className="mt-1.5 flex">
-          {type == 'productos' && (
-            <div
-              href={`/infoinv/${number}`}
-              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
-            >
-              Productos
-              <Verified className="ltr:ml-1 rtl:mr-1" />
-            </div>
-          )}
-
-          {type == 'staking' && (
-            <div
-              href={`/infoinv/${number}`}
-              className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
-            >
-              Inversiones
-              <Verified className="ltr:ml-1 rtl:mr-1" />
-            </div>
-          )}
+          <div className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400">
+            Frenchies
+            <Verified className="ltr:ml-1 rtl:mr-1" />
+          </div>
         </div>
 
         {alldata && (

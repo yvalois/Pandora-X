@@ -98,7 +98,7 @@ const StakingPage: NextPageWithLayout = () => {
   const [alertMsg, setAlertMsg] = useState('');
   const [id, setId] = useState(0);
   const [success, setSuccess] = useState(false);
-  const { inventoryi } = useSelector((state: any) => state.blockchain);
+  const { inventoryi, chainId } = useSelector((state: any) => state.blockchain);
   const nftdata = {
     Nombre: '',
     img: '',
@@ -138,42 +138,54 @@ const StakingPage: NextPageWithLayout = () => {
   const Usuario = useSelector((state: any) => state.Usuario);
 
   const verifyApprove = async () => {
-    const isap = await inversionMinter.getApproved(id); //MarketPlace
+    const isap = await inversionMinter.isApprovedForAll(
+      accountAddress,
+      staking.address
+    ); //MarketPlace
     //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
-    if (isap == staking.address) {
+    if (isap == true) {
       setApprovedToken(true);
     } else {
     }
   };
 
   const Approve = async () => {
-    setLoading(true);
-    const tx = await inversionMinter.approve(staking.address, id);
+    if (chainId == 137) {
+      setLoading(true);
+      const tx = await inversionMinter.setApprovalForAll(
+        staking.address,
+        'true'
+      );
 
-    await tx.wait();
-    await verifyApprove();
-    setLoading(false);
+      await tx.wait();
+      await verifyApprove();
+      setLoading(false);
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
   };
 
   const Stake = async () => {
-    setLoading(true);
-    //si no esta referido
+    if (chainId == 137) {
+      setLoading(true);
+      alert(id);
+      alert(tipoStak.value);
 
-    let tx = await staking.stake(id, tipoStak.value);
-    //  .send({ gas: '1000000', gasPrice: '2000000000', from: accountAddress });
+      let tx = await staking.stake(id, tipoStak.value);
 
-    await tx.wait();
-    dispatch(uInvertion(provider, address));
-    dispatch(uStaking());
+      await tx.wait();
+      dispatch(uInvertion(accountAddress));
+      dispatch(uStaking(accountAddress));
 
-    //redirigir a tabla
-    setLoading(false);
-    setApprovedToken(false);
-    setStatus(true);
-    setSuccess(true);
-    setAlertMsg('Nft stakeado correctamente');
+      //redirigir a tabla
+      setLoading(false);
+      setApprovedToken(false);
+      setStatus(true);
+      setSuccess(true);
+      setAlertMsg('Nft stakeado correctamente');
 
-    /*if (!Usuario.isReferido && Usuario.type == 'blockMaker') {
+      /*if (!Usuario.isReferido && Usuario.type == 'blockMaker') {
 
     }else{
 
@@ -182,6 +194,10 @@ const StakingPage: NextPageWithLayout = () => {
           usdtContract.address)
 
     }*/
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -216,18 +232,18 @@ const StakingPage: NextPageWithLayout = () => {
     });
   }, []);
 
-  /*useEffect(() => {
-    if (
-      Usuario.rol !== 'Admin' &&
-      Usuario.rol !== 'usuario' &&
-      Usuario.rol !== 'cliente'
-    ) {
+  useEffect(() => {
+    if (Usuario.rol !== 'Admin' && Usuario.rol !== 'usuario') {
       window.location.href = '/';
     }
-  });*/
+  });
 
   useEffect(() => {
     openModal('STAKING_VIEW');
+  }, []);
+
+  useEffect(() => {
+    verifyApprove();
   }, []);
 
   return (

@@ -240,7 +240,7 @@ export default function ModalRegister() {
       }
     }
     fetchData();
-  }, [referidor]);
+  }, []);
 
   useEffect(() => {
     if (status != 0) {

@@ -55,7 +55,7 @@ const CreateUser: NextPageWithLayout<
   const [exist, setExist] = useState(false);
 
   useEffect(() => {
-    if (Usuario.rol !== 'Admin') {
+    if (Usuario.rol !== 'Admin' && Usuario.rol !== 'cliente') {
       window.location.href = '/';
     }
   });
@@ -199,10 +199,8 @@ const CreateUser: NextPageWithLayout<
       let rango = value.Rango;
 
       await mint(address, categoria, rango);
-      //const a = await getType(address);
-      //const b = await getRange(address);
 
-      if (/*txResult.status*/ 1 == 1) {
+      if (1 == 1) {
         if (exist == true) {
           await update();
         } else {

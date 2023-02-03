@@ -35,6 +35,7 @@ import AnchorLink from '@/components/ui/links/anchor-link';
 import { uFrench, uStakingF } from '@/redux/Blockchain/blockchainAction';
 import { useModal } from '@/components/modal-views/context';
 import dotenv from 'dotenv';
+import NFTGrids from '@/components/ui/nft-card-s';
 
 const StakeFPage: NextPageWithLayout = () => {
   const nftInfo = {
@@ -80,8 +81,8 @@ const StakeFPage: NextPageWithLayout = () => {
     let i = 0;
     if (currentF.length != 0) {
       currentF.map((item) => {
-        if (nfts.id == item.id) {
-          if (nfts.select == false) {
+        if (nfts == item.id) {
+          if (item.select == false) {
             const nftInfo = {
               nombre: item.nombre,
               image: item.image,
@@ -466,99 +467,122 @@ const StakeFPage: NextPageWithLayout = () => {
         title="Create NFT"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="mb-[-180px]  h-[430px]   w-full sm:ltr:pr-6   sm:rtl:pl-6 md:mb-8 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]">
-        {inventorysf.length != 0 ? (
-          <NftSlider
-            nfts={currentF}
-            priceFormat={0.3}
-            nftInfo={nftInfo}
-            setNftSelect={setNftSelect}
-            type={'stakingss'}
-          />
-        ) : (
-          <div className="mb-8 h-[630px] w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]"></div>
+
+      <div className="mt-[-60px] flex w-full justify-center">
+        <div className="flex-column w-full  justify-between  md:w-[80%] lg:flex">
+          <div className="w-auto px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
+            <div className="flex-column w-full justify-center  md:flex ">
+              <div className="column flex w-full justify-center lg:col-span-2 ">
+                <div className="mb-8 mr-2 w-[80%]">
+                  <InputLabel title="Cantidad" />
+                  <Input type="text" placeholder="0" value={cant} disabled />
+                </div>
+
+                <div className="mb-8 ">
+                  <div className="mb-8"></div>
+
+                  {!loading && (
+                    <Button
+                      shape="rounded"
+                      disabled={stak}
+                      onClick={() => Withdraw()}
+                    >
+                      Desbloquear Nft
+                    </Button>
+                  )}
+
+                  {loading && <Button>Cargando...</Button>}
+                </div>
+              </div>
+
+              <div className="column flex w-full justify-center lg:col-span-2 ">
+                {!loading && (
+                  <div className=" ml-10 mr-2 w-[80%]">
+                    <InputLabel title="Cantidad" />
+                    <Input type="text" placeholder="0" value={cantC} disabled />
+                  </div>
+                )}
+
+                {loading && (
+                  <div className=" mr-10 w-[80%]">
+                    <InputLabel title="Cantidad" />
+                    <Input type="text" placeholder="0" value={cantC} disabled />
+                  </div>
+                )}
+
+                <div className="mb-8">
+                  <div className="mb-8"></div>
+
+                  {!loading && (
+                    <Button
+                      className="w-[86%]"
+                      shape="rounded"
+                      onClick={() => Claim()}
+                    >
+                      Reclamar recompensa
+                    </Button>
+                  )}
+
+                  {loading && <Button className="">Cargando...</Button>}
+                </div>
+              </div>
+
+              <div className="mt-2 flex justify-center md:ml-8 md:mt-8">
+                <Button onClick={selectAll}>
+                  {allSelect ? 'Deselecionar todos ' : 'Selecionar todos'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 flex w-full justify-center md:mt-0">
+        {status == 200 && (
+          <div
+            className="mb-8 mt-[-80px] flex w-full justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800 sm:w-[500px]"
+            role="alert"
+          >
+            <span className="text-center font-medium">{errorMSG}</span>
+          </div>
+        )}
+
+        {status == 100 && (
+          <div
+            className="mb-8 mt-[-40px] flex w-full justify-center self-center rounded-lg bg-red-200 p-4  text-sm text-red-700 dark:bg-red-200 dark:text-red-800 sm:w-[500px]"
+            role="alert"
+          >
+            <span className="text-center font-medium">{errorMSG}</span>
+          </div>
         )}
       </div>
-      <div className="mb-20 flex w-full justify-end md:mb-12">
-        <Button onClick={selectAll}>
-          {allSelect ? 'Deselecionar todos ' : 'Selecionar todos'}
-        </Button>
-      </div>
-      <div className="mx-auto w-auto px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
-        <div className="mb-8  w-full ">
-          <div className="column flex w-full justify-center lg:col-span-2 ">
-            <div className="mb-8 mr-10 w-[15%]">
-              <InputLabel title="Cantidad" />
-              <Input type="text" placeholder="0" value={cant} disabled />
-            </div>
 
-            <div className="mb-8 ">
-              <div className="mb-8"></div>
-
-              {!loading && (
-                <Button
-                  shape="rounded"
-                  disabled={stak}
-                  onClick={() => Withdraw()}
-                >
-                  Desbloquear Nft
-                </Button>
-              )}
-
-              {loading && <Button>Cargando...</Button>}
+      <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-5 xl:gap-6  3xl:grid-cols-4 4xl:grid-cols-5">
+        {currentF?.map((nft) => (
+          <NFTGrids
+            key={nft.nombre}
+            name={nft.nombre}
+            image={nft.image}
+            price={nft.precio}
+            number={nft.id}
+            alldata={false}
+            type={'staking'}
+            setNftSelect={setNftSelect}
+            isSelect={nft.select}
+          />
+        ))}
+        {currentF.length == 0 && (
+          <div className="flex h-full w-full  items-center justify-center ">
+            <div className=" h-full w-full">
+              <span>
+                <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                  No tienes Nft's Stakeados
+                </h1>
+              </span>
             </div>
           </div>
-          <div className="column flex w-full justify-center lg:col-span-2 ">
-            {!loading && (
-              <div className="mb-8 ml-10 mr-10 w-[15%]">
-                <InputLabel title="Cantidad" />
-                <Input type="text" placeholder="0" value={cantC} disabled />
-              </div>
-            )}
-
-            {loading && (
-              <div className="mb-8 mr-10 w-[15%]">
-                <InputLabel title="Cantidad" />
-                <Input type="text" placeholder="0" value={cantC} disabled />
-              </div>
-            )}
-
-            <div className="mb-8">
-              <div className="mb-8"></div>
-
-              {!loading && (
-                <Button
-                  className="w-[86%]"
-                  shape="rounded"
-                  onClick={() => Claim()}
-                >
-                  Reclamar recompensa
-                </Button>
-              )}
-
-              {loading && <Button className="">Cargando...</Button>}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
-
-      {status == 200 && (
-        <div
-          className="mb-4 ml-[580px]  flex w-[500px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">{errorMSG}</span>
-        </div>
-      )}
-
-      {status == 100 && (
-        <div
-          className="mb-4 ml-[580px]  flex w-[500px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <span className="font-medium">{errorMSG}</span>
-        </div>
-      )}
     </>
   );
 };

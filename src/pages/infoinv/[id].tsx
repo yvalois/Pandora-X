@@ -15,82 +15,6 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const productos = [
-  {
-    Nombre: 'Pandora X NFT - Podcast-Streaming',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Streaming%20%282%29.gif',
-    precio: 13,
-    tipo: 'PS',
-    tipoN: 1,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    Nombre: 'Pandora X NFT - Academia X',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Academia X%20%281%29.gif',
-    precio: 13,
-    tipo: 'PA',
-    tipoN: 2,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    Nombre: 'Pandora X NFT - NFT Studio',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20NFT%20Studio%20%282%29.gif',
-    precio: 13,
-    tipo: 'NS',
-    tipoN: 3,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    Nombre: 'Pandora X NFT - Investing Value',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Investing%20Value%20%282%29.gif',
-    precio: 13,
-    tipo: 'IV',
-    tipoN: 4,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    Nombre: 'Pandora X NFT - Comunidad Privada',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Privada.gif',
-    precio: 13,
-    tipo: 'CP',
-    tipoN: 5,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    Nombre: 'Pandora X NFT - Comunidad Gratuita',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Gratuita.gif',
-    precio: 13,
-    tipo: 'CG',
-    tipoN: 6,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    Nombre: 'Pandora X NFT - Coaching',
-
-    precio: 13,
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Coaching.gif',
-    tipo: 'NC',
-    tipoN: 7,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-  {
-    Nombre: 'Pandora X NFT - Alpha Report',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Alpha%20Report.gif',
-    precio: 13,
-    tipo: 'AP',
-    tipoN: 8,
-    descripcion:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis rerum veniam, qui est id maxime tenetur minima fugiat quos debitis sunt corporis cumque molestiae alias quasi voluptatem autem repellat obcaecati.',
-  },
-];
-
 const inversiones = [
   {
     Nombre: 'UBX Card 100',
@@ -181,6 +105,7 @@ const NFTDetailsPage: NextPageWithLayout<
 
     inventoryi.map((inv) => {
       if (inv.id == id) {
+        console.log(inv);
         setNft(inv);
       }
     });

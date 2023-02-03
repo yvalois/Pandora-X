@@ -306,19 +306,17 @@ export const uFrench = (address) => async (dispatch) => {
   );
 };*/
 
-export const uInvertion = (provider, address) => async (dispatch) => {
-  setProvider(provider);
+export const uInvertion = (address) => async (dispatch) => {
+  const rpc_MAC =
+    'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
+  const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const inversionMinterContract = new ethers.Contract(
     INVERSION_MINTER_ADDRESS,
     inversionMinterAbi,
-    provider
+    provider_MAC
   );
-  const tokenContract = new ethers.Contract(
-    TokenPrueba_ADDRESS,
-    abiErc20,
-    provider
-  );
+
   const nftiBalance = await inversionMinterContract.getMyInventory(address);
   const inventoryi = [];
   nftiBalance.map(async (item) => {
@@ -340,10 +338,7 @@ export const uInvertion = (provider, address) => async (dispatch) => {
       var type = '100K';
     }
 
-    const price = await inversionMinterContract.buyPrice(
-      tipo,
-      tokenContract.address
-    );
+    const price = await inversionMinterContract.buyPrice(tipo);
     //alert(price)
 
     const precio = ethers.utils.formatUnits(price, 6);
@@ -369,7 +364,7 @@ export const uInvertion = (provider, address) => async (dispatch) => {
 
 export const uStakingF = (_address) => async (dispatch) => {
   const rpc_ETH =
-    'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
+    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
 
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
@@ -458,28 +453,20 @@ export const uStakingF = (_address) => async (dispatch) => {
   console.log(inventorysfc.length);
 };
 
-export const uStaking = () => async (dispatch) => {
-  const web3Modal = new Web3Modal({
-    cacheProvider: true,
-    // providerOptions // required
-  });
-
-  const instance = await web3Modal.connect(providerOptions);
-  const provider = new ethers.providers.Web3Provider(instance);
-
-  setProvider(provider);
-  const signer = provider.getSigner();
-  const accounts = await provider.listAccounts();
+export const uStaking = (address) => async (dispatch) => {
+  const rpc_MAC =
+    'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
+  const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const stakingContract = new ethers.Contract(
     STAKING_ADDRESS,
     stakingAbi,
-    signer
+    provider_MAC
   );
   const inversionMinterContract = new ethers.Contract(
     INVERSION_MINTER_ADDRESS,
     inversionMinterAbi,
-    signer
+    provider_MAC
   );
   let aux = true;
   const nftStaking = await stakingContract.getNfts();
@@ -492,10 +479,10 @@ export const uStaking = () => async (dispatch) => {
         return t;
       }
 
-      const is = await stakingContract.NftIsStaking(accounts[0], item);
+      const is = await stakingContract.NftIsStaking(address, item);
 
       const pr = await stakingContract.getPosition(item);
-      const pre = await inversionMinterContract.getPricePlusFee(item);
+      const pre = await inversionMinterContract.buyPrice(item);
       const ap = await stakingContract.getApr();
 
       const cpa = await stakingContract.rewardPerToken(item);
@@ -537,7 +524,7 @@ export const uStaking = () => async (dispatch) => {
   );
 };
 
-const subscribeProvider = (connection) => async (dispatch) => {
+/*const subscribeProvider = (connection) => async (dispatch) => {
   connection.on('close', () => {
     dispatch(disconectWallet());
   });
@@ -652,6 +639,7 @@ const subscribeProvider = (connection) => async (dispatch) => {
       });
 
       nftiBalance.map(async (item) => {
+
         const tipo = await inversionMinterContract.getTipo(item);
         var type = '';
         if (tipo == 1) {
@@ -670,16 +658,18 @@ const subscribeProvider = (connection) => async (dispatch) => {
           var type = '100K';
         }
         const price = await inversionMinterContract.buyPrice(
-          tipo,
-          tokenContract.address
+          tipo
         );
         //alert(price)
+        alert("a")
+
         const precio = ethers.utils.formatUnits(price, 6);
+        alert(precio)
         if (inversionesAR[tipo - 1].tipo == type) {
           const inv = {
             Nombre: inversionesAR[tipo - 1].nombre,
             img: inversionesAR[tipo - 1].img,
-            precio: parseInt(precio),
+            precio: parseFloat(precio).toFixed(1),
             tipo: inversionesAR[tipo - 1].tipo,
             descripcion: inversionesAR[tipo - 1].descripcion,
             id: item,
@@ -722,7 +712,7 @@ const subscribeProvider = (connection) => async (dispatch) => {
       dispatch(disconectWallet());
     }
   });
-};
+};*/
 
 const getProductos = async () => {
   fetch(`${process.env.BACKEND_API}/getProducto`, {
@@ -834,81 +824,79 @@ const getInversiones = async () => {
     .catch((error) => console.error('Error:', error));
 };
 
-const conectar =
-  (accountAddress /*, productoMinterContract, stakingContract*/) =>
-  async (dispatch) => {
-    fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response !== null) {
-          if (response.Categoria == 'Agente X') {
-            /*infoPagos(
+const conectar = (accountAddress, stakingContract) => async (dispatch) => {
+  fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      if (response !== null) {
+        if (response.Categoria == 'Agente X') {
+          /*infoPagos(
               productoMinterContract,
               response.Rango,
               response.Categoria
             );*/
-            dispatch(
-              connectSuccessToMongo({
-                rol: response.Rol,
-                nombre: response.Nombre,
-                isreferido: response.IsReferido,
-                referidor: response.Referidor,
-                range: response.Range,
-                type: response.Type,
-                rango: response.Rango,
-                paid: Pagos,
-                perfil: response.Perfil,
-                banner: response.Banner,
-                descripcion: response.Descripcion,
-                ban: response.Ban,
-              })
-            );
-          } else if (response.Categoria == 'BlockMaker') {
-            //infoPagosC(stakingContract, response.Rango, response.Categoria);
-            dispatch(
-              connectSuccessToMongo({
-                rol: response.Rol,
-                nombre: response.Nombre,
-                isreferido: response.IsReferido,
-                referidor: response.Referidor,
-                range: response.Range,
-                type: response.Type,
-                rango: response.Rango,
-                paid: Pagos,
-                perfil: response.Perfil,
-                banner: response.Banner,
-                descripcion: response.Descripcion,
-                ban: response.Ban,
-              })
-            );
-          } else {
-            dispatch(
-              connectSuccessToMongo({
-                rol: response.Rol,
-                nombre: response.Nombre,
-                isreferido: response.IsReferido,
-                referidor: response.Referidor,
-                range: response.Range,
-                type: response.Type,
-                rango: response.Rango,
-                paid: Pagos,
-                perfil: response.Perfil,
-                banner: response.Banner,
-                descripcion: response.Descripcion,
-                ban: response.Ban,
-              })
-            );
-          }
+          dispatch(
+            connectSuccessToMongo({
+              rol: response.Rol,
+              nombre: response.Nombre,
+              isreferido: response.IsReferido,
+              referidor: response.Referidor,
+              range: response.Range,
+              type: response.Type,
+              rango: response.Rango,
+              paid: Pagos,
+              perfil: response.Perfil,
+              banner: response.Banner,
+              descripcion: response.Descripcion,
+              ban: response.Ban,
+            })
+          );
+        } else if (response.Categoria == 'BlockMaker') {
+          infoPagosC(stakingContract, response.Rango, response.Categoria);
+          dispatch(
+            connectSuccessToMongo({
+              rol: response.Rol,
+              nombre: response.Nombre,
+              isreferido: response.IsReferido,
+              referidor: response.Referidor,
+              range: response.Range,
+              type: response.Type,
+              rango: response.Rango,
+              paid: Pagos,
+              perfil: response.Perfil,
+              banner: response.Banner,
+              descripcion: response.Descripcion,
+              ban: response.Ban,
+            })
+          );
         } else {
-          dispatch(register());
+          dispatch(
+            connectSuccessToMongo({
+              rol: response.Rol,
+              nombre: response.Nombre,
+              isreferido: response.IsReferido,
+              referidor: response.Referidor,
+              range: response.Range,
+              type: response.Type,
+              rango: response.Rango,
+              paid: Pagos,
+              perfil: response.Perfil,
+              banner: response.Banner,
+              descripcion: response.Descripcion,
+              ban: response.Ban,
+            })
+          );
         }
-      });
-  };
+      } else {
+        dispatch(register());
+      }
+    });
+};
 export const update = (accountAddress) => async (dispatch) => {
   fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
     method: 'GET',
@@ -938,10 +926,11 @@ export const connectWallet =
     dispatch(loading());
     try {
       const chainID = provider._network.chainId;
+      setProvider(signer);
+      //const rpc_ETH = "https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG" ;
 
-      //const rpc_ETH = "https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ" ;
       const rpc_ETH =
-        'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
+        'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
 
       const rpc_MAC =
         'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
@@ -1063,8 +1052,7 @@ export const connectWallet =
           const token = responses?.result;
 
           nftStakingF.map(async (item) => {
-            const is = true;
-            //const is = await stakingfrenEContract.nftIsStaking(address, item);
+            const is = await stakingfrenEContract.nftIsStaking(address, item);
 
             if (is == true) {
               fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
@@ -1218,10 +1206,7 @@ export const connectWallet =
             var type = '100K';
           }
 
-          const price = await inversionMinterContract.buyPrice(
-            tipo,
-            tokenContract.address
-          );
+          const price = await inversionMinterContract.buyPrice(tipo);
 
           const precio = ethers.utils.formatUnits(price, 6);
           if (Inversiones[tipo - 1]?.tipo == type) {
@@ -1381,9 +1366,7 @@ export const connectWallet =
           })
         );
 
-        dispatch(
-          conectar(address /*, productoMinterContract, stakingContract*/)
-        );
+        dispatch(conectar(address, stakingContract));
 
         /*instance.on('close',() => {
       web3Modal && web3Modal.clearCachedProvider();
@@ -1426,7 +1409,11 @@ export const connectWallet =
           try {
             await provider.provider.request({
               method: 'wallet_switchEthereumChain',
-              params: [{ chainId: `0x${Number(5).toString(16)}` }],
+              params: [
+                {
+                  chainId: `0x${Number(5).toString(16)}`,
+                },
+              ],
             });
           } catch (switchError) {
             if (switchError.code === 4902) {
@@ -1459,7 +1446,11 @@ export const connectWallet =
           try {
             await provider.provider.request({
               method: 'wallet_switchEthereumChain',
-              params: [{ chainId: `0x${Number(5).toString(16)}` }],
+              params: [
+                {
+                  chainId: `0x${Number(5).toString(16)}`,
+                },
+              ],
             });
           } catch (switchError) {
             if (switchError.code === 4902) {

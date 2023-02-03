@@ -12,7 +12,7 @@ export function setProvider(_provider) {
 export const mint = async (address, type, range) => {
   let tx;
 
-  //const signer = provider.getSigner();
+  console.log;
   const NFTROLPROVIDER = NFTROL.connect(provider);
   tx = await NFTROLPROVIDER.mint(address, type, range);
   await tx.wait();

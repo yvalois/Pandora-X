@@ -73,10 +73,7 @@ const getInversiones = async () => {
     .then((res) => res.json())
     .then((response) => {
       response.map(async (item) => {
-        const precio = await inversionesMinter.buyPrice(
-          item.tipoN,
-          '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
-        );
+        const precio = await inversionesMinter.buyPrice(item.tipoN);
         const price = parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(
           2
         );

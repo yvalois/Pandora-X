@@ -157,8 +157,8 @@ export default function TransactionUserTable() {
 
   const data = paid;
   const columns = COLUMNS;
-  const [stakes, setStakes] = useState(infoUser);
-  const Usuario = useSelector((state) => state.Usuario);
+  //  const [stakes, setStakes] = useState(infoUser);
+  //  const Usuario = useSelector((state) => state.Usuario);
   const {
     getTableProps,
     getTableBodyProps,

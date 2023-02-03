@@ -34,7 +34,7 @@ const initialState = {
   isUser: null,
   paid: [],
   paids: [],
-  balanceI: [],
+  balanceI: [0],
   chainId: 1,
 };
 

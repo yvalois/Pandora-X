@@ -1,20 +1,9 @@
-
 [
 	{
 		"inputs": [
 			{
 				"internalType": "contract IERC20",
-				"name": "_tokenT",
-				"type": "address"
-			},
-			{
-				"internalType": "contract IERC20",
-				"name": "_tokenC",
-				"type": "address"
-			},
-			{
-				"internalType": "contract IERC20",
-				"name": "_tokenB",
+				"name": "_token",
 				"type": "address"
 			}
 		],
@@ -264,11 +253,6 @@
 				"internalType": "uint256",
 				"name": "_tipo",
 				"type": "uint256"
-			},
-			{
-				"internalType": "contract IERC20",
-				"name": "_token",
-				"type": "address"
 			}
 		],
 		"name": "buyPrice",
@@ -298,49 +282,6 @@
 		"name": "buyToken",
 		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			},
-			{
-				"internalType": "contract IERC20",
-				"name": "_token",
-				"type": "address"
-			}
-		],
-		"name": "buyTokenFee",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "decimals",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -949,7 +890,7 @@
 	{
 		"inputs": [
 			{
-				"internalType": "contract IERC20",
+				"internalType": "address",
 				"name": "_token",
 				"type": "address"
 			}
@@ -976,13 +917,8 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_tokenContract",
+				"name": "_token",
 				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
 			}
 		],
 		"name": "withdrawToken",

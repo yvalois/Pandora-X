@@ -633,6 +633,12 @@ const InversionesPage: NextPageWithLayout<
     fetchItems();
   },[inversionI]);*/
 
+  useEffect(() => {
+    if (Usuario.rol !== 'Admin' && Usuario.rol !== 'usuario') {
+      window.location.href = '/';
+    }
+  });
+
   return (
     <>
       <NextSeo
@@ -642,7 +648,7 @@ const InversionesPage: NextPageWithLayout<
       <div className="grid sm:pt-5  4xl:grid-cols-4">
         <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block"></div>
         <div className="2xl:ltr:pl-10 2xl:rtl:pr-10 4xl:ltr:pl-12 4xl:rtl:pr-12">
-          <div className="relative z-10 mb-6 flex items-center justify-between">
+          <div className="relative z-10 mb-[-80px] flex items-center justify-between">
             {/*<span className="text-xs font-medium text-gray-900 dark:text-white sm:text-sm">
               5,686,066 items
   </span>*/}

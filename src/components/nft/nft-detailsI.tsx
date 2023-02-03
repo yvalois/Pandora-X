@@ -57,6 +57,7 @@ function NftFooter({
   const [isBuy, setIsBuy] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [alertMsg2, setAlertMsg2] = useState('');
+  const [precio, setPrecio] = useState(0);
 
   const Usuario = useSelector((state) => state.Usuario);
   const [auxPrice, setAuxPrice] = useState(price);
@@ -153,6 +154,7 @@ function NftFooter({
       setStatus2(false);
     }, 5000);
   }, [status2]);
+
   return (
     <div
       className={cn(

@@ -350,7 +350,7 @@ export default function Sidebar({ className }: SidebarProps) {
               (inventoryf.length == 0 && item.name == 'Stakear') ||
               (inventorysf.length == 0 && item.name == 'Staking') ||
               (UsuarioR !== 'Admin' &&
-                //UsuarioR !== 'usuario' &&
+                UsuarioR !== 'usuario' &&
                 item.name == 'Inversiones') ||
               (UsuarioR !== 'Admin' && item.name == 'Panel de retiro') ? (
                 <div key={index}></div>

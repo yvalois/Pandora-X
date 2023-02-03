@@ -34,6 +34,7 @@ import { WalletContext } from '@/lib/hooks/use-connect';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { uFrench, uStakingF } from '@/redux/Blockchain/blockchainAction';
 import { useModal } from '@/components/modal-views/context';
+import NFTGrids from '@/components/ui/nft-card-s';
 
 const StakePage: NextPageWithLayout = () => {
   const nftInfo = {
@@ -88,8 +89,8 @@ const StakePage: NextPageWithLayout = () => {
     let i = 0;
     if (currentF.length != 0) {
       currentF.map((item) => {
-        if (nfts.id == item.id) {
-          if (nfts.select == false) {
+        if (nfts == item.id) {
+          if (item.select == false) {
             const nftInfo = {
               nombre: item.nombre,
               image: item.image,
@@ -282,6 +283,7 @@ const StakePage: NextPageWithLayout = () => {
         //
       }
     } else {
+      setCant(0);
       openModal('NETWORK_VIEW');
       setLoading(false);
     }
@@ -319,6 +321,7 @@ const StakePage: NextPageWithLayout = () => {
       }
     } else {
       openModal('NETWORK_VIEW');
+      setLoading(false);
     }
   };
 
@@ -428,7 +431,6 @@ const StakePage: NextPageWithLayout = () => {
         auxNFT.push(nftInfo);
         if (i == inventoryf.length - 1) {
           setCurrentF(auxNFT);
-          console.log(currentF);
         }
         i++;
       });
@@ -441,56 +443,34 @@ const StakePage: NextPageWithLayout = () => {
         title="Create NFT"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="mb-[-180px]  h-[430px]   w-full sm:ltr:pr-6   sm:rtl:pl-6 md:mb-8 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]">
-        {inventoryf.length != 0 ? (
-          <NftSlider
-            nfts={currentF}
-            priceFormat={0.3}
-            nftInfo={nftInfo}
-            setNftSelect={setNftSelect}
-            type={'eingss'}
-          />
-        ) : (
-          <div className="mb-8 h-[630px] w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]"></div>
-        )}
-      </div>{' '}
-      <div className="mb-20 flex w-full justify-end md:mb-12">
-        <Button onClick={selectAll}>
-          {allSelect ? 'Deselecionar todos ' : 'Selecionar todos'}
-        </Button>
-      </div>
-      <div className="flex w-full justify-center">
-        <h1 className="text-lg font-semibold text-white">
-          {totalStaking} Nft's Stakeados
-        </h1>
-      </div>
-      <div className="flex w-full justify-center">
-        <h1 className="text-lg font-semibold text-white">TVL: {tvl} USDT</h1>
-      </div>
-      <div className="mx-auto w-full px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
-        <div className="mb-8  w-full ">
-          <div className="column flex w-full justify-center lg:col-span-2 ">
-            {/* Name */}
-            {/*<div className="mb-8">
-                            <InputLabel title="Name" important />
-                            <Input
-                                type="text"
-                                placeholder="Item name"
-                                value={nftSelect.nombre}
-                                disabled
-                            />
-                </div>*/}
 
-            <div className="mb-8 mr-10 w-[40%]">
+      <div className="flex w-full justify-center">
+        <div className="flex-column w-full  justify-between  md:w-[80%] lg:flex">
+          <div>
+            <div className="flex justify-center">
+              <h1 className="text-lg font-semibold text-white">
+                {totalStaking} Nft's Stakeados
+              </h1>
+            </div>
+            <div className="flex  justify-center">
+              <h1 className="text-lg font-semibold text-white">
+                TVL: {tvl} USDT
+              </h1>
+            </div>
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Button onClick={selectAll}>
+              {allSelect ? 'Deselecionar todos ' : 'Selecionar todos'}
+            </Button>
+          </div>
+
+          <div className=" row mt-4 flex w-full justify-center md:mt-0 lg:w-[50%]">
+            <div className="mb-8 mr-2 w-[70%]">
               <InputLabel title="Cantidad" />
               <Input type="text" placeholder="0" value={cant} disabled />
             </div>
 
-            <div className="mb-8">
-              <div className="mb-8">
-                <div className="relative"></div>
-              </div>
-
+            <div className="mt-[32px]">
               {ap && !loading && (
                 <Button shape="rounded" disabled={stak} onClick={() => Stake()}>
                   Stake
@@ -505,49 +485,56 @@ const StakePage: NextPageWithLayout = () => {
               )}
             </div>
           </div>
-
-          {/*<div className="hidden flex-col lg:flex">
-                        {/* NFT preview }
-                        <InputLabel title="Preview" />
-                        <div className="relative flex flex-grow flex-col overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
-                            <div className="relative block w-full pb-full">
-                                <Image
-                                    src={nftSelect.img}
-                                    layout="fill"
-                                    objectFit="cover"
-                                    alt="Pulses of Imagination #214"
-                                />
-                            </div>
-                            <div className="p-5">
-                                <div className="text-sm font-medium text-black dark:text-white">
-                                    {nftSelect.nombre}
-                                </div>
-                                <div className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    {nftSelect.precio} USDT
-                                </div>
-                            </div>
-                        </div>
-                    </div>*/}
         </div>
       </div>
-      {status == 200 && (
-        <div
-          className="mb-4 ml-[580px]  flex w-[500px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">
-            Transaccion completada correctamen
-          </span>
-        </div>
-      )}
-      {status == 100 && (
-        <div
-          className="mb-4 ml-[580px]  flex w-[500px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <span className="font-medium">{errorMSG}</span>
-        </div>
-      )}
+
+      <div className="flex w-full justify-center">
+        {status == 200 && (
+          <div
+            className="mb-8 flex justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800 sm:w-[500px]"
+            role="alert"
+          >
+            <span className="text-center font-medium">
+              Transaccion completada correctamente
+            </span>
+          </div>
+        )}
+        {status == 100 && (
+          <div
+            className="mb-8 flex justify-center self-center rounded-lg bg-red-200 p-4  text-sm text-red-700 dark:bg-red-200 dark:text-red-800 sm:w-[500px]"
+            role="alert"
+          >
+            <span className="text-center font-medium ">{errorMSG}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-5 xl:gap-6  3xl:grid-cols-4 4xl:grid-cols-5">
+        {currentF?.map((nft) => (
+          <NFTGrids
+            key={nft.nombre}
+            name={nft.nombre}
+            image={nft.image}
+            price={nft.precio}
+            number={nft.id}
+            alldata={false}
+            type={'staking'}
+            setNftSelect={setNftSelect}
+            isSelect={nft.select}
+          />
+        ))}
+        {currentF.length == 0 && (
+          <div className="flex h-full w-full  items-center justify-center ">
+            <div className=" h-full w-full">
+              <span>
+                <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                  No tienes Frenchies
+                </h1>
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 };
