@@ -11,6 +11,7 @@ import Button from '@/components/ui/button';
 import { getType, getRange, exist } from '@/NFTROL';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 
 export default function ModalRegister() {
   const tiempoTranscurrido = Date.now();
@@ -50,8 +51,10 @@ export default function ModalRegister() {
   const [tipo, setTipo] = useState('');
   const [rango, setRango] = useState('');
   const [value1, setValue1] = useState('');
-
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+  const { address } = useAccount();
   const { closeModal } = useModal();
+  const provider = useProvider();
 
   const dispatch = useDispatch<AppDispatch>();
   const { disconnectWallet } = useContext(WalletContext);
@@ -92,7 +95,7 @@ export default function ModalRegister() {
         .then(() => {
           //ver posibilidad de que primero se mande un alert que diga usuario creado y 5 segundos despues en un timeout se llame esta funcion
           setTimeout(() => {
-            dispatch(connectWallet());
+            dispatch(connectWallet(address, provider, signer));
             setStatus(0);
             window.localStorage.removeItem('Wallet');
           }, 3000);
@@ -225,16 +228,21 @@ export default function ModalRegister() {
 
   useEffect(() => {
     async function fetchData() {
-      const a = window.localStorage.getItem('Wallet');
-      let _exist = await exist(a);
+      const a = window.localStorage.getItem('Wallet_address');
+      //let _exist = await exist(a);
+
       //alert(_exist)
-      if (_exist == true) {
-        let type = await getType(a);
-        let range = await getRange(a);
+      if (1 == 1) {
+        //let type = await getType(a);
+        //let range = await getRange(a);
         setValue((prevState) => ({ ...prevState, Referidor: a }));
-        setValue((prevState) => ({ ...prevState, Range: range }));
-        setValue((prevState) => ({ ...prevState, Type: type }));
-        setValue((prevState) => ({ ...prevState, IsReferido: _exist }));
+        //setValue((prevState) => ({ ...prevState, Range: range }));
+        //setValue((prevState) => ({ ...prevState, Type: type }));
+        //setValue((prevState) => ({ ...prevState, IsReferido: _exist }));
+
+        setValue((prevState) => ({ ...prevState, Range: 'range' }));
+        setValue((prevState) => ({ ...prevState, Type: 'type ' }));
+        setValue((prevState) => ({ ...prevState, IsReferido: true }));
       } else {
         window.location.href = '/';
       }

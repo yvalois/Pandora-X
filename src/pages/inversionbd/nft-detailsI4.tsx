@@ -90,7 +90,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
   };
 
   const approve = async () => {
-    //setLoading(true);
+    setLoading(true);
 
     if (chainId == 137) {
       try {
@@ -116,7 +116,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
   };
 
   const buyNft = async () => {
-    //setLoading(true);
+    setLoading(true);
 
     if (chainId == 137) {
       const a = await tokenContract.balanceOf(accountAddress);

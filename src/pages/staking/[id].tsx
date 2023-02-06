@@ -52,32 +52,55 @@ const stakingOption = [
   },
   {
     id: 2,
-    name: '2 Año (APR 36%)',
+    name: '2 Años (APR 36%)',
     value: 2,
     //icon: <Flow />,
   },
   {
     id: 3,
-    name: '3 Año (APR 42%)',
+    name: '3 Años (APR 42%)',
     value: 3,
     //icon: <Flow />,
   },
   {
     id: 4,
-    name: '4 año (APR 48%)',
+    name: '4 años (APR 48%)',
     value: 4,
     //icon: <Flow />,
   },
   {
     id: 5,
-    name: '5 Año (APR 54%)',
+    name: '5 Años (APR 54%)',
     value: 5,
     //icon: <Flow />,
   },
 ];
 
 const StakingPage: NextPageWithLayout = () => {
-  //la idea es mostrar los nfts de staking del usuario
+  const initDate = [
+    1669870800, 1672549200, 1675227600, 1677646800, 1680325200, 1682917200,
+    1685595600, 1688187600, 1690866000, 1693544400, 1696136400, 1698814800,
+    1701406800, 1704085200, 1706763600, 1709269200, 1711947600, 1714539600,
+    1717218000, 1719810000, 1722488400, 1725166800, 1727758800, 1730437200,
+    1733029200, 1735707600, 1738386000, 1740805200, 1743483600, 1746075600,
+    1748754000, 1751346000, 1754024400, 1756702800, 1759294800, 1761973200,
+    1764565200, 1767243600, 1769922000, 1772341200, 1775019600, 1777611600,
+    1780290000, 1782882000, 1785560400, 1788238800, 1790830800, 1793509200,
+    1796101200, 1798779600, 1801458000, 1803877200, 1806555600, 1809147600,
+    1811826000, 1814418000, 1817096400, 1819774800, 1822366800, 1825045200,
+    1827637200,
+  ];
+
+  const findInd = () => {
+    let now = new Date();
+    var resultInSeconds = now.getTime() / 1000;
+
+    for (let i = 0; i < initDate.length; i++) {
+      if (resultInSeconds > initDate[i] && resultInSeconds < initDate[i + 1]) {
+        return i + 1;
+      }
+    }
+  };
 
   const nftInfo = {
     nombre: '',
@@ -150,7 +173,7 @@ const StakingPage: NextPageWithLayout = () => {
   };
 
   const Approve = async () => {
-    if (chainId == 137) {
+    if (chainId == 5) {
       setLoading(true);
       const tx = await inversionMinter.setApprovalForAll(
         staking.address,
@@ -167,12 +190,11 @@ const StakingPage: NextPageWithLayout = () => {
   };
 
   const Stake = async () => {
-    if (chainId == 137) {
+    if (chainId == 5) {
       setLoading(true);
-      alert(id);
-      alert(tipoStak.value);
-
-      let tx = await staking.stake(id, tipoStak.value);
+      const indice = findInd();
+      const Contra = process.env.NEXT_PUBLIC_BACKEND_CONS;
+      let tx = await staking.stake(id, tipoStak.value, indice, Contra);
 
       await tx.wait();
       dispatch(uInvertion(accountAddress));

@@ -14,7 +14,7 @@ import Avatar from '@/components/ui/avatar';
 import TopupButton from '@/components/ui/topup-button';
 import NftSlider from '@/components/ui/nftSlider';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMintedNftProducts } from '../redux/Minted/MintedAction';
+import { getMintedNftProducts } from '../../redux/Minted/MintedAction';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
@@ -34,7 +34,7 @@ import BlockCreator from '@/assets/images/profile/BLOCKCREATOR.jpg';
 import BlockElite from '@/assets/images/profile/BLOCKELITE.jpg';
 import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
-import { transations } from '../redux/Transactions/TransactionsActions';
+import { transations } from '../../redux/Transactions/TransactionsActions';
 import AvatarP from '@/components/ui/AvatarP';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
@@ -89,7 +89,7 @@ const prod = [
   },
 ];
 
-const HomePage: NextPageWithLayout<
+const AuthorProfilePage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
   const nftInfo = {
@@ -496,7 +496,7 @@ const HomePage: NextPageWithLayout<
   }, []); */
 
   useEffect(() => {
-    return window.localStorage.setItem('Wallet', router.query.id);
+    return window.localStorage.setItem('Wallet_address', router.query.id);
   }, []);
 
   return (
@@ -620,8 +620,15 @@ const HomePage: NextPageWithLayout<
   );
 };
 
-HomePage.getLayout = function getLayout(page) {
+AuthorProfilePage.getLayout = function getLayout(page) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
 
-export default HomePage;
+export default AuthorProfilePage;
+
+export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
+  return {
+    paths: [], //indicates that no page needs be created at build time
+    fallback: 'blocking', //indicates the type of fallback
+  };
+};

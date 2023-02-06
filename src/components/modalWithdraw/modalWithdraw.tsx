@@ -28,9 +28,9 @@ export default function ModalWithdraw() {
 
   const getInfo = async () => {
     const _id = window.localStorage.getItem('WithdrawID');
-    const _val = await inversionMinter.getPricePlusFee(_id);
-    const _valor = parseFloat(ethers.utils.formatUnits(_val, 6)).toFixed(2);
-    const lastValor = parseFloat(_valor * (10 / 1000)).toFixed(3);
+    const _val = await inversionMinter.getPrice(_id);
+    const _valor = parseInt(ethers.utils.formatUnits(_val, 6));
+    const lastValor = parseInt(_valor * (10 / 100));
     setValor(lastValor);
   };
 
@@ -72,7 +72,7 @@ export default function ModalWithdraw() {
     const tx = await staking.withdrawP(id, tokenContract.address);
     await tx.wait();
 
-    dispatch(uStaking());
+    dispatch(uStaking(accountAddress));
     dispatch(uInvertion(provider, address));
     setLoading(false);
     closeModal('Withdraw_VIEW');
@@ -90,6 +90,7 @@ export default function ModalWithdraw() {
 
   useEffect(() => {
     getInfo();
+    verifyApprove();
   }, []);
   return (
     <>

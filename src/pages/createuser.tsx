@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import DashboardLayout from '@/layouts/_dashboard';
 import { useState, useEffect } from 'react';
-import { getRange, mint, getType } from '@/NFTROL';
+//import { getRange, mint, getType } from '@/NFTROL';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/components/ui/button';
@@ -49,6 +49,8 @@ const CreateUser: NextPageWithLayout<
 
   const [value, setValue] = useState(NewUser);
   const Usuario = useSelector((state: any) => state.Usuario);
+  const { NftAccess } = useSelector((state: any) => state.blockchain);
+
   const [status, setStatus] = useState(0);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(Err);
@@ -198,8 +200,8 @@ const CreateUser: NextPageWithLayout<
       let categoria = value.Categoria;
       let rango = value.Rango;
 
-      await mint(address, categoria, rango);
-
+      const tx = await NftAccess.mint(address, categoria, rango);
+      await tx.wait();
       if (1 == 1) {
         if (exist == true) {
           await update();

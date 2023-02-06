@@ -17,6 +17,7 @@ const initialState = {
   //  stakinfETH: null,
   //  stakingPOL: null,
   staking: null,
+  NftAccess: null,
   accountAddress: '',
   //usdtBalance: null,
   //busdBalance: null,
@@ -61,6 +62,8 @@ const blockchainReducer = (state = initialState, action) => {
         frenchiesMinter: action.payload.frenchiesMinter,
         stakingfrenPContract: action.payload.stakingfrenPContract,
         stakingfrenEContract: action.payload.stakingfrenEContract,
+        NftAccess: action.payload.AccessContract,
+
         //stakinfETH: action.payload.stakinfETH,
         //stakingPOL: action.payload.stakingPOL,
         staking: action.payload.staking,

@@ -7,11 +7,6 @@
                 "type": "address"
             },
             {
-                "internalType": "uint256",
-                "name": "_Apr",
-                "type": "uint256"
-            },
-            {
                 "internalType": "contract IERC20",
                 "name": "_token",
                 "type": "address"
@@ -40,8 +35,14 @@
         "type": "event"
     },
     {
-        "inputs": [],
-        "name": "Apr",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "Aprs",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -122,30 +123,6 @@
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "UnblockTime",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "contract IERC20",
                 "name": "_tokenAddress",
                 "type": "address"
@@ -210,53 +187,17 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "_date",
-                "type": "uint256"
+                "internalType": "string",
+                "name": "a",
+                "type": "string"
             },
             {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
+                "internalType": "string",
+                "name": "thecontra",
+                "type": "string"
             }
         ],
-        "name": "changeDate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_date",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
-        "name": "changeFinishDate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_date",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
-        "name": "changeinitDate",
+        "name": "change",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -340,64 +281,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "getApr",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
-        "name": "getBalanceStaking",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getBalanceTotal",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getCountOfStaking",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -424,63 +307,12 @@
                 "type": "uint256"
             }
         ],
-        "name": "getFinishDate",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
-        "name": "getId",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
         "name": "getIndice",
         "outputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getNfts",
-        "outputs": [
-            {
-                "internalType": "uint256[]",
-                "name": "",
-                "type": "uint256[]"
             }
         ],
         "stateMutability": "view",
@@ -522,25 +354,6 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getPosition",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
                 "name": "position",
                 "type": "uint256"
             }
@@ -551,25 +364,6 @@
                 "internalType": "address",
                 "name": "",
                 "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "position",
-                "type": "uint256"
-            }
-        ],
-        "name": "getinitDate",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -888,37 +682,16 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_Apr",
+                "name": "position",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_apr",
                 "type": "uint256"
             }
         ],
         "name": "setApr",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_date",
-                "type": "uint256"
-            }
-        ],
-        "name": "setDate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_date",
-                "type": "uint256"
-            }
-        ],
-        "name": "setFinishDate",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -940,19 +713,6 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_date",
-                "type": "uint256"
-            }
-        ],
-        "name": "setinitDate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
                 "name": "tokenId",
                 "type": "uint256"
             },
@@ -960,11 +720,45 @@
                 "internalType": "uint256",
                 "name": "_years",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "indice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "tc",
+                "type": "string"
             }
         ],
         "name": "stake",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "tokenApr",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {

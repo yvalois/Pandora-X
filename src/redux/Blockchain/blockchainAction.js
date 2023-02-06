@@ -29,6 +29,7 @@ const STAKING_ADDRESS = router.staking;
 const STAKINGE_ADDRESS = router.stakingETH;
 const STAKINGP_ADDRESS = router.stakingPOL;
 const FRENCHIES_ADDRESS = router.frenchies;
+const ACCESS_ADDRESS = router.Access;
 
 const RPC_URL = router.RPC_URL;
 
@@ -308,7 +309,7 @@ export const uFrench = (address) => async (dispatch) => {
 
 export const uInvertion = (address) => async (dispatch) => {
   const rpc_MAC =
-    'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
+    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
   const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const inversionMinterContract = new ethers.Contract(
@@ -339,7 +340,6 @@ export const uInvertion = (address) => async (dispatch) => {
     }
 
     const price = await inversionMinterContract.buyPrice(tipo);
-    //alert(price)
 
     const precio = ethers.utils.formatUnits(price, 6);
     if (Inversiones[tipo - 1].tipo == type) {
@@ -364,7 +364,7 @@ export const uInvertion = (address) => async (dispatch) => {
 
 export const uStakingF = (_address) => async (dispatch) => {
   const rpc_ETH =
-    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+    'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
 
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
@@ -455,7 +455,7 @@ export const uStakingF = (_address) => async (dispatch) => {
 
 export const uStaking = (address) => async (dispatch) => {
   const rpc_MAC =
-    'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
+    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
   const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const stakingContract = new ethers.Contract(
@@ -469,7 +469,7 @@ export const uStaking = (address) => async (dispatch) => {
     provider_MAC
   );
   let aux = true;
-  const nftStaking = await stakingContract.getNfts();
+  const nftStaking = await stakingContract.getNftsInStaking();
   const inventorys = [];
   if (nftStaking.length != undefined) {
     nftStaking.map(async (item) => {
@@ -481,15 +481,18 @@ export const uStaking = (address) => async (dispatch) => {
 
       const is = await stakingContract.NftIsStaking(address, item);
 
-      const pr = await stakingContract.getPosition(item);
-      const pre = await inversionMinterContract.buyPrice(item);
-      const ap = await stakingContract.getApr();
+      const pr = await stakingContract.historicalStaking(address, item);
+      const pre = await inversionMinterContract.getPricePlusFee(item);
+
+      const ap = await stakingContract.tokenApr(address, item);
 
       const cpa = await stakingContract.rewardPerToken(item);
-      const ind = await stakingContract.getIndice(item);
+
+      const ind = await stakingContract.indiceArray(address, item);
       const dat = await stakingContract.getDate(ind);
+
       const precio = ethers.utils.formatUnits(pre, 6);
-      const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 6)).toFixed(2);
+      const cantpago = parseInt(ethers.utils.formatUnits(cpa, 6));
       const apr = ethers.utils.formatUnits(ap, 8);
       const i = 0;
       const date = toDateTime(dat);
@@ -576,7 +579,8 @@ export const uStaking = (address) => async (dispatch) => {
       if (nftStaking.length != undefined) {
         nftStaking.map(async (item) => {
           const is = await stakingContract.NftIsStaking(accounts[0], item);
-          const pr = await stakingContract.getPosition(item);
+          const pr = await stakingContract.      const pr = await stakingContract.historicalStaking(address,item);
+(item);
           const pre = await inversionMinterContract.getPricePlusFee(item);
           const ap = await stakingContract.getApr();
           const cpa = await stakingContract.rewardPerToken(item);
@@ -927,14 +931,17 @@ export const connectWallet =
     try {
       const chainID = provider._network.chainId;
       setProvider(signer);
-      //const rpc_ETH = "https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG" ;
-
-      const rpc_ETH =
+      const rpc_ETH2 =
         'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
 
+      const rpc_ETH =
+        'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
+
       const rpc_MAC =
-        'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
+        'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
       const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
+      const provider_ETH2 = new ethers.providers.JsonRpcProvider(rpc_ETH);
+
       const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
       if (1 == 1) {
@@ -974,10 +981,27 @@ export const connectWallet =
           provider_ETH
         );
 
+        const stakingContract1 = new ethers.Contract(
+          STAKING_ADDRESS,
+          stakingAbi,
+          provider_ETH2
+        );
+        const NftAccess = new ethers.Contract(
+          ACCESS_ADDRESS,
+          stakingAbi,
+          provider_MAC
+        );
+
+        const NftAccess1 = new ethers.Contract(
+          ACCESS_ADDRESS,
+          stakingAbi,
+          signer
+        );
+
         await getProductos();
         await getInversiones();
 
-        const nftStaking = await stakingContract.getNfts();
+        const nftStaking = await stakingContract.getNftsInStaking();
 
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
@@ -986,14 +1010,14 @@ export const connectWallet =
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
+        alert('a');
+
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
         const inventoryf = [];
         const inventorysf = [];
-
         let aux = true;
-
         if (nftStaking.length != undefined) {
           nftStaking.map(async (item) => {
             function toDateTime(secs) {
@@ -1004,15 +1028,17 @@ export const connectWallet =
 
             const is = await stakingContract.NftIsStaking(address, item);
 
-            const pr = await stakingContract.getPosition(item);
+            const pr = await stakingContract.historicalStaking(address, item);
             const pre = await inversionMinterContract.getPricePlusFee(item);
-            const ap = await stakingContract.getApr(item);
+
+            const ap = await stakingContract.tokenApr(address, item);
+
             const cpa = await stakingContract.rewardPerToken(item);
-            const ind = await stakingContract.getIndice(item);
+
+            const ind = await stakingContract.indiceArray(address, item);
             const dat = await stakingContract.getDate(ind);
-            const precio = parseFloat(ethers.utils.formatUnits(pre, 6)).toFixed(
-              2
-            );
+
+            const precio = parseInt(ethers.utils.formatUnits(pre, 6));
             const cantpago = parseFloat(
               ethers.utils.formatUnits(cpa, 6)
             ).toFixed(2);
@@ -1037,6 +1063,7 @@ export const connectWallet =
               };
               i++;
               inventorys.push(stak);
+              console.log(inventorys);
             }
           });
         }
@@ -1230,6 +1257,8 @@ export const connectWallet =
         });
 
         const token = response?.result;
+
+        console.log(response);
         token.map((item) => {
           if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
             const nft = item._data.metadata;
@@ -1321,12 +1350,6 @@ export const connectWallet =
           signer
         );
 
-        const stakingContract1 = new ethers.Contract(
-          STAKING_ADDRESS,
-          stakingAbi,
-          signer
-        );
-
         const stakingfrenEContract1 = new ethers.Contract(
           STAKINGE_ADDRESS,
           stakingErAbi,
@@ -1350,6 +1373,8 @@ export const connectWallet =
             stakingfrenEContract: stakingfrenEContract1,
             stakingfrenPContract: stakingfrenPContract1,
             staking: stakingContract1,
+            NftAccess: NftAccess1,
+
             // stakinfETH: stakingfrenEContract,
             // stakingPOL: stakingfrenPContract,
             accountAddress: address,
