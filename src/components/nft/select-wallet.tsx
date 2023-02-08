@@ -42,8 +42,6 @@ export default function SelectWallet({ ...props }) {
 
   useEffect(() => {
     if (!arroz && signer !== undefined) {
-      console.log(provider);
-      console.log(signer);
       dispatch(connectWallet(address, provider, signer));
 
       setOpen(false);

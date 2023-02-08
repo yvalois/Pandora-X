@@ -231,7 +231,7 @@ const StakeFPage: NextPageWithLayout = () => {
             setTimeout(() => {
               const si = true;
               dispatch(uStakingF(accountAddress));
-              dispatch(uFrench(accountAddress, si));
+              dispatch(uFrench(accountAddress));
               setStatus(200);
               setErrorMSG('Transaccion completada exitosamente');
               setProfile(true);

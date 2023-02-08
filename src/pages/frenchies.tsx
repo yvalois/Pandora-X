@@ -379,7 +379,7 @@ const Frenchies: NextPageWithLayout<
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const buyNft = async () => {
-    if (chainId == 1) {
+    if (chainId == 5) {
       setLoading(true);
 
       try {
@@ -398,15 +398,18 @@ const Frenchies: NextPageWithLayout<
           setApprovedToken(0);
           setearSupply();
           //verifyApprove();
+          setLoading(false);
           if (count > 0) {
             setCount(count - multiplicador);
             setMultiplicador(0);
             setCantidad(0);
             setPrecio(0);
+            setLoading(false);
           } else {
             setMultiplicador(0);
             setCantidad(0);
             setPrecio(0);
+            setLoading(false);
           }
         } else {
           const options_ = {
@@ -425,16 +428,19 @@ const Frenchies: NextPageWithLayout<
           setCantidad(0);
           setApprovedToken(0);
           setearSupply();
-          verifyApprove();
+          setLoading(false);
+
           if (count > 0) {
             setCount(count - multiplicador);
             setMultiplicador(0);
             setCantidad(0);
             setPrecio(0);
+            setLoading(false);
           } else {
             setMultiplicador(0);
             setCantidad(0);
             setPrecio(0);
+            setLoading(false);
           }
         }
       } catch (err) {
@@ -447,6 +453,7 @@ const Frenchies: NextPageWithLayout<
         console.log(mess);
         const rejected = mess[0].split(' ');
         console.log(rejected);
+
         if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
           setErrorMSG('Fondos insuficientes');
         } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {

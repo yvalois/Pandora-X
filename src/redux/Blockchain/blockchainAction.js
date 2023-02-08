@@ -10,7 +10,7 @@ import stakingErAbi from '../../abi/StakingETH.json';
 import frenchiesAbi from '../../abi/FrenchiesBlues.json';
 import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
-import { ethereumClient } from 'wagmi';
+import { GOERLIClient } from 'wagmi';
 
 import stakingAbi from '../../abi/staking.json';
 import { setProvider } from '../../NFTROL';
@@ -197,45 +197,38 @@ export const update_sf = (payload) => {
 };
 
 export const uFrench = (address) => async (dispatch) => {
-  try {
-    const inventoryf = [];
-
-    const chain = EvmChain.ETHEREUM;
-
-    const response = await Moralis.EvmApi.nft.getWalletNFTs({
-      address,
-      chain,
-    });
-
-    const token = response?.result;
-
-    token.map((item) => {
-      if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
-        const nft = item._data.metadata;
-
-        if (nft != undefined) {
-          let a = nft.image.split('/');
-          const prod = {
-            name: nft.name,
-            image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-            precio: 0.3,
-            descripcion: nft.description,
-            id: item._data.tokenId,
-          };
-          inventoryf.push(prod);
-          console.log(inventoryf);
+  fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      response.map((meta) => {
+        if (
+          meta.contractAddress == '0x32bfb6790b3536a7269185278b482a0fa0385362'
+        ) {
+          let token = meta.metadata;
+          token.map((item) => {
+            const nft = item.metadata;
+            if (nft != undefined) {
+              let a = nft.image.split('/');
+              const prod = {
+                name: nft.name,
+                image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                precio: 0.3,
+                descripcion: nft.description,
+                id: item.tokenId,
+              };
+              inventoryf.push(prod);
+              console.log(inventoryf);
+            }
+          });
         }
-      }
+      });
     });
-    console.log(inventoryf);
-    await dispatch(
-      update_f({
-        inventoryf: inventoryf,
-      })
-    );
-  } catch (e) {
-    console.error(e);
-  }
 };
 
 /*export const uProduct = () => async (dispatch) => {
@@ -243,10 +236,8 @@ export const uFrench = (address) => async (dispatch) => {
     cacheProvider: true,
     // providerOptions // required
   });
-
   const instance = await web3Modal.connect(providerOptions);
   const provider = new ethers.providers.Web3Provider(instance);
-
   setProvider(provider);
   const signer = provider.getSigner();
   const accounts = await provider.listAccounts();
@@ -296,7 +287,6 @@ export const uFrench = (address) => async (dispatch) => {
         descripcion: Productos[item].descripcion,
         id: item,
       };
-
       inventoryp.push(prod);
     }
   });
@@ -373,84 +363,70 @@ export const uStakingF = (_address) => async (dispatch) => {
     stakingErAbi,
     provider_ETH
   );
-
-  const inventorysfc = [];
-
   const nftStakingF = await stakingfrenEContract.getNftsInStaking(_address);
+
   if (nftStakingF.length != undefined) {
-    const chain = EvmChain.ETHEREUM;
-    const address = STAKINGE_ADDRESS.toLowerCase();
-    const responses = await Moralis.EvmApi.nft.getWalletNFTs({
-      address,
-      chain,
-    });
-
-    const token = responses?.result;
-
-    let i = 0;
-    if (nftStakingF.length > 0) {
-      nftStakingF.map(async (item) => {
-        const is = true;
-        //const is = await stakingfrenEContract.nftIsStaking(address, item);
-
-        if (is == true) {
-          fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-            .then((res) => res.json())
-            .then((response) => {
-              token.map((itemt) => {
-                if (itemt._data.tokenId == item) {
-                  const nft = itemt._data.metadata;
-                  if (nft != undefined) {
-                    let a = nft.image.split('/');
-                    const dat = new Date(response.fechap);
-                    const date = dat.toLocaleDateString();
-                    const stak = {
-                      id: parseInt(item),
-                      fechaPago: {
-                        fecha: response.fechap,
-                        fechaM: date,
-                      }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
-                      idCR: {
-                        id: parseInt(item),
-                        fechap: response.fechap,
-                        fechaM: date,
-                      },
-                      idW: parseInt(item),
-                      Nombre: nft.name,
-                      image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                      precio: 0.3,
-                      descripcion: nft.description,
-                    };
-                    inventorysfc.push(stak);
-                  }
-                  if (i == nftStakingF.length - 1) {
-                    dispatch(
-                      update_sf({
-                        inventorysf: inventorysfc,
-                      })
-                    );
-                  }
-                }
-              });
-
-              i++;
-            });
-        }
-      });
-    } else {
-      dispatch(
-        update_sf({
-          inventorysf: inventorysfc,
+    nftStakingF.map(async (item) => {
+      const is = await stakingfrenEContract.nftIsStaking(address, item);
+      if (is == true) {
+        fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         })
-      );
-    }
+          .then((res) => res.json())
+          .then((response) => {
+            const info = response;
+            fetch(
+              `https://api.tatum.io/v3/nft/address/balance/ETH/0x6E29BD03bac672B2E4B78128953928B9270d4c6C`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((response) => {
+                console.log(response);
+                response.map((meta) => {
+                  let token = meta.metadata;
+                  token.map((_item) => {
+                    const nft = _item.metadata;
+                    if (_item.tokenId == item) {
+                      let a = nft.image.split('/');
+                      const dat = new Date(info.fechap);
+                      const date = dat.toLocaleDateString();
+                      const stak = {
+                        id: parseInt(item),
+                        fechaPago: {
+                          fecha: info.fechap,
+                          fechaM: date,
+                          fechaL: info.fechald,
+                        }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+                        idCR: {
+                          id: parseInt(item),
+                          fechap: info.fechap,
+                          fechaM: date,
+                        },
+                        idW: parseInt(item),
+                        Nombre: nft.name,
+                        image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                        precio: 0.3,
+                        descripcion: nft.description,
+                      };
+                      inventorysf.push(stak);
+                      console.log(inventorysf);
+                    }
+                  });
+                });
+              });
+          });
+      }
+    });
   }
-  console.log(inventorysfc.length);
 };
 
 export const uStaking = (address) => async (dispatch) => {
@@ -549,30 +525,25 @@ export const uStaking = (address) => async (dispatch) => {
         productoMinterAbi,
         signer
       );
-
       const inversionMinterContract = new ethers.Contract(
         INVERSION_MINTER_ADDRESS,
         inversionMinterAbi,
         signer
       );
-
       const stakingContract = new ethers.Contract(
         STAKING_ADDRESS,
         stakingAbi,
         signer
       );
-
       await getProductos();
       await getInversiones();
       const nftStaking = stakingContract.getNfts();
-
       const nftpBalance = await productoMinterContract.getMyInventory(
         accounts[0]
       );
       const nftiBalance = await inversionMinterContract.getMyInventory(
         accounts[0]
       );
-
       const inventoryp = [];
       const inventoryi = [];
       const inventorys = [];
@@ -602,7 +573,6 @@ export const uStaking = (address) => async (dispatch) => {
           }
         });
       }
-
       nftpBalance.map(async (item) => {
         const tipo = await productoMinterContract.getTipo(item);
         var type = '';
@@ -637,13 +607,10 @@ export const uStaking = (address) => async (dispatch) => {
             descripcion: Productos[tipo - 1].descripcion,
             id: item,
           };
-
           inventoryp.push(prod);
         }
       });
-
       nftiBalance.map(async (item) => {
-
         const tipo = await inversionMinterContract.getTipo(item);
         var type = '';
         if (tipo == 1) {
@@ -666,7 +633,6 @@ export const uStaking = (address) => async (dispatch) => {
         );
         //alert(price)
         alert("a")
-
         const precio = ethers.utils.formatUnits(price, 6);
         alert(precio)
         if (inversionesAR[tipo - 1].tipo == type) {
@@ -681,24 +647,17 @@ export const uStaking = (address) => async (dispatch) => {
           inventoryi.push(inv);
         }
       });
-
       let balancei = 0;
-
       nftiBalance.map(async (item) => {
         const precio = await inversionMinterContract.getPricePlusFee(item);
         balancei += parseFloat(ethers.utils.formatUnits(precio, 6)).toFixed(2);
       });
-
       let balancep = 0;
-
       nftpBalance.map(async (item) => {
         const precio = await productoMinterContract.getPricePlusFee(item);
-
         balancep = precio;
       });
-
       const accountAddress = accounts[0];
-
       dispatch(
         updateBalance({
           accountAddress: accountAddress,
@@ -931,8 +890,6 @@ export const connectWallet =
     try {
       const chainID = provider._network.chainId;
       setProvider(signer);
-      const rpc_ETH2 =
-        'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
 
       const rpc_ETH =
         'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
@@ -1010,8 +967,8 @@ export const connectWallet =
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
-        alert('a');
 
+        const balance = await frenchiesMinterContract.balanceOf(address);
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
@@ -1069,18 +1026,8 @@ export const connectWallet =
         }
 
         if (nftStakingF.length != undefined) {
-          const chain = EvmChain.ETHEREUM;
-          const address = STAKINGE_ADDRESS.toLowerCase();
-          const responses = await Moralis.EvmApi.nft.getWalletNFTs({
-            address,
-            chain,
-          });
-
-          const token = responses?.result;
-
           nftStakingF.map(async (item) => {
             const is = await stakingfrenEContract.nftIsStaking(address, item);
-
             if (is == true) {
               fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
                 method: 'GET',
@@ -1090,35 +1037,53 @@ export const connectWallet =
               })
                 .then((res) => res.json())
                 .then((response) => {
-                  token.map((itemt) => {
-                    if (itemt._data.tokenId == item) {
-                      const nft = itemt._data.metadata;
-                      if (nft != undefined) {
-                        let a = nft.image.split('/');
-                        const dat = new Date(response.fechap);
-                        const date = dat.toLocaleDateString();
-                        const stak = {
-                          id: parseInt(item),
-                          fechaPago: {
-                            fecha: response.fechap,
-                            fechaM: date,
-                            fechaL: response.fechald,
-                          }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
-                          idCR: {
-                            id: parseInt(item),
-                            fechap: response.fechap,
-                            fechaM: date,
-                          },
-                          idW: parseInt(item),
-                          Nombre: nft.name,
-                          image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                          precio: 0.3,
-                          descripcion: nft.description,
-                        };
-                        inventorysf.push(stak);
-                      }
+                  const info = response;
+                  fetch(
+                    `https://api.tatum.io/v3/nft/address/balance/ETH/0x6E29BD03bac672B2E4B78128953928B9270d4c6C`,
+                    {
+                      method: 'GET',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+                      },
                     }
-                  });
+                  )
+                    .then((res) => res.json())
+                    .then((response) => {
+                      console.log(response);
+                      response.map((meta) => {
+                        let token = meta.metadata;
+                        token.map((_item) => {
+                          const nft = _item.metadata;
+                          if (_item.tokenId == item) {
+                            let a = nft.image.split('/');
+                            const dat = new Date(info.fechap);
+                            const date = dat.toLocaleDateString();
+                            const stak = {
+                              id: parseInt(item),
+                              fechaPago: {
+                                fecha: info.fechap,
+                                fechaM: date,
+                                fechaL: info.fechald,
+                              }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+                              idCR: {
+                                id: parseInt(item),
+                                fechap: info.fechap,
+                                fechaM: date,
+                              },
+                              idW: parseInt(item),
+                              Nombre: nft.name,
+                              image:
+                                'https://gateway.pinata.cloud/ipfs/' + a[2],
+                              precio: 0.3,
+                              descripcion: nft.description,
+                            };
+                            inventorysf.push(stak);
+                            console.log(inventorysf);
+                          }
+                        });
+                      });
+                    });
                 });
             }
           });
@@ -1131,9 +1096,7 @@ export const connectWallet =
             t.setSeconds(secs);
             return t;
           }
-
           const is = await stakingfrenEContract.NftIsStaking(address, item);
-
           const pr = await stakingfrenEContract.getPosition(item);
           const pre = await frenchiesMinterContract.getPricePlusFee(item); //getPrice 
           const ap = await stakingfrenEContract.getApr(item);
@@ -1149,7 +1112,6 @@ export const connectWallet =
           const apr = ethers.utils.formatUnits(ap, 8);
           const i = 0;
           const date = toDateTime(dat);
-
           if (is == true && aux == true) {
             if (parseInt(item) == 0) {
               aux = false;
@@ -1191,12 +1153,10 @@ export const connectWallet =
           } else if (tipo == 8) {
             var type = 'AP';
           }
-
           const price = await productoMinterContract.buyPrice(
             tipo,
             tokenContract.address
           );
-
           const precio = ethers.utils.formatUnits(price, 6);
           Productos.map((item) => {
             if (item.tipo == type) {
@@ -1249,34 +1209,38 @@ export const connectWallet =
           }
         });
 
-        const chain = EvmChain.ETHEREUM;
-
-        const response = await Moralis.EvmApi.nft.getWalletNFTs({
-          address,
-          chain,
-        });
-
-        const token = response?.result;
-
-        console.log(response);
-        token.map((item) => {
-          if (item._data.tokenAddress._value == FRENCHIES_ADDRESS) {
-            const nft = item._data.metadata;
-
-            if (nft != undefined) {
-              let a = nft.image.split('/');
-              const prod = {
-                Nombre: nft.name,
-                image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                precio: 0.3,
-                descripcion: nft.description,
-                id: item._data.tokenId,
-              };
-
-              inventoryf.push(prod);
-            }
-          }
-        });
+        fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+          },
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            response.map((meta) => {
+              if (
+                meta.contractAddress ==
+                '0x32bfb6790b3536a7269185278b482a0fa0385362'
+              ) {
+                let token = meta.metadata;
+                token.map((item) => {
+                  const nft = item.metadata;
+                  if (nft != undefined) {
+                    let a = nft.image.split('/');
+                    const prod = {
+                      name: nft.name,
+                      image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                      precio: 0.3,
+                      descripcion: nft.description,
+                      id: item.tokenId,
+                    };
+                    inventoryf.push(prod);
+                  }
+                });
+              }
+            });
+          });
 
         let balancei = [];
         balancei[0] = 0;
@@ -1297,19 +1261,13 @@ export const connectWallet =
 
         /*let preciosP =[]
       let preciosI =[]
-
-
-
       inversionesAR.map(async()=>{
         const precio = await inversionMinterContract.buyPrice(i+1)
-
         const price = ethers.utils.formatUnits(precio, 6)
         preciosI.push(price)
       })
-
       Productos.map(async()=>{
         const precio = await productoMinterContract.buyPrice(i+1)
-
         const price = ethers.utils.formatUnits(precio, 6)
         preciosP.push(price)
       })*/
@@ -1401,7 +1359,6 @@ export const connectWallet =
         //esto se llama desde el use-connect
 
         /* instance.on('accountsChanged', async (accounts) => {
-
      // const usdtBalance = await usdtContract.balanceOf(accounts[0]);
       //const tokenBalance = aw ait tokenContract.balanceOf(accounts[0]);
       const nftBalance = await nudaraMinterContract.getMyInventory(accounts[0]);
@@ -1412,12 +1369,9 @@ export const connectWallet =
           inventory.push(items[item.id]);
         }
       });
-
       const accountAddress = accounts[0];
-
       //const balanceFormat = ethers.utils.formatUnits(tokenBalance, 6);
       //const balanceFormat2 = ethers.utils.formatUnits(usdtBalance, 6);
-
       dispatch(
         updateBalance({
           accountAddress:accountAddress ,
@@ -1433,7 +1387,7 @@ export const connectWallet =
         if (process.env.NODE_ENV === 'production') {
           try {
             await provider.provider.request({
-              method: 'wallet_switchEthereumChain',
+              method: 'wallet_switchGOERLIChain',
               params: [
                 {
                   chainId: `0x${Number(5).toString(16)}`,
@@ -1444,7 +1398,7 @@ export const connectWallet =
             if (switchError.code === 4902) {
               try {
                 await provider.provider.request({
-                  method: 'wallet_addEthereumChain',
+                  method: 'wallet_addGOERLIChain',
                   params: [
                     {
                       chainId: `0x${Number(5).toString(16)}`,
@@ -1470,7 +1424,7 @@ export const connectWallet =
         if (process.env.NODE_ENV === 'development') {
           try {
             await provider.provider.request({
-              method: 'wallet_switchEthereumChain',
+              method: 'wallet_switchGOERLIChain',
               params: [
                 {
                   chainId: `0x${Number(5).toString(16)}`,
@@ -1481,7 +1435,7 @@ export const connectWallet =
             if (switchError.code === 4902) {
               try {
                 await provider.provider.request({
-                  method: 'wallet_addEthereumChain',
+                  method: 'wallet_addGOERLIChain',
                   params: [
                     {
                       chainId: `0x${Number(5).toString(16)}`,

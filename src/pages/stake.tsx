@@ -417,7 +417,6 @@ const StakePage: NextPageWithLayout = () => {
   useEffect(() => {
     let i = 0;
     auxNFT = [];
-
     if (inventoryf.length != 0) {
       inventoryf.map((item) => {
         const nftInfo = {

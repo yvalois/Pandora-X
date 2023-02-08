@@ -220,7 +220,7 @@ const AuthorProfilePage: NextPageWithLayout<
   }, []);
 
   useEffect(() => {
-    dispatch(uFrench(accountAddress));
+    //dispatch(uFrench(accountAddress));
     dispatch(uStakingF(accountAddress));
   }, []);
 
