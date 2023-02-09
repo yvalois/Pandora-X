@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import Button from '../ui/button/button';
 import { getRange, mint, getType } from '@/NFTROL';
+import { useSelector } from 'react-redux';
 
 export default function ModalChange() {
   const { closeModal } = useModal();
@@ -11,7 +12,9 @@ export default function ModalChange() {
   const [error, setError] = useState('');
   const [tipo, setTipo] = useState('');
   const [rango, setRango] = useState('');
-
+  const { NftAccessContract, chainId } = useSelector(
+    (state: any) => state.blockchain
+  );
   const tiempoTranscurrido = Date.now();
   const hoy = new Date(tiempoTranscurrido);
 
@@ -53,15 +56,21 @@ export default function ModalChange() {
   };
 
   const Update = async () => {
-    try {
-      let _address = address;
-      let categoria = tipo;
-      let _rango = rango;
-      await mint(_address, categoria, _rango);
+    if (chainId == 5) {
+      try {
+        let _address = address;
+        let categoria = tipo;
+        let _rango = rango;
+        const tx = await NftAccessContract.mint(_address, categoria, _rango);
+        await tx.wait();
 
-      update();
-    } catch (error) {
-      console.log(error);
+        update();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
     }
   };
 

@@ -31,6 +31,7 @@ export default function ModalWithdraw() {
     const _val = await inversionMinter.getPrice(_id);
     const _valor = parseInt(ethers.utils.formatUnits(_val, 6));
     const lastValor = parseInt(_valor * (10 / 100));
+    setId(_id);
     setValor(lastValor);
   };
 
@@ -73,7 +74,7 @@ export default function ModalWithdraw() {
     await tx.wait();
 
     dispatch(uStaking(accountAddress));
-    dispatch(uInvertion(provider, address));
+    dispatch(uInvertion(address));
     setLoading(false);
     closeModal('Withdraw_VIEW');
     setSuccess(true);

@@ -111,7 +111,7 @@ const StakingPage: NextPageWithLayout = () => {
 
   const [nftSelect, setNftSelect] = useState(nftInfo);
   const [time, setTime] = useState(0);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(0);
   const { openModal } = useModal();
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
@@ -121,6 +121,8 @@ const StakingPage: NextPageWithLayout = () => {
   const [alertMsg, setAlertMsg] = useState('');
   const [id, setId] = useState(0);
   const [success, setSuccess] = useState(false);
+  const [errormsg, setErrorMSG] = useState('');
+
   const { inventoryi, chainId } = useSelector((state: any) => state.blockchain);
   const nftdata = {
     Nombre: '',
@@ -168,54 +170,85 @@ const StakingPage: NextPageWithLayout = () => {
     //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
     if (isap == true) {
       setApprovedToken(true);
+      setAlertMsg('Aprobado correctamente');
     } else {
     }
   };
 
   const Approve = async () => {
-    if (chainId == 5) {
-      setLoading(true);
-      const tx = await inversionMinter.setApprovalForAll(
-        staking.address,
-        'true'
-      );
+    try {
+      if (chainId == 5) {
+        setLoading(true);
+        const tx = await inversionMinter.setApprovalForAll(
+          staking.address,
+          'true'
+        );
 
-      await tx.wait();
-      await verifyApprove();
+        await tx.wait();
+        await verifyApprove();
+        setAlertMsg('Aprobado');
+        setLoading(false);
+      } else {
+        openModal('NETWORK_VIEW');
+        setLoading(false);
+      }
+    } catch (err) {
       setLoading(false);
-    } else {
-      openModal('NETWORK_VIEW');
-      setLoading(false);
+      setStatus(100);
+      const mess = err.message.split('[');
+      //const messa = mess[1].split(":")
+      //const messag = messa[3].split(",")
+      //const messag_ = messag[0].split("-")
+      const rejected = mess[0].split(' ');
+
+      if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+        setAlertMsg('Fondos insuficientes');
+      } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+        setAlertMsg('Transacion rechazada');
+      } else {
+        setAlertMsg('Error');
+      }
+      //
     }
   };
 
   const Stake = async () => {
     if (chainId == 5) {
-      setLoading(true);
-      const indice = findInd();
-      const Contra = process.env.NEXT_PUBLIC_BACKEND_CONS;
-      let tx = await staking.stake(id, tipoStak.value, indice, Contra);
+      try {
+        setLoading(true);
+        const indice = findInd();
+        const Contra = process.env.NEXT_PUBLIC_BACKEND_CONS;
+        let tx = await staking.stake(id, tipoStak.value, indice, Contra);
 
-      await tx.wait();
-      dispatch(uInvertion(accountAddress));
-      dispatch(uStaking(accountAddress));
+        await tx.wait();
+        dispatch(uInvertion(accountAddress));
+        dispatch(uStaking(accountAddress));
 
-      //redirigir a tabla
-      setLoading(false);
-      setApprovedToken(false);
-      setStatus(true);
-      setSuccess(true);
-      setAlertMsg('Nft stakeado correctamente');
+        //redirigir a tabla
+        setLoading(false);
+        setApprovedToken(false);
+        setStatus(200);
+        setSuccess(true);
+        setAlertMsg('Nft stakeado correctamente');
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        //const messa = mess[1].split(":")
+        //const messag = messa[3].split(",")
+        //const messag_ = messag[0].split("-")
+        const rejected = mess[0].split(' ');
 
-      /*if (!Usuario.isReferido && Usuario.type == 'blockMaker') {
-
-    }else{
-
-        const tx = await productoMinter.buyToken(
-          tipoN,
-          usdtContract.address)
-
-    }*/
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
     } else {
       openModal('NETWORK_VIEW');
       setLoading(false);
@@ -239,7 +272,7 @@ const StakingPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setStatus(false);
+      setStatus(0);
     }, 5000);
   }, [status]);
 
@@ -261,7 +294,7 @@ const StakingPage: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
-    openModal('STAKING_VIEW');
+    //openModal('STAKING_VIEW');
   }, []);
 
   useEffect(() => {
@@ -274,11 +307,33 @@ const StakingPage: NextPageWithLayout = () => {
         title="Staking"
         description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
       />
-      <div className="mb-4 h-[100px] w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]"></div>
 
       <div className="mx-auto w-full px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
-        <div className="mb-8 grid grid-cols-1 gap-12 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+        <div className="w-full flex-col md:hidden  ">
+          {/* NFT preview */}
+          <InputLabel title="Preview" />
+          <div className="relative w-full flex-grow flex-col   overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xs:w-[60%] md:w-[40%]">
+            <div className="relative  w-full pb-full">
+              <Image
+                src={nft.img}
+                layout="fill"
+                objectFit="cover"
+                alt="Pulses of Imagination #214"
+              />
+            </div>
+            <div className="p-5">
+              <div className="text-sm font-medium text-black dark:text-white">
+                {nft.Nombre}
+              </div>
+              <div className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+                {nft.precio} USDT
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="md:grid md:grid-cols-3 md:gap-12 lg:grid-cols-3">
+          <div className="  md:col-span-2">
             {/* Name */}
             <div className="mb-8">
               <InputLabel title="Name" important />
@@ -341,7 +396,7 @@ const StakingPage: NextPageWithLayout = () => {
               </div>
             </div>
 
-            <div className="mb-8">
+            <div className="mb-8 flex justify-center md:block">
               <div className="mb-8"></div>
 
               {loading && (
@@ -375,7 +430,7 @@ const StakingPage: NextPageWithLayout = () => {
             </div>
           </div>
 
-          <div className="hidden flex-col lg:flex">
+          <div className="hidden flex-col md:flex">
             {/* NFT preview */}
             <InputLabel title="Preview" />
             <div className="relative flex flex-grow flex-col overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
@@ -400,14 +455,25 @@ const StakingPage: NextPageWithLayout = () => {
         </div>
       </div>
 
-      {status && (
-        <div
-          className="mb-4 ml-[580px] mt-[-90px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">{alertMsg}</span>
-        </div>
-      )}
+      <div className="mt-[-70px] flex w-full justify-center align-middle md:mt-0">
+        {status == 200 && (
+          <div
+            className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+            role="alert"
+          >
+            <span className="font-medium">{alertMsg}</span>
+          </div>
+        )}
+
+        {status == 100 && (
+          <div
+            className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
+            <span className="font-medium">{alertMsg}</span>
+          </div>
+        )}
+      </div>
     </>
   );
 };

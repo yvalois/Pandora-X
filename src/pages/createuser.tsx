@@ -14,6 +14,7 @@ import BlockCreator from '@/assets/images/profile/BLOCKCREATOR.jpg';
 import BlockElite from '@/assets/images/profile/BLOCKELITE.jpg';
 import BlockMaster from '@/assets/images/profile/BLOCKMASTER.jpg';
 import Generic from '@/assets/images/profile/GENERIC.jpg';
+import { useModal } from '@/components/modal-views/context';
 
 // static data
 export const getStaticProps: GetStaticProps = async () => {
@@ -32,8 +33,8 @@ const CreateUser: NextPageWithLayout<
     Nombre: '',
     Correo: '',
     Address: '',
-    Categoria: 'Agente X',
-    Rango: 'peerx',
+    Type: 'Agente X',
+    Range: 'peerx',
     Fecha: hoy.toLocaleDateString(),
     Rol: 'usuario',
     Perfil: '',
@@ -49,12 +50,17 @@ const CreateUser: NextPageWithLayout<
 
   const [value, setValue] = useState(NewUser);
   const Usuario = useSelector((state: any) => state.Usuario);
-  const { NftAccess } = useSelector((state: any) => state.blockchain);
+  const { NftAccessContract, chainId } = useSelector(
+    (state: any) => state.blockchain
+  );
 
   const [status, setStatus] = useState(0);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(Err);
   const [exist, setExist] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errormsg, setErrorMSG] = useState('');
+  const { openModal, closeModal } = useModal();
 
   useEffect(() => {
     if (Usuario.rol !== 'Admin' && Usuario.rol !== 'cliente') {
@@ -79,10 +85,10 @@ const CreateUser: NextPageWithLayout<
       setValue((prevState) => ({ ...prevState, Correo: valor }));
     } else if (Dato == 'Address') {
       setValue((prevState) => ({ ...prevState, Address: valor }));
-    } else if (Dato == 'Categoria') {
-      setValue((prevState) => ({ ...prevState, Categoria: valor }));
+    } else if (Dato == 'Type') {
+      setValue((prevState) => ({ ...prevState, Type: valor }));
     } else {
-      setValue((prevState) => ({ ...prevState, Rango: valor }));
+      setValue((prevState) => ({ ...prevState, Range: valor }));
     }
   };
 
@@ -137,8 +143,8 @@ const CreateUser: NextPageWithLayout<
 
   const update = async () => {
     const newAccount = {
-      Categoria: value.Categoria,
-      Rango: value.Rango,
+      Categoria: value.Type,
+      Rango: value.Range,
       Fecha: hoy.toLocaleDateString(),
       Rol: 'usuario',
     };
@@ -153,8 +159,10 @@ const CreateUser: NextPageWithLayout<
         res.json();
         if (res.status == 200) {
           setStatus(res.status);
+          setLoading(false);
         } else {
           setStatus(100);
+          setLoading(false);
         }
       })
       .then(() => {});
@@ -188,31 +196,52 @@ const CreateUser: NextPageWithLayout<
       .then((res) => {
         res.json();
         setStatus(res.status);
+        setLoading(false);
       })
       .then(() => {})
       .catch((error) => console.error('Error:', error));
   };
 
   const CrearUsuario = async () => {
-    login();
-    try {
-      let address = value.Address;
-      let categoria = value.Categoria;
-      let rango = value.Rango;
+    if (chainId == 5) {
+      login();
+      setLoading(true);
+      try {
+        let address = value.Address;
+        let categoria = value.Type;
+        let rango = value.Range;
 
-      const tx = await NftAccess.mint(address, categoria, rango);
-      await tx.wait();
-      if (1 == 1) {
+        const tx = await NftAccessContract.mint(address, categoria, rango);
+        await tx.wait();
+
         if (exist == true) {
           await update();
         } else {
           await registrar();
         }
-      } else {
+      } catch (err) {
+        setLoading(false);
         setStatus(100);
+        const mess = err.message.split('[');
+        //const messa = mess[1].split(":")
+        //const messag = messa[3].split(",")
+        //const messag_ = messag[0].split("-")
+        console.log(mess);
+        const rejected = mess[0].split(' ');
+        console.log(rejected);
+
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setErrorMSG('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setErrorMSG('Transacion rechazada');
+        } else {
+          setErrorMSG('Error');
+        }
+        //
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
     }
   };
 
@@ -325,7 +354,7 @@ const CreateUser: NextPageWithLayout<
                 Categoria NFT
               </label>
               <select
-                onChange={(e) => ChangeInfo('Categoria', e.target.value)}
+                onChange={(e) => ChangeInfo('Type', e.target.value)}
                 name="select"
                 className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
                 id="wallet"
@@ -340,7 +369,7 @@ const CreateUser: NextPageWithLayout<
                 Rango NFT
               </label>
               <select
-                onChange={(e) => ChangeInfo('Rango', e.target.value)}
+                onChange={(e) => ChangeInfo('Range', e.target.value)}
                 name="select"
                 className="focus:shadow-outline mb-3 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
                 id="wallet"
@@ -353,35 +382,40 @@ const CreateUser: NextPageWithLayout<
             </div>
 
             <div className="flex items-center justify-center">
-              <Button
-                onClick={() => registerUser()}
-                className="focus:shadow-outline  rounded"
-                type="button"
-              >
-                Crear Usuario
-              </Button>
+              {loading && <Button size="small">Cargando...</Button>}
+              {!loading && (
+                <Button
+                  onClick={() => registerUser()}
+                  className="focus:shadow-outline  rounded"
+                  type="button"
+                >
+                  Crear Usuario
+                </Button>
+              )}
             </div>
           </form>
         </div>
       </div>
 
-      {status == 200 && (
-        <div
-          className="mb-4 ml-[610px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">Usuario creado correctamente</span>
-        </div>
-      )}
+      <div className="mt-10 flex w-full justify-center align-middle">
+        {status == 200 && (
+          <div
+            className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+            role="alert"
+          >
+            <span className="font-medium">Usuario creado correctamente</span>
+          </div>
+        )}
 
-      {status == 100 && (
-        <div
-          className="mb-4 ml-[580px] mt-[30px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <span className="font-medium">operacion fallo en el minteo</span>
-        </div>
-      )}
+        {status == 100 && (
+          <div
+            className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
+            <span className="font-medium">{errormsg}</span>
+          </div>
+        )}
+      </div>
     </>
   );
 };

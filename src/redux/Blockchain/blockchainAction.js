@@ -14,7 +14,7 @@ import { GOERLIClient } from 'wagmi';
 
 import stakingAbi from '../../abi/staking.json';
 import { setProvider } from '../../NFTROL';
-
+import accessAbi from '../../abi/NftsRol.json';
 //import WalletLink from 'walletlink'
 
 const router = contract();
@@ -32,11 +32,6 @@ const FRENCHIES_ADDRESS = router.frenchies;
 const ACCESS_ADDRESS = router.Access;
 
 const RPC_URL = router.RPC_URL;
-
-Moralis.start({
-  apiKey: 'lZlG5FYAIhPCSsvVNoQx2qZBv7SlJGAWaGYJZ3PAEZidTn5yoCrJHy2bzqdiOKtK',
-  // ...and any other configuration
-});
 
 const providerOptions = new WalletConnectProvider({
   walletconnect: {
@@ -466,7 +461,6 @@ export const uStaking = (address) => async (dispatch) => {
 
       const ind = await stakingContract.indiceArray(address, item);
       const dat = await stakingContract.getDate(ind);
-
       const precio = ethers.utils.formatUnits(pre, 6);
       const cantpago = parseInt(ethers.utils.formatUnits(cpa, 6));
       const apr = ethers.utils.formatUnits(ap, 8);
@@ -734,6 +728,7 @@ const infoPagos = async (productoMinter, rango, categoria) => {
 };
 const infoPagosC = async (staking, rango, categoria) => {
   const cant = await staking.cantPagos();
+  alert(cant);
   let i;
   if (Pagos.length < cant) {
     for (i = 0; i < cant; i++) {
@@ -812,6 +807,7 @@ const conectar = (accountAddress, stakingContract) => async (dispatch) => {
               range: response.Range,
               type: response.Type,
               rango: response.Rango,
+              categoria: response.Categoria,
               paid: Pagos,
               perfil: response.Perfil,
               banner: response.Banner,
@@ -830,6 +826,7 @@ const conectar = (accountAddress, stakingContract) => async (dispatch) => {
               range: response.Range,
               type: response.Type,
               rango: response.Rango,
+              categoria: response.Categoria,
               paid: Pagos,
               perfil: response.Perfil,
               banner: response.Banner,
@@ -941,24 +938,25 @@ export const connectWallet =
         const stakingContract1 = new ethers.Contract(
           STAKING_ADDRESS,
           stakingAbi,
-          provider_ETH2
+          signer
         );
+
         const NftAccess = new ethers.Contract(
           ACCESS_ADDRESS,
-          stakingAbi,
-          provider_MAC
+          accessAbi,
+          provider_ETH2
         );
 
         const NftAccess1 = new ethers.Contract(
           ACCESS_ADDRESS,
-          stakingAbi,
+          accessAbi,
           signer
         );
 
         await getProductos();
         await getInversiones();
 
-        const nftStaking = await stakingContract.getNftsInStaking();
+        const nftStaking = await stakingContract1.getNftsInStaking();
 
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
@@ -967,15 +965,13 @@ export const connectWallet =
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
-
-        const balance = await frenchiesMinterContract.balanceOf(address);
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
         const inventoryf = [];
         const inventorysf = [];
         let aux = true;
-        if (nftStaking.length != undefined) {
+        if (nftStaking.length != 0) {
           nftStaking.map(async (item) => {
             function toDateTime(secs) {
               var t = new Date(1970, 0, 1); // Epoch
@@ -984,8 +980,8 @@ export const connectWallet =
             }
 
             const is = await stakingContract.NftIsStaking(address, item);
-
             const pr = await stakingContract.historicalStaking(address, item);
+
             const pre = await inversionMinterContract.getPricePlusFee(item);
 
             const ap = await stakingContract.tokenApr(address, item);
@@ -994,7 +990,6 @@ export const connectWallet =
 
             const ind = await stakingContract.indiceArray(address, item);
             const dat = await stakingContract.getDate(ind);
-
             const precio = parseInt(ethers.utils.formatUnits(pre, 6));
             const cantpago = parseFloat(
               ethers.utils.formatUnits(cpa, 6)
@@ -1174,7 +1169,7 @@ export const connectWallet =
           });
         });*/
 
-        nftiBalance.map(async (item) => {
+        /*nftiBalance.map(async (item) => {
           const tipo = await inversionMinterContract.getTipo(item);
           var type = '';
           if (tipo == 1) {
@@ -1207,7 +1202,7 @@ export const connectWallet =
             };
             inventoryi.push(inv);
           }
-        });
+        });*/
 
         fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
           method: 'GET',
@@ -1319,7 +1314,6 @@ export const connectWallet =
           stakingPAbi,
           signer
         );
-
         await dispatch(
           dataLoaded({
             usdtContract: usdtContract1,
@@ -1331,7 +1325,7 @@ export const connectWallet =
             stakingfrenEContract: stakingfrenEContract1,
             stakingfrenPContract: stakingfrenPContract1,
             staking: stakingContract1,
-            NftAccess: NftAccess1,
+            NftAccessContract: NftAccess1,
 
             // stakinfETH: stakingfrenEContract,
             // stakingPOL: stakingfrenPContract,
