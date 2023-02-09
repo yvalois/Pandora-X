@@ -728,7 +728,6 @@ const infoPagos = async (productoMinter, rango, categoria) => {
 };
 const infoPagosC = async (staking, rango, categoria) => {
   const cant = await staking.cantPagos();
-  alert(cant);
   let i;
   if (Pagos.length < cant) {
     for (i = 0; i < cant; i++) {
@@ -889,7 +888,7 @@ export const connectWallet =
       setProvider(signer);
 
       const rpc_ETH =
-        'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+        'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
 
       const rpc_MAC =
         'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
@@ -956,7 +955,7 @@ export const connectWallet =
         await getProductos();
         await getInversiones();
 
-        //const nftStaking = await stakingContract1.getNftsInStaking();
+        const nftStaking = await stakingContract.getNftsInStaking();
 
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
@@ -965,6 +964,7 @@ export const connectWallet =
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
+
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
