@@ -956,7 +956,7 @@ export const connectWallet =
         await getProductos();
         await getInversiones();
 
-        const nftStaking = await stakingContract1.getNftsInStaking();
+        //const nftStaking = await stakingContract1.getNftsInStaking();
 
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
