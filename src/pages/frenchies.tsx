@@ -379,7 +379,7 @@ const Frenchies: NextPageWithLayout<
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const buyNft = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
 
       try {
