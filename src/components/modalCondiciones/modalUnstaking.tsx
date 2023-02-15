@@ -33,7 +33,8 @@ export default function ModalWithdraw() {
     setLoading(true);
     try {
       //
-      const isOutTime = await staking.isOutTime(value);
+      //const isOutTime = await staking.isOutTime(value);
+      const isOutTime = false;
       if (isOutTime) {
         window.localStorage.setItem('WithdrawID', value.toString());
         openModal('WITHDRAW_VIEW');
