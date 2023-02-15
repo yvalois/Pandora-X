@@ -4,6 +4,7 @@ import { StaticImageData } from 'next/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import Avatar from '@/components/ui/avatar';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
+import { useEffect } from 'react';
 
 type ItemType = {
   id?: string | number;
@@ -35,6 +36,7 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
     user,
     tipo,
   } = item ?? {};
+
   return (
     <div
       className={cn(
@@ -53,10 +55,100 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
         />
       </div>
       <div className="absolute top-0 left-0 z-[5] flex h-full w-full flex-col justify-between bg-gradient-to-t from-black p-5 md:p-6">
-        <AnchorLink
-          href={`/details/${tipo}`}
-          className="absolute top-0 left-0 z-10 h-full w-full"
-        />
+        {nombre == 'Podcast Straming' && (
+          <AnchorLink
+            onClick={() => {
+              window.open(
+                'https://academy.pandorax.co/offers/JDnEzntz/checkout'
+              );
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
+        {nombre == 'Academia X' && (
+          <AnchorLink
+            onClick={() => {
+              window.open(
+                'https://academy.pandorax.co/offers/Sf3awR87/checkout'
+              );
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
+        {nombre == 'NFT Studio' && (
+          <AnchorLink
+            onClick={() => {
+              window.open(
+                'https://academy.pandorax.co/offers/SvAjzFcZ/checkout'
+              );
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
+        {nombre == 'Investing Value' && (
+          <AnchorLink
+            onClick={() => {
+              window.open(
+                'https://academy.pandorax.co/offers/GMoLiq82/checkout'
+              );
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
+        {nombre == 'Comunidad Privada' && (
+          <AnchorLink
+            onClick={() => {
+              window.open(
+                'https://academy.pandorax.co/offers/HzPLpzk6/checkout'
+              );
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
+        {nombre == 'Comunidad Gratuita' && (
+          <AnchorLink
+            onClick={() => {
+              window.open('https://discord.com/invite/bybu984z');
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
+        {nombre == 'Coaching' && (
+          <AnchorLink
+            onClick={() => {
+              window.open(
+                'https://academy.pandorax.co/offers/Ne4xqLqa/checkout'
+              );
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
+        {nombre == 'Alpha Report' && (
+          <AnchorLink
+            onClick={() => {
+              window.open(
+                'https://academy.pandorax.co/offers/KLDhtczq/checkout'
+              );
+            }}
+            href={`#`}
+            className="absolute top-0 left-0 z-10 h-full w-full"
+          />
+        )}
+
         <div className="flex justify-between gap-3">
           <div
             className="font-hairline hidden h-8 shrink-0 items-center   rounded-2xl bg-white/20 px-4 text-xs uppercase -tracking-wide text-white backdrop-blur-[50px] md:inline-flex md:h-6

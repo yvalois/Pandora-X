@@ -76,6 +76,8 @@ function NftFooter({
   const provider = useProvider();
   const { address } = useAccount();
 
+  const { perfil, nombre } = useSelector((state) => state.Usuario);
+
   const verifyApprove = async () => {
     try {
       const usdt = await tokenContract.allowance(
@@ -180,9 +182,15 @@ function NftFooter({
               className="mt-2 hidden items-center text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:inline-flex"
             >
               <div className="h-6 w-6 rounded-full ltr:mr-2 rtl:ml-2">
-                <Image src={pandorax} alt="avatar" width={24} height={24} />
+                <Image
+                  className="rounded-3xl"
+                  src={perfil}
+                  alt="avatar"
+                  width={24}
+                  height={24}
+                />
               </div>
-              @PandoraX
+              {`@${nombre}`}
             </AnchorLink>
           </div>
         </div>
@@ -208,7 +216,7 @@ function NftFooter({
           className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">{alertMsg}</span>
+          <span className="text-center font-medium">{alertMsg}</span>
         </div>
       )}
 
@@ -217,7 +225,7 @@ function NftFooter({
           className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">{alertMsg2}</span>
+          <span className="text-center font-medium">{alertMsg2}</span>
         </div>
       )}
     </div>
@@ -253,7 +261,7 @@ export default function NftDetails({ tipo }) {
   const provider = useProvider();
   const { address } = useAccount();
 
-  const Usuario = useSelector((state) => state.Usuario);
+  const { perfil, nombre } = useSelector((state) => state.Usuario);
 
   const {
     productoMinter,
@@ -381,7 +389,7 @@ export default function NftDetails({ tipo }) {
 
                       <div className="inline-flex">
                         <span className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                          @PandoraX
+                          {`@${nombre}`}
                         </span>{' '}
                       </div>
                     </div>

@@ -780,7 +780,9 @@ const CreateNFTPage: NextPageWithLayout = () => {
           className="absolute top-24 right-[680px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">Nft creado correctamente</span>
+          <span className="text-center font-medium">
+            Nft creado correctamente
+          </span>
         </div>
       )}
 
@@ -789,7 +791,9 @@ const CreateNFTPage: NextPageWithLayout = () => {
           className="absolute top-24 right-[680px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
-          <span className="font-medium">operacion fallo en el minteo</span>
+          <span className="text-center font-medium">
+            operacion fallo en el minteo
+          </span>
         </div>
       )}
     </>

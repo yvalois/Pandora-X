@@ -294,7 +294,7 @@ export const uFrench = (address) => async (dispatch) => {
 
 export const uInvertion = (address) => async (dispatch) => {
   const rpc_MAC =
-    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+    'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
   const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const inversionMinterContract = new ethers.Contract(
@@ -327,9 +327,9 @@ export const uInvertion = (address) => async (dispatch) => {
     const price = await inversionMinterContract.buyPrice(tipo);
 
     const precio = ethers.utils.formatUnits(price, 6);
-    if (Inversiones[tipo - 1].tipo == type) {
+    if (Inversiones[tipo - 1]?.tipo == type) {
       const inv = {
-        Nombre: Inversiones[tipo - 1].nombre,
+        Nombre: Inversiones[tipo - 1].Nombre,
         img: Inversiones[tipo - 1].img,
         precio: parseInt(precio),
         tipo: Inversiones[tipo - 1].tipo,
@@ -426,7 +426,7 @@ export const uStakingF = (_address) => async (dispatch) => {
 
 export const uStaking = (address) => async (dispatch) => {
   const rpc_MAC =
-    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+    'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
   const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const stakingContract = new ethers.Contract(
@@ -434,15 +434,16 @@ export const uStaking = (address) => async (dispatch) => {
     stakingAbi,
     provider_MAC
   );
+
   const inversionMinterContract = new ethers.Contract(
     INVERSION_MINTER_ADDRESS,
     inversionMinterAbi,
     provider_MAC
   );
   let aux = true;
-  const nftStaking = await stakingContract.getNftsInStaking();
+  const nftStaking = await stakingContract.getNftsInStaking(address);
   const inventorys = [];
-  if (nftStaking.length != undefined) {
+  if (nftStaking.length != 0) {
     nftStaking.map(async (item) => {
       function toDateTime(secs) {
         var t = new Date(1970, 0, 1); // Epoch
@@ -451,26 +452,23 @@ export const uStaking = (address) => async (dispatch) => {
       }
 
       const is = await stakingContract.NftIsStaking(address, item);
-
       const pr = await stakingContract.historicalStaking(address, item);
+
       const pre = await inversionMinterContract.getPricePlusFee(item);
 
       const ap = await stakingContract.tokenApr(address, item);
 
-      const cpa = await stakingContract.rewardPerToken(item);
+      const cpa = await stakingContract.rewardPerToken(item, address);
 
       const ind = await stakingContract.indiceArray(address, item);
       const dat = await stakingContract.getDate(ind);
-      const precio = ethers.utils.formatUnits(pre, 6);
-      const cantpago = parseInt(ethers.utils.formatUnits(cpa, 6));
+      const precio = parseInt(ethers.utils.formatUnits(pre, 6));
+      const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 6)).toFixed(2);
       const apr = ethers.utils.formatUnits(ap, 8);
       const i = 0;
       const date = toDateTime(dat);
 
-      if (
-        (parseInt(item) == 0 && is == true && aux == true) ||
-        (parseInt(item) !== 0 && is == true)
-      ) {
+      if (is == true && aux == true) {
         if (parseInt(item) == 0) {
           aux = false;
         }
@@ -478,7 +476,7 @@ export const uStaking = (address) => async (dispatch) => {
           id: parseInt(item),
           position: parseInt(i),
           positionR: parseInt(pr), //llamar funcion
-          precio: parseInt(precio), //getpricePlusfee
+          precio: precio, //getpricePlusfee
           fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
           Apr: parseInt(apr), // getApr
           cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
@@ -487,6 +485,7 @@ export const uStaking = (address) => async (dispatch) => {
         };
         i++;
         inventorys.push(stak);
+        console.log(inventorys);
       }
     });
   }
@@ -726,13 +725,15 @@ const infoPagos = async (productoMinter, rango, categoria) => {
     }
   }
 };
-const infoPagosC = async (staking, rango, categoria) => {
-  const cant = await staking.cantPagos();
+const infoPagosC = async (address, staking, rango, categoria) => {
+  const cant = await staking.cantPagos(address);
   let i;
   if (Pagos.length < cant) {
     for (i = 0; i < cant; i++) {
-      const paid = await staking.getPagoUser(i + 1);
-      const wallet = await staking.getWallet(i + 1);
+      const paid = await staking.getPagoUser(address, i + 1);
+      alert(paid);
+
+      const wallet = await staking.getWallet(address, i + 1);
       const paidFormat = parseFloat(ethers.utils.formatUnits(paid, 6)).toFixed(
         2
       );
@@ -746,15 +747,6 @@ const infoPagosC = async (staking, rango, categoria) => {
         tipo = 'Staking';
       }
       let porcentaje = '1%';
-      /*if (rango == 'peerx') {
-        porcentaje = '20%';
-      } else if (rango == 'blockelite') {
-        porcentaje = '25%';
-      } else if (rango == 'blockmaster') {
-        porcentaje = '35%';
-      } else if (rango == 'blockcreator') {
-        porcentaje = '40%';
-      }*/
 
       const pago1 = {
         pago: paidFormat,
@@ -815,7 +807,12 @@ const conectar = (accountAddress, stakingContract) => async (dispatch) => {
             })
           );
         } else if (response.Categoria == 'BlockMaker') {
-          infoPagosC(stakingContract, response.Rango, response.Categoria);
+          infoPagosC(
+            accountAddress,
+            stakingContract,
+            response.Rango,
+            response.Categoria
+          );
           dispatch(
             connectSuccessToMongo({
               rol: response.Rol,
@@ -891,7 +888,7 @@ export const connectWallet =
         'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
 
       const rpc_MAC =
-        'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+        'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
       const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
       const provider_ETH2 = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
@@ -954,9 +951,7 @@ export const connectWallet =
 
         await getProductos();
         await getInversiones();
-
-        const nftStaking = await stakingContract.getNftsInStaking();
-
+        const nftStaking = await stakingContract.getNftsInStaking(address);
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
         );
@@ -970,6 +965,7 @@ export const connectWallet =
         const inventorys = [];
         const inventoryf = [];
         const inventorysf = [];
+
         let aux = true;
         if (nftStaking.length != 0) {
           nftStaking.map(async (item) => {
@@ -986,7 +982,7 @@ export const connectWallet =
 
             const ap = await stakingContract.tokenApr(address, item);
 
-            const cpa = await stakingContract.rewardPerToken(item);
+            const cpa = await stakingContract.rewardPerToken(item, address);
 
             const ind = await stakingContract.indiceArray(address, item);
             const dat = await stakingContract.getDate(ind);
@@ -1019,7 +1015,6 @@ export const connectWallet =
             }
           });
         }
-
         if (nftStakingF.length != undefined) {
           nftStakingF.map(async (item) => {
             const is = await stakingfrenEContract.nftIsStaking(address, item);
@@ -1083,7 +1078,6 @@ export const connectWallet =
             }
           });
         }
-
         /* if (nftStakingF.length != undefined) {
         nftStakingF.map(async (item) => {
           function toDateTime(secs) {
@@ -1169,7 +1163,7 @@ export const connectWallet =
           });
         });*/
 
-        /*nftiBalance.map(async (item) => {
+        nftiBalance.map(async (item) => {
           const tipo = await inversionMinterContract.getTipo(item);
           var type = '';
           if (tipo == 1) {
@@ -1202,7 +1196,7 @@ export const connectWallet =
             };
             inventoryi.push(inv);
           }
-        });*/
+        });
 
         fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
           method: 'GET',

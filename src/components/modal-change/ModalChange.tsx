@@ -56,7 +56,7 @@ export default function ModalChange() {
   };
 
   const Update = async () => {
-    if (chainId == 5) {
+    if (chainId == 137) {
       try {
         let _address = address;
         let categoria = tipo;

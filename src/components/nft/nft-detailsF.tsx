@@ -48,6 +48,7 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
   const [isBuy, setIsBuy] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [alertMsg2, setAlertMsg2] = useState('');
+  const { perfil, nombre } = useSelector((state) => state.Usuario);
 
   const Usuario = useSelector((state) => state.Usuario);
   const [auxPrice, setAuxPrice] = useState(price);
@@ -107,9 +108,15 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
               className="mt-2 hidden items-center text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:inline-flex"
             >
               <div className="h-6 w-6 rounded-full ltr:mr-2 rtl:ml-2">
-                <Image src={pandorax} alt="avatar" width={24} height={24} />
+                <Image
+                  className="rounded-3xl"
+                  src={perfil}
+                  alt="avatar"
+                  width={24}
+                  height={24}
+                />
               </div>
-              @PandoraX
+              {`@${nombre}`}
             </AnchorLink>
           </div>
         </div>
@@ -267,10 +274,7 @@ export default function NftDetailsF(Nft) {
   const [approvedToken, setApprovedToken] = useState(0);
   const [status, setStatus] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
-
-  useEffect(() => {
-    console.log(Nft.Nft.img);
-  }, []);
+  const { perfil, nombre } = useSelector((state) => state.Usuario);
 
   return (
     <div className="flex flex-grow">
@@ -325,7 +329,7 @@ export default function NftDetailsF(Nft) {
 
                       <div className="inline-flex">
                         <span className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                          @PandoraX
+                          {`@${nombre}`}
                         </span>{' '}
                       </div>
                     </div>

@@ -257,7 +257,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
           className="absolute top-[170px] right-[100px] mb-4   mt-[0px] w-[400px] self-center rounded-lg  bg-green-200   p-4 text-center text-sm text-green-700 dark:bg-green-200 dark:text-green-800  md:top-[220px] md:right-[65px] md:w-[280px] xl:top-[250px] xl:right-[100px]"
           role="alert"
         >
-          <span className="font-medium">{alertMsg}</span>
+          <span className="text-center font-medium">{alertMsg}</span>
         </div>
       )}
 
@@ -266,7 +266,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
           className="absolute top-[170px] right-[100px] mb-4   mt-[0px] w-[400px] self-center rounded-lg  bg-red-200   p-4 text-center text-sm text-red-700 dark:bg-red-200  dark:text-red-800  md:top-[220px] md:right-[65px] md:w-[280px] xl:top-[250px] xl:right-[100px]"
           role="alert"
         >
-          <span className="font-medium">{alertMsg2}</span>
+          <span className="text-center font-medium">{alertMsg2}</span>
         </div>
       )}
     </div>
@@ -290,7 +290,7 @@ const NftDetails4Page: NextPageWithLayout<
   const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
 
   const inversionMinterContract = new ethers.Contract(
-    '0x3870d08b787db776f2c6d8bee986Fe9A756652dC',
+    '0x2Bb6CfdcabF3245298522666453383BbBC179920',
     inversionesAbi,
     provider_MAC
   );

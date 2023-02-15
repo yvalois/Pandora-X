@@ -177,7 +177,7 @@ const StakingPage: NextPageWithLayout = () => {
 
   const Approve = async () => {
     try {
-      if (chainId == 5) {
+      if (chainId == 137) {
         setLoading(true);
         const tx = await inversionMinter.setApprovalForAll(
           staking.address,
@@ -213,7 +213,7 @@ const StakingPage: NextPageWithLayout = () => {
   };
 
   const Stake = async () => {
-    if (chainId == 5) {
+    if (chainId == 137) {
       try {
         setLoading(true);
         const indice = findInd();
@@ -235,6 +235,8 @@ const StakingPage: NextPageWithLayout = () => {
         setLoading(false);
         setStatus(100);
         const mess = err.message.split('[');
+        const errValor = mess[1].split('"');
+
         //const messa = mess[1].split(":")
         //const messag = messa[3].split(",")
         //const messag_ = messag[0].split("-")
@@ -244,6 +246,8 @@ const StakingPage: NextPageWithLayout = () => {
           setAlertMsg('Fondos insuficientes');
         } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
           setAlertMsg('Transacion rechazada');
+        } else if (errValor[1] == 'execution reverted: valor incorrecto') {
+          setAlertMsg('Los años sobrepasan la maxima cantidad de staking');
         } else {
           setAlertMsg('Error');
         }
@@ -294,7 +298,7 @@ const StakingPage: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
-    //openModal('STAKING_VIEW');
+    openModal('STAKING_VIEW');
   }, []);
 
   useEffect(() => {
@@ -461,7 +465,7 @@ const StakingPage: NextPageWithLayout = () => {
             className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
             role="alert"
           >
-            <span className="font-medium">{alertMsg}</span>
+            <span className="text-center font-medium">{alertMsg}</span>
           </div>
         )}
 
@@ -470,7 +474,7 @@ const StakingPage: NextPageWithLayout = () => {
             className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
             role="alert"
           >
-            <span className="font-medium">{alertMsg}</span>
+            <span className="text-center font-medium">{alertMsg}</span>
           </div>
         )}
       </div>

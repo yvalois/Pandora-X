@@ -632,11 +632,11 @@ const Frenchies: NextPageWithLayout<
             <ParamTab
               tabMenu={[
                 {
-                  title: 'NFT MarketPlace',
+                  title: 'MarketPlace',
                   path: 'coleccion',
                 },
                 {
-                  title: 'Frenchies',
+                  title: 'Comprar Frenchies',
                   path: 'buy',
                 },
               ]}
@@ -740,7 +740,7 @@ const Frenchies: NextPageWithLayout<
                         className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
                         role="alert"
                       >
-                        <span className="font-medium">
+                        <span className="text-center font-medium">
                           Frenchie obtenido de manera exitosa
                         </span>
                       </div>
@@ -751,7 +751,9 @@ const Frenchies: NextPageWithLayout<
                         className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
                         role="alert"
                       >
-                        <span className="font-medium">{errormsg}</span>
+                        <span className="text-center font-medium">
+                          {errormsg}
+                        </span>
                       </div>
                     )}
                   </div>

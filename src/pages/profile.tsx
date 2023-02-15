@@ -327,7 +327,7 @@ const AuthorProfilePage: NextPageWithLayout<
       </div>
 
       {/* Profile Container */}
-      <div className="mx-auto flex w-full shrink-0 flex-col md:px-4 xl:px-6 3xl:max-w-[1700px] 3xl:px-12">
+      <div className="justify mx-auto flex w-full shrink-0 flex-col md:px-4 xl:px-6 3xl:max-w-[1700px] 3xl:px-12">
         {/* Profile Image */}
         {Usuario.perfil?.length == 0 && Usuario.rango == 'peerx' ? (
           <div className="row flex w-full">
@@ -561,10 +561,10 @@ const AuthorProfilePage: NextPageWithLayout<
         )}
         {/* Profile Info */}
         <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row xl:pt-12">
-          <div className="shrink-2 .0.order-dashed  border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
-            <div className="mb-4 md:mb-0 md:text-center ltr:md:text-left rtl:md:text-right ">
+          <div className=" shrink-2  .0.order-dashed flex w-full justify-center border-gray-200  dark:border-gray-700 md:block md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
+            <div className="mb-4 w-full md:mb-0 md:text-center ltr:md:text-left rtl:md:text-right ">
               {/*Name */}
-              <div>
+              <div className="flex w-full justify-start">
                 {!editIsActivated && (
                   <div className="row flex items-center space-x-2">
                     <h2 className="text-xl font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl">
@@ -615,114 +615,54 @@ const AuthorProfilePage: NextPageWithLayout<
                   </div>
                 )}
               </div>
+              <div className="flex w-full justify-start">
+                <div className="justify-start">
+                  {Usuario.rol == 'usuario' && (
+                    <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
+                      <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
+                        Referido
+                      </div>
+                      <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
+                        {`${link}principal/${accountAddress}`}
+                      </div>
+                      <div
+                        className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                        title="Copy Address"
+                        onClick={copiar}
+                      >
+                        {copyButtonStatus ? (
+                          <Check className="h-auto w-3.5 text-green-500" />
+                        ) : (
+                          <Copy className="h-auto w-3.5" />
+                        )}
+                      </div>
+                    </div>
+                  )}
 
-              {Usuario.rol == 'usuario' && (
-                <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
-                  <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
-                    Referido
-                  </div>
-                  <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
-                    {`${link}principal/${accountAddress}`}
-                  </div>
-                  <div
-                    className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                    title="Copy Address"
-                    onClick={copiar}
-                  >
-                    {copyButtonStatus ? (
-                      <Check className="h-auto w-3.5 text-green-500" />
-                    ) : (
-                      <Copy className="h-auto w-3.5" />
-                    )}
-                  </div>
+                  {Usuario.rol == 'Admin' && (
+                    <div className=" mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
+                      <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
+                        Referido
+                      </div>
+                      <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
+                        {`${link}principal/${accountAddress}`}
+                      </div>
+                      <div
+                        className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                        title="Copy Address"
+                        onClick={copiar}
+                      >
+                        {copyButtonStatus ? (
+                          <Check className="h-auto w-3.5 text-green-500" />
+                        ) : (
+                          <Copy className="h-auto w-3.5" />
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-
-              {Usuario.rol == 'Admin' && (
-                <div className="  mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
-                  <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
-                    Referido
-                  </div>
-                  <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
-                    {`${link}principal/${accountAddress}`}
-                  </div>
-                  <div
-                    className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                    title="Copy Address"
-                    onClick={copiar}
-                  >
-                    {copyButtonStatus ? (
-                      <Check className="h-auto w-3.5 text-green-500" />
-                    ) : (
-                      <Copy className="h-auto w-3.5" />
-                    )}
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
-
-            {/* Followers, Following and follow button */}
-            {/*<div className="mt-10 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 md:justify-start ltr:md:text-left rtl:md:text-right xl:mt-12 xl:gap-8 xl:py-6">
-              <div>
-                <div className="mb-1.5 text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
-                  {authorData?.following}
-                </div>
-                <div className="text-sm tracking-tighter text-gray-600 dark:text-gray-400">
-                  Following
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-1.5 text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
-                  {authorData?.followers}
-                </div>
-                <div className="text-sm tracking-tighter text-gray-600 dark:text-gray-400">
-                  Followers
-                </div>
-              </div>
-
-              <Button
-                color="white"
-                className="shadow-card dark:bg-light-dark md:h-10 md:px-5 xl:h-12 xl:px-7"
-              >
-                Follow
-              </Button>
-                  </div>*/}
-
-            {/* Followed by */}
-            {/*<div className="border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 ltr:md:text-left rtl:md:text-right xl:py-6">
-              <div className="mb-2 text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
-                Followed by
-              </div>
-              <div className="flex justify-center md:justify-start">
-                { Followers list}
-                {authorData?.followed_by?.map((item) => (
-                  <AnchorLink
-                    key={item?.id}
-                    href="/"
-                    className="-ml-2 first:ml-0"
-                  >
-                    <Avatar
-                      size="sm"
-                      image={item?.avatar?.thumbnail}
-                      alt="Author"
-                      height={28}
-                      width={28}
-                      className="dark:border-gray-500"
-                    />
-                  </AnchorLink>
-                ))}
-              </div>
-
-              <div className="mt-4">
-                <AnchorLink
-                  href="/"
-                  className="text-sm tracking-tighter text-gray-600 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  View All
-                </AnchorLink>
-              </div>
-            </div>*/}
 
             {
               <AuthorInformation
@@ -732,7 +672,7 @@ const AuthorProfilePage: NextPageWithLayout<
             }
           </div>
 
-          <div className=" flex-column ml-6 grow justify-center align-middle ">
+          <div className=" flex-column grow justify-center align-middle md:ml-6 ">
             {Usuario.rol == 'usuario' || Usuario.rol == 'Admin' ? (
               <ProfileTabUser />
             ) : (
@@ -747,7 +687,7 @@ const AuthorProfilePage: NextPageWithLayout<
           className="absolute top-[60px] left-[685px] mb-4 ml-[60px] mt-[30px] flex w-[200px] justify-center self-center rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">Link copiado</span>
+          <span className="text-center font-medium">Link copiado</span>
         </div>
       )}
     </>

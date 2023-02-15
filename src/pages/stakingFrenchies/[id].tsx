@@ -290,7 +290,7 @@ const StakingFPage: NextPageWithLayout = () => {
           className="mb-4 ml-[580px]  flex w-[500px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">
+          <span className="text-center font-medium">
             Transaccion completada correctamen
           </span>
         </div>
@@ -301,7 +301,7 @@ const StakingFPage: NextPageWithLayout = () => {
           className="mb-4 ml-[580px]  flex w-[500px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
-          <span className="font-medium">{errorMSG}</span>
+          <span className="text-center font-medium">{errorMSG}</span>
         </div>
       )}
     </>

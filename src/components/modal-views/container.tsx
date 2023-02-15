@@ -28,6 +28,10 @@ const TransferF = dynamic(() => import('@/components/modalTransfer/modalTF'));
 const Ban = dynamic(() => import('@/components/modal-ban/ModalBan'));
 const Change = dynamic(() => import('@/components/modal-change/ModalChange'));
 const Banned = dynamic(() => import('@/components/Banned-views/ModalBanned'));
+const Unstaking = dynamic(
+  () => import('@/components/modalCondiciones/modalUnstaking')
+);
+
 const Network = dynamic(
   () => import('@/components/SoporteNetwork-views/ModalNetwork')
 );
@@ -60,6 +64,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Banned />;
     case 'NETWORK_VIEW':
       return <Network />;
+    case 'UNSTAKING_VIEW':
+      return <Unstaking />;
     default:
       return null;
   }

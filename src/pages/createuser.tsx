@@ -203,7 +203,7 @@ const CreateUser: NextPageWithLayout<
   };
 
   const CrearUsuario = async () => {
-    if (chainId == 5) {
+    if (chainId == 137) {
       login();
       setLoading(true);
       try {
@@ -403,7 +403,9 @@ const CreateUser: NextPageWithLayout<
             className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
             role="alert"
           >
-            <span className="font-medium">Usuario creado correctamente</span>
+            <span className="text-center font-medium">
+              Usuario creado correctamente
+            </span>
           </div>
         )}
 
@@ -412,7 +414,7 @@ const CreateUser: NextPageWithLayout<
             className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
             role="alert"
           >
-            <span className="font-medium">{errormsg}</span>
+            <span className="text-center font-medium">{errormsg}</span>
           </div>
         )}
       </div>

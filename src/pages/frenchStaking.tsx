@@ -557,7 +557,7 @@ const StakeFPage: NextPageWithLayout = () => {
         )}
       </div>
 
-      <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-5 xl:gap-6  3xl:grid-cols-4 4xl:grid-cols-5">
+      <div className="ml-4 mr-2 grid h-full w-full   grid-cols-2  gap-4 xs:grid-cols-2 md:ml-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-5 xl:gap-6  3xl:grid-cols-4 4xl:grid-cols-5">
         {currentF?.map((nft) => (
           <NFTGrids
             key={nft.nombre}

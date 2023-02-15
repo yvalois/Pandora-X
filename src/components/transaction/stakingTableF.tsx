@@ -455,7 +455,7 @@ export default function StakingTableF() {
           className="absolute top-[250px] right-[50px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">{alertMsg}</span>
+          <span className="text-center font-medium">{alertMsg}</span>
         </div>
       )}
 
@@ -464,7 +464,7 @@ export default function StakingTableF() {
           className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">{alertMsg}</span>
+          <span className="text-center font-medium">{alertMsg}</span>
         </div>
       )}
 
@@ -473,7 +473,7 @@ export default function StakingTableF() {
           className="absolute top-[250px] right-[50px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
-          <span className="font-medium">{alertMsg}</span>
+          <span className="text-center font-medium">{alertMsg}</span>
         </div>
       )}
 
@@ -482,7 +482,7 @@ export default function StakingTableF() {
           className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
-          <span className="font-medium">{alertMsg}</span>
+          <span className="text-center font-medium">{alertMsg}</span>
         </div>
       )}
     </div>

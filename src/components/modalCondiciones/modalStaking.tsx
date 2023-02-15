@@ -21,7 +21,7 @@ export default function ModalWithdraw() {
   };
 
   const verify = () => {
-    if (msg == true && msg2 == true) {
+    if (msg == true) {
       close();
     } else {
       setAlert('Debes aceptar los terminos');
@@ -30,10 +30,6 @@ export default function ModalWithdraw() {
 
   const change = () => {
     setMsg(!msg);
-  };
-
-  const change2 = () => {
-    setMsg2(!msg2);
   };
 
   return (
@@ -54,14 +50,12 @@ export default function ModalWithdraw() {
           </button>
         </AnchorLink>
         <p className="mb-8">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
-          assumenda voluptatem! Optio iusto eum qui voluptate aperiam mollitia
-          corporis! Ullam id commodi ad consectetur suscipit architecto delectus
-          nobis veritatis. Accusamus asperiores eaque nihil quaerat neque modi.
-          Laborum, ad. Aperiam quis qui necessitatibus vel labore voluptatem
-          praesentium ullam quos saepe possimus placeat optio consectetur porro
-          id odio ex quam assumenda quaerat fugiat, ipsum explicabo voluptate.
-          Quas veritatis architecto itaque ut doloremque?
+          By participating in NFT staking with NFT Studio by Pandora X you
+          acknowledge that you haver read, understood, and accepted all of the
+          terms and conditions in these NFT staking terms, and you acknowledge
+          and agree that you will be bound by and will comply with these NFT
+          staking Terms. If you do not understand and accept these NFT staking
+          terms in their entirety, you should not participate.
         </p>
         <div className="mb-0 flex items-center">
           <input
@@ -75,45 +69,20 @@ export default function ModalWithdraw() {
             for="link-checkbox"
             className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            Estoy de acuerdo con{' '}
+            I have read and I agree to NFT Staking{' '}
             <a
               onClick={() => {
-                window.open('https://pandorax.co/privacy-policy');
+                window.open('https://pandorax.co/terms-nft-staking');
               }}
               href="#"
               className="text-blue-600 hover:underline dark:text-blue-500"
             >
-              Policitcas de privacidad
+              Terms
             </a>
             .
           </label>
         </div>
 
-        <div className="mb-0 flex items-center">
-          <input
-            id="link-checkbox"
-            type="checkbox"
-            value={msg2}
-            onChange={change2}
-            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-          />
-          <label
-            for="link-checkbox"
-            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Estoy de acuerdo con{' '}
-            <a
-              onClick={() => {
-                window.open('https://pandorax.co/terms-of-use');
-              }}
-              href=""
-              className="text-blue-600 hover:underline dark:text-blue-500"
-            >
-              Terminos de uso
-            </a>
-            .
-          </label>
-        </div>
         <div className="mb-6">
           {' '}
           {!msg && alert.length > 0 && (

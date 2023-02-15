@@ -181,7 +181,7 @@ export default function ModalTP() {
           className="mb-4 ml-[20px] mt-[30px] flex w-[400px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">
+          <span className="text-center font-medium">
             la transferencia se ejecuto correctamente
           </span>
         </div>

@@ -44,7 +44,7 @@ export default function ProfileTab() {
           path: 'inversiones',
         }, */
         {
-          title: 'My NFTs',
+          title: 'Fr3nchies Blues',
           path: 'coleccion',
         },
       ]}

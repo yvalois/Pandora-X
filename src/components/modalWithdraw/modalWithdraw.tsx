@@ -25,6 +25,8 @@ export default function ModalWithdraw() {
   const { inversionMinter, staking, tokenContract, accountAddress } =
     useSelector((state) => state.blockchain);
   const dispatch = useDispatch<AppDispatch>();
+  const [statusW, setStatusW] = useState(0);
+  const [alertMsg, setAlertMsg] = useState('');
 
   const getInfo = async () => {
     const _id = window.localStorage.getItem('WithdrawID');
@@ -60,8 +62,25 @@ export default function ModalWithdraw() {
       await tx.wait();
       await verifyApprove();
       setLoading(false);
-    } catch (e) {
+      setAlertMsg('Aprobado');
+    } catch (err) {
       setLoading(false);
+      setStatusW(100);
+      //console.log(err)
+      const mess = err.message.split('[');
+      //const messa = mess[1].split(":")
+      //const messag = messa[3].split(",")
+      //const messag_ = messag[0].split("-")
+      const rejected = mess[0].split(' ');
+
+      if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+        setAlertMsg('Fondos insuficientes');
+      } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+        setAlertMsg('Transacion rechazada');
+      } else {
+        setAlertMsg('Error');
+      }
+      //
     }
   };
 
@@ -70,18 +89,35 @@ export default function ModalWithdraw() {
 
   const withdraw = async () => {
     setLoading(true);
-    const tx = await staking.withdrawP(id, tokenContract.address);
-    await tx.wait();
+    try {
+      const tx = await staking.withdrawP(id, tokenContract.address);
+      await tx.wait();
 
-    dispatch(uStaking(accountAddress));
-    dispatch(uInvertion(address));
-    setLoading(false);
-    closeModal('Withdraw_VIEW');
-    setSuccess(true);
-    setTimeout(() => {
-      setSuccess(false);
-      window.localStorage.removeItem('WithdrawID');
-    }, 3000);
+      dispatch(uStaking(accountAddress));
+      dispatch(uInvertion(address));
+      setStatusW(200);
+      setLoading(false);
+      closeModal('Withdraw_VIEW');
+      setAlertMsg('Transaccion completada correctamente');
+    } catch (err) {
+      setLoading(false);
+      setStatusW(100);
+      //console.log(err)
+      const mess = err.message.split('[');
+      //const messa = mess[1].split(":")
+      //const messag = messa[3].split(",")
+      //const messag_ = messag[0].split("-")
+      const rejected = mess[0].split(' ');
+
+      if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+        setAlertMsg('Fondos insuficientes');
+      } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+        setAlertMsg('Transacion rechazada');
+      } else {
+        setAlertMsg('Error');
+      }
+      //
+    }
   };
 
   const close = () => {
@@ -93,6 +129,13 @@ export default function ModalWithdraw() {
     getInfo();
     verifyApprove();
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      window.localStorage.removeItem('WithdrawID');
+      setStatusW(0);
+    }, 5000);
+  }, [statusW]);
   return (
     <>
       <div className="relative z-50 mx-auto h-[400px] w-[400px] max-w-full rounded-lg bg-white px-6 py-16 dark:bg-light-dark">
@@ -141,14 +184,29 @@ export default function ModalWithdraw() {
           </div>
         )}
       </div>
-      {succes && (
-        <div
-          className="absolute top-[430px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-          role="alert"
-        >
-          <span className="font-medium">Transaccion exitosa</span>
-        </div>
-      )}
+      <div className="mt-12 flex w-full justify-center align-middle">
+        {statusW == 200 && (
+          <div
+            className="absolute mb-8  w-[300px] justify-center self-center rounded-lg rounded-l bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+            role="alert"
+          >
+            <center>
+              <span className="font-medium ">{alertMsg}</span>
+            </center>
+          </div>
+        )}
+
+        {statusW == 100 && (
+          <div
+            className=" absolute mb-8  w-[300px] justify-center self-center rounded-lg rounded-l bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
+            <center>
+              <span className="font-medium ">{alertMsg}</span>
+            </center>
+          </div>
+        )}
+      </div>
     </>
   );
 }

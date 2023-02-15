@@ -72,7 +72,7 @@ export default function VoteDetailsCard({ vote }: any) {
           {/* show only for past vote */}
           {vote.status === 'past' && (
             <time className="mt-4 block text-gray-400 xs:mt-6 md:mt-7">
-              <span className="font-medium">Executed</span> at{' '}
+              <span className="text-center font-medium">Executed</span> at{' '}
               {dayjs(vote.executed_at).format('MMM DD, YYYY')}
             </time>
           )}

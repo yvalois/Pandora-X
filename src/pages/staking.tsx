@@ -277,7 +277,9 @@ const StakingPage: NextPageWithLayout = () => {
           className="mb-4 ml-[580px] mt-[30px] flex w-[300px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
-          <span className="font-medium">Usuario creado correctamente</span>
+          <span className="text-center font-medium">
+            Usuario creado correctamente
+          </span>
         </div>
       )}
 
@@ -286,7 +288,9 @@ const StakingPage: NextPageWithLayout = () => {
           className="mb-4 ml-[580px] mt-[30px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
-          <span className="font-medium">operacion fallo en el minteo</span>
+          <span className="text-center font-medium">
+            operacion fallo en el minteo
+          </span>
         </div>
       )}
     </>

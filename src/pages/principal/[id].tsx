@@ -68,7 +68,7 @@ const prod = [
     tipo: 'IV',
   },
   {
-    nombre: 'Comunidad Privadad',
+    nombre: 'Comunidad Privada',
     image: privada,
     tipo: 'CP',
   },

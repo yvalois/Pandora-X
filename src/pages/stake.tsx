@@ -277,7 +277,6 @@ const StakePage: NextPageWithLayout = () => {
         } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
           setErrorMSG('Transacion rechazada');
         } else {
-          console.log(mess);
           setErrorMSG('Error');
         }
         //
@@ -448,7 +447,7 @@ const StakePage: NextPageWithLayout = () => {
           <div>
             <div className="flex justify-center">
               <h1 className="text-lg font-semibold text-white">
-                {totalStaking} Nft's Stakeados
+                Hay {totalStaking} Nft's estakeados en total.
               </h1>
             </div>
             <div className="flex  justify-center">
@@ -457,7 +456,7 @@ const StakePage: NextPageWithLayout = () => {
               </h1>
             </div>
           </div>
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex justify-center ">
             <Button onClick={selectAll}>
               {allSelect ? 'Deselecionar todos ' : 'Selecionar todos'}
             </Button>
