@@ -373,50 +373,40 @@ export const uStakingF = (_address) => async (dispatch) => {
           .then((res) => res.json())
           .then((response) => {
             const info = response;
+            const id = parseInt(item) + 1;
             fetch(
-              `https://api.tatum.io/v3/nft/address/balance/ETH/${address}`,
+              `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
               {
                 method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
-                },
               }
             )
               .then((res) => res.json())
               .then((response) => {
-                console.log(response);
-                response.map((meta) => {
-                  let token = meta.metadata;
-                  token.map((_item) => {
-                    const nft = _item.metadata;
-                    if (_item.tokenId == item) {
-                      let a = nft.image.split('/');
-                      const dat = new Date(info.fechap);
-                      const date = dat.toLocaleDateString();
-                      const stak = {
-                        id: parseInt(item),
-                        fechaPago: {
-                          fecha: info.fechap,
-                          fechaM: date,
-                          fechaL: info.fechald,
-                        }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
-                        idCR: {
-                          id: parseInt(item),
-                          fechap: info.fechap,
-                          fechaM: date,
-                        },
-                        idW: parseInt(item),
-                        Nombre: nft.name,
-                        image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                        precio: 0.3,
-                        descripcion: nft.description,
-                      };
-                      inventorysf.push(stak);
-                      console.log(inventorysf);
-                    }
-                  });
-                });
+                const nft = response;
+                let a = nft.image.split('/');
+
+                const dat = new Date(info.fechap);
+                const date = dat.toLocaleDateString();
+                const stak = {
+                  id: parseInt(item),
+                  fechaPago: {
+                    fecha: info.fechap,
+                    fechaM: date,
+                    fechaL: info.fechald,
+                  },
+                  idCR: {
+                    id: parseInt(item),
+                    fechap: info.fechap,
+                    fechaM: date,
+                  },
+                  idW: parseInt(item),
+                  Nombre: nft.name,
+                  image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                  precio: 0.3,
+                  descripcion: nft.description,
+                };
+                inventorysf.push(stak);
+                console.log(inventorysf);
               });
           });
       }
@@ -1027,52 +1017,41 @@ export const connectWallet =
               })
                 .then((res) => res.json())
                 .then((response) => {
+                  const id = parseInt(item) + 1;
                   const info = response;
                   fetch(
-                    `https://api.tatum.io/v3/nft/address/balance/ETH/${address}`,
+                    `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
                     {
                       method: 'GET',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
-                      },
                     }
                   )
                     .then((res) => res.json())
                     .then((response) => {
-                      console.log(response);
-                      response.map((meta) => {
-                        let token = meta.metadata;
-                        token.map((_item) => {
-                          const nft = _item.metadata;
-                          if (_item.tokenId == item) {
-                            let a = nft.image.split('/');
-                            const dat = new Date(info.fechap);
-                            const date = dat.toLocaleDateString();
-                            const stak = {
-                              id: parseInt(item),
-                              fechaPago: {
-                                fecha: info.fechap,
-                                fechaM: date,
-                                fechaL: info.fechald,
-                              }, //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
-                              idCR: {
-                                id: parseInt(item),
-                                fechap: info.fechap,
-                                fechaM: date,
-                              },
-                              idW: parseInt(item),
-                              Nombre: nft.name,
-                              image:
-                                'https://gateway.pinata.cloud/ipfs/' + a[2],
-                              precio: 0.3,
-                              descripcion: nft.description,
-                            };
-                            inventorysf.push(stak);
-                            console.log(inventorysf);
-                          }
-                        });
-                      });
+                      const nft = response;
+                      let a = nft.image.split('/');
+
+                      const dat = new Date(info.fechap);
+                      const date = dat.toLocaleDateString();
+                      const stak = {
+                        id: parseInt(item),
+                        fechaPago: {
+                          fecha: info.fechap,
+                          fechaM: date,
+                          fechaL: info.fechald,
+                        },
+                        idCR: {
+                          id: parseInt(item),
+                          fechap: info.fechap,
+                          fechaM: date,
+                        },
+                        idW: parseInt(item),
+                        Nombre: nft.name,
+                        image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                        precio: 0.3,
+                        descripcion: nft.description,
+                      };
+                      inventorysf.push(stak);
+                      console.log(inventorysf);
                     });
                 });
             }
