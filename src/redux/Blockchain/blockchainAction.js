@@ -362,7 +362,7 @@ export const uStakingF = (_address) => async (dispatch) => {
 
   if (nftStakingF.length != undefined) {
     nftStakingF.map(async (item) => {
-      const is = await stakingfrenEContract.nftIsStaking(address, item);
+      const is = await stakingfrenEContract.nftIsStaking(_address, item);
       if (is == true) {
         fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
           method: 'GET',
@@ -374,7 +374,7 @@ export const uStakingF = (_address) => async (dispatch) => {
           .then((response) => {
             const info = response;
             fetch(
-              `https://api.tatum.io/v3/nft/address/balance/ETH/0x6E29BD03bac672B2E4B78128953928B9270d4c6C`,
+              `https://api.tatum.io/v3/nft/address/balance/ETH/${address}`,
               {
                 method: 'GET',
                 headers: {
@@ -1029,7 +1029,7 @@ export const connectWallet =
                 .then((response) => {
                   const info = response;
                   fetch(
-                    `https://api.tatum.io/v3/nft/address/balance/ETH/0x6E29BD03bac672B2E4B78128953928B9270d4c6C`,
+                    `https://api.tatum.io/v3/nft/address/balance/ETH/${address}`,
                     {
                       method: 'GET',
                       headers: {
@@ -1161,6 +1161,8 @@ export const connectWallet =
               inventoryp.push(prod);
             }
           });
+
+
         });*/
 
         nftiBalance.map(async (item) => {
@@ -1214,18 +1216,30 @@ export const connectWallet =
               ) {
                 let token = meta.metadata;
                 token.map((item) => {
-                  const nft = item.metadata;
-                  if (nft != undefined) {
-                    let a = nft.image.split('/');
-                    const prod = {
-                      name: nft.name,
-                      image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                      precio: 0.3,
-                      descripcion: nft.description,
-                      id: item.tokenId,
-                    };
-                    inventoryf.push(prod);
-                  }
+                  const id = parseInt(item.tokenId) + 1;
+                  fetch(
+                    `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
+                    {
+                      method: 'GET',
+                    }
+                  )
+                    .then((res) => res.json())
+                    .then((response) => {
+                      console.log(response);
+
+                      const nft = response;
+                      if (nft != undefined) {
+                        let a = nft.image.split('/');
+                        const prod = {
+                          name: nft.name,
+                          image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                          precio: 0.3,
+                          descripcion: nft.description,
+                          id: item.tokenId,
+                        };
+                        inventoryf.push(prod);
+                      }
+                    });
                 });
               }
             });
