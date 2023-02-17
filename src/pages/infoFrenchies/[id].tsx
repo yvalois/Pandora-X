@@ -25,6 +25,7 @@ const NFTDetailsPage: NextPageWithLayout<
     img: '',
     precio: 0,
     descripcion: '',
+    attributes: [{}],
     id: 0,
   };
 
@@ -36,7 +37,15 @@ const NFTDetailsPage: NextPageWithLayout<
 
     inventoryf.map((inv) => {
       if (inv.id == id) {
-        setNft(inv);
+        const nftdata = {
+          Nombre: inv.name,
+          img: inv.image,
+          precio: inv.precio,
+          descripcion: inv.descripcion,
+          attributes: inv.attributes,
+          id: 0,
+        };
+        setNft(nftdata);
       }
     });
   }, []);

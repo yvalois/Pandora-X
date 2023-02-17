@@ -208,7 +208,7 @@ export const menuItems = [
   },
 
   {
-    name: 'Stakear',
+    name: 'Staking',
     icon: <PlusCircle />,
     href: '#',
     dropdownItems: [
@@ -220,7 +220,7 @@ export const menuItems = [
     ],
   },
   {
-    name: 'Staking',
+    name: 'En staking',
     icon: <PlusCircle />,
     href: '#',
     dropdownItems: [
@@ -347,8 +347,8 @@ export default function Sidebar({ className }: SidebarProps) {
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
-              (inventoryf.length == 0 && item.name == 'Stakear') ||
-              (inventorysf.length == 0 && item.name == 'Staking') ||
+              //(inventoryf.length == 0 && item.name == 'Staking') ||
+              (inventorysf.length == 0 && item.name == 'En staking') ||
               (UsuarioR !== 'Admin' &&
                 UsuarioR !== 'usuario' &&
                 item.name == 'Inversiones') ||

@@ -406,7 +406,7 @@ const StakePage: NextPageWithLayout = () => {
   useEffect(() => {
     const a = async () => {
       const totalg = await frenchiesMinter.balanceOf(
-        stakingfrenEContract.address
+        '0x6E29BD03bac672B2E4B78128953928B9270d4c6C'
       );
       setTotalStaking(parseInt(totalg));
     };
@@ -446,14 +446,12 @@ const StakePage: NextPageWithLayout = () => {
         <div className="flex-column w-full  justify-between  md:w-[80%] lg:flex">
           <div>
             <div className="flex justify-center">
-              <h1 className="text-lg font-semibold text-white">
-                Hay {totalStaking} Nft's estakeados en total.
+              <h1 className="text-lg  text-gray-400 ">
+                Hay {totalStaking} Nft's en staking en total.
               </h1>
             </div>
             <div className="flex  justify-center">
-              <h1 className="text-lg font-semibold text-white">
-                TVL: {tvl} USDT
-              </h1>
+              <h1 className="text-lg  text-gray-400 ">TVL: {tvl} USDT</h1>
             </div>
           </div>
           <div className="mt-8 flex justify-center ">

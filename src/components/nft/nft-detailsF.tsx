@@ -276,6 +276,8 @@ export default function NftDetailsF(Nft) {
   const [alertMsg, setAlertMsg] = useState('');
   const { perfil, nombre } = useSelector((state) => state.Usuario);
 
+  const propiedades = Nft.Nft.attributes;
+
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
@@ -316,11 +318,17 @@ export default function NftDetailsF(Nft) {
                   <div className="space-y-6">
                     <div className="block">
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                        Description
+                        About
                       </h3>
                       <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
                         {Nft.Nft.descripcion}
                       </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
+                        Properties
+                      </h3>
                     </div>
                     <div className="block">
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
