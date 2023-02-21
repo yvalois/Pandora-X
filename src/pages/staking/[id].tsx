@@ -215,6 +215,7 @@ const StakingPage: NextPageWithLayout = () => {
   const Stake = async () => {
     if (chainId == 137) {
       try {
+        alert(id);
         setLoading(true);
         const indice = findInd();
         const Contra = process.env.NEXT_PUBLIC_BACKEND_CONS;

@@ -6,7 +6,7 @@ export const contract = () => {
     daiContract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     productoMinter: '0x40ED3Adb3E97f72bE5f85A69bf0be3371cad78E2',
     inversionMinter: '0x2Bb6CfdcabF3245298522666453383BbBC179920',
-    staking: '0x1fdCE192F2A4dd5E482BE9e54EF7aa68Ef6CDE53',
+    staking: '0x31f24BCE39e4e12c9566eD0eEa9126f0c2C4ED2C',
     stakingETH: '0x6E29BD03bac672B2E4B78128953928B9270d4c6C',
     stakingPOL: '0x32bfb6790B3536a7269185278B482A0FA0385362',
     frenchies: '0x32bfb6790B3536a7269185278B482A0FA0385362',
@@ -14,7 +14,7 @@ export const contract = () => {
     //0x125F36815B9fB10B6164653bd57d9e8d42a0D33b
     maticContract: '0x0000000000000000000000000000000000001010',
     RPC_URL:
-      'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
+      'https:0x2Bb6CfdcabF3245298522666453383BbBC179920//polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0x52020b93791c0AD281362D6F5825B1Bb226BB6e6', //aqui ponemos el usdt
   };
 };

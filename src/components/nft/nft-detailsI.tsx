@@ -239,6 +239,7 @@ export default function NftDetails({ tipo }) {
     precio: 0,
     tipoN: 0,
     descripcion: '',
+    id: 0,
   };
   const [nft, setNft] = useState(nftdata);
   const [type, setType] = useState('');
