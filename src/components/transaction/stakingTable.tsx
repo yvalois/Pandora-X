@@ -108,13 +108,12 @@ export default function StakingTable() {
         openModal('UNSTAKING_VIEW');
         window.localStorage.setItem('WithdrawID', value.toString());
         //setaear variables en el local storage obtenerlo y llamar a la funcion desde el boyon aceptar Unstaking.
-        /*setLoading(true);
+        setLoading(true);
         const isOutTime = await staking.isOutTime(value);
         if (isOutTime) {
           window.localStorage.setItem('WithdrawID', value.toString());
           openModal('WITHDRAW_VIEW');
           setLoading(false);
-
         } else {
           const tx = await staking.withdraw(value);
           await tx.wait();
@@ -123,7 +122,7 @@ export default function StakingTable() {
           setLoading(false);
           setStatusW(200);
           setAlertMsg('Transacion cumplida');
-        }*/
+        }
       } else {
         openModal('NETWORK_VIEW');
         setLoading(false);
