@@ -374,7 +374,7 @@ export const uStakingF = (_address) => async (dispatch) => {
     nftStakingF.map(async (item) => {
       const is = await stakingfrenEContract.nftIsStaking(_address, item);
       if (is == true) {
-        fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getStaking/${item}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -671,7 +671,7 @@ export const uStaking = (address) => async (dispatch) => {
 };*/
 
 const getProductos = async () => {
-  fetch(`${process.env.BACKEND_API}/getProducto`, {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -759,7 +759,7 @@ const infoPagosC = async (address, staking, rango, categoria) => {
 };
 
 const getInversiones = async () => {
-  fetch(`${process.env.BACKEND_API}/getInversion`, {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -773,7 +773,7 @@ const getInversiones = async () => {
 };
 
 const conectar = (accountAddress, stakingContract) => async (dispatch) => {
-  fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/login/${accountAddress}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -853,7 +853,7 @@ const conectar = (accountAddress, stakingContract) => async (dispatch) => {
     });
 };
 export const update = (accountAddress) => async (dispatch) => {
-  fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/login/${accountAddress}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -951,6 +951,7 @@ export const connectWallet =
         await getProductos();
         await getInversiones();
         const nftStaking = await stakingContract.getNftsInStaking(address);
+
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
         );
@@ -1018,12 +1019,15 @@ export const connectWallet =
           nftStakingF.map(async (item) => {
             const is = await stakingfrenEContract.nftIsStaking(address, item);
             if (is == true) {
-              fetch(`${process.env.BACKEND_API}/getStaking/${item}`, {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              })
+              fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_API}/getStaking/${item}`,
+                {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                }
+              )
                 .then((res) => res.json())
                 .then((response) => {
                   const id = parseInt(item) + 1;
