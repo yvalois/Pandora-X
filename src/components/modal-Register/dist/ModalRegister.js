@@ -242,7 +242,7 @@ function ModalRegister() {
     return __awaiter(_this, void 0, void 0, function () {
       return __generator(this, function (_a) {
         try {
-          fetch('${process.env.BACKEND_API}/CrearUsuario', {
+          fetch('${process.env.NEXT_PUBLIC_BACKEND_API }/CrearUsuario', {
             method: 'POST',
             body: JSON.stringify(value),
             headers: {
@@ -364,7 +364,7 @@ function ModalRegister() {
     });
   };
   /*const conectar = (accountAddress) => {
-      fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API }/login/${accountAddress}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

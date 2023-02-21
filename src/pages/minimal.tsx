@@ -48,7 +48,7 @@ const Index2: NextPageWithLayout<
     <>
       <NextSeo
         title="Pandora Minimal"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Nft-Sudio powered by Pandorax"
       />
       <div className="mt-8 gap-6 px-4 sm:px-6 lg:px-8 xl:px-10 3xl:px-12">
         <PriceFeedSlider

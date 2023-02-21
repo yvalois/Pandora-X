@@ -129,13 +129,16 @@ const AuthorProfilePage: NextPageWithLayout<
       banner: hola,
     };
 
-    fetch(`${process.env.BACKEND_API}/updatebanner/${accountAddress}`, {
-      method: 'PUT',
-      body: JSON.stringify(banner),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/updatebanner/${accountAddress}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(banner),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then((res) => {
         res.json();
 
@@ -150,13 +153,16 @@ const AuthorProfilePage: NextPageWithLayout<
     const name = {
       nombre: newName,
     };
-    fetch(`${process.env.BACKEND_API}/updatename/${accountAddress}`, {
-      method: 'PUT',
-      body: JSON.stringify(name),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/updatename/${accountAddress}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(name),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then((res) => {
         res.json();
 
@@ -173,13 +179,16 @@ const AuthorProfilePage: NextPageWithLayout<
     const perfil = {
       perfil: aux,
     };
-    fetch(`${process.env.BACKEND_API}/updateprofile/${accountAddress}`, {
-      method: 'PUT',
-      body: JSON.stringify(perfil),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/updateprofile/${accountAddress}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(perfil),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then((res) => {
         res.json();
 
@@ -226,10 +235,7 @@ const AuthorProfilePage: NextPageWithLayout<
 
   return (
     <>
-      <NextSeo
-        title="Profile"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-      />
+      <NextSeo title="Profile" description="Nft-Sudio powered by Pandorax" />
       {/* Profile Cover Image */}
       <div className="relative h-36 w-full overflow-hidden rounded-lg sm:h-44 sm:w-[100%] md:h-64 md:w-[100%] xl:h-80 xl:w-[100%] 2xl:h-96 3xl:h-[448px]">
         <div className="relative h-full w-full">

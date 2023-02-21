@@ -69,7 +69,7 @@ const NFTDetailsPage: NextPageWithLayout<
     <>
       <NextSeo
         title="NFT details"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Nft-Sudio powered by Pandorax"
       />
       <NftDetails tipo={type} />
     </>

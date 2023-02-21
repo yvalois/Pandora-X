@@ -33,13 +33,16 @@ export default function AuthorInformation({
     const value = {
       descripcion: newDescipcion,
     };
-    fetch(`${process.env.BACKEND_API}/updatedescripcion/${accountAddress}`, {
-      method: 'PUT',
-      body: JSON.stringify(value),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/updatedescripcion/${accountAddress}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(value),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then((res) => {
         res.json();
 

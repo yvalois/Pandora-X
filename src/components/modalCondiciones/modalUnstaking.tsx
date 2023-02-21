@@ -5,6 +5,7 @@ import Button from '../ui/button';
 import { Warning } from '@/components/icons/warning';
 import { useDispatch, useSelector } from 'react-redux';
 import { uInvertion } from '@/redux/Blockchain/blockchainAction';
+import { useProvider } from 'wagmi';
 
 export default function ModalWithdraw() {
   const { closeModal, openModal } = useModal();
@@ -18,12 +19,10 @@ export default function ModalWithdraw() {
   const [statusW, setStatusW] = useState(0);
   const [alertMsg, setAlertMsg] = useState('');
 
-  const { inventorys, staking, tokenContract, chainId } = useSelector(
-    (state) => state.blockchain
-  );
+  const { inventorys, staking, tokenContract, chainId, accountAddress } =
+    useSelector((state) => state.blockchain);
   const [alert, setAlert] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-
   const close = () => {
     closeModal();
   };
@@ -43,7 +42,7 @@ export default function ModalWithdraw() {
         const tx = await staking.withdraw(value);
         await tx.wait();
 
-        dispatch(uInvertion(provider, address));
+        dispatch(uInvertion(accountAddress));
         setLoading(false);
         setStatusW(200);
         setAlertMsg('Transacion cumplida');

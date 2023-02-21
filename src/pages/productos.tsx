@@ -648,7 +648,7 @@ const ProductosPage: NextPageWithLayout<
     <>
       <NextSeo
         title="Explore NTF"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Nft-Sudio powered by Pandorax"
       />
       <div className="grid sm:pt-5  4xl:grid-cols-4">
         <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block"></div>

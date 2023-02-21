@@ -37,7 +37,7 @@ export default function ModalChange() {
       Fecha: hoy.toLocaleDateString(),
       Rol: 'usuario',
     };
-    fetch(`${process.env.BACKEND_API}/updateAccount/${address}`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/updateAccount/${address}`, {
       method: 'PUT',
       body: JSON.stringify(newAccount),
       headers: {

@@ -138,7 +138,7 @@ function NftDetails4Page() {
 
   useEffect(() => {
     const getProductos = async () => {
-      fetch(`${process.env.BACKEND_API}/getProducto`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getProducto`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

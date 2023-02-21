@@ -71,7 +71,7 @@ const StakePage: NextPageWithLayout = () => {
   let auxNFT = [];
 
   const getTvl = async () => {
-    fetch(`${process.env.BACKEND_API}/getTvl`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getTvl`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -246,7 +246,7 @@ const StakePage: NextPageWithLayout = () => {
             fechald: ld,
             fechap: paidDay,
           };
-          fetch(`${process.env.BACKEND_API}/crearstaking`, {
+          fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/crearstaking`, {
             method: 'POST',
             body: JSON.stringify(value),
             headers: {
@@ -437,10 +437,7 @@ const StakePage: NextPageWithLayout = () => {
 
   return (
     <>
-      <NextSeo
-        title="Create NFT"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-      />
+      <NextSeo title="Create NFT" description="Nft-Sudio powered by Pandorax" />
 
       <div className="flex w-full justify-center">
         <div className="flex-column w-full  justify-between  md:w-[80%] lg:flex">

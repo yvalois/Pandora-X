@@ -128,10 +128,7 @@ const StakingPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <NextSeo
-        title="Create NFT"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-      />
+      <NextSeo title="Create NFT" description="Nft-Sudio powered by Pandorax" />
       <div className="mb-8 h-[630px] w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[100%] lg:w-[100%] 2xl:w-[100%] 3xl:w-[100%]">
         <NftSlider
           nfts={currentInv}

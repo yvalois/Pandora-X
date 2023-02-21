@@ -299,7 +299,7 @@ const NftDetails5Page: NextPageWithLayout<
 
   useEffect(() => {
     const getInversiones = async () => {
-      fetch(`${process.env.BACKEND_API}/getInversion`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getInversion`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -332,7 +332,7 @@ const NftDetails5Page: NextPageWithLayout<
       <div className="flex flex-grow">
         <NextSeo
           title="Inversion"
-          description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+          description="Nft-Sudio powered by Pandorax"
         />
 
         <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">

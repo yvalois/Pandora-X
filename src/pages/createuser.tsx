@@ -148,13 +148,16 @@ const CreateUser: NextPageWithLayout<
       Fecha: hoy.toLocaleDateString(),
       Rol: 'usuario',
     };
-    fetch(`${process.env.BACKEND_API}/updateAccount/${value.Address}`, {
-      method: 'PUT',
-      body: JSON.stringify(newAccount),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/updateAccount/${value.Address}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(newAccount),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then((res) => {
         res.json();
         if (res.status == 200) {
@@ -169,7 +172,7 @@ const CreateUser: NextPageWithLayout<
   };
 
   const login = async () => {
-    fetch(`${process.env.BACKEND_API}/login/${value.Address}`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/login/${value.Address}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -186,7 +189,7 @@ const CreateUser: NextPageWithLayout<
   };
 
   const registrar = async () => {
-    fetch(`${process.env.BACKEND_API}/CrearUsuario`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/CrearUsuario`, {
       method: 'POST',
       body: JSON.stringify(value),
       headers: {
@@ -255,7 +258,7 @@ const CreateUser: NextPageWithLayout<
     <>
       <NextSeo
         title="Create new user"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Nft-Sudio powered by Pandorax"
       />
       <div className="mx-auto flex  w-full justify-center self-center text-sm md:pt-14 4xl:pt-24 ">
         <div className=" w-full max-w-xs  justify-center">

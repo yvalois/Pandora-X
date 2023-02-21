@@ -83,7 +83,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   //wallet address saldra
 
   /*const conectar = async () => {
-    fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API }/login/${accountAddress}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

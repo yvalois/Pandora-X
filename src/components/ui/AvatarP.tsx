@@ -77,13 +77,16 @@ function AvatarP({
     const value = {
       profile: prevProfile,
     };
-    fetch(`${process.env.BACKEND_API}/updatebanner/${accountAddress}`, {
-      method: 'POST',
-      body: JSON.stringify(value),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/updatebanner/${accountAddress}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(value),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then((res) => {
         res.json();
       })

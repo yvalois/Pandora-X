@@ -27,10 +27,7 @@ const ClassicPage: NextPageWithLayout<
 > = () => {
   return (
     <>
-      <NextSeo
-        title="Pandora Classic Demo"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-      />
+      <NextSeo title="Pandora Classic Demo" description="" />
       <div className="flex flex-wrap">
         <div className="mb-8 w-full sm:mb-0  ">
           <CoinSlider coins={coinSlideData} />

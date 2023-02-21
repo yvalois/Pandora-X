@@ -34,7 +34,7 @@ export default function ModalBan() {
       Ban: action,
     };
 
-    fetch(`${process.env.BACKEND_API}/ban/${address}`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/ban/${address}`, {
       method: 'PUT',
       body: JSON.stringify(value),
       headers: {

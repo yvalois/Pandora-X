@@ -221,12 +221,15 @@ const StakeFPage: NextPageWithLayout = () => {
         let tx = await stakingfrenEContract.withdraw(nftSelects);
         await tx.wait();
         for (let i = 0; i < nftSelects.length; i++) {
-          fetch(`${process.env.BACKEND_API}/deleteStaking/${nftSelects[i]}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_API}/deleteStaking/${nftSelects[i]}`,
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
           if (i == nftSelects.length - 1) {
             setTimeout(() => {
               const si = true;
@@ -290,13 +293,16 @@ const StakeFPage: NextPageWithLayout = () => {
             const val = {
               fechap: paidDay,
             };
-            fetch(`${process.env.BACKEND_API}/actualizarstaking/${item.id}`, {
-              method: 'PUT',
-              body: JSON.stringify(val),
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
+            fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_API}/actualizarstaking/${item.id}`,
+              {
+                method: 'PUT',
+                body: JSON.stringify(val),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
             setProfile(true);
             setErrorMSG('Transaccion realizada de manera exitosa');
             setCantC(0);
@@ -463,10 +469,7 @@ const StakeFPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <NextSeo
-        title="Create NFT"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-      />
+      <NextSeo title="Create NFT" description="Nft-Sudio powered by Pandorax" />
 
       <div className="mt-[-60px] flex w-full justify-center">
         <div className="flex-column w-full  justify-between  md:w-[80%] lg:flex">

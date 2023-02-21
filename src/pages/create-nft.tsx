@@ -302,7 +302,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   ];
 
   const getProductos = async () => {
-    fetch(`${process.env.BACKEND_API}/getProducto`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getProducto`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -316,7 +316,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const getInversiones = async () => {
-    fetch(`${process.env.BACKEND_API}/getInversion`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getInversion`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -330,7 +330,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearProducto = async (objeto) => {
-    fetch(`${process.env.BACKEND_API}/CrearNftProducto`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/CrearNftProducto`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -350,7 +350,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
   };
 
   const CrearInversion = async (objeto) => {
-    fetch(`${process.env.BACKEND_API}/CrearNftInversion`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/CrearNftInversion`, {
       method: 'POST',
       body: JSON.stringify(objeto),
       headers: {
@@ -433,10 +433,7 @@ const CreateNFTPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <NextSeo
-        title="Create NFT"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-      />
+      <NextSeo title="Create NFT" description="Nft-Sudio powered by Pandorax" />
       <div className="mx-auto w-full px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
         <h2 className="mb-6 text-lg font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-10 sm:text-2xl">
           Create New Item

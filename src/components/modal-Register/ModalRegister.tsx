@@ -77,7 +77,7 @@ export default function ModalRegister() {
 
   const RegistrarBD = async () => {
     try {
-      fetch(`${process.env.BACKEND_API}/CrearUsuario`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/CrearUsuario`, {
         method: 'POST',
         body: JSON.stringify(value),
         headers: {
@@ -184,7 +184,7 @@ export default function ModalRegister() {
   };
 
   /*const conectar = (accountAddress) => {
-    fetch(`${process.env.BACKEND_API}/login/${accountAddress}`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API }/login/${accountAddress}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

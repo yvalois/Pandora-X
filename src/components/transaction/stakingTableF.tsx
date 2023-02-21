@@ -111,13 +111,16 @@ export default function StakingTableF() {
             fechap: paidDay,
           };
 
-          fetch(`${process.env.BACKEND_API}/actualizarstaking/${value.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(val),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_API}/actualizarstaking/${value.id}`,
+            {
+              method: 'PUT',
+              body: JSON.stringify(val),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
 
           setLoading(false);
           setStatusC(200);
@@ -169,7 +172,7 @@ export default function StakingTableF() {
         dispatch(uStakingF(accountAddress));
         dispatch(uFrench(accountAddress));
 
-        fetch(`${process.env.BACKEND_API}/deleteStaking/${value}`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/deleteStaking/${value}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

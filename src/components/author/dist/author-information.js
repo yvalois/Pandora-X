@@ -172,7 +172,8 @@ function AuthorInformation(_a) {
           descripcion: newDescipcion,
         };
         fetch(
-          '${process.env.BACKEND_API}/updatedescripcion/' + accountAddress,
+          '${process.env.NEXT_PUBLIC_BACKEND_API }/updatedescripcion/' +
+            accountAddress,
           {
             method: 'PUT',
             body: JSON.stringify(value),

@@ -190,7 +190,7 @@ const RetiroPanelPage: NextPageWithLayout<
       Tvl: tvl,
     };
 
-    fetch(`${process.env.BACKEND_API}/updateTvl`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/updateTvl`, {
       method: 'PUT',
       body: JSON.stringify(val),
       headers: {
@@ -209,7 +209,7 @@ const RetiroPanelPage: NextPageWithLayout<
   };
 
   const getStakings = async () => {
-    fetch(`${process.env.BACKEND_API}/getStakings`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getStakings`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

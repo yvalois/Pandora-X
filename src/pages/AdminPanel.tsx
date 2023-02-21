@@ -30,7 +30,7 @@ const AdminPanelPage: NextPageWithLayout<
   const currentUser = userData.slice(firstUserIndex, lastUserIndex);
 
   const getUsers = async () => {
-    fetch(`${process.env.BACKEND_API}/getUsers`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getUsers`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

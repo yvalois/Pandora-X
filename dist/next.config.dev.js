@@ -83,7 +83,7 @@ module.exports = withPWA(
         ],
       },
       env: {
-        BACKEND_API: process.env.BACKEND_API,
+        NEXT_PUBLIC_BACKEND_API: process.env.NEXT_PUBLIC_BACKEND_API,
       },
       sass: true,
       modules: true,

@@ -307,10 +307,7 @@ const StakingPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <NextSeo
-        title="Staking"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
-      />
+      <NextSeo title="Staking" description="Nft-Sudio powered by Pandorax" />
 
       <div className="mx-auto w-full px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
         <div className="w-full flex-col md:hidden  ">

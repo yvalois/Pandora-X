@@ -34,7 +34,7 @@ const getProductos = async () => {
     productoMinterAbi,
     provider
   );
-  fetch(`${process.env.BACKEND_API}/getProducto`, {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getProducto`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const getInversiones = async () => {
     inversionMinterAbi,
     provider
   );
-  fetch(`${process.env.BACKEND_API}/getInversion`, {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getInversion`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
