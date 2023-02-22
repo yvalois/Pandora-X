@@ -370,6 +370,11 @@
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            },
+            {
                 "internalType": "uint256",
                 "name": "num",
                 "type": "uint256"
