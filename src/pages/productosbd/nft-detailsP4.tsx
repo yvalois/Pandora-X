@@ -23,8 +23,9 @@ import DashboardLayout from '@/layouts/_dashboard';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 
 import router from 'next/router';
-import { useAccount, useProvider } from 'wagmi';
 import { GetStaticProps } from 'next';
+import { connectWallet } from '@/redux/Blockchain/blockchainAction';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -165,6 +166,20 @@ function NftDetails4Page() {
     };
     getProductos();
   }, []);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+  const { address } = useAccount();
+  const { isConnect } = useSelector((state) => state.blockchain);
+
+  useEffect(() => {
+    if (!isConnect) {
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      }
+    }
+  }, [isConnect]);
 
   return (
     <div className="flex flex-grow">

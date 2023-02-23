@@ -6,9 +6,10 @@ import NftDetailsF from '@/components/nft/nft-detailsF';
 import { nftData } from '@/data/static/single-nft';
 import { useEffect, useState } from 'react';
 import router from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ethers } from 'ethers';
-
+import { connectWallet } from '@/redux/Blockchain/blockchainAction';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
@@ -18,7 +19,9 @@ export const getStaticProps: GetStaticProps = async () => {
 const NFTDetailsPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  const { inventoryf } = useSelector((state: any) => state.blockchain);
+  const { inventoryf, isConnect } = useSelector(
+    (state: any) => state.blockchain
+  );
 
   const nftdata = {
     Nombre: '',
@@ -48,18 +51,28 @@ const NFTDetailsPage: NextPageWithLayout<
         setNft(nftdata);
       }
     });
-  }, []);
+  }, [inventoryf]);
 
   const Usuario = useSelector((state: any) => state.Usuario);
+
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+  const { address } = useAccount();
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    if (
-      Usuario.rol !== 'Admin' &&
-      Usuario.rol !== 'usuario' &&
-      Usuario.rol !== 'cliente'
-    ) {
-      window.location.href = '/';
+    if (!isConnect) {
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      } else if (
+        Usuario.rol !== 'Admin' &&
+        Usuario.rol !== 'usuario' &&
+        Usuario.rol !== 'cliente'
+      ) {
+        window.location.href = '/';
+      }
     }
-  });
+  }, []);
 
   return (
     <>

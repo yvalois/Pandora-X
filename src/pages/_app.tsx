@@ -18,7 +18,7 @@ import 'swiper/css';
 import '@/assets/css/scrollbar.css';
 import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import store from '@/redux/store';
 
 import { alchemyProvider } from 'wagmi/providers/alchemy';
@@ -36,12 +36,11 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   const { chains, provider, webSocketProvider } = configureChains(
-    [mainnet, polygon, goerli],
+    [mainnet, polygon],
     [alchemyProvider({ apiKey: 'q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ' })]
   );
-
   const client = createClient({
-    autoConnect: false,
+    autoConnect: true,
     connectors: [
       new MetaMaskConnector({
         chains,

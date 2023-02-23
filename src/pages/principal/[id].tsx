@@ -39,6 +39,7 @@ import AvatarP from '@/components/ui/AvatarP';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 import router from 'next/router';
+import { connectWallet } from '@/redux/Blockchain/blockchainAction';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -498,6 +499,18 @@ const AuthorProfilePage: NextPageWithLayout<
   useEffect(() => {
     return window.localStorage.setItem('Wallet_address', router.query.id);
   }, []);
+
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+  const { address } = useAccount();
+
+  useEffect(() => {
+    if (!isConnect) {
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      }
+    }
+  }, [isConnect]);
 
   return (
     <>

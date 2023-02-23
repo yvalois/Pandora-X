@@ -37,8 +37,6 @@ export default function ProfileTabUser() {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
     setCurrentF(inventoryf);
-
-    setTimeout(() => {}, 5000);
   }, [inventoryp, inventoryi, inventoryf]);
 
   return (

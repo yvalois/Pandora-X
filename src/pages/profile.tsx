@@ -32,6 +32,8 @@ import { WalletContext } from '@/lib/hooks/use-connect';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { provider } from '@/NFTROL';
 
+import { connectWallet } from '@/redux/Blockchain/blockchainAction';
+
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
@@ -52,7 +54,9 @@ const AuthorProfilePage: NextPageWithLayout<
   };
 
   const Usuario = useSelector((state: any) => state.Usuario);
-  const { accountAddress } = useSelector((state) => state.blockchain);
+  const { accountAddress, isConnect } = useSelector(
+    (state) => state.blockchain
+  );
   const [copiado, setCopiado] = useState(false);
   const [link, setLink] = useState('');
   const [editIsActivated, setEditIsActivated] = useState(false);
@@ -113,15 +117,24 @@ const AuthorProfilePage: NextPageWithLayout<
     }
   };
 
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+
+  const { address } = useAccount();
+
   useEffect(() => {
-    if (
-      Usuario.rol !== 'Admin' &&
-      Usuario.rol !== 'usuario' &&
-      Usuario.rol !== 'cliente'
-    ) {
-      window.location.href = '/';
+    if (!isConnect) {
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      } else if (
+        Usuario.rol !== 'Admin' &&
+        Usuario.rol !== 'usuario' &&
+        Usuario.rol !== 'cliente'
+      ) {
+        window.location.href = '/';
+      }
     }
-  });
+  }, [isConnect]);
 
   const UploadBanner = async () => {
     const hola = prevBanner.toString();
@@ -219,18 +232,11 @@ const AuthorProfilePage: NextPageWithLayout<
     }, 2000);
   }, [copiado]);
 
-  const { isConnect } = useSelector((state) => state.blockchain);
-
   const { disconnectWallet } = useContext(WalletContext);
   useEffect(() => {
     if (!isConnect) {
       disconnectWallet();
     }
-  }, []);
-
-  useEffect(() => {
-    //dispatch(uFrench(accountAddress));
-    dispatch(uStakingF(accountAddress));
   }, []);
 
   return (

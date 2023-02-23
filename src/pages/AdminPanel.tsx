@@ -145,7 +145,7 @@ const AdminPanelPage: NextPageWithLayout<
             />
             <Button
               onClick={() => alert('Buscando Address,' + busqueda)}
-              className="font-small rounded-tl-sm  rounded-bl-sm px-4 py-2 text-sm focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="font-small rounded-tl-sm  rounded-bl-sm px-4 py-2 text-sm focus:outline-none focus:ring-4 "
             >
               Search
             </Button>

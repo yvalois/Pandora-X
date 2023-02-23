@@ -35,7 +35,8 @@ import AnchorLink from '@/components/ui/links/anchor-link';
 import { uFrench, uStakingF } from '@/redux/Blockchain/blockchainAction';
 import { useModal } from '@/components/modal-views/context';
 import NFTGrids from '@/components/ui/nft-card-s';
-
+import { connectWallet } from '@/redux/Blockchain/blockchainAction';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 const StakePage: NextPageWithLayout = () => {
   const nftInfo = {
     nombre: '',
@@ -370,16 +371,23 @@ const StakePage: NextPageWithLayout = () => {
       }
     }, 3000);
   }, [status]);
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+  const { address } = useAccount();
 
   useEffect(() => {
-    if (
-      Usuario.rol !== 'Admin' &&
-      Usuario.rol !== 'usuario' &&
-      Usuario.rol !== 'cliente'
-    ) {
-      window.location.href = '/';
+    if (!isConnect) {
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      } else if (
+        Usuario.rol !== 'Admin' &&
+        Usuario.rol !== 'usuario' &&
+        Usuario.rol !== 'cliente'
+      ) {
+        window.location.href = '/';
+      }
     }
-  });
+  }, [isConnect]);
 
   useEffect(() => {
     let i = 0;

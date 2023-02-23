@@ -25,6 +25,7 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import inversionesAbi from '../../abi/InversionMinter.json';
 
 import router from 'next/router';
+import { connectWallet } from '@/redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { NextSeo } from 'next-seo';
 
@@ -60,6 +61,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
   const [isBuy, setIsBuy] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [alertMsg2, setAlertMsg2] = useState('');
+  const [profile, setProfile] = useState(false);
 
   const Usuario = useSelector((state) => state.Usuario);
   const [auxPrice, setAuxPrice] = useState(price);
@@ -140,6 +142,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
           setApprovedToken(0);
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
+          setProfile(true);
           setIsBuy(true);
           dispatch(uInvertion(accountAddress));
 
@@ -181,11 +184,17 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
     verifyApprove();
   }, []);
 
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+
   useEffect(() => {
-    if (Usuario.rol !== 'Admin' && Usuario.rol !== 'usuario') {
-      window.location.href = '/';
-    }
-  });
+    if (!isConnect)
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      } else if (Usuario.rol !== 'Admin' && Usuario.rol !== 'usuario') {
+        window.location.href = '/';
+      }
+  }, [isConnect]);
 
   return (
     <div
@@ -219,18 +228,26 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
           </div>
         </div>
         <div className="justify-ae flex w-full">
-          {isConnect && !isBuy && !loading && parseInt(price) > approvedToken && (
-            <Button shape="rounded" onClick={() => approve()}>
-              Aprobar
-            </Button>
-          )}
-          {isConnect && !isBuy && !loading && parseInt(price) <= approvedToken && (
-            <Button shape="rounded" onClick={() => buyNft()}>
-              {`Comprar por ${price} `}
-            </Button>
-          )}
+          {isConnect &&
+            !isBuy &&
+            !loading &&
+            parseInt(price) > approvedToken &&
+            !profile && (
+              <Button shape="rounded" onClick={() => approve()}>
+                Aprobar
+              </Button>
+            )}
+          {isConnect &&
+            !isBuy &&
+            !loading &&
+            parseInt(price) <= approvedToken &&
+            !profile && (
+              <Button shape="rounded" onClick={() => buyNft()}>
+                {`Comprar por ${price} `}
+              </Button>
+            )}
 
-          {!isConnect && (
+          {!isConnect && !profile && (
             <Button
               shape="rounded"
               onClick={() => openModal('WALLET_CONNECT_VIEW')}
@@ -239,7 +256,14 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
             </Button>
           )}
 
-          {!isBuy && loading && <Button shape="rounded">Cargando...</Button>}
+          {!isBuy && loading && !profile && (
+            <Button shape="rounded">Cargando...</Button>
+          )}
+          {profile && (
+            <Button shape="rounded">
+              <AnchorLink href={'/profile'}>ir a perfil</AnchorLink>
+            </Button>
+          )}
 
           <Button
             shape="rounded"

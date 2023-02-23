@@ -52,7 +52,6 @@ export default function ModalRegister() {
   const [rango, setRango] = useState('');
   const [value1, setValue1] = useState('');
   const { data: signer, isError, isLoading: arroz } = useSigner();
-  const { address } = useAccount();
   const { closeModal } = useModal();
   const provider = useProvider();
 

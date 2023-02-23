@@ -21,10 +21,13 @@ import productosAbi from '../../abi/ProductoMinter.json';
 import DashboardLayout from '@/layouts/_dashboard';
 
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
+import { connectWallet } from '@/redux/Blockchain/blockchainAction';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 
 import router from 'next/router';
-import { useAccount, useProvider } from 'wagmi';
+
 import { GetStaticProps } from 'next';
+import { isCancel } from 'axios';
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
@@ -135,6 +138,7 @@ function NftDetails1Page() {
     provider
   );
   const [nft, setNft] = useState(nftdata);
+  const { isConnect } = useSelector((state) => state.blockchain);
 
   useEffect(() => {
     const getProductos = async () => {
@@ -165,6 +169,19 @@ function NftDetails1Page() {
     };
     getProductos();
   }, []);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+  const { address } = useAccount();
+
+  useEffect(() => {
+    if (!isConnect) {
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      }
+    }
+  }, [isConnect]);
 
   return (
     <div className="flex flex-grow">

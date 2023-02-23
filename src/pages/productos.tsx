@@ -38,7 +38,7 @@ import {
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
 import { WalletContext } from '@/lib/hooks/use-connect';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 
 const productos = [
   {
@@ -643,6 +643,17 @@ const ProductosPage: NextPageWithLayout<
     }
     fetchItems();
   },[inversionI]);*/
+
+  const _provider = useProvider();
+  const { data: signer, isError, isLoading: arroz } = useSigner();
+
+  useEffect(() => {
+    if (!isConnect) {
+      if (address?.length > 0) {
+        dispatch(connectWallet(address, _provider, signer));
+      }
+    }
+  }, [isConnect]);
 
   return (
     <>
