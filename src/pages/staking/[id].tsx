@@ -170,7 +170,6 @@ const StakingPage: NextPageWithLayout = () => {
     //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
     if (isap == true) {
       setApprovedToken(true);
-      setAlertMsg('Aprobado correctamente');
     } else {
     }
   };

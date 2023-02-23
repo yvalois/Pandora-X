@@ -1252,6 +1252,8 @@ export const connectWallet =
           stakingPAbi,
           signer
         );
+
+        console.log(inversionMinterContract1);
         await dispatch(
           dataLoaded({
             usdtContract: usdtContract1,

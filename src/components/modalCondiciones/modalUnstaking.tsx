@@ -4,7 +4,7 @@ import AnchorLink from '../ui/links/anchor-link';
 import Button from '../ui/button';
 import { Warning } from '@/components/icons/warning';
 import { useDispatch, useSelector } from 'react-redux';
-import { uInvertion } from '@/redux/Blockchain/blockchainAction';
+import { uInvertion, uStaking } from '@/redux/Blockchain/blockchainAction';
 import { useProvider } from 'wagmi';
 
 export default function ModalWithdraw() {
@@ -32,17 +32,18 @@ export default function ModalWithdraw() {
     setLoading(true);
     try {
       //
-      //const isOutTime = await staking.isOutTime(value);
-      const isOutTime = false;
+      const isOutTime = await staking.isOutTime(value);
       if (isOutTime) {
         window.localStorage.setItem('WithdrawID', value.toString());
         openModal('WITHDRAW_VIEW');
+
         setLoading(false);
       } else {
         const tx = await staking.withdraw(value);
         await tx.wait();
 
         dispatch(uInvertion(accountAddress));
+        dispatch(uStaking(accountAddress));
         setLoading(false);
         setStatusW(200);
         setAlertMsg('Transacion cumplida');
