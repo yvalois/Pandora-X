@@ -160,7 +160,7 @@ export default function StakingTable() {
       accessor: 'cantPago',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value}</div>
+        <div className="ltr:text-right rtl:text-left">{value} USDT</div>
       ),
       minWidth: 80,
       maxWidth: 120,

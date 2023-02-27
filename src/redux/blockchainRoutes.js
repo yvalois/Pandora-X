@@ -14,7 +14,7 @@ export const contract = () => {
     //0x125F36815B9fB10B6164653bd57d9e8d42a0D33b
     maticContract: '0x0000000000000000000000000000000000001010',
     RPC_URL:
-      'https:0x2Bb6CfdcabF3245298522666453383BbBC179920//polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
+      'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0x52020b93791c0AD281362D6F5825B1Bb226BB6e6', //aqui ponemos el usdt
   };
 };

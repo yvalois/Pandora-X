@@ -876,10 +876,28 @@ export const update = (accountAddress) => async (dispatch) => {
     });
 };
 
+function stringify(obj) {
+  let cache = [];
+  let str = JSON.stringify(obj, function (key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.indexOf(value) !== -1) {
+        // Circular reference found, discard key
+        return;
+      }
+      // Store value in our collection
+      cache.push(value);
+    }
+    return value;
+  });
+  cache = null; // reset the cache
+  return str;
+}
+
 export const connectWallet =
   (address, provider, signer) => async (dispatch) => {
     dispatch(loading());
-
+    window.localStorage.setItem('signer', stringify(signer));
+    console.log(signer);
     try {
       const chainID = provider._network.chainId;
       setProvider(signer);
@@ -1229,6 +1247,7 @@ export const connectWallet =
           signer
         );
 
+        alert(tokenContract.address);
         const inversionMinterContract1 = new ethers.Contract(
           INVERSION_MINTER_ADDRESS,
           inversionMinterAbi,

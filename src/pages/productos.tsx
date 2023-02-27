@@ -647,14 +647,6 @@ const ProductosPage: NextPageWithLayout<
   const _provider = useProvider();
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
-  useEffect(() => {
-    if (!isConnect) {
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      }
-    }
-  }, [isConnect]);
-
   return (
     <>
       <NextSeo
@@ -710,7 +702,7 @@ const ProductosPage: NextPageWithLayout<
                       : 'grid w-full gap-6 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
                   }
                 >
-                  {productos.map((producto) => (
+                  {currentItems.map((producto) => (
                     <NFTGrid
                       key={producto.Nombre}
                       name={producto.Nombre}

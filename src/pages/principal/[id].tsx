@@ -504,14 +504,6 @@ const AuthorProfilePage: NextPageWithLayout<
   const { data: signer, isError, isLoading: arroz } = useSigner();
   const { address } = useAccount();
 
-  useEffect(() => {
-    if (!isConnect) {
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      }
-    }
-  }, [isConnect]);
-
   return (
     <>
       <NextSeo title="Pandora X" description="Nft-Sudio powered by Pandorax" />

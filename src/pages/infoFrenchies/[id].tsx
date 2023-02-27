@@ -60,20 +60,6 @@ const NFTDetailsPage: NextPageWithLayout<
   const { address } = useAccount();
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    if (!isConnect) {
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      } else if (
-        Usuario.rol !== 'Admin' &&
-        Usuario.rol !== 'usuario' &&
-        Usuario.rol !== 'cliente'
-      ) {
-        window.location.href = '/';
-      }
-    }
-  }, []);
-
   return (
     <>
       <NextSeo

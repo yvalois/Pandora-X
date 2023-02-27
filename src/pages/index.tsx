@@ -140,17 +140,10 @@ const HomePage: NextPageWithLayout<
     tokenContract,
   } = useSelector((state: any) => state.blockchain);
 
+  const { address } = useAccount();
+
   const _provider = useProvider();
   const { data: signer, isError, isLoading: arroz } = useSigner();
-
-  const { address } = useAccount();
-  useEffect(() => {
-    if (!isConnect) {
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      }
-    }
-  }, [isConnect]);
 
   const getInvertionTrans = async () => {
     fetch(

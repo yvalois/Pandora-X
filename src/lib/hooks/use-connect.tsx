@@ -140,6 +140,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const disconnectWallet = async () => {
     //setAddress('');
     disconnect();
+    window.localStorage.removeItem('signer');
     /*  window.localStorage.removeItem('wagmi.cache');
     window.localStorage.removeItem('wagmi.wallet');
     window.localStorage.removeItem('wagmi.store');
@@ -147,6 +148,13 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     window.localStorage.removeItem('wagmi.injected.shimDisconnect');    */
 
     await dispatch(disconectWallet());
+    if (
+      window.location.href != 'https://app.pandorax.co' &&
+      window.location.href != 'http://localhost:3000/'
+    ) {
+      window.location.href = '/';
+    }
+
     //disconect();
   };
 

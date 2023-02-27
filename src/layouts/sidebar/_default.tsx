@@ -236,6 +236,12 @@ export const menuItems = [
     icon: <PlusCircle />,
     href: '/panelretiro',
   },
+  {
+    name: 'Panel de inversion',
+    icon: <PlusCircle />,
+    href: '/panelinv',
+  },
+
   /*{
     name: 'Configuracion',
     icon: <PlusCircle />,
@@ -347,12 +353,13 @@ export default function Sidebar({ className }: SidebarProps) {
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
-              //(inventoryf.length == 0 && item.name == 'Staking') ||
+              (inventoryf.length == 0 && item.name == 'Staking') ||
               (inventorysf.length == 0 && item.name == 'En staking') ||
               (UsuarioR !== 'Admin' &&
                 UsuarioR !== 'usuario' &&
                 item.name == 'Inversiones') ||
-              (UsuarioR !== 'Admin' && item.name == 'Panel de retiro') ? (
+              (UsuarioR !== 'Admin' && item.name == 'Panel de retiro') ||
+              (UsuarioR !== 'Admin' && item.name == 'Panel de inversion') ? (
                 <div key={index}></div>
               ) : (
                 <MenuItem

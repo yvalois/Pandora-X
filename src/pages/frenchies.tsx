@@ -474,14 +474,6 @@ const Frenchies: NextPageWithLayout<
 
   const _provider = useProvider();
 
-  useEffect(() => {
-    if (!isConnect) {
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      }
-    }
-  }, [isConnect]);
-
   /*useEffect(() => {
     if (!arroz && signer !== undefined) {
       console.log(signer);

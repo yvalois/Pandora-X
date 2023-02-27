@@ -187,15 +187,6 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
   const _provider = useProvider();
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
-  useEffect(() => {
-    if (!isConnect)
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      } else if (Usuario.rol !== 'Admin' && Usuario.rol !== 'usuario') {
-        window.location.href = '/';
-      }
-  }, [isConnect]);
-
   return (
     <div
       className={cn(

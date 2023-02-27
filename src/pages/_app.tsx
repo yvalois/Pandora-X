@@ -91,7 +91,17 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
       </Head>
       <WagmiConfig client={client}>
         <Provider store={store}>
-          <ConnectKitProvider theme="auto">
+          <ConnectKitProvider
+            customTheme={{
+              '--ck-connectbutton-background': 'rgba(211, 211, 211 )',
+              '--ck-connectbutton-hover-background': 'rgba(175, 174, 174  )',
+              '--ck-connectbutton-border-radius': ' 30PX ',
+              '--ck-connectbutton-color': 'rgba(88, 88, 88  )',
+              '--ck-connectbutton-active-color': 'rgba(88, 88, 88 )',
+              '--ck-connectbutton-hover-color': 'rgba(88, 88, 88 )',
+              //"--ck-connectbutton-font-size" :"rgba(2136, 52, 52 )",
+            }}
+          >
             <QueryClientProvider client={queryClient}>
               <Hydrate state={pageProps.dehydratedState}>
                 <ThemeProvider

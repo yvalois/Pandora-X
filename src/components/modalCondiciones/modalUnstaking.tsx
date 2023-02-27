@@ -108,7 +108,12 @@ export default function ModalWithdraw() {
         </div>
         <div className="flex w-full justify-evenly">
           {!loading && (
-            <Button onClick={verify} size="small">
+            <Button
+              onClick={() => {
+                verify();
+              }}
+              size="small"
+            >
               <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
                 aceptar
               </span>

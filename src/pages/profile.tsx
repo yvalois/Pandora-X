@@ -122,20 +122,6 @@ const AuthorProfilePage: NextPageWithLayout<
 
   const { address } = useAccount();
 
-  useEffect(() => {
-    if (!isConnect) {
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      } else if (
-        Usuario.rol !== 'Admin' &&
-        Usuario.rol !== 'usuario' &&
-        Usuario.rol !== 'cliente'
-      ) {
-        window.location.href = '/';
-      }
-    }
-  }, [isConnect]);
-
   const UploadBanner = async () => {
     const hola = prevBanner.toString();
     const banner = {
@@ -237,6 +223,10 @@ const AuthorProfilePage: NextPageWithLayout<
     if (!isConnect) {
       disconnectWallet();
     }
+  }, []);
+
+  useEffect(() => {
+    console.log(signer);
   }, []);
 
   return (

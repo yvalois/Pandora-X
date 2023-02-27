@@ -30,19 +30,8 @@ export default function SelectWallet({ ...props }) {
     window.localStorage.removeItem('ChainId');
   };
 
-  /*  useEffect(() => {
-
-    if (address?.length > 1) {
-    dispatch(connectWallet(address, provider));
-
-      //  location.reload()
-      setOpen(false);
-    }
-  }, [address]);  */
-
   useEffect(() => {
     if (!arroz && signer !== undefined) {
-      console.log(signer);
       dispatch(connectWallet(address, provider, signer));
 
       setOpen(false);
@@ -65,6 +54,8 @@ export default function SelectWallet({ ...props }) {
     const id = window.localStorage.getItem('ChainId');
     setId(id);
   }, []);
+
+  const _provider = useProvider();
 
   return (
     <>

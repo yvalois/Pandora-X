@@ -175,14 +175,6 @@ function NftDetails1Page() {
   const { data: signer, isError, isLoading: arroz } = useSigner();
   const { address } = useAccount();
 
-  useEffect(() => {
-    if (!isConnect) {
-      if (address?.length > 0) {
-        dispatch(connectWallet(address, _provider, signer));
-      }
-    }
-  }, [isConnect]);
-
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
