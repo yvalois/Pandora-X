@@ -896,8 +896,7 @@ function stringify(obj) {
 export const connectWallet =
   (address, provider, signer) => async (dispatch) => {
     dispatch(loading());
-    window.localStorage.setItem('signer', stringify(signer));
-    console.log(signer);
+
     try {
       const chainID = provider._network.chainId;
       setProvider(signer);
