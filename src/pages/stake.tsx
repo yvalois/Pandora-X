@@ -37,6 +37,8 @@ import { useModal } from '@/components/modal-views/context';
 import NFTGrids from '@/components/ui/nft-card-s';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
+import { ethers } from 'ethers';
+import frenchiesAbi from '../abi/FrenchiesBlues.json';
 const StakePage: NextPageWithLayout = () => {
   const nftInfo = {
     nombre: '',
@@ -392,9 +394,20 @@ const StakePage: NextPageWithLayout = () => {
 
   useEffect(() => {
     const a = async () => {
+      const rpc_ETH =
+        'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
+      const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
+
+      const frenchiesMinter = new ethers.Contract(
+        '0x32bfb6790B3536a7269185278B482A0FA0385362',
+        frenchiesAbi,
+        provider_ETH
+      );
+
       const totalg = await frenchiesMinter.balanceOf(
         '0x6E29BD03bac672B2E4B78128953928B9270d4c6C'
       );
+
       setTotalStaking(parseInt(totalg));
     };
     a();

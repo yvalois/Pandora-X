@@ -47,8 +47,9 @@ const NFTDetailsPage: NextPageWithLayout<
           precio: inv.precio,
           descripcion: inv.descripcion,
           attributes: inv.attributes,
-          id: 0,
+          id: inv.id,
         };
+        console.log(nftdata);
         setNft(nftdata);
       }
     });

@@ -275,8 +275,12 @@ export default function NftDetailsF(Nft) {
   const [status, setStatus] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const { perfil, nombre } = useSelector((state) => state.Usuario);
+  const [atributos, setAtributos] = useState([]);
 
-  const propiedades = Nft.Nft.attributes;
+  useEffect(() => {
+    setAtributos(Nft.Nft.attributes);
+    console.log(atributos);
+  }, [Nft]);
 
   return (
     <div className="flex flex-grow">
@@ -318,7 +322,7 @@ export default function NftDetailsF(Nft) {
                   <div className="space-y-6">
                     <div className="block">
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                        About
+                        Sobre
                       </h3>
                       <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
                         {Nft.Nft.descripcion}
@@ -327,12 +331,43 @@ export default function NftDetailsF(Nft) {
 
                     <div>
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                        Properties
+                        Caracteristicas
                       </h3>
                     </div>
+
+                    <div className="grid h-full   w-full  grid-cols-2 gap-4  sm:grid-cols-3  lg:gap-5 xl:gap-6 ">
+                      {atributos.map((item, index) => (
+                        <div key={index} className="w-40">
+                          <div className="light:border-black flex-column w-full  rounded-lg border ">
+                            <div className="flex w-full justify-center ">
+                              <h1 className="self-center">{item.trait_type}</h1>
+                            </div>
+
+                            <div className="ligth:border-black h-[1px] w-full border "></div>
+
+                            <div className="flex w-full justify-center ">
+                              <h1 className="self-center">{item.value}</h1>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
                     <div className="block">
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                        Owner
+                        Direccion de contrato
+                      </h3>
+
+                      <div className="inline-flex">
+                        <span className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                          0x32bfb6790B3536a7269185278B482A0FA0385362
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="block">
+                      <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
+                        Dueño
                       </h3>
 
                       <div className="inline-flex">
@@ -343,7 +378,7 @@ export default function NftDetailsF(Nft) {
                     </div>
                     <div className="block">
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                        Block Chain
+                        BlockChain
                       </h3>
 
                       <div className="flex flex-col gap-2">
