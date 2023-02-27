@@ -463,6 +463,16 @@ const StakeFPage: NextPageWithLayout = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
+
   return (
     <>
       <NextSeo title="Create NFT" description="Nft-Sudio powered by Pandorax" />

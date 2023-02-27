@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import router from 'next/router';
 import { useSelector } from 'react-redux';
 import { ethers } from 'ethers';
+import { useModal } from '@/components/modal-views/context';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -83,7 +84,7 @@ const inversiones = [
 const NFTDetailsPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  const { inventoryp, inventoryi, producto } = useSelector(
+  const { inventoryp, inventoryi, producto, isConnect } = useSelector(
     (state: any) => state.blockchain
   );
 
@@ -109,18 +110,21 @@ const NFTDetailsPage: NextPageWithLayout<
         setNft(inv);
       }
     });
-  }, []);
+  }, [isConnect]);
 
   const Usuario = useSelector((state: any) => state.Usuario);
+
+  const { openModal, closeModal } = useModal();
+
   useEffect(() => {
-    if (
-      Usuario.rol !== 'Admin' &&
-      Usuario.rol !== 'usuario' &&
-      Usuario.rol !== 'cliente'
-    ) {
-      window.location.href = '/';
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
     }
-  });
+  }, [isConnect]);
 
   return (
     <>

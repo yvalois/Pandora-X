@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ethers } from 'ethers';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useModal } from '@/components/modal-views/context';
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
@@ -59,6 +60,18 @@ const NFTDetailsPage: NextPageWithLayout<
   const { data: signer, isError, isLoading: arroz } = useSigner();
   const { address } = useAccount();
   const dispatch = useDispatch<AppDispatch>();
+
+  const { openModal, closeModal } = useModal();
+
+  useEffect(() => {
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
 
   return (
     <>

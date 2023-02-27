@@ -38,6 +38,7 @@ import {
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
 import { useAccount, useProvider } from 'wagmi';
+import { useModal } from '@/components/modal-views/context';
 
 const productos = [
   {
@@ -633,11 +634,17 @@ const InversionesPage: NextPageWithLayout<
     fetchItems();
   },[inversionI]);*/
 
+  const { openModal, closeModal } = useModal();
+
   useEffect(() => {
-    if (Usuario.rol !== 'Admin' && Usuario.rol !== 'usuario') {
-      window.location.href = '/';
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
     }
-  });
+  }, [isConnect]);
 
   return (
     <>

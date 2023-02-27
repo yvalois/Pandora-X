@@ -40,6 +40,7 @@ import { WalletContext } from '@/lib/hooks/use-connect';
 import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
+import { useModal } from '@/components/modal-views/context';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -141,7 +142,7 @@ const HomePage: NextPageWithLayout<
   } = useSelector((state: any) => state.blockchain);
 
   const { address } = useAccount();
-
+  const { openModal, closeModal } = useModal();
   const _provider = useProvider();
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
@@ -500,6 +501,18 @@ const HomePage: NextPageWithLayout<
       disconnectWallet();
     }
   }, []); */
+
+  //variable que verifique si estuvo conectado anteriormente si estuvo conectado
+
+  useEffect(() => {
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
 
   return (
     <>

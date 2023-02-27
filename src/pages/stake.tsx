@@ -357,13 +357,6 @@ const StakePage: NextPageWithLayout = () => {
 
   const { isConnect } = useSelector((state) => state.blockchain);
 
-  const { disconnectWallet } = useContext(WalletContext);
-  useEffect(() => {
-    if (!isConnect) {
-      disconnectWallet();
-    }
-  }, []);
-
   useEffect(() => {
     setTimeout(() => {
       if (status != 0) {
@@ -428,6 +421,16 @@ const StakePage: NextPageWithLayout = () => {
       });
     }
   }, [inventoryf]);
+
+  useEffect(() => {
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
 
   return (
     <>

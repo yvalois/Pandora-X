@@ -167,7 +167,7 @@ const StakingPage: NextPageWithLayout = () => {
       accountAddress,
       staking.address
     ); //MarketPlace
-    alert(isap);
+
     //setApprovedUsdt(ethers.utils.formatUnits(usdt, 18));
     if (isap == true) {
       setApprovedToken(true);

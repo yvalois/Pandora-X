@@ -39,6 +39,7 @@ import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useModal } from '@/components/modal-views/context';
 
 const productos = [
   {
@@ -614,11 +615,6 @@ const ProductosPage: NextPageWithLayout<
   }, [dataloaded, inversiones, productos]);
 
   const { disconnectWallet } = useContext(WalletContext);
-  useEffect(() => {
-    if (!isConnect) {
-      disconnectWallet();
-    }
-  }, []);
 
   /*useEffect(() => {
     const fetchItems = async () => {
@@ -646,6 +642,18 @@ const ProductosPage: NextPageWithLayout<
 
   const _provider = useProvider();
   const { data: signer, isError, isLoading: arroz } = useSigner();
+
+  const { openModal, closeModal } = useModal();
+
+  useEffect(() => {
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
 
   return (
     <>

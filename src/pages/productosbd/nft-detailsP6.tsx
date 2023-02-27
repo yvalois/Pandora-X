@@ -168,11 +168,19 @@ function NftDetails6Page() {
     getProductos();
   }, []);
 
-  const dispatch = useDispatch<AppDispatch>();
-  const _provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
-  const { address } = useAccount();
+  const { openModal, closeModal } = useModal();
+
   const { isConnect } = useSelector((state) => state.blockchain);
+
+  useEffect(() => {
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
 
   return (
     <div className="flex flex-grow">

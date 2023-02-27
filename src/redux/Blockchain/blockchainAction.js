@@ -1247,7 +1247,6 @@ export const connectWallet =
           signer
         );
 
-        alert(tokenContract.address);
         const inversionMinterContract1 = new ethers.Contract(
           INVERSION_MINTER_ADDRESS,
           inversionMinterAbi,

@@ -33,6 +33,7 @@ import { useAccount, useProvider, useSigner } from 'wagmi';
 import { provider } from '@/NFTROL';
 
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
+import { useModal } from '@/components/modal-views/context';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -218,16 +219,17 @@ const AuthorProfilePage: NextPageWithLayout<
     }, 2000);
   }, [copiado]);
 
-  const { disconnectWallet } = useContext(WalletContext);
-  useEffect(() => {
-    if (!isConnect) {
-      disconnectWallet();
-    }
-  }, []);
+  const { openModal, closeModal } = useModal();
 
   useEffect(() => {
-    console.log(signer);
-  }, []);
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si?.length > 0 && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
 
   return (
     <>
