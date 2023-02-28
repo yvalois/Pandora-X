@@ -92,7 +92,7 @@ export default function ModalWithdraw() {
         <div className="flex w-full justify-evenly">
           <Button onClick={verify} size="small">
             <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
-              aceptar
+              Aceptar
             </span>
           </Button>
           <AnchorLink href="/">

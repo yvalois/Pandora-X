@@ -55,7 +55,7 @@ export default function ProfileTabUser() {
           path: 'coleccion',
         },
         {
-          title: 'Staking',
+          title: 'Staking Inversion',
           path: 'staking',
         },
         {

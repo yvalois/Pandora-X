@@ -217,6 +217,11 @@ export const menuItems = [
         icon: <PlusCircle />,
         href: routes.stak,
       },
+      {
+        name: 'Staking Inversion',
+        icon: <PlusCircle />,
+        href: '/profile?view=staking',
+      },
     ],
   },
   {

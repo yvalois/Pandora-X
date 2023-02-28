@@ -424,8 +424,8 @@ const StakingPage: NextPageWithLayout = () => {
               )}
 
               {success && (
-                <AnchorLink href="/">
-                  <Button shape="rounded">Ir Inicio</Button>
+                <AnchorLink href="/profile">
+                  <Button shape="rounded">Ir al perfil</Button>
                 </AnchorLink>
               )}
             </div>
