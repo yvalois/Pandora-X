@@ -1147,7 +1147,7 @@ export const connectWallet =
                   token.map((item) => {
                     const id = parseInt(item.tokenId) + 1;
                     fetch(
-                      `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
+                      `https://lime-geographical-angelfish-53.mypinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
                       {
                         method: 'GET',
                       }
