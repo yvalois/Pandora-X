@@ -783,11 +783,6 @@ const conectar = (accountAddress, stakingContract) => async (dispatch) => {
     .then((response) => {
       if (response !== null) {
         if (response.Categoria == 'Agente X') {
-          /*infoPagos(
-              productoMinterContract,
-              response.Rango,
-              response.Categoria
-            );*/
           dispatch(
             connectSuccessToMongo({
               rol: response.Rol,
@@ -985,131 +980,119 @@ export const connectWallet =
 
         let aux = true;
 
-        const getStaking = async () => {
-          if (nftStaking.length != 0) {
-            nftStaking.map(async (item) => {
-              function toDateTime(secs) {
-                var t = new Date(1970, 0, 1); // Epoch
-                t.setSeconds(secs);
-                return t;
-              }
-
-              const is = await stakingContract.NftIsStaking(address, item);
-              const pr = await stakingContract.historicalStaking(address, item);
-
-              const pre = await inversionMinterContract.getPricePlusFee(item);
-
-              const ap = await stakingContract.tokenApr(address, item);
-
-              const cpa = await stakingContract.rewardPerToken(item, address);
-
-              const ind = await stakingContract.indiceArray(address, item);
-              const dat = await stakingContract.getDate(ind);
-              const precio = parseInt(ethers.utils.formatUnits(pre, 6));
-              const cantpago = parseFloat(
-                ethers.utils.formatUnits(cpa, 6)
-              ).toFixed(2);
-              const apr = ethers.utils.formatUnits(ap, 8);
-              const i = 0;
-              const date = toDateTime(dat);
-
-              if (is == true) {
-                if (parseInt(item) == 0 && aux == true) {
-                  aux = false;
-
-                  const stak = {
-                    id: parseInt(item),
-                    position: parseInt(i),
-                    positionR: parseInt(pr), //llamar funcion
-                    precio: precio, //getpricePlusfee
-                    fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
-                    Apr: parseInt(apr), // getApr
-                    cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
-                    idCR: parseInt(item),
-                    idW: parseInt(item),
-                  };
-                  i++;
-                  inventorys.push(stak);
-                } else if (parseInt(item) != 0) {
-                  const stak = {
-                    id: parseInt(item),
-                    position: parseInt(i),
-                    positionR: parseInt(pr), //llamar funcion
-                    precio: precio, //getpricePlusfee
-                    fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
-                    Apr: parseInt(apr), // getApr
-                    cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
-                    idCR: parseInt(item),
-                    idW: parseInt(item),
-                  };
-                  i++;
-                  inventorys.push(stak);
-                }
-              }
-            });
+        nftStaking.map(async (item) => {
+          function toDateTime(secs) {
+            var t = new Date(1970, 0, 1); // Epoch
+            t.setSeconds(secs);
+            return t;
           }
-        };
 
-        await getStaking();
+          const is = await stakingContract.NftIsStaking(address, item);
+          const pr = await stakingContract.historicalStaking(address, item);
 
-        const getStakingF = async () => {
-          if (nftStakingF.length != undefined) {
-            nftStakingF.map(async (item) => {
-              const is = await stakingfrenEContract.nftIsStaking(address, item);
-              if (is == true) {
+          const pre = await inversionMinterContract.getPricePlusFee(item);
+
+          const ap = await stakingContract.tokenApr(address, item);
+
+          const cpa = await stakingContract.rewardPerToken(item, address);
+
+          const ind = await stakingContract.indiceArray(address, item);
+          const dat = await stakingContract.getDate(ind);
+          const precio = parseInt(ethers.utils.formatUnits(pre, 6));
+          const cantpago = parseFloat(ethers.utils.formatUnits(cpa, 6)).toFixed(
+            2
+          );
+          const apr = ethers.utils.formatUnits(ap, 8);
+          const i = 0;
+          const date = toDateTime(dat);
+
+          if (is == true) {
+            if (parseInt(item) == 0 && aux == true) {
+              aux = false;
+
+              const stak = {
+                id: parseInt(item),
+                position: parseInt(i),
+                positionR: parseInt(pr), //llamar funcion
+                precio: precio, //getpricePlusfee
+                fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+                Apr: parseInt(apr), // getApr
+                cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
+                idCR: parseInt(item),
+                idW: parseInt(item),
+              };
+              i++;
+              inventorys.push(stak);
+            } else if (parseInt(item) != 0) {
+              const stak = {
+                id: parseInt(item),
+                position: parseInt(i),
+                positionR: parseInt(pr), //llamar funcion
+                precio: precio, //getpricePlusfee
+                fechaPago: date.toDateString(), //tratar de mandar a 0 y en la pagina en un useEffect cambiarlo para que cambie con el pago
+                Apr: parseInt(apr), // getApr
+                cantPago: cantpago, // rewardPerToken tratar de cambiar con un useEffect cuando se pague
+                idCR: parseInt(item),
+                idW: parseInt(item),
+              };
+              i++;
+              console.log('ready');
+              inventorys.push(stak);
+            }
+          }
+        });
+
+        nftStakingF.map(async (item) => {
+          const is = await stakingfrenEContract.nftIsStaking(address, item);
+          if (is == true) {
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getStaking/${item}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+              .then((res) => res.json())
+              .then((response) => {
+                const id = parseInt(item) + 1;
+                const info = response;
                 fetch(
-                  `${process.env.NEXT_PUBLIC_BACKEND_API}/getStaking/${item}`,
+                  `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
                   {
                     method: 'GET',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
                   }
                 )
                   .then((res) => res.json())
                   .then((response) => {
-                    const id = parseInt(item) + 1;
-                    const info = response;
-                    fetch(
-                      `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
-                      {
-                        method: 'GET',
-                      }
-                    )
-                      .then((res) => res.json())
-                      .then((response) => {
-                        const nft = response;
-                        let a = nft.image.split('/');
+                    const nft = response;
+                    let a = nft.image.split('/');
 
-                        const dat = new Date(info.fechap);
-                        const date = dat.toLocaleDateString();
-                        const stak = {
-                          id: parseInt(item),
-                          fechaPago: {
-                            fecha: info.fechap,
-                            fechaM: date,
-                            fechaL: info.fechald,
-                          },
-                          idCR: {
-                            id: parseInt(item),
-                            fechap: info.fechap,
-                            fechaM: date,
-                          },
-                          idW: parseInt(item),
-                          Nombre: nft.name,
-                          image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                          precio: 0.3,
-                          descripcion: nft.description,
-                        };
-                        inventorysf.push(stak);
-                      });
+                    const dat = new Date(info.fechap);
+                    const date = dat.toLocaleDateString();
+                    const stak = {
+                      id: parseInt(item),
+                      fechaPago: {
+                        fecha: info.fechap,
+                        fechaM: date,
+                        fechaL: info.fechald,
+                      },
+                      idCR: {
+                        id: parseInt(item),
+                        fechap: info.fechap,
+                        fechaM: date,
+                      },
+                      idW: parseInt(item),
+                      Nombre: nft.name,
+                      image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
+                      precio: 0.3,
+                      descripcion: nft.description,
+                    };
+                    console.log('ready');
+
+                    inventorysf.push(stak);
                   });
-              }
-            });
+              });
           }
-        };
-
-        await getStakingF();
+        });
 
         nftiBalance.map(async (item) => {
           const tipo = await inversionMinterContract.getTipo(item);
@@ -1203,27 +1186,6 @@ export const connectWallet =
           balancei[0] = parseFloat(auxiliar) + parseFloat(aux);
         });
 
-        //const usdtBalance = await usdtContract.balanceOf(address);
-        //const tokenBalance = await tokenContract.balanceOf(address);
-
-        //const balanceFormat = ethers.utils.formatUnits(usdtBalance, 6);|
-        //const balanceFormat2 = ethers.utils.formatUnits(tokenBalance, 6);
-
-        /*let preciosP =[]
-      let preciosI =[]
-      inversionesAR.map(async()=>{
-        const precio = await inversionMinterContract.buyPrice(i+1)
-        const price = ethers.utils.formatUnits(precio, 6)
-        preciosI.push(price)
-      })
-      Productos.map(async()=>{
-        const precio = await productoMinterContract.buyPrice(i+1)
-        const price = ethers.utils.formatUnits(precio, 6)
-        preciosP.push(price)
-      })*/
-
-        //  dispatch(subscribeProvider(instance));
-
         const usdtContract1 = new ethers.Contract(
           USDT_ADDRESS,
           abiErc20,
@@ -1269,71 +1231,38 @@ export const connectWallet =
           stakingPAbi,
           signer
         );
+        setTimeout(async () => {
+          await dispatch(
+            dataLoaded({
+              usdtContract: usdtContract1,
+              tokenContract: tokenContract1,
+              //maticContract: null,
+              productoMinter: productoMinterContract1,
+              inversionMinter: inversionMinterContract1,
+              frenchiesMinter: frenchiesMinterContract1,
+              stakingfrenEContract: stakingfrenEContract1,
+              stakingfrenPContract: stakingfrenPContract1,
+              staking: stakingContract1,
+              NftAccessContract: NftAccess1,
 
-        console.log(inversionMinterContract1);
-        await dispatch(
-          dataLoaded({
-            usdtContract: usdtContract1,
-            tokenContract: tokenContract1,
-            //maticContract: null,
-            productoMinter: productoMinterContract1,
-            inversionMinter: inversionMinterContract1,
-            frenchiesMinter: frenchiesMinterContract1,
-            stakingfrenEContract: stakingfrenEContract1,
-            stakingfrenPContract: stakingfrenPContract1,
-            staking: stakingContract1,
-            NftAccessContract: NftAccess1,
+              // stakinfETH: stakingfrenEContract,
+              // stakingPOL: stakingfrenPContract,
+              accountAddress: address,
+              //usdtBalance: balanceFormat,
+              //tokenBalance: balanceFormat2,
+              inventoryp: inventoryp,
+              inventoryi: inventoryi,
+              inventorys: inventorys,
+              inventoryf: inventoryf,
+              inventorysf: inventorysf,
+              instance: null,
+              balancei: balancei,
+              chainId: chainID,
+            })
+          );
 
-            // stakinfETH: stakingfrenEContract,
-            // stakingPOL: stakingfrenPContract,
-            accountAddress: address,
-            //usdtBalance: balanceFormat,
-            //tokenBalance: balanceFormat2,
-            inventoryp: inventoryp,
-            inventoryi: inventoryi,
-            inventorys: inventorys,
-            inventoryf: inventoryf,
-            inventorysf: inventorysf,
-            instance: null,
-            balancei: balancei,
-            chainId: chainID,
-          })
-        );
-
-        dispatch(conectar(address, stakingContract));
-
-        /*instance.on('close',() => {
-      web3Modal && web3Modal.clearCachedProvider();
-      dispatch(disconectWallet())
-  });*/
-
-        //esto se llama desde el use-connect
-
-        /* instance.on('accountsChanged', async (accounts) => {
-     // const usdtBalance = await usdtContract.balanceOf(accounts[0]);
-      //const tokenBalance = aw ait tokenContract.balanceOf(accounts[0]);
-      const nftBalance = await nudaraMinterContract.getMyInventory(accounts[0]);
-      const inventory = [];
-      nftBalance.map((item) => {
-        // if inventory id in items push to inventory
-        if (items[item]) {
-          inventory.push(items[item.id]);
-        }
-      });
-      const accountAddress = accounts[0];
-      //const balanceFormat = ethers.utils.formatUnits(tokenBalance, 6);
-      //const balanceFormat2 = ethers.utils.formatUnits(usdtBalance, 6);
-      dispatch(
-        updateBalance({
-          accountAddress:accountAddress ,
-          //busdBalance: balanceFormat,
-          //usdtBalance: balanceFormat2,
-          inventory,
-        })
-      );
-      dispatch(userChange());
-      dispatch(adminChange());
-    });*/
+          dispatch(conectar(address, stakingContract));
+        }, 3000);
       } else {
         if (process.env.NODE_ENV === 'production') {
           try {

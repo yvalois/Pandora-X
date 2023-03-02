@@ -275,6 +275,7 @@ const StakePage: NextPageWithLayout = () => {
         //const messag = messa[3].split(",")
         //const messag_ = messag[0].split("-")
         const rejected = mess[0].split(' ');
+
         if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
           setErrorMSG('Fondos insuficientes');
         } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {

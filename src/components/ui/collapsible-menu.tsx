@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useMeasure } from '@/lib/hooks/use-measure';
 import ActiveLink from '@/components/ui/links/active-link';
 import { ChevronDown } from '@/components/icons/chevron-down';
+import { useSelector } from 'react-redux';
 
 type MenuItemProps = {
   name?: string;
@@ -25,7 +26,9 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
 
   let isChildrenActive =
     dropdownItems && dropdownItems.some((item) => item.href === pathname);
-
+  const { inventoryf, inventorys } = useSelector(
+    (state: any) => state.blockchain
+  );
   useEffect(() => {
     if (isChildrenActive) {
       setIsOpen(true);
@@ -76,17 +79,24 @@ export function MenuItem({ name, icon, href, dropdownItems }: MenuItemProps) {
             className="ease-[cubic-bezier(0.33, 1, 0.68, 1)] overflow-hidden transition-all duration-[350ms]"
           >
             <ul ref={ref}>
-              {dropdownItems.map((item, index) => (
-                <li className="first:pt-2" key={index}>
-                  <ActiveLink
-                    href={item.href}
-                    className="flex items-center rounded-lg p-3 text-sm text-gray-500 transition-all before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-brand ltr:pl-6 before:ltr:mr-5 rtl:pr-6 before:rtl:ml-5 dark:hover:text-white"
-                    activeClassName="!text-brand dark:!text-white dark:before:!bg-white before:!bg-brand before:!w-2 before:!h-2 before:-ml-0.5 before:ltr:!mr-[18px] before:rtl:!ml-[18px] !font-medium"
-                  >
-                    {item.name}
-                  </ActiveLink>
-                </li>
-              ))}
+              {dropdownItems.map((item, index) =>
+                (item.name == 'Frenchies' && inventoryf.length > 0) ||
+                (item.name == 'Staking Inversion' && inventorys.length > 0) ||
+                (item.name != 'Staking Inversion' &&
+                  item.name != 'Frenchies') ? (
+                  <li className="first:pt-2" key={index}>
+                    <ActiveLink
+                      href={item.href}
+                      className="flex items-center rounded-lg p-3 text-sm text-gray-500 transition-all before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-brand ltr:pl-6 before:ltr:mr-5 rtl:pr-6 before:rtl:ml-5 dark:hover:text-white"
+                      activeClassName="!text-brand dark:!text-white dark:before:!bg-white before:!bg-brand before:!w-2 before:!h-2 before:-ml-0.5 before:ltr:!mr-[18px] before:rtl:!ml-[18px] !font-medium"
+                    >
+                      {item.name}
+                    </ActiveLink>
+                  </li>
+                ) : (
+                  <></>
+                )
+              )}
             </ul>
           </div>
         </>

@@ -148,9 +148,9 @@ export default function ModalWithdraw() {
           </span>
         </button>
         <p className="mb-8">
-          Aun no cumples con la fecha de staking como castigo debes pagar 10%
-          del valor de tu nft para evitar este castigo solo debes esperar a que
-          tu stakeo se cumpla
+          Aun no cumples con la fecha de staking, debes pagar 10% del valor de
+          tu nft, para evitar este cobro solo debes esperar a que tu stakeo se
+          cumpla
         </p>
         <div className="mb-6">
           <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-white">

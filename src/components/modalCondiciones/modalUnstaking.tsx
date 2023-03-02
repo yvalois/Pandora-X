@@ -126,22 +126,21 @@ export default function ModalWithdraw() {
               </span>
             </Button>
           )}
-          <AnchorLink href="/">
-            {!loading && (
-              <Button size="small">
-                <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
-                  Cancelar
-                </span>
-              </Button>
-            )}
-            {loading && (
-              <Button size="small">
-                <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
-                  cargando...
-                </span>
-              </Button>
-            )}
-          </AnchorLink>
+
+          {!loading && (
+            <Button onClick={() => closeModal()} size="small">
+              <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
+                Cancelar
+              </span>
+            </Button>
+          )}
+          {loading && (
+            <Button size="small">
+              <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
+                cargando...
+              </span>
+            </Button>
+          )}
         </div>
       </div>
       <div className="mt-12 flex w-full justify-center align-middle">

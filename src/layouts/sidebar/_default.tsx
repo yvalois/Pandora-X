@@ -35,40 +35,7 @@ export const menuItems = [
     name: 'Home',
     icon: <HomeIcon />,
     href: routes.home,
-    /*dropdownItems: [
-      {
-        name: 'Modern',
-        href: routes.home,
-      },
-      {
-        name: 'Minimal',
-        href: routes.minimal,
-      },
-      {
-        name: 'Retro',
-        href: routes.retro,
-      },
-      {
-        name: 'Classic',
-        href: routes.classic,
-      },
-    ],*/
   },
-  /*{
-    name: 'Farm',
-    icon: <FarmIcon />,
-    href: routes.farms,
-  },*/
-  /*{
-    name: 'Swap',
-    icon: <ExchangeIcon />,
-    href: routes.swap,
-  },*/
-  /*{
-    name: 'Liquidity',
-    icon: <PoolIcon />,
-    href: routes.liquidity,
-  },*/
   {
     name: 'Profile',
     icon: <ProfileIcon />,
@@ -79,11 +46,6 @@ export const menuItems = [
     icon: <CompassIcon />,
     href: routes._profile,
   },
-  /*{
-    name: 'Staking',
-    icon: <PlusCircle />,
-    href: routes.staking,
-  },*/
   {
     name: 'Comunidad',
     icon: <VoteIcon />,
@@ -158,43 +120,6 @@ export const menuItems = [
       },
     ],
   },
-
-  /*{
-    name: 'NFT Details',
-    icon: <DiskIcon />,
-    href: routes.nftDetails,
-  },*/
-
-  /*{
-    name: 'Vote',
-    icon: <VoteIcon />,
-    href: routes.vote,
-    dropdownItems: [
-      {
-        name: 'Explore',
-        href: routes.vote,
-      },
-      {
-        name: 'Vote with pools',
-        href: routes.proposals,
-      },
-      {
-        name: 'Create proposal',
-        href: routes.createProposal,
-      },
-    ],
-  
-  },*/
-  /*{
-    name: 'Crear Usuario',
-    icon: <PlusCircle />,
-    href: routes.createuser,
-  },*/
-  /*{
-    name: 'Crear NFT',
-    icon: <PlusCircle />,
-    href: routes.createNft,
-  },*/
   {
     name: 'Referidos',
     icon: <PlusCircle />,
@@ -241,11 +166,6 @@ export const menuItems = [
     icon: <PlusCircle />,
     href: '/panelretiro',
   },
-  /*{
-    name: 'Configuracion',
-    icon: <PlusCircle />,
-    href: '',
-  },*/
 ];
 
 type SidebarProps = {
@@ -267,6 +187,7 @@ export default function Sidebar({ className }: SidebarProps) {
     inversionMinter,
     inventoryf,
     inventorysf,
+    inventorys,
   } = useSelector((state: any) => state.blockchain);
   const [nos, setNos] = useState(false);
   const [noi, setNoi] = useState(false);
@@ -352,7 +273,9 @@ export default function Sidebar({ className }: SidebarProps) {
                 UsuarioR !== 'usuario' &&
                 UsuarioR !== 'cliente' &&
                 item.name == 'Profile') ||
-              //(inventoryf.length == 0 && item.name == 'Staking') ||
+              (inventoryf.length == 0 &&
+                inventorys.length == 0 &&
+                item.name == 'Staking') ||
               (inventorysf.length == 0 && item.name == 'En staking') ||
               (UsuarioR !== 'Admin' &&
                 UsuarioR !== 'usuario' &&
