@@ -484,12 +484,16 @@ const Frenchies: NextPageWithLayout<
   }, [signer, arroz]);*/
 
   const getWhithelist = async () => {
-    //setLoading(true);
+    setLoading(true);
 
     const w = await frenchiesMinter.getWhitelist();
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
       setCount(c);
+
+      setLoading(false);
+    } else {
+      setLoading(false);
     }
   };
 
