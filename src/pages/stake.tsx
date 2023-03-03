@@ -336,9 +336,8 @@ const StakePage: NextPageWithLayout = () => {
   const verifyApproved = async () => {
     let tx = await frenchiesMinter.isApprovedForAll(
       accountAddress,
-      stakingfrenEContract.address
+      '0x6E29BD03bac672B2E4B78128953928B9270d4c6C'
     );
-
     if (tx == true) {
       setAp(true);
     }
@@ -350,18 +349,6 @@ const StakePage: NextPageWithLayout = () => {
     verifyApproved();
     getTvl();
   }, []);
-
-  /*useEffect(() => {
-        //router.query.id
-        const id = router.query.id;
-        setID(id)
-        inventoryf.map((inv) => {
-            if (inv.id == id) {
-
-                setNftSelect(inv)
-            }
-        });
-    }, []);*/
 
   const { isConnect } = useSelector((state) => state.blockchain);
 
@@ -441,7 +428,7 @@ const StakePage: NextPageWithLayout = () => {
     }
   }, [inventoryf]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
     const es = JSON.parse(is);
 
@@ -449,9 +436,7 @@ const StakePage: NextPageWithLayout = () => {
     if (si != undefined && !isConnect) {
       openModal('WALLET_CONNECT_VIEW');
     }
-  }, [isConnect]);
-
-  return (
+  }, [isConnect]);*/ return (
     <>
       <NextSeo title="Create NFT" description="Nft-Sudio powered by Pandorax" />
 
