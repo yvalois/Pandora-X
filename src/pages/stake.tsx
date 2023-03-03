@@ -318,7 +318,7 @@ const StakePage: NextPageWithLayout = () => {
         } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
           setErrorMSG('Transacion rechazada');
         } else {
-          setErrorMSG('Error');
+          setErrorMSG('Fondos insuficientes');
         }
         //
       }
