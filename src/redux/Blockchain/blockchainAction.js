@@ -1056,7 +1056,7 @@ export const connectWallet =
                 const id = parseInt(item) + 1;
                 const info = response;
                 fetch(
-                  `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
+                  `https://lime-geographical-angelfish-53.mypinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
                   {
                     method: 'GET',
                   }
@@ -1141,7 +1141,7 @@ export const connectWallet =
               response.map((meta) => {
                 if (
                   meta.contractAddress ==
-                  '0x32bfb6790b3536a7269185278b482a0fa0385362'
+                  '0x32bfb6790B3536a7269185278B482A0FA0385362'
                 ) {
                   let token = meta.metadata;
                   token.map((item) => {

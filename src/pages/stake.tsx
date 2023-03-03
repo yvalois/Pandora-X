@@ -158,18 +158,30 @@ const StakePage: NextPageWithLayout = () => {
     let i = 0;
     if (!allSelect) {
       currentF.map((item) => {
-        const nftInfo = {
-          nombre: item.nombre,
-          image: item.image,
-          precio: item.precio,
-          descripcion: item.descripcion,
-          id: item.id,
-          select: true,
-        };
-
-        setCant(currentF.length);
-        setStak(false);
-        auxNFT1.push(nftInfo);
+        if (i < 130) {
+          const nftInfo = {
+            nombre: item.nombre,
+            image: item.image,
+            precio: item.precio,
+            descripcion: item.descripcion,
+            id: item.id,
+            select: true,
+          };
+          setCant(130);
+          setStak(false);
+          auxNFT1.push(nftInfo);
+        } else {
+          const nftInfo = {
+            nombre: item.nombre,
+            image: item.image,
+            precio: item.precio,
+            descripcion: item.descripcion,
+            id: item.id,
+            select: false,
+          };
+          setStak(false);
+          auxNFT1.push(nftInfo);
+        }
         if (i == currentF.length - 1) {
           let auxSelect = [];
           setCurrentF(auxNFT1);
@@ -225,7 +237,7 @@ const StakePage: NextPageWithLayout = () => {
   };
   const Stake = async () => {
     //si no esta referido
-    if (chainId == 1) {
+    if (chainId == 5) {
       setLoading(true);
       try {
         let tx = await stakingfrenEContract.stake(nftSelects);
