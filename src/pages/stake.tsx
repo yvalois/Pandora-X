@@ -158,7 +158,7 @@ const StakePage: NextPageWithLayout = () => {
     let i = 0;
     if (!allSelect) {
       currentF.map((item) => {
-        if (i < 130) {
+        if (i < 150) {
           const nftInfo = {
             nombre: item.nombre,
             image: item.image,
@@ -167,7 +167,7 @@ const StakePage: NextPageWithLayout = () => {
             id: item.id,
             select: true,
           };
-          setCant(130);
+          setCant(150);
           setStak(false);
           auxNFT1.push(nftInfo);
         } else {
