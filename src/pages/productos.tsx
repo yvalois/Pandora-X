@@ -645,7 +645,7 @@ const ProductosPage: NextPageWithLayout<
 
   const { openModal, closeModal } = useModal();
 
-  useEffect(() => {
+  /*  useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
     const es = JSON.parse(is);
 
@@ -653,7 +653,7 @@ const ProductosPage: NextPageWithLayout<
     if (si != undefined && !isConnect) {
       openModal('WALLET_CONNECT_VIEW');
     }
-  }, [isConnect]);
+  }, [isConnect]);*/
 
   return (
     <>

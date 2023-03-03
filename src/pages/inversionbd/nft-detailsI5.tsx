@@ -185,7 +185,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
     verifyApprove();
   }, []);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
     const es = JSON.parse(is);
 
@@ -193,7 +193,7 @@ function NftFooter({ className = 'md:hidden', price, tipoN }: NftFooterProps) {
     if (si != undefined && !isConnect) {
       openModal('WALLET_CONNECT_VIEW');
     }
-  }, [isConnect]);
+  }, [isConnect]);*/
   return (
     <div
       className={cn(

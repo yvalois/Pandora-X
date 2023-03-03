@@ -107,7 +107,7 @@ export default function ProfileTab() {
         </div>
           </TabPanel> */}
       <TabPanel className="focus:outline-none">
-        <div className="ml-6 grid h-full   w-full  gap-4 xs:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-4">
+        <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
           {currentF?.map((nft) => (
             <NFTGrid
               key={nft.name}
