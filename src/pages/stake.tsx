@@ -336,8 +336,9 @@ const StakePage: NextPageWithLayout = () => {
   const verifyApproved = async () => {
     let tx = await frenchiesMinter.isApprovedForAll(
       accountAddress,
-      '0x6E29BD03bac672B2E4B78128953928B9270d4c6C'
+      stakingfrenEContract.address
     );
+
     if (tx == true) {
       setAp(true);
     }
@@ -349,6 +350,18 @@ const StakePage: NextPageWithLayout = () => {
     verifyApproved();
     getTvl();
   }, []);
+
+  /*useEffect(() => {
+        //router.query.id
+        const id = router.query.id;
+        setID(id)
+        inventoryf.map((inv) => {
+            if (inv.id == id) {
+
+                setNftSelect(inv)
+            }
+        });
+    }, []);*/
 
   const { isConnect } = useSelector((state) => state.blockchain);
 
