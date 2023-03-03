@@ -1141,7 +1141,7 @@ export const connectWallet =
               response.map((meta) => {
                 if (
                   meta.contractAddress ==
-                  '0x32bfb6790B3536a7269185278B482A0FA0385362'
+                  '0x32bfb6790b3536a7269185278b482a0fa0385362'
                 ) {
                   let token = meta.metadata;
                   token.map((item) => {
