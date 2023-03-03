@@ -463,7 +463,7 @@ const StakeFPage: NextPageWithLayout = () => {
     }
   }, []);
 
-  /*  useEffect(() => {
+  useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
     const es = JSON.parse(is);
 
@@ -471,7 +471,7 @@ const StakeFPage: NextPageWithLayout = () => {
     if (si != undefined && !isConnect) {
       openModal('WALLET_CONNECT_VIEW');
     }
-  }, [isConnect]);*/
+  }, [isConnect]);
 
   return (
     <>

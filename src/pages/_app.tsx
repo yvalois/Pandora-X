@@ -40,6 +40,7 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
     [alchemyProvider({ apiKey: 'q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ' })]
   );
   const client = createClient({
+    autoConnect: true,
     connectors: [
       new MetaMaskConnector({
         chains,

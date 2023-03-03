@@ -504,7 +504,7 @@ const HomePage: NextPageWithLayout<
 
   //variable que verifique si estuvo conectado anteriormente si estuvo conectado
 
-  /*  useEffect(() => {
+  useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
     const es = JSON.parse(is);
 
@@ -512,7 +512,7 @@ const HomePage: NextPageWithLayout<
     if (si != undefined && !isConnect) {
       openModal('WALLET_CONNECT_VIEW');
     }
-  }, [isConnect]);*/
+  }, [isConnect]);
 
   return (
     <>

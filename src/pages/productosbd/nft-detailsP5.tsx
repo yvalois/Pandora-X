@@ -174,7 +174,7 @@ function NftDetails5Page() {
 
   const { isConnect } = useSelector((state: any) => state.blockchain);
 
-  /*  useEffect(() => {
+  useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
     const es = JSON.parse(is);
 
@@ -182,7 +182,7 @@ function NftDetails5Page() {
     if (si != undefined && !isConnect) {
       openModal('WALLET_CONNECT_VIEW');
     }
-  }, [isConnect]);*/
+  }, [isConnect]);
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
