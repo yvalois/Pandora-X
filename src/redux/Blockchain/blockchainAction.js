@@ -1129,13 +1129,16 @@ export const connectWallet =
           }
         });
         const getFren = async () => {
-          fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
-            },
-          })
+          fetch(
+            `https://api.tatum.io/v3/nft/address/balance/ETH/0xF9DFed404AB1ecA310244D7f32A3D0f66A2FCC11`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+              },
+            }
+          )
             .then((res) => res.json())
             .then((response) => {
               response.map((meta) => {

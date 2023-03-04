@@ -156,7 +156,39 @@ const StakePage: NextPageWithLayout = () => {
   const selectAll = () => {
     let auxNFT1 = [];
     let i = 0;
-    if (!allSelect) {
+    if (!allSelect && currentF.length < 150) {
+      currentF.map((item) => {
+        const nftInfo = {
+          nombre: item.nombre,
+          image: item.image,
+          precio: item.precio,
+          descripcion: item.descripcion,
+          id: item.id,
+          select: true,
+        };
+
+        setCant(currentF.length);
+        setStak(false);
+        auxNFT1.push(nftInfo);
+        if (i == currentF.length - 1) {
+          let auxSelect = [];
+          setCurrentF(auxNFT1);
+          let i = 0;
+          auxNFT1.map((item) => {
+            if (item.select == true) {
+              auxSelect.push(item.id);
+            }
+            if (i == auxNFT1.length - 1) {
+              setNftSelects(auxSelect);
+            }
+            i++;
+          });
+          auxNFT1 = [];
+          setAllSelect(true);
+        }
+        i++;
+      });
+    } else if (!allSelect && currentF.length > 150) {
       currentF.map((item) => {
         if (i < 150) {
           const nftInfo = {
@@ -237,7 +269,7 @@ const StakePage: NextPageWithLayout = () => {
   };
   const Stake = async () => {
     //si no esta referido
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         let tx = await stakingfrenEContract.stake(nftSelects);
@@ -477,10 +509,31 @@ const StakePage: NextPageWithLayout = () => {
               <h1 className="text-lg  text-gray-400 ">TVL: {tvl} USDT</h1>
             </div>
           </div>
-          <div className="mt-8 flex justify-center ">
-            <Button onClick={selectAll}>
-              {allSelect ? 'Deselecionar todos ' : 'Selecionar todos'}
-            </Button>
+
+          <div className=" flex w-full justify-center md:hidden">
+            <div className="flex-column mt-8 self-center ">
+              <div className="flex self-center">
+                <Button onClick={selectAll}>
+                  {allSelect ? 'Deselecionar todos ' : 'Selecionar Todos'}
+                </Button>
+              </div>
+
+              <div className="mt-2 mb-2 flex self-center pl-8">
+                <span>Maximo 150 nfts</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-column mt-8 hidden self-center md:block ">
+            <div className="flex self-center">
+              <Button onClick={selectAll}>
+                {allSelect ? 'Deselecionar todos ' : 'Selecionar Todos'}
+              </Button>
+            </div>
+
+            <div className="mt-2 mb-2 flex self-center pl-8">
+              <span>Maximo 150 nfts</span>
+            </div>
           </div>
 
           <div className=" row mt-4 flex w-full justify-center md:mt-0 lg:w-[50%]">
