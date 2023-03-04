@@ -156,6 +156,7 @@ const StakePage: NextPageWithLayout = () => {
   const selectAll = () => {
     let auxNFT1 = [];
     let i = 0;
+
     if (!allSelect && currentF.length < 150) {
       currentF.map((item) => {
         const nftInfo = {
@@ -188,7 +189,7 @@ const StakePage: NextPageWithLayout = () => {
         }
         i++;
       });
-    } else if (!allSelect && currentF.length > 150) {
+    } else if (!allSelect && currentF.length >= 150) {
       currentF.map((item) => {
         if (i < 150) {
           const nftInfo = {
@@ -199,7 +200,7 @@ const StakePage: NextPageWithLayout = () => {
             id: item.id,
             select: true,
           };
-          setCant(150);
+
           setStak(false);
           auxNFT1.push(nftInfo);
         } else {
@@ -217,15 +218,16 @@ const StakePage: NextPageWithLayout = () => {
         if (i == currentF.length - 1) {
           let auxSelect = [];
           setCurrentF(auxNFT1);
-          let i = 0;
+          let j = 0;
           auxNFT1.map((item) => {
             if (item.select == true) {
               auxSelect.push(item.id);
             }
-            if (i == auxNFT1.length - 1) {
+            if (j == auxNFT1.length - 1) {
+              setCant(auxSelect.length);
               setNftSelects(auxSelect);
             }
-            i++;
+            j++;
           });
           auxNFT1 = [];
           setAllSelect(true);
@@ -498,7 +500,7 @@ const StakePage: NextPageWithLayout = () => {
       <NextSeo title="Create NFT" description="Nft-Sudio powered by Pandorax" />
 
       <div className="flex w-full justify-center">
-        <div className="flex-column w-full  justify-between  md:w-[80%] lg:flex">
+        <div className="flex-column w-full  justify-between  md:flex">
           <div>
             <div className="flex justify-center">
               <h1 className="text-lg  text-gray-400 ">
@@ -510,7 +512,7 @@ const StakePage: NextPageWithLayout = () => {
             </div>
           </div>
 
-          <div className=" flex w-full justify-center md:hidden">
+          <div className=" flex w-full justify-center lg:hidden">
             <div className="flex-column mt-8 self-center ">
               <div className="flex self-center">
                 <Button onClick={selectAll}>
@@ -524,7 +526,7 @@ const StakePage: NextPageWithLayout = () => {
             </div>
           </div>
 
-          <div className="flex-column mt-8 hidden self-center md:block ">
+          <div className="flex-column mt-8 hidden self-center lg:block ">
             <div className="flex self-center">
               <Button onClick={selectAll}>
                 {allSelect ? 'Deselecionar todos ' : 'Selecionar Todos'}
