@@ -272,48 +272,50 @@ const StakeFPage: NextPageWithLayout = () => {
     if (chainId == 137) {
       setLoading(true);
       try {
-        const the = process.env.NEXT_PUBLIC_BACKEND_CON;
+        if (cantC > 0) {
+          const the = process.env.NEXT_PUBLIC_BACKEND_CON;
 
-        const tx = await stakingfrenPContract.claimReward(
-          the,
-          tokenContract.address,
-          cantC
-        );
-        await tx.wait();
+          const tx = await stakingfrenPContract.claimReward(
+            the,
+            tokenContract.address,
+            cantC
+          );
+          await tx.wait();
 
-        inventorysf.map(async (item) => {
-          const now = new Date();
+          inventorysf.map(async (item) => {
+            const now = new Date();
 
-          const fecha = new Date(item.fechaPago.fecha);
+            const fecha = new Date(item.fechaPago.fecha);
 
-          if (fecha <= now && cantC > 0) {
-            const fecha = new Date(item.fechaPago.fecha),
-              y = fecha.getFullYear(),
-              m = fecha.getMonth();
-            const paidDay = new Date(y, m + 1, 5);
+            if (fecha <= now && cantC > 0) {
+              const fecha = new Date(item.fechaPago.fecha),
+                y = fecha.getFullYear(),
+                m = fecha.getMonth();
+              const paidDay = new Date(y, m + 1, 5);
 
-            const val = {
-              fechap: paidDay,
-            };
-            fetch(
-              `${process.env.NEXT_PUBLIC_BACKEND_API}/actualizarstaking/${item.id}`,
-              {
-                method: 'PUT',
-                body: JSON.stringify(val),
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }
-            );
-            setProfile(true);
-            setErrorMSG('Transaccion realizada de manera exitosa');
-            setCantC(0);
-          } else {
-            setStatus(100);
-            setErrorMSG('No tienes pagos pendientes');
-            setLoading(false);
-          }
-        });
+              const val = {
+                fechap: paidDay,
+              };
+              fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_API}/actualizarstaking/${item.id}`,
+                {
+                  method: 'PUT',
+                  body: JSON.stringify(val),
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                }
+              );
+              setProfile(true);
+              setErrorMSG('Transaccion realizada de manera exitosa');
+              setCantC(0);
+            } else {
+              setStatus(100);
+              setErrorMSG('No tienes pagos pendientes');
+              setLoading(false);
+            }
+          });
+        }
       } catch (err) {
         setLoading(false);
         setStatus(100);
@@ -528,7 +530,7 @@ const StakeFPage: NextPageWithLayout = () => {
                       shape="rounded"
                       onClick={() => Claim()}
                     >
-                      Reclamar recompensa
+                      Reclamar usdt
                     </Button>
                   )}
 

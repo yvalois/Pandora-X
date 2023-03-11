@@ -14,7 +14,7 @@ import Avatar from '@/components/ui/avatar';
 import TopupButton from '@/components/ui/topup-button';
 import NftSlider from '@/components/ui/nftSlider';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMintedNftProducts } from '../redux/Minted/MintedAction';
+import { getAllNFts, getMintedNftProducts } from '../redux/Minted/MintedAction';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
@@ -502,7 +502,7 @@ const HomePage: NextPageWithLayout<
     }
   }, []); */
 
-  //variable que verifique si estuvo conectado anteriormente si estuvo conectado
+  //variable que verifique si es  tuvo conectado anteriormente si estuvo conectado
 
   useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');

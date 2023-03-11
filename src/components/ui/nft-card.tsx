@@ -170,6 +170,17 @@ export default function NFTGrid({
         >
           <Image src={image} layout="fill" objectFit="cover" alt="" />
         </AnchorLink>
+      ) : type == 'general' ? (
+        <AnchorLink
+          href={`/generalnft/${number}`}
+          className="relative block w-full pb-full"
+        >
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
+      ) : type == 'subasta' ? (
+        <AnchorLink href={`/subasta`} className="relative block w-full pb-full">
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
       ) : (
         <AnchorLink
           href={`/infoinv/${number}`}
@@ -197,6 +208,20 @@ export default function NFTGrid({
         ) : type == 'productos' ? (
           <AnchorLink
             href={`/info/${number}`}
+            className="text-sm font-medium text-black dark:text-white"
+          >
+            {name}
+          </AnchorLink>
+        ) : type == 'subasta' ? (
+          <AnchorLink
+            href={`/subasta`}
+            className="text-sm font-medium text-black dark:text-white"
+          >
+            {name}
+          </AnchorLink>
+        ) : type == 'general' ? (
+          <AnchorLink
+            href={`/generalnft/${number}`}
             className="text-sm font-medium text-black dark:text-white"
           >
             {name}

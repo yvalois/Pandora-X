@@ -169,10 +169,10 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   };*/
   // seteamos el provider
   const connectToWallet = async () => {
-    await window.ethereum.request({
+    /*await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: `0x${Number(137).toString(16)}` }],
-    });
+    });*/
     //request();
 
     try {

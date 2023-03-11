@@ -28,6 +28,11 @@ const TransferF = dynamic(() => import('@/components/modalTransfer/modalTF'));
 const Ban = dynamic(() => import('@/components/modal-ban/ModalBan'));
 const Change = dynamic(() => import('@/components/modal-change/ModalChange'));
 const Banned = dynamic(() => import('@/components/Banned-views/ModalBanned'));
+const Venta = dynamic(() => import('@/components/market-views/modal-venta'));
+const Subasta = dynamic(
+  () => import('@/components/market-views/modal-subasta')
+);
+
 const Unstaking = dynamic(
   () => import('@/components/modalCondiciones/modalUnstaking')
 );
@@ -66,6 +71,10 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Network />;
     case 'UNSTAKING_VIEW':
       return <Unstaking />;
+    case 'AUCTION_VIEW':
+      return <Subasta />;
+    case 'SELL_VIEW':
+      return <Venta />;
     default:
       return null;
   }

@@ -21,7 +21,7 @@ import Button from '@/components/ui/button';
 import { Close } from '@/components/icons/close';
 import { NFTList } from '@/data/static/nft-list';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMintedNftProducts } from '../redux/Minted/MintedAction';
+import { getAllNFts, getMintedNftProducts } from '../redux/Minted/MintedAction';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import { number } from 'yup';
 import NftSlider from '@/components/ui/nftSlider';
@@ -32,6 +32,12 @@ import ActiveLink from '@/components/ui/links/active-link';
 import { ethers } from 'ethers';
 import validator from 'validator';
 import frenchiesAbi from '../abi/FrenchiesBlues.json';
+import auction from '../abi/auction.json';
+import _ofertas from '../abi/ofertas.json';
+
+import ventas from '../abi/ventas.json';
+
+import allFrenchies from '../abi/ultimateDatos.json';
 
 import { connectWallet, uFrench } from '../redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
@@ -190,8 +196,12 @@ function PriceRange() {
   );
 }
 
-function Status() {
-  let [plan, setPlan] = useState('buy-now');
+function Status({ ontipom }) {
+  let [plan, setPlan] = useState('new');
+
+  function handleClick(value) {
+    ontipom(value);
+  }
 
   return (
     <RadioGroup
@@ -199,7 +209,12 @@ function Status() {
       onChange={setPlan}
       className="grid grid-cols-2 gap-2 p-5"
     >
-      <RadioGroup.Option value="buy-now">
+      <RadioGroup.Option
+        value="buy-now"
+        onClick={() => {
+          handleClick('buy-now');
+        }}
+      >
         {({ checked }) => (
           <span
             className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
@@ -212,7 +227,12 @@ function Status() {
           </span>
         )}
       </RadioGroup.Option>
-      <RadioGroup.Option value="on-auction">
+      <RadioGroup.Option
+        value="on-auction"
+        onClick={() => {
+          handleClick('on-auction');
+        }}
+      >
         {({ checked }) => (
           <span
             className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
@@ -225,7 +245,12 @@ function Status() {
           </span>
         )}
       </RadioGroup.Option>
-      <RadioGroup.Option value="new">
+      <RadioGroup.Option
+        value="new"
+        onClick={() => {
+          handleClick('new');
+        }}
+      >
         {({ checked }) => (
           <span
             className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
@@ -234,11 +259,16 @@ function Status() {
                 : 'border-gray-200 bg-white text-brand dark:border-gray-700 dark:bg-gray-800 dark:text-white'
             }`}
           >
-            Nuevos
+            Todos
           </span>
         )}
       </RadioGroup.Option>
-      <RadioGroup.Option value="has-offers">
+      <RadioGroup.Option
+        value="has-offers"
+        onClick={() => {
+          handleClick('has-offers');
+        }}
+      >
         {({ checked }) => (
           <span
             className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
@@ -255,11 +285,11 @@ function Status() {
   );
 }
 
-function Filters() {
+function Filters({ ontipom }) {
   return (
     <>
       <Collapse label="Status" initialOpen>
-        <Status />
+        <Status ontipom={ontipom} />
       </Collapse>
       <Collapse label="Price Range" initialOpen>
         <PriceRange />
@@ -331,11 +361,6 @@ const BuyButton = styled.button`
 const Frenchies: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  const a = {
-    numb: 0,
-    tipo: '',
-  };
-
   const { openModal } = useModal();
 
   const provider = useProvider();
@@ -371,6 +396,53 @@ const Frenchies: NextPageWithLayout<
     tokenContract,
     chainId,
   } = useSelector((state) => state.blockchain);
+  const allnfts = allFrenchies;
+  const [frenchies, setFrenchies] = useState([{}]);
+  const [subastas, setSubastas] = useState([{}]);
+  const [ofertas, setOfertas] = useState([{}]);
+  const [_ventas, setVentas] = useState([{}]);
+
+  const [mysubastas, setMySubastas] = useState([{}]);
+  const [mypujas, setMyPujas] = useState([{}]);
+
+  const [myofertas, setMyOfertas] = useState([{}]);
+  const [offers, setOffers] = useState([{}]);
+  const [myventas, setMyVentas] = useState([{}]);
+  const [currentF, setCurrentF] = useState([]);
+
+  const { inventoryf } = useSelector((state: any) => state.blockchain);
+
+  const rpc_ETH =
+    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+  const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
+
+  const frenchiesMinterContract = new ethers.Contract(
+    '0x908f659085E3C561b5F47A03E2b105Ff141c68C9',
+    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    frenchiesAbi,
+    provider_ETH
+  );
+
+  const AuctionMinterContract = new ethers.Contract(
+    '0x323516A1daB354cBa079d80A0a1b36Ae50407939',
+    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    auction,
+    provider_ETH
+  );
+
+  const OffersMinterContract = new ethers.Contract(
+    '0x7764D03497948388Df4b1ee1EA071249db6Ce98e',
+    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    _ofertas,
+    provider_ETH
+  );
+
+  const VentasMinterContract = new ethers.Contract(
+    '0xAf31782D87C912Ef71341E1b2148bE0B1a4fD1Aa',
+    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    ventas,
+    provider_ETH
+  );
 
   const valor = 0.3;
 
@@ -575,15 +647,7 @@ const Frenchies: NextPageWithLayout<
 
   const setearSupply = async () => {
     //setLoading(true);
-    const rpc_ETH =
-      'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
-    const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
-    const frenchiesMinterContract = new ethers.Contract(
-      '0x32bfb6790B3536a7269185278B482A0FA0385362',
-      frenchiesAbi,
-      provider_ETH
-    );
     const supp = await frenchiesMinterContract.totalSupply();
     //setLoading(false);
 
@@ -598,7 +662,7 @@ const Frenchies: NextPageWithLayout<
     }, 3000);
   }, [status]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
     const es = JSON.parse(is);
 
@@ -606,7 +670,296 @@ const Frenchies: NextPageWithLayout<
     if (si != undefined && !isConnect) {
       openModal('WALLET_CONNECT_VIEW');
     }
-  }, [isConnect]);
+  }, [isConnect]);*/
+
+  const { frenchs } = useSelector((state) => state.minted);
+
+  const getnfts = async () => {
+    const total = await frenchiesMinterContract.totalSupply();
+
+    const nfts = allnfts.slice(0, total);
+    setFrenchies(nfts);
+
+    await getNftAuction();
+    await getMyNftAuction();
+    await getNftOffers();
+    await getNftOwnerOffers();
+    await getNftMyOffers();
+    await getMyNftPuja();
+    await getNftVentas();
+    await getMyNftVentas();
+  };
+
+  const getNftAuction = async () => {
+    const nose = await AuctionMinterContract.getSubastasAll();
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
+
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        seller: nose[i].seller,
+        startBlock: parseInt(nose[i].startBlock),
+        endBlock: parseInt(nose[i].endBlock),
+        startPrice: parseInt(nose[i].startPrice),
+        currentPrice: parseInt(nose[i].currentPrice),
+        currentWinner: nose[i].currentWinner,
+        active: nose[i].active,
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        description: infoToken.descripcion,
+        type: 'subasta',
+      };
+      jsonArray.push(objetoJSON);
+    }
+    setSubastas(jsonArray);
+  };
+
+  const getMyNftAuction = async () => {
+    const nose = await AuctionMinterContract.getSubastasMyNfts(accountAddress);
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        seller: nose[i].seller,
+        startBlock: parseInt(nose[i].startBlock),
+        endBlock: parseInt(nose[i].endBlock),
+        startPrice: parseInt(nose[i].startPrice),
+        currentPrice: parseInt(nose[i].currentPrice),
+        currentWinner: nose[i].currentWinner,
+        active: nose[i].active,
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        description: infoToken.descripcion,
+        type: 'subasta',
+      };
+      jsonArray.push(objetoJSON);
+    }
+    setMySubastas(jsonArray);
+  };
+
+  const getMyNftPuja = async () => {
+    const nose = await AuctionMinterContract.getPujas(accountAddress);
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        seller: nose[i].seller,
+        startBlock: parseInt(nose[i].startBlock),
+        endBlock: parseInt(nose[i].endBlock),
+        startPrice: parseInt(nose[i].startPrice),
+        currentPrice: parseInt(nose[i].currentPrice),
+        currentWinner: nose[i].currentWinner,
+        active: nose[i].active,
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        description: infoToken.descripcion,
+        type: 'subasta',
+      };
+      jsonArray.push(objetoJSON);
+    }
+    setPujas(jsonArray);
+  };
+
+  const getNftOffers = async () => {
+    const nose = await OffersMinterContract.getOfertasAll();
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        owner: nose[i].owner,
+        max: parseInt(nose[i].max),
+        active: parseInt(nose[i].active),
+        currentWinner: parseInt(nose[i].currentWinner),
+      };
+      jsonArray.push(objetoJSON);
+    }
+
+    const jsonString = JSON.stringify(jsonArray);
+    let offers = [];
+    for (let xl = 0; xl < jsonArray.length; xl++) {
+      const position = jsonArray[xl].tokenId;
+
+      const infoToken = allnfts[position];
+      const newInfo = {
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        type: 'oferta',
+      };
+
+      offers.push(newInfo);
+      allnfts[position] = newInfo;
+    }
+    setOfertas(offers);
+  };
+
+  const getNftOwnerOffers = async () => {
+    const nose = await OffersMinterContract.getOfertas(accountAddress);
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        owner: nose[i].owner,
+        max: parseInt(nose[i].max),
+        active: parseInt(nose[i].active),
+        currentWinner: parseInt(nose[i].currentWinner),
+      };
+      jsonArray.push(objetoJSON);
+    }
+
+    const jsonString = JSON.stringify(jsonArray);
+    let offers = [];
+    for (let xl = 0; xl < jsonArray.length; xl++) {
+      const position = jsonArray[xl].tokenId;
+
+      const infoToken = allnfts[position];
+      const newInfo = {
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        type: 'oferta',
+      };
+
+      offers.push(newInfo);
+      allnfts[position] = newInfo;
+    }
+
+    setMyOfertas(offers);
+  };
+
+  const getNftMyOffers = async () => {
+    const nose = await OffersMinterContract.getOfertasMyNfts(accountAddress);
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        owner: nose[i].owner,
+        max: parseInt(nose[i].max),
+        active: parseInt(nose[i].active),
+        currentWinner: parseInt(nose[i].currentWinner),
+      };
+      jsonArray.push(objetoJSON);
+    }
+
+    const jsonString = JSON.stringify(jsonArray);
+    let offers = [];
+    for (let xl = 0; xl < jsonArray.length; xl++) {
+      const position = jsonArray[xl].tokenId;
+
+      const infoToken = allnfts[position];
+      const newInfo = {
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        type: 'oferta',
+      };
+
+      offers.push(newInfo);
+      allnfts[position] = newInfo;
+    }
+
+    setOffers(offers);
+  };
+
+  const getNftVentas = async () => {
+    const nose = await VentasMinterContract.getVentasAll();
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        owner: nose[i].owner,
+        price: parseInt(nose[i].price),
+        active: parseInt(nose[i].active),
+      };
+      jsonArray.push(objetoJSON);
+    }
+
+    const jsonString = JSON.stringify(jsonArray);
+    let ventass = [];
+    for (let xl = 0; xl < jsonArray.length; xl++) {
+      const position = jsonArray[xl].tokenId;
+
+      const infoToken = allnfts[position];
+      const newInfo = {
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        type: 'venta',
+      };
+
+      ventass.push(newInfo);
+      allnfts[position] = newInfo;
+    }
+    setVentas(ventass);
+  };
+
+  const getMyNftVentas = async () => {
+    const nose = await VentasMinterContract.getVentasMyNfts(accountAddress);
+    const jsonArray = [];
+
+    for (let i = 0; i < nose.length; i++) {
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        owner: nose[i].owner,
+        price: parseInt(nose[i].price),
+        active: parseInt(nose[i].active),
+      };
+      jsonArray.push(objetoJSON);
+    }
+
+    const jsonString = JSON.stringify(jsonArray);
+    let ventass = [];
+    for (let xl = 0; xl < jsonArray.length; xl++) {
+      const position = jsonArray[xl].tokenId;
+
+      const infoToken = allnfts[position];
+      const newInfo = {
+        name: infoToken.name,
+        image: infoToken.image,
+        id: infoToken.id,
+        type: 'venta',
+      };
+
+      ventass.push(newInfo);
+      allnfts[position] = newInfo;
+    }
+    setMyVentas(ventass);
+  };
+
+  const subirDatos = async (nft) => {
+    const jsonString = JSON.stringify(nft);
+    window.localStorage.setItem('nft', jsonString);
+  };
+
+  useEffect(() => {
+    setTipoM('new');
+    getnfts();
+  }, []);
+
+  const [tipoM, setTipoM] = useState('');
+
+  function cambiartipoM(data) {
+    setTipoM(data);
+  }
+  useEffect(() => {
+    setCurrentF(inventoryf);
+  }, [inventoryf]);
 
   return (
     <>
@@ -616,7 +969,7 @@ const Frenchies: NextPageWithLayout<
       />
       <div className="grid sm:pt-5 2xl:grid-cols-[280px_minmax(auto,_1fr)] 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
         <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block">
-          <Filters />
+          <Filters ontipom={cambiartipoM} />
         </div>
         <div className="2xl:ltr:pl-10 2xl:rtl:pr-10 4xl:ltr:pl-12 4xl:rtl:pr-12">
           <div className="relative z-10 mb-6 flex items-center justify-between">
@@ -640,139 +993,450 @@ const Frenchies: NextPageWithLayout<
               </div>
             </div>
           </div>
-          <div className=" h-[100%] w-[100%]">
-            <ParamTab
-              tabMenu={[
-                {
-                  title: 'MarketPlace',
-                  path: 'coleccion',
-                },
-                {
-                  title: 'Comprar Frenchies',
-                  path: 'buy',
-                },
-              ]}
-            >
-              <TabPanel className="focus:outline-none">
-                <div>Pronto</div>
-              </TabPanel>
-              <TabPanel className="h-full focus:outline-none">
-                <div className="h-full flex-col justify-between">
-                  <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
-                    Frenchies Blue
-                  </h1>
-                  <p className="mb-[15px] flex justify-center align-middle">
-                    PRECIO DE VENTA: 0.30 ETH
-                  </p>
-                  <div className=" mb-[10px] flex  justify-center align-middle">
-                    <Image
-                      src={Back}
-                      alt="wallet"
-                      width={300}
-                      height={300}
-                      className="rounded-none"
-                    />
+          {Usuario.rol === 'Admin' && (
+            <div className=" h-[100%] w-[100%]">
+              <ParamTab
+                tabMenu={[
+                  {
+                    title: 'Mis nfts',
+                    path: 'Mis nfts',
+                  },
+                  {
+                    title: 'Todos',
+                    path: 'coleccion',
+                  },
+                  {
+                    title: 'Nfts en subasta',
+                    path: 'subastas',
+                  },
+                  {
+                    title: 'Puja',
+                    path: 'Puja',
+                  },
+                  {
+                    title: 'Nfts en Venta',
+                    path: 'Ventas',
+                  },
+                  {
+                    title: 'Mis ofertas',
+                    path: 'Mis ofertas',
+                  },
+                  {
+                    title: 'Ofertas',
+                    path: 'ofertas',
+                  },
+                  {
+                    title: 'Comprar Frenchies',
+                    path: 'buy',
+                  },
+                ]}
+              >
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {currentF?.map((nft) => (
+                      <NFTGrid
+                        key={nft.name}
+                        name={nft.name}
+                        image={nft.image}
+                        price={nft.precio}
+                        number={nft.id}
+                        type={'general'}
+                      />
+                    ))}
                   </div>
-
-                  <div className="mb-[30px] flex justify-center align-middle">
-                    <div className="h-10 w-32 focus:outline-0">
-                      <label
-                        for="custom-input-number"
-                        className="flex w-full justify-center self-center text-sm font-semibold text-gray-700"
-                      >
-                        Cantidad
-                      </label>
-                      <div className="relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent">
-                        <button
-                          onClick={() => changeCantidad('-')}
-                          data-action="decrement"
-                          className=" h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-gray-400 hover:text-gray-700"
-                        >
-                          <span className="m-auto text-2xl font-thin">−</span>
-                        </button>
-                        <input
-                          onChange={(e) => changeCantidadM(e)}
-                          className="text-md md:text-basecursor-default flex w-full items-center bg-gray-300 text-center font-semibold text-gray-700  outline-none outline-0 hover:text-black focus:text-black  focus:outline-none"
-                          name="custom-input-number"
-                          value={cantidad}
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  {tipoM == 'new' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {frenchies?.map((nft) => (
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={nft.precio}
+                          number={nft.id}
+                          type={'oferta'}
                         />
-                        <button
-                          onClick={() => changeCantidad('+')}
-                          data-action="increment"
-                          className="h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
+                      ))}
+                    </div>
+                  )}
+
+                  {tipoM == 'on-auction' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {subastas?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={0}
+                            number={nft.id}
+                            type={'subasta'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {tipoM == 'has-offers' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {ofertas?.map((nft) => (
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'oferta'}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {tipoM == 'buy-now' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {_ventas?.map((nft) => (
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'venta'}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {mysubastas?.map((nft) => (
+                      <NFTGrid
+                        key={nft.name}
+                        name={nft.name}
+                        image={nft.image}
+                        price={0}
+                        number={nft.id}
+                        type={'subasta'}
+                      />
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {mypujas?.map((nft) => (
+                      <NFTGrid
+                        key={nft.name}
+                        name={nft.name}
+                        image={nft.image}
+                        price={0}
+                        number={nft.id}
+                        type={'general'}
+                      />
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {myventas?.map((nft) => (
+                      <NFTGrid
+                        key={nft.name}
+                        name={nft.name}
+                        image={nft.image}
+                        price={0}
+                        number={nft.id}
+                        type={'venta'}
+                      />
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {offers?.map((nft) => (
+                      <NFTGrid
+                        key={nft.name}
+                        name={nft.name}
+                        image={nft.image}
+                        price={0}
+                        number={nft.id}
+                        type={'oferta'}
+                      />
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {myofertas?.map((nft) => (
+                      <NFTGrid
+                        key={nft.name}
+                        name={nft.name}
+                        image={nft.image}
+                        price={0}
+                        number={nft.id}
+                        type={'oferta'}
+                      />
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="h-full focus:outline-none">
+                  <div className="h-full flex-col justify-between">
+                    <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
+                      Frenchies Blue
+                    </h1>
+                    <p className="mb-[15px] flex justify-center align-middle">
+                      PRECIO DE VENTA: 0.30 ETH
+                    </p>
+                    <div className=" mb-[10px] flex  justify-center align-middle">
+                      <Image
+                        src={Back}
+                        alt="wallet"
+                        width={300}
+                        height={300}
+                        className="rounded-none"
+                      />
+                    </div>
+
+                    <div className="mb-[30px] flex justify-center align-middle">
+                      <div className="h-10 w-32 focus:outline-0">
+                        <label
+                          for="custom-input-number"
+                          className="flex w-full justify-center self-center text-sm font-semibold text-gray-700"
                         >
-                          <span className="m-auto text-2xl font-thin">+</span>
-                        </button>
+                          Cantidad
+                        </label>
+                        <div className="relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent">
+                          <button
+                            onClick={() => changeCantidad('-')}
+                            data-action="decrement"
+                            className=" h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-gray-400 hover:text-gray-700"
+                          >
+                            <span className="m-auto text-2xl font-thin">−</span>
+                          </button>
+                          <input
+                            onChange={(e) => changeCantidadM(e)}
+                            className="text-md md:text-basecursor-default flex w-full items-center bg-gray-300 text-center font-semibold text-gray-700  outline-none outline-0 hover:text-black focus:text-black  focus:outline-none"
+                            name="custom-input-number"
+                            value={cantidad}
+                          />
+                          <button
+                            onClick={() => changeCantidad('+')}
+                            data-action="increment"
+                            className="h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
+                          >
+                            <span className="m-auto text-2xl font-thin">+</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="mb-[80px] flex justify-center align-middle">
-                    <label htmlFor="">Precio: {precio.toFixed(1)}</label>
-                  </div>
+                    <div className="mb-[80px] flex justify-center align-middle">
+                      <label htmlFor="">Precio: {precio.toFixed(1)}</label>
+                    </div>
 
-                  <div className="flex justify-center align-middle">
-                    {/*isConnect &&
+                    <div className="flex justify-center align-middle">
+                      {/*isConnect &&
                       approvedToken < precio * cantidad - precio * count &&
                       !loading &&
                       cantidad > count &&
                       approvedToken < precio * cantidad - precio * count &&
                     !loading && <Button onClick={approve}>Aprobar</Button>*/}
 
-                    {isConnect && loading && <Button>Cargando...</Button>}
+                      {isConnect && loading && <Button>Cargando...</Button>}
 
-                    {isConnect && !loading && (
-                      /*approvedToken >= precio * cantidad - precio * count && */ <Button
-                        disabled={cantidad == 0}
-                        onClick={buyNft}
-                      >
-                        Comprar
-                      </Button>
-                    )}
+                      {isConnect && !loading && (
+                        /*approvedToken >= precio * cantidad - precio * count && */ <Button
+                          disabled={cantidad == 0}
+                          onClick={buyNft}
+                        >
+                          Comprar
+                        </Button>
+                      )}
 
-                    {!isConnect && (
-                      <Button onClick={() => openModal('WALLET_CONNECT_VIEW')}>
-                        Conectar
-                      </Button>
-                    )}
+                      {!isConnect && (
+                        <Button
+                          onClick={() => openModal('WALLET_CONNECT_VIEW')}
+                        >
+                          Conectar
+                        </Button>
+                      )}
+                    </div>
+                    <div className="mt-4 flex justify-center align-middle">
+                      {vendido && (
+                        <AnchorLink href={'/profile'}>
+                          <Button>ver mis nfts</Button>
+                        </AnchorLink>
+                      )}
+                    </div>
+
+                    <h1 className="flex  justify-center align-middle font-bold">
+                      {supply}/10010
+                    </h1>
+                    <div className="mt-10 flex w-full justify-center align-middle">
+                      {status == 200 && (
+                        <div
+                          className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+                          role="alert"
+                        >
+                          <span className="text-center font-medium">
+                            Frenchie obtenido de manera exitosa
+                          </span>
+                        </div>
+                      )}
+
+                      {status == 100 && (
+                        <div
+                          className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+                          role="alert"
+                        >
+                          <span className="text-center font-medium">
+                            {errormsg}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="mt-4 flex justify-center align-middle">
-                    {vendido && (
-                      <AnchorLink href={'/profile'}>
-                        <Button>ver mis nfts</Button>
-                      </AnchorLink>
-                    )}
+                </TabPanel>
+              </ParamTab>
+            </div>
+          )}
+          {Usuario.rol === 'cliente' && (
+            <div className=" h-[100%] w-[100%]">
+              <ParamTab
+                tabMenu={[
+                  {
+                    title: 'MarketPlace',
+                    path: 'MarketPlace',
+                  },
+                  {
+                    title: 'Comprar Frenchies',
+                    path: 'buy',
+                  },
+                ]}
+              >
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    Prontamente
                   </div>
+                </TabPanel>
+                <TabPanel className="h-full focus:outline-none">
+                  <div className="h-full flex-col justify-between">
+                    <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
+                      Frenchies Blue
+                    </h1>
+                    <p className="mb-[15px] flex justify-center align-middle">
+                      PRECIO DE VENTA: 0.30 ETH
+                    </p>
+                    <div className=" mb-[10px] flex  justify-center align-middle">
+                      <Image
+                        src={Back}
+                        alt="wallet"
+                        width={300}
+                        height={300}
+                        className="rounded-none"
+                      />
+                    </div>
 
-                  <h1 className="flex  justify-center align-middle font-bold">
-                    {supply}/10010
-                  </h1>
-                  <div className="mt-10 flex w-full justify-center align-middle">
-                    {status == 200 && (
-                      <div
-                        className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-                        role="alert"
-                      >
-                        <span className="text-center font-medium">
-                          Frenchie obtenido de manera exitosa
-                        </span>
+                    <div className="mb-[30px] flex justify-center align-middle">
+                      <div className="h-10 w-32 focus:outline-0">
+                        <label
+                          for="custom-input-number"
+                          className="flex w-full justify-center self-center text-sm font-semibold text-gray-700"
+                        >
+                          Cantidad
+                        </label>
+                        <div className="relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent">
+                          <button
+                            onClick={() => changeCantidad('-')}
+                            data-action="decrement"
+                            className=" h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-gray-400 hover:text-gray-700"
+                          >
+                            <span className="m-auto text-2xl font-thin">−</span>
+                          </button>
+                          <input
+                            onChange={(e) => changeCantidadM(e)}
+                            className="text-md md:text-basecursor-default flex w-full items-center bg-gray-300 text-center font-semibold text-gray-700  outline-none outline-0 hover:text-black focus:text-black  focus:outline-none"
+                            name="custom-input-number"
+                            value={cantidad}
+                          />
+                          <button
+                            onClick={() => changeCantidad('+')}
+                            data-action="increment"
+                            className="h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
+                          >
+                            <span className="m-auto text-2xl font-thin">+</span>
+                          </button>
+                        </div>
                       </div>
-                    )}
+                    </div>
+                    <div className="mb-[80px] flex justify-center align-middle">
+                      <label htmlFor="">Precio: {precio.toFixed(1)}</label>
+                    </div>
 
-                    {status == 100 && (
-                      <div
-                        className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-                        role="alert"
-                      >
-                        <span className="text-center font-medium">
-                          {errormsg}
-                        </span>
-                      </div>
-                    )}
+                    <div className="flex justify-center align-middle">
+                      {/*isConnect &&
+                      approvedToken < precio * cantidad - precio * count &&
+                      !loading &&
+                      cantidad > count &&
+                      approvedToken < precio * cantidad - precio * count &&
+                    !loading && <Button onClick={approve}>Aprobar</Button>*/}
+
+                      {isConnect && loading && <Button>Cargando...</Button>}
+
+                      {isConnect && !loading && (
+                        /*approvedToken >= precio * cantidad - precio * count && */ <Button
+                          disabled={cantidad == 0}
+                          onClick={buyNft}
+                        >
+                          Comprar
+                        </Button>
+                      )}
+
+                      {!isConnect && (
+                        <Button
+                          onClick={() => openModal('WALLET_CONNECT_VIEW')}
+                        >
+                          Conectar
+                        </Button>
+                      )}
+                    </div>
+                    <div className="mt-4 flex justify-center align-middle">
+                      {vendido && (
+                        <AnchorLink href={'/profile'}>
+                          <Button>ver mis nfts</Button>
+                        </AnchorLink>
+                      )}
+                    </div>
+
+                    <h1 className="flex  justify-center align-middle font-bold">
+                      {supply}/10010
+                    </h1>
+                    <div className="mt-10 flex w-full justify-center align-middle">
+                      {status == 200 && (
+                        <div
+                          className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+                          role="alert"
+                        >
+                          <span className="text-center font-medium">
+                            Frenchie obtenido de manera exitosa
+                          </span>
+                        </div>
+                      )}
+
+                      {status == 100 && (
+                        <div
+                          className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+                          role="alert"
+                        >
+                          <span className="text-center font-medium">
+                            {errormsg}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </TabPanel>
-            </ParamTab>
-          </div>
+                </TabPanel>
+              </ParamTab>
+            </div>
+          )}
         </div>
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
           <Button onClick={() => openDrawer('DRAWER_SEARCH')} fullWidth>

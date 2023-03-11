@@ -16,6 +16,10 @@ export const contract = () => {
     RPC_URL:
       'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0x52020b93791c0AD281362D6F5825B1Bb226BB6e6', //aqui ponemos el usdt
+
+    auction: '0x323516A1daB354cBa079d80A0a1b36Ae50407939',
+    offers: '0x7764D03497948388Df4b1ee1EA071249db6Ce98e',
+    venta: '0xAf31782D87C912Ef71341E1b2148bE0B1a4fD1Aa',
   };
 };
 
@@ -36,3 +40,7 @@ export const contract = () => {
 //0x908f659085E3C561b5F47A03E2b105Ff141c68C9  token
 
 // 0x1fdCE192F2A4dd5E482BE9e54EF7aa68Ef6CDE53
+
+// 0x34a2daa2234098C75Db3452eF2278f1b5c073D68 Auction
+// 0x5CAd1d329B09379d5B829D4eEb8adc033663C27F offers
+// 0xD9E56802C85A9edEE8f649323ea8B67F7b8ab937 Venta

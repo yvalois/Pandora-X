@@ -8,6 +8,11 @@ import inversionMinterAbi from '../../abi/InversionMinter.json';
 import stakingPAbi from '../../abi/StakingPOL.json';
 import stakingErAbi from '../../abi/StakingETH.json';
 import frenchiesAbi from '../../abi/FrenchiesBlues.json';
+import allFrenchies from '../../abi/ultimateDatos.json';
+import auction from '../../abi/auction.json';
+import ofertas from '../../abi/ofertas.json';
+import ventas from '../../abi/ventas.json';
+
 import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
 import { GOERLIClient } from 'wagmi';
@@ -29,6 +34,10 @@ const STAKING_ADDRESS = router.staking;
 const STAKINGE_ADDRESS = router.stakingETH;
 const STAKINGP_ADDRESS = router.stakingPOL;
 const FRENCHIES_ADDRESS = router.frenchies;
+const AUCTION_ADDRESS = router.auction;
+const VENTA_ADDRESS = router.venta;
+const OFERTAS_ADDRESS = router.offers;
+
 const ACCESS_ADDRESS = router.Access;
 
 const RPC_URL = router.RPC_URL;
@@ -385,7 +394,7 @@ export const uStakingF = (_address) => async (dispatch) => {
             const info = response;
             const id = parseInt(item) + 1;
             fetch(
-              `https://gateway.pinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
+              `https://lime-geographical-angelfish-53.mypinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
               {
                 method: 'GET',
               }
@@ -961,17 +970,36 @@ export const connectWallet =
           signer
         );
 
-        await getProductos();
-        await getInversiones();
-        const nftStaking = await stakingContract.getNftsInStaking(address);
-        const nftStakingF = await stakingfrenEContract.getNftsInStaking(
-          address
+        /*const auction = new ethers.Contract(
+          AUCTION_ADDRESS,
+          auction,
+          signer
+        );
+          
+        const ofertas = new ethers.Contract(
+          OFERTAS_ADDRESS,
+          ofertas,
+          signer
         );
 
+        const ventas = new ethers.Contract(
+          VENTA_ADDRESS,
+          ventas,
+          signer
+        );*/
+
+        await getProductos();
+        await getInversiones();
+
+        const nftStaking = await stakingContract.getNftsInStaking(address);
+
+        const nftStakingF = await stakingfrenEContract.getNftsInStaking(
+          '0xF9DFed404AB1ecA310244D7f32A3D0f66A2FCC11'
+        );
+        const french = await frenchiesMinterContract.getMyInventory(address);
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
-
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
@@ -1036,14 +1064,16 @@ export const connectWallet =
                 idW: parseInt(item),
               };
               i++;
-              console.log('ready');
               inventorys.push(stak);
             }
           }
         });
 
         nftStakingF.map(async (item) => {
-          const is = await stakingfrenEContract.nftIsStaking(address, item);
+          const is = await stakingfrenEContract.nftIsStaking(
+            '0xF9DFed404AB1ecA310244D7f32A3D0f66A2FCC11',
+            item
+          );
           if (is == true) {
             fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getStaking/${item}`, {
               method: 'GET',
@@ -1053,43 +1083,30 @@ export const connectWallet =
             })
               .then((res) => res.json())
               .then((response) => {
-                const id = parseInt(item) + 1;
-                const info = response;
-                fetch(
-                  `https://lime-geographical-angelfish-53.mypinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
-                  {
-                    method: 'GET',
-                  }
-                )
-                  .then((res) => res.json())
-                  .then((response) => {
-                    const nft = response;
-                    let a = nft.image.split('/');
+                const id = parseInt(item);
+                const info = allFrenchies[id];
+                const dat = new Date(info.fechap);
+                const date = dat.toLocaleDateString();
+                const stak = {
+                  id: parseInt(item),
+                  fechaPago: {
+                    fecha: info.fechap,
+                    fechaM: date,
+                    fechaL: info.fechald,
+                  },
+                  idCR: {
+                    id: parseInt(item),
+                    fechap: info.fechap,
+                    fechaM: date,
+                  },
+                  idW: parseInt(item),
+                  Nombre: info.name,
+                  image: info.image,
+                  precio: 0.3,
+                  descripcion: info.description,
+                };
 
-                    const dat = new Date(info.fechap);
-                    const date = dat.toLocaleDateString();
-                    const stak = {
-                      id: parseInt(item),
-                      fechaPago: {
-                        fecha: info.fechap,
-                        fechaM: date,
-                        fechaL: info.fechald,
-                      },
-                      idCR: {
-                        id: parseInt(item),
-                        fechap: info.fechap,
-                        fechaM: date,
-                      },
-                      idW: parseInt(item),
-                      Nombre: nft.name,
-                      image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                      precio: 0.3,
-                      descripcion: nft.description,
-                    };
-                    console.log('ready');
-
-                    inventorysf.push(stak);
-                  });
+                inventorysf.push(stak);
               });
           }
         });
@@ -1128,14 +1145,36 @@ export const connectWallet =
             inventoryi.push(inv);
           }
         });
+        /*const getFren = async () => {
+            for(let i = 43; i < 64; i++){
+              
+              const nft = allFrenchies[i]
+
+
+              const prod = {
+                name: nft.name,
+                image: nft.image,
+                precio: 0.3,
+                descripcion: nft.description,
+                id: i,
+                attributes: nft.attributes,
+              };
+              inventoryf.push(prod);
+            }
+
+        };*/
+
         const getFren = async () => {
-          fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
-            },
-          })
+          fetch(
+            `https://api.tatum.io/v3/nft/address/balance/ETH/0xF9DFed404AB1ecA310244D7f32A3D0f66A2FCC11`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+              },
+            }
+          )
             .then((res) => res.json())
             .then((response) => {
               response.map((meta) => {
@@ -1145,29 +1184,18 @@ export const connectWallet =
                 ) {
                   let token = meta.metadata;
                   token.map((item) => {
-                    const id = parseInt(item.tokenId) + 1;
-                    fetch(
-                      `https://lime-geographical-angelfish-53.mypinata.cloud/ipfs/bafybeiawpvggels6zvzlluqjw5b6a72xnigo2647o24qpep7org3pht26a/${id}`,
-                      {
-                        method: 'GET',
-                      }
-                    )
-                      .then((res) => res.json())
-                      .then((response) => {
-                        const nft = response;
-                        if (nft != undefined) {
-                          let a = nft.image.split('/');
-                          const prod = {
-                            name: nft.name,
-                            image: 'https://gateway.pinata.cloud/ipfs/' + a[2],
-                            precio: 0.3,
-                            descripcion: nft.description,
-                            id: item.tokenId,
-                            attributes: nft.attributes,
-                          };
-                          inventoryf.push(prod);
-                        }
-                      });
+                    const i = parseInt(item.tokenId);
+                    const nft = allFrenchies[i];
+
+                    const prod = {
+                      name: nft.name,
+                      image: nft.image,
+                      precio: 0.3,
+                      descripcion: nft.description,
+                      id: item.tokenId,
+                      attributes: nft.attributes,
+                    };
+                    inventoryf.push(prod);
                   });
                 }
               });
@@ -1231,6 +1259,7 @@ export const connectWallet =
           stakingPAbi,
           signer
         );
+
         setTimeout(async () => {
           await dispatch(
             dataLoaded({
@@ -1242,9 +1271,11 @@ export const connectWallet =
               frenchiesMinter: frenchiesMinterContract1,
               stakingfrenEContract: stakingfrenEContract1,
               stakingfrenPContract: stakingfrenPContract1,
+              //ventasContract: ventas,
+              //auctionContract: auction,
+              //ofertasContract: ofertas,
               staking: stakingContract1,
               NftAccessContract: NftAccess1,
-
               // stakinfETH: stakingfrenEContract,
               // stakingPOL: stakingfrenPContract,
               accountAddress: address,

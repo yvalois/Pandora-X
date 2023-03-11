@@ -5,6 +5,7 @@ const initialState = {
   errorMsg: null,
   inversiones: [],
   productos: [],
+  frenchs: [],
 };
 
 const MintedReducer = (state = initialState, action) => {
@@ -28,6 +29,11 @@ const MintedReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case 'UPDATE_FRENCH':
+      return {
+        ...state,
+        frenchies: action.payload,
       };
 
     default:
