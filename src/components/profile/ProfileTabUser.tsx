@@ -22,8 +22,9 @@ export default function ProfileTabUser() {
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
   const [currentF, setCurrentF] = useState([]);
+  const [currentF2, setCurrentF2] = useState([]);
 
-  const { inventoryp, inventoryi, inventoryf } = useSelector(
+  const { inventoryp, inventoryi, inventoryf, inventoryf2 } = useSelector(
     (state: any) => state.blockchain
   );
 
@@ -37,6 +38,7 @@ export default function ProfileTabUser() {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
     setCurrentF(inventoryf);
+    setCurrentF2(inventoryf2);
   }, [inventoryp, inventoryi, inventoryf]);
 
   return (
@@ -120,7 +122,7 @@ export default function ProfileTabUser() {
       </TabPanel>
       <TabPanel className="h-full w-full focus:outline-none">
         <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-          {currentF?.map((nft) => (
+          {currentF2?.map((nft) => (
             <NFTGrid
               key={nft.name}
               name={nft.name}

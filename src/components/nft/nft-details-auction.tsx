@@ -15,6 +15,8 @@ import { nftData } from '@/data/static/single-nft';
 import NftDropDown from './nft-dropdown';
 import Avatar from '@/components/ui/avatar';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { ethers } from 'ethers';
 
 interface NftFooterProps {
   className?: string;
@@ -32,6 +34,127 @@ function NftFooter({
   price,
 }: NftFooterProps) {
   const { openModal } = useModal();
+  const [isFinish, setIsFinish] = useState(true);
+  const { accountAddress, auctionContract, chainId } = useSelector(
+    (state) => state.blockchain
+  );
+  const [status, setStatus] = useState(0);
+  const [alertMsg, setAlertMsg] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [reclamar, setReclamar] = useState(false);
+  const [precio, setPrecio] = useState(0);
+
+  function toDateTime(secs) {
+    var t = new Date(1970, 0, 1); // Epoch
+    t.setSeconds(secs - 3600 * 4);
+    return t;
+  }
+
+  const dateTime = toDateTime(auctionTime);
+
+  const Pujar = async () => {
+    /*if (chainId == 5) {
+      setLoading(true);
+      try { 
+        const bid =parseFloat(0.001) + parseFloat(0.002)
+  
+        const options = {
+          value: ethers.utils.parseUnits(bid.toString(), 'ether'),
+        };
+          const tx = await  auctionContract.bidApuestas(currentBid.tokenId, options);
+          await tx.wait();
+          setStatus(200);
+          setLoading(false);
+          setAlertMsg('Transaccion completada correctamente');
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }*/
+    window.localStorage.setItem('pujaId', currentBid.tokenId);
+    openModal('BID_VIEW');
+  };
+
+  const Reclamar = async () => {
+    if (chainId == 5) {
+      setLoading(true);
+      try {
+        const tx = await auctionContract.claim(currentBid.tokenId);
+        await tx.wait();
+        setStatus(200);
+        setLoading(false);
+        setAlertMsg('Transaccion completada correctamente');
+        setReclamar(true);
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        console.log(err);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fecha = new Date();
+    const dateTime2 = toDateTime(auctionTime);
+
+    if (1 == 1) {
+      setIsFinish(false);
+    } else {
+      setIsFinish(true);
+    }
+  }, [auctionTime]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (status != 0 && reclamar == true) {
+        setStatus(0);
+        window.location.href = '/frenchies';
+      } else {
+        setStatus(0);
+      }
+    }, 5000);
+  }, [status, reclamar]);
+
+  useEffect(() => {
+    const newPrecio = ethers.utils.formatEther(currentBid?.currentPrice);
+    setPrecio(newPrecio);
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (status != 0) {
+        setStatus(0);
+        window.location.href = '/frenchies';
+      }
+    }, 3000);
+  }, [status]);
+
   return (
     <div
       className={cn(
@@ -53,31 +176,125 @@ function NftFooter({
                 </AnchorLink>
               </h3>
               <div className="text-lg font-medium -tracking-wider md:text-xl xl:text-2xl">
-                {currentBid?.currentPrice} ETH
+                {parseFloat(
+                  currentBid?.currentPrice / 1000000000000000000
+                ).toFixed(3)}{' '}
+                ETH
               </div>
             </div>
             <div className="block w-1/2 shrink-0 md:w-3/5">
               <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
                 Auction ends in
               </h3>
-              <AuctionCountdown date={auctionTime} />
+              <AuctionCountdown date={dateTime - 3600 * 1000} />
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3">
-          <Button shape="rounded">
-            {isAuction ? 'PLACE A BID' : `BUY FOR ${price} ETH`}
-          </Button>
-          <Button
-            shape="rounded"
-            variant="solid"
-            color="gray"
-            className="dark:bg-gray-800"
-            onClick={() => openModal('SHARE_VIEW')}
-          >
-            SHARE
-          </Button>
+        {currentBid.seller == accountAddress && (
+          <div className="grid grid-cols-2 gap-3">
+            {!loading && (
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="gray"
+                className="dark:bg-gray-800"
+                onClick={Reclamar}
+                disabled={isFinish}
+              >
+                Reclamar
+              </Button>
+            )}
+            {loading && (
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="gray"
+                className="dark:bg-gray-800"
+              >
+                Cargando
+              </Button>
+            )}
+            <Button
+              shape="rounded"
+              variant="solid"
+              color="gray"
+              className="dark:bg-gray-800"
+              onClick={() => openModal('SHARE_VIEW')}
+            >
+              SHARE
+            </Button>
+          </div>
+        )}
+
+        {currentBid.currentWinner != accountAddress && (
+          <div className="grid grid-cols-2 gap-3">
+            {!loading && (
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="gray"
+                className="dark:bg-gray-800"
+                onClick={Reclamar}
+                disabled={isFinish}
+              >
+                Reclamar
+              </Button>
+            )}
+
+            {loading && <Button shape="rounded">Cargando</Button>}
+            <Button
+              shape="rounded"
+              variant="solid"
+              color="gray"
+              className="dark:bg-gray-800"
+              onClick={() => openModal('SHARE_VIEW')}
+            >
+              SHARE
+            </Button>
+          </div>
+        )}
+
+        {currentBid.seller != accountAddress &&
+          currentBid.currentWinner == accountAddress && (
+            <div className="grid grid-cols-2 gap-3">
+              {!loading && (
+                <Button shape="rounded" onClick={Pujar}>
+                  Pujar
+                </Button>
+              )}
+
+              {loading && <Button shape="rounded">Cargando</Button>}
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="gray"
+                className="dark:bg-gray-800"
+                onClick={() => openModal('SHARE_VIEW')}
+              >
+                SHARE
+              </Button>
+            </div>
+          )}
+
+        <div className="m-2 flex w-full justify-center align-middle">
+          {status == 200 && (
+            <div
+              className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+              role="alert"
+            >
+              <span className="text-center font-medium">{alertMsg}</span>
+            </div>
+          )}
+
+          {status == 100 && (
+            <div
+              className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+              role="alert"
+            >
+              <span className="text-center font-medium">{alertMsg}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -182,7 +399,7 @@ export default function NftDetailsAuction() {
         width: 40,
       },
       id: 2,
-      label: 'Bid Placed',
+      label: 'Puja hecha',
       name: nft.currentWinner,
       transactionUrl: '#',
     },
@@ -313,14 +530,14 @@ export default function NftDetailsAuction() {
           <NftFooter
             className="hidden md:block"
             currentBid={nft}
-            auctionTime={Date.now() + nft.endBlock}
+            auctionTime={nft.endBlock}
             isAuction={nft.active}
             price={parseInt(nft.currentPrice)}
           />
         </div>
         <NftFooter
           currentBid={nft}
-          auctionTime={Date.now() + nft.endBlock}
+          auctionTime={nft.endBlock}
           isAuction={nft.active}
           price={nft.currentPrice}
         />

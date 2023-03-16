@@ -17,8 +17,9 @@ import Avatar from '@/components/ui/avatar';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
-import { uInvertion, uFrench } from '../../redux/Blockchain/blockchainAction';
+import { uInvertion, uFrench2 } from '../../redux/Blockchain/blockchainAction';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
+import frenchiesAbi2 from '../../abi/FrenchiesBlues2.json';
 
 import router from 'next/router';
 import { useAccount, useProvider } from 'wagmi';
@@ -39,7 +40,7 @@ type Avatar = {
   logo: StaticImageData;
 };
 
-function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
+function NftFooter({ className = 'md:hidden', price, id, _status, _alertMsg }) {
   const { openModal } = useModal();
   const [loading, setLoading] = useState(false);
   const [cuenta, setCuenta] = useState('');
@@ -49,6 +50,8 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
   const [alertMsg, setAlertMsg] = useState('');
   const [alertMsg2, setAlertMsg2] = useState('');
   const { perfil, nombre } = useSelector((state) => state.Usuario);
+  const [isOwner, setIsOwner] = useState(false);
+  const { accountAddress } = useSelector((state) => state.blockchain);
 
   const Usuario = useSelector((state) => state.Usuario);
   const [auxPrice, setAuxPrice] = useState(price);
@@ -61,33 +64,45 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
   const { address } = useAccount();
 
   const openVenta = () => {
-    window.localStorage.setItem('TransferFId', id);
+    window.localStorage.setItem('VentaId', id);
     openModal('SELL_VIEW');
   };
 
+  const openOferta = () => {
+    window.localStorage.setItem('OfertaId', id);
+    openModal('OFFER_VIEW');
+  };
+
   const openSubasta = () => {
-    window.localStorage.setItem('TransferFId', id);
+    window.localStorage.setItem('SubastaId', id);
     openModal('AUCTION_VIEW');
   };
-  /* Transferir */
 
-  const chain = async () => {
-    if (chainId != 1) {
-      openModal('NETWORK_VIEW');
+  const rpc_ETH =
+    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+  const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
+
+  const frenchiesMinterContract = new ethers.Contract(
+    '0x9d78C6BCB757C63D92925983E47994b2164B1eF8',
+    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    frenchiesAbi2,
+    provider_ETH
+  );
+
+  const verifyOwner = async () => {
+    const _id = id;
+    const owner = await frenchiesMinterContract.ownerOf(_id);
+    if (owner == accountAddress) {
+      setIsOwner(true);
+    } else {
+      setIsOwner(false);
     }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setStatus(false);
-    }, 5000);
-  }, [status]);
+    verifyOwner();
+  }, [id]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setStatus2(false);
-    }, 5000);
-  }, [status2]);
   return (
     <div
       className={cn(
@@ -99,69 +114,38 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
         <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
           <div className="block w-1/2 shrink-0 md:w-2/5">
             <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
-              Precio <span className="md:hidden">by</span>{' '}
               <AnchorLink
                 href={'#'}
                 className="normal-case text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:hidden"
               ></AnchorLink>
             </h3>
-            <div className="text-lg font-medium -tracking-wider md:text-xl xl:text-2xl">
-              {price} ETH
-            </div>
-            <AnchorLink
-              href={'#'}
-              className="mt-2 hidden items-center text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:inline-flex"
-            >
-              <div className="h-6 w-6 rounded-full ltr:mr-2 rtl:ml-2">
-                <Image
-                  className="rounded-3xl"
-                  src={perfil}
-                  alt="avatar"
-                  width={24}
-                  height={24}
-                />
-              </div>
-              {`@${nombre}`}
-            </AnchorLink>
           </div>
         </div>
 
-        {/* {tipo == 'producto' && (
-          <div className="grid grid-cols-2 gap-3">
-            {!isBuy && !loading && price > approvedToken && (
-              <Button shape="rounded" onClick={() => approve()}>
-                Ir al curso
-              </Button>
-            )}
-            {!isBuy &&
-              !loading &&
-              parseInt(price) <= approvedToken &&
-              tipoN != 6 && (
-                <Button shape="rounded" onClick={() => buyNft()}>
-                  {`Comprar por ${price} `}
-                </Button>
-              )}
+        {isOwner && (
+          <div className="grid w-full grid-cols-2 gap-3">
+            <Button onClick={openVenta} shape="rounded">
+              Vender
+            </Button>
 
-            {tipoN == 6 && (
-              <Button
-                shape="rounded"
-                onClick={() =>
-                  window.open('https://discord.com/invite/bybu984z')
-                }
-              >
-                ir al discord
-              </Button>
-            )}
+            <Button
+              shape="rounded"
+              variant="solid"
+              color="gray"
+              onClick={openSubasta}
+              className="dark:bg-gray-800"
+            >
+              Subastar
+            </Button>
+          </div>
+        )}
 
-            {isBuy && (
-              <Button shape="rounded">
-                <AnchorLink href="/" className="w-full">
-                  Ir a inicio
-                </AnchorLink>
-              </Button>
-            )}
+        {!isOwner && (
+          <div className="grid w-full grid-cols-2 gap-3">
+            <Button onClick={openOferta} shape="rounded">
+              Ofertar
+            </Button>
 
-            {!isBuy && loading && <Button shape="rounded">Cargando...</Button>}
             <Button
               shape="rounded"
               variant="solid"
@@ -169,112 +153,227 @@ function NftFooter({ className = 'md:hidden', price, id }: NftFooterProps) {
               className="dark:bg-gray-800"
               onClick={() => openModal('SHARE_VIEW')}
             >
-              Compartir
+              SHARE
             </Button>
           </div>
         )}
+      </div>
 
-        {tipo == 'inversion' && (
-          <div className="grid grid-cols-2 gap-3">
-            {!isBuy && !loading && parseInt(price) > approvedToken && (
-              <Button shape="rounded" onClick={() => approve()}>
-                Aprobar
-              </Button>
-            )}
-            {!isBuy && !loading && parseInt(price) <= approvedToken && (
-              <Button shape="rounded" onClick={() => buyNft()}>
-                {`Comprar por ${price} `}
-              </Button>
-            )}
-
-            {isBuy && (
-              <Button shape="rounded">
-                <AnchorLink href="/" className="w-full">
-                  Ir a inicio
-                </AnchorLink>
-              </Button>
-            )}
-            {!isBuy && loading && <Button shape="rounded">Cargando...</Button>}
-            <Button
-              shape="rounded"
-              variant="solid"
-              color="gray"
-              className="dark:bg-gray-800"
-              onClick={() => openModal('SHARE_VIEW')}
-            >
-              Compartir
-            </Button>
-          </div>
-        )}
-
-        {tipo == 'pcomprado' && (
-          <div className="grid grid-cols-2 gap-3">
-            <Button shape="rounded" onClick={open}>
-              Transferir
-            </Button>
-            <Button
-              shape="rounded"
-              variant="solid"
-              color="gray"
-              className="dark:bg-gray-800"
-            >
-              Acceder
-            </Button>
-          </div>
-        )}
-
-        {tipo == 'invcomprado' && (
-          <div className="grid grid-cols-2 gap-3">
-            <Button shape="rounded" onClick={openI}>
-              Transferir
-            </Button>
-            <AnchorLink href={`/staking/${id}`}>
-              <Button
-                shape="rounded"
-                variant="solid"
-                color="gray"
-                className="dark:bg-gray-800"
-              >
-                Stake
-              </Button>
-            </AnchorLink>
-          </div>
-        )} */}
-        <div className="grid w-full grid-cols-2 gap-3">
-          <Button onClick={openVenta} shape="rounded">
-            Vender
-          </Button>
-
-          <Button
-            shape="rounded"
-            variant="solid"
-            color="gray"
-            onClick={openSubasta}
-            className="dark:bg-gray-800"
+      <div className="  flex w-full justify-center align-middle">
+        {_status == 200 && (
+          <div
+            className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+            role="alert"
           >
-            Subastar
-          </Button>
-        </div>
+            <span className="text-center font-medium">{_alertMsg}</span>
+          </div>
+        )}
+
+        {_status == 100 && (
+          <div
+            className=" flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
+            <span className="text-center font-medium">{_alertMsg}</span>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export default function NftDetailsFG(Nft) {
+export default function NftDetailsFG() {
   const [tokenAddress, setTokenAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [cuenta, setCuenta] = useState('');
   const [approvedUsdt, setApprovedUsdt] = useState(0);
   const [approvedToken, setApprovedToken] = useState(0);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(0);
   const [alertMsg, setAlertMsg] = useState('');
   const { perfil, nombre } = useSelector((state) => state.Usuario);
+  const { closeModal, openModal } = useModal();
   const [atributos, setAtributos] = useState([]);
+  const [aceptada, setAceptada] = useState(false);
+  const { accountAddress, ofertasContract, chainId, frenchiesMinter } =
+    useSelector((state) => state.blockchain);
+  const [ap, setAp] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const nftdata = {
+    active: null,
+    currentWinner: '',
+    id: 0,
+    image: '',
+    max: 0,
+    name: '',
+    owner: '',
+    tokenId: 0,
+    type: '',
+  };
+
+  const [nft, setNft] = useState(nftdata);
 
   useEffect(() => {
-    setAtributos(Nft.Nft.attributes);
-    console.log(atributos);
-  }, [Nft]);
+    const fetch = async () => {
+      const storedJsonString = window.localStorage.getItem('nft');
+      const storedObject = JSON.parse(storedJsonString);
+      setNft(storedObject);
+      console.log(storedObject);
+      setAtributos(nft.attributes);
+    };
+    fetch();
+  }, []);
+
+  let bidder = [
+    {
+      amount: nft.max,
+      authorSlug: '#',
+      avatar: {
+        blurDataURL:
+          '/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F2.3e7881c0.png&w=8&q=70',
+        blurHeight: 8,
+        blurWidth: 8,
+        height: 40,
+        src: '/_next/static/media/2.3e7881c0.png',
+        width: 40,
+      },
+      id: 2,
+      label: 'Oferta hecha por',
+      name: nft.currentWinner,
+      transactionUrl: '#',
+    },
+  ];
+
+  const Aceptar = async () => {
+    if (chainId == 5) {
+      setLoading(true);
+      try {
+        const tx = await ofertasContract.sellNFT(nft.tokenId);
+        await tx.wait();
+        setStatus(200);
+        setLoading(false);
+        setAlertMsg('Transaccion completada correctamente');
+        dispatch(uFrench2(accountAddress, frenchiesMinter));
+        bidder = [];
+        setAceptada(true);
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        console.log(err);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
+  const Retirar = async () => {
+    if (chainId == 5) {
+      setLoading(true);
+      try {
+        const tx = await ofertasContract.withdraw(nft.tokenId);
+        await tx.wait();
+        setStatus(200);
+        setLoading(false);
+        setAlertMsg('Transaccion completada correctamente');
+        setAceptada(true);
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        console.log(err);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
+  const rpc_ETH =
+    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+  const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
+
+  const frenchiesMinterContract = new ethers.Contract(
+    '0x9d78C6BCB757C63D92925983E47994b2164B1eF8',
+    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    frenchiesAbi2,
+    provider_ETH
+  );
+
+  const verifyApproved = async () => {
+    let tx = await frenchiesMinterContract.isApprovedForAll(
+      accountAddress,
+      ofertasContract.address
+    );
+    if (tx == true) {
+      setAp(true);
+    }
+  };
+  const approve = async () => {
+    setLoading(true);
+    if (chainId == 5) {
+      try {
+        let tx = await frenchiesMinter.setApprovalForAll(
+          ofertasContract.address,
+          'true'
+        );
+        await tx.wait();
+        verifyApproved();
+        setLoading(false);
+        setStatus(200);
+        setAlertMsg('Aprobado correctamente');
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    verifyApproved();
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (status != 0 && aceptada) {
+        setStatus(0);
+        window.location.href = '/frenchies';
+      } else {
+        setStatus(0);
+      }
+    }, 3000);
+  }, [status]);
 
   return (
     <div className="flex flex-grow">
@@ -283,7 +382,7 @@ export default function NftDetailsFG(Nft) {
           <div className="flex h-full max-h-full w-full items-center justify-center lg:max-w-[768px]">
             <div className="relative aspect-square max-h-full w-full overflow-hidden rounded-lg">
               <Image
-                src={Nft.Nft.img}
+                src={nft.image}
                 //placeholder="blur"
                 layout="fill"
                 objectFit="cover"
@@ -299,7 +398,7 @@ export default function NftDetailsFG(Nft) {
             <div className="block">
               <div className="flex justify-between">
                 <h2 className="text-xl font-medium leading-[1.45em] -tracking-wider text-gray-900 dark:text-white md:text-2xl xl:text-3xl">
-                  {Nft.Nft.Nombre}
+                  {nft.name}
                 </h2>
               </div>
             </div>
@@ -310,6 +409,10 @@ export default function NftDetailsFG(Nft) {
                     title: 'Details',
                     path: 'details',
                   },
+                  {
+                    title: 'Ofertas',
+                    path: 'ofertado',
+                  },
                 ]}
               >
                 <TabPanel className="focus:outline-none">
@@ -319,7 +422,13 @@ export default function NftDetailsFG(Nft) {
                         Sobre
                       </h3>
                       <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
-                        {Nft.Nft.descripcion}
+                        The Frenchies Blue collection combines fantastic art
+                        with detailed tokenomics and fun gamification. Holders
+                        have DEFI utility, also have access to the private
+                        membership, which includes networking and collaboraFtion
+                        opportunities with other professionals, as well as the
+                        opportunity to participate in group discussion and
+                        brainstorming sessions.
                       </div>
                     </div>
 
@@ -330,7 +439,7 @@ export default function NftDetailsFG(Nft) {
                     </div>
 
                     <div className="grid h-full   w-full  grid-cols-2 gap-4  sm:grid-cols-3  lg:gap-5 xl:gap-6 ">
-                      {atributos.map((item, index) => (
+                      {nft.attributes?.map((item, index) => (
                         <div key={index} className="w-40">
                           <div className="light:border-black flex-column w-full  rounded-lg border ">
                             <div className="flex w-full justify-center ">
@@ -403,40 +512,91 @@ export default function NftDetailsFG(Nft) {
                         Cargando...
                       </Button>
                     )}
-
-                    {/*type !== 'invcomprado' &&
-                      type !== 'pcomprado' &&
-                      !loading &&
-                      product.precio <= approvedToken && (
-                        <Button onClick={() => buyNft()}>Buy</Button>
-                      )*/}
-
-                    {/*type !== 'pcomprado' &&
-                      !loading &&
-                      type !== 'invcomprado' && (
-                        <Button>Buy without cripto</Button>
-                      )*/}
-
-                    {/*type == 'pcomprado' && type !== 'invcomprado' && (
-                      <Button onClick={() => buyNft()}>transfer</Button>
-                    )*/}
-
-                    {/*type == 'invcomprado' && (
-                      <Button onClick={() => buyNft()}>Stake</Button> //anchor link
-                    )*/}
-                    {/*type == 'invcomprado' && (
-                      <Button onClick={() => buyNft()}>Transfer</Button> //Modal
-                    )*/}
-                    <NftFooter
-                      className="hidden md:block"
-                      price={Nft.Nft.precio}
-                      id={Nft.Nft.id}
-                    />
                   </div>
+                </TabPanel>
+
+                <TabPanel className="focus:outline-none">
+                  {nft.active == true && nft.owner == accountAddress && (
+                    <div className="flex w-[45%] flex-row">
+                      {bidder?.map((bid) => (
+                        <FeaturedCard
+                          item={bid}
+                          key={bid?.id}
+                          className="mb-3 w-[200%] first:mb-0"
+                        />
+                      ))}
+
+                      {!loading && !ap && (
+                        <Button onClick={approve} className="ml-2 rounded-lg">
+                          aprobar
+                        </Button>
+                      )}
+
+                      {!loading && ap && (
+                        <Button onClick={Aceptar} className="ml-2 rounded-lg">
+                          Aceptar
+                        </Button>
+                      )}
+
+                      {loading && (
+                        <Button className="ml-2 rounded-lg">Cargando</Button>
+                      )}
+                    </div>
+                  )}
+
+                  {nft.active == true &&
+                    nft.owner != accountAddress &&
+                    nft.currentWinner != accountAddress && (
+                      <div className="flex w-[45%] flex-row">
+                        {bidder?.map((bid) => (
+                          <FeaturedCard
+                            item={bid}
+                            key={bid?.id}
+                            className="mb-3 w-[200%] first:mb-0"
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                  {nft.active == true && nft.currentWinner == accountAddress && (
+                    <div className="flex w-[45%] flex-row">
+                      {bidder?.map((bid) => (
+                        <FeaturedCard
+                          item={bid}
+                          key={bid?.id}
+                          className="mb-3 w-[200%] first:mb-0"
+                        />
+                      ))}
+
+                      {!loading && (
+                        <Button onClick={Retirar} className="ml-2 rounded-lg">
+                          Retirar
+                        </Button>
+                      )}
+
+                      {loading && (
+                        <Button className="ml-2 rounded-lg">Cargando</Button>
+                      )}
+                    </div>
+                  )}
                 </TabPanel>
               </ParamTab>
             </div>
           </div>
+
+          <NftFooter
+            className="hidden md:block"
+            price={nft.precio}
+            id={nft.id}
+            _status={status}
+            _alertMsg={alertMsg}
+          />
+          <NftFooter
+            price={nft.precio}
+            id={nft.id}
+            _status={status}
+            _alertMsg={alertMsg}
+          />
         </div>
       </div>
     </div>

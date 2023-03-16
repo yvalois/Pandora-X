@@ -13,7 +13,6 @@ export default function ModalBanned() {
   const [action, setAction] = useState(true);
   const [status, setStatus] = useState(0);
   const [error, setError] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
 
   //botton y state
 

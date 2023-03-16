@@ -31,7 +31,7 @@ import styled from 'styled-components';
 import ActiveLink from '@/components/ui/links/active-link';
 import { ethers } from 'ethers';
 import validator from 'validator';
-import frenchiesAbi from '../abi/FrenchiesBlues.json';
+import frenchiesAbi2 from '../abi/FrenchiesBlues2.json';
 import auction from '../abi/auction.json';
 import _ofertas from '../abi/ofertas.json';
 
@@ -395,6 +395,7 @@ const Frenchies: NextPageWithLayout<
     isConnect,
     tokenContract,
     chainId,
+    frenchiess,
   } = useSelector((state) => state.blockchain);
   const allnfts = allFrenchies;
   const [frenchies, setFrenchies] = useState([{}]);
@@ -409,36 +410,39 @@ const Frenchies: NextPageWithLayout<
   const [offers, setOffers] = useState([{}]);
   const [myventas, setMyVentas] = useState([{}]);
   const [currentF, setCurrentF] = useState([]);
+  const [currentF2, setCurrentF2] = useState([]);
 
-  const { inventoryf } = useSelector((state: any) => state.blockchain);
+  const { inventoryf, inventoryf2 } = useSelector(
+    (state: any) => state.blockchain
+  );
 
   const rpc_ETH =
     'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
-    '0x908f659085E3C561b5F47A03E2b105Ff141c68C9',
+    '0x9d78C6BCB757C63D92925983E47994b2164B1eF8',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
-    frenchiesAbi,
+    frenchiesAbi2,
     provider_ETH
   );
 
   const AuctionMinterContract = new ethers.Contract(
-    '0x323516A1daB354cBa079d80A0a1b36Ae50407939',
+    '0x9A6aceC93EbB4b7FA199542C2E66b3cf781A00fc',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     auction,
     provider_ETH
   );
 
   const OffersMinterContract = new ethers.Contract(
-    '0x7764D03497948388Df4b1ee1EA071249db6Ce98e',
+    '0x007e5fe58668F921A6b51cBa859F4b64F736280E',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     _ofertas,
     provider_ETH
   );
 
   const VentasMinterContract = new ethers.Contract(
-    '0xAf31782D87C912Ef71341E1b2148bE0B1a4fD1Aa',
+    '0x7880C3Caed37003E35C0b8c6C6B8Ee5594Ec7E68',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     ventas,
     provider_ETH
@@ -451,7 +455,7 @@ const Frenchies: NextPageWithLayout<
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const buyNft = async () => {
-    if (chainId == 1) {
+    if (chainId == 5) {
       setLoading(true);
 
       try {
@@ -559,11 +563,10 @@ const Frenchies: NextPageWithLayout<
     setLoading(true);
 
     const w = await frenchiesMinter.getWhitelist();
+
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
       setCount(c);
-
-      setLoading(false);
     } else {
       setLoading(false);
     }
@@ -579,13 +582,13 @@ const Frenchies: NextPageWithLayout<
   useEffect(() => {
     if (isConnect) {
       setearSupply();
-      getWhithelist();
+      //getWhithelist();
     }
   }, [pan]);
   useEffect(() => {
     if (isConnect) {
       setearSupply();
-      getWhithelist();
+      //getWhithelist();
     } else if (!isConnect) {
       setCount(0);
     }
@@ -675,19 +678,10 @@ const Frenchies: NextPageWithLayout<
   const { frenchs } = useSelector((state) => state.minted);
 
   const getnfts = async () => {
-    const total = await frenchiesMinterContract.totalSupply();
+    const supp = await frenchiesMinterContract.totalSupply();
 
-    const nfts = allnfts.slice(0, total);
+    const nfts = allnfts.slice(0, supp);
     setFrenchies(nfts);
-
-    await getNftAuction();
-    await getMyNftAuction();
-    await getNftOffers();
-    await getNftOwnerOffers();
-    await getNftMyOffers();
-    await getMyNftPuja();
-    await getNftVentas();
-    await getMyNftVentas();
   };
 
   const getNftAuction = async () => {
@@ -709,10 +703,10 @@ const Frenchies: NextPageWithLayout<
         active: nose[i].active,
         name: infoToken.name,
         image: infoToken.image,
-        id: infoToken.id,
         description: infoToken.descripcion,
         type: 'subasta',
       };
+      allnfts[id] = objetoJSON;
       jsonArray.push(objetoJSON);
     }
     setSubastas(jsonArray);
@@ -725,22 +719,24 @@ const Frenchies: NextPageWithLayout<
     for (let i = 0; i < nose.length; i++) {
       const id = parseInt(nose[i].tokenId);
       const infoToken = allnfts[id];
-      const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
-        seller: nose[i].seller,
-        startBlock: parseInt(nose[i].startBlock),
-        endBlock: parseInt(nose[i].endBlock),
-        startPrice: parseInt(nose[i].startPrice),
-        currentPrice: parseInt(nose[i].currentPrice),
-        currentWinner: nose[i].currentWinner,
-        active: nose[i].active,
-        name: infoToken.name,
-        image: infoToken.image,
-        id: infoToken.id,
-        description: infoToken.descripcion,
-        type: 'subasta',
-      };
-      jsonArray.push(objetoJSON);
+      if (nose[i].active == true) {
+        const objetoJSON = {
+          tokenId: parseInt(nose[i].tokenId),
+          seller: nose[i].seller,
+          startBlock: parseInt(nose[i].startBlock),
+          endBlock: parseInt(nose[i].endBlock),
+          startPrice: parseInt(nose[i].startPrice),
+          currentPrice: parseInt(nose[i].currentPrice),
+          currentWinner: nose[i].currentWinner,
+          active: nose[i].active,
+          name: infoToken.name,
+          image: infoToken.image,
+          description: infoToken.descripcion,
+          type: 'subasta',
+        };
+
+        jsonArray.push(objetoJSON);
+      }
     }
     setMySubastas(jsonArray);
   };
@@ -748,28 +744,28 @@ const Frenchies: NextPageWithLayout<
   const getMyNftPuja = async () => {
     const nose = await AuctionMinterContract.getPujas(accountAddress);
     const jsonArray = [];
-
     for (let i = 0; i < nose.length; i++) {
       const id = parseInt(nose[i].tokenId);
       const infoToken = allnfts[id];
-      const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
-        seller: nose[i].seller,
-        startBlock: parseInt(nose[i].startBlock),
-        endBlock: parseInt(nose[i].endBlock),
-        startPrice: parseInt(nose[i].startPrice),
-        currentPrice: parseInt(nose[i].currentPrice),
-        currentWinner: nose[i].currentWinner,
-        active: nose[i].active,
-        name: infoToken.name,
-        image: infoToken.image,
-        id: infoToken.id,
-        description: infoToken.descripcion,
-        type: 'subasta',
-      };
-      jsonArray.push(objetoJSON);
+      if (nose[i].active == true) {
+        const objetoJSON = {
+          tokenId: parseInt(nose[i].tokenId),
+          seller: nose[i].seller,
+          startBlock: parseInt(nose[i].startBlock),
+          endBlock: parseInt(nose[i].endBlock),
+          startPrice: parseInt(nose[i].startPrice),
+          currentPrice: parseInt(nose[i].currentPrice),
+          currentWinner: nose[i].currentWinner,
+          active: nose[i].active,
+          name: infoToken.name,
+          image: infoToken.image,
+          description: infoToken.descripcion,
+          type: 'subasta',
+        };
+        jsonArray.push(objetoJSON);
+      }
     }
-    setPujas(jsonArray);
+    setMyPujas(jsonArray);
   };
 
   const getNftOffers = async () => {
@@ -777,33 +773,24 @@ const Frenchies: NextPageWithLayout<
     const jsonArray = [];
 
     for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
+
       const objetoJSON = {
         tokenId: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         max: parseInt(nose[i].max),
-        active: parseInt(nose[i].active),
-        currentWinner: parseInt(nose[i].currentWinner),
+        active: nose[i].active,
+        currentWinner: nose[i].currentWinner,
+        name: infoToken.name,
+        image: infoToken.image,
+        type: 'general',
       };
+      allnfts[id] = objetoJSON;
       jsonArray.push(objetoJSON);
     }
 
-    const jsonString = JSON.stringify(jsonArray);
-    let offers = [];
-    for (let xl = 0; xl < jsonArray.length; xl++) {
-      const position = jsonArray[xl].tokenId;
-
-      const infoToken = allnfts[position];
-      const newInfo = {
-        name: infoToken.name,
-        image: infoToken.image,
-        id: infoToken.id,
-        type: 'oferta',
-      };
-
-      offers.push(newInfo);
-      allnfts[position] = newInfo;
-    }
-    setOfertas(offers);
+    setOfertas(jsonArray);
   };
 
   const getNftOwnerOffers = async () => {
@@ -811,34 +798,23 @@ const Frenchies: NextPageWithLayout<
     const jsonArray = [];
 
     for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
+
       const objetoJSON = {
         tokenId: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         max: parseInt(nose[i].max),
-        active: parseInt(nose[i].active),
-        currentWinner: parseInt(nose[i].currentWinner),
+        active: nose[i].active,
+        currentWinner: nose[i].currentWinner,
+        name: infoToken.name,
+        image: infoToken.image,
+        type: 'general',
       };
       jsonArray.push(objetoJSON);
     }
 
-    const jsonString = JSON.stringify(jsonArray);
-    let offers = [];
-    for (let xl = 0; xl < jsonArray.length; xl++) {
-      const position = jsonArray[xl].tokenId;
-
-      const infoToken = allnfts[position];
-      const newInfo = {
-        name: infoToken.name,
-        image: infoToken.image,
-        id: infoToken.id,
-        type: 'oferta',
-      };
-
-      offers.push(newInfo);
-      allnfts[position] = newInfo;
-    }
-
-    setMyOfertas(offers);
+    setMyOfertas(jsonArray);
   };
 
   const getNftMyOffers = async () => {
@@ -846,34 +822,23 @@ const Frenchies: NextPageWithLayout<
     const jsonArray = [];
 
     for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
+
       const objetoJSON = {
         tokenId: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         max: parseInt(nose[i].max),
-        active: parseInt(nose[i].active),
-        currentWinner: parseInt(nose[i].currentWinner),
+        active: nose[i].active,
+        currentWinner: nose[i].currentWinner,
+        name: infoToken.name,
+        image: infoToken.image,
+        type: 'general',
       };
       jsonArray.push(objetoJSON);
     }
 
-    const jsonString = JSON.stringify(jsonArray);
-    let offers = [];
-    for (let xl = 0; xl < jsonArray.length; xl++) {
-      const position = jsonArray[xl].tokenId;
-
-      const infoToken = allnfts[position];
-      const newInfo = {
-        name: infoToken.name,
-        image: infoToken.image,
-        id: infoToken.id,
-        type: 'oferta',
-      };
-
-      offers.push(newInfo);
-      allnfts[position] = newInfo;
-    }
-
-    setOffers(offers);
+    setOffers(jsonArray);
   };
 
   const getNftVentas = async () => {
@@ -881,32 +846,24 @@ const Frenchies: NextPageWithLayout<
     const jsonArray = [];
 
     for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
       const objetoJSON = {
         tokenId: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         price: parseInt(nose[i].price),
-        active: parseInt(nose[i].active),
-      };
-      jsonArray.push(objetoJSON);
-    }
-
-    const jsonString = JSON.stringify(jsonArray);
-    let ventass = [];
-    for (let xl = 0; xl < jsonArray.length; xl++) {
-      const position = jsonArray[xl].tokenId;
-
-      const infoToken = allnfts[position];
-      const newInfo = {
+        active: nose[i].active,
         name: infoToken.name,
         image: infoToken.image,
         id: infoToken.id,
         type: 'venta',
+        description: infoToken.descripcion,
       };
-
-      ventass.push(newInfo);
-      allnfts[position] = newInfo;
+      jsonArray.push(objetoJSON);
+      allnfts[id] = objetoJSON;
     }
-    setVentas(ventass);
+    setVentas(jsonArray);
+    setMyVentas(jsonArray);
   };
 
   const getMyNftVentas = async () => {
@@ -914,32 +871,23 @@ const Frenchies: NextPageWithLayout<
     const jsonArray = [];
 
     for (let i = 0; i < nose.length; i++) {
+      const id = parseInt(nose[i].tokenId);
+      const infoToken = allnfts[id];
       const objetoJSON = {
         tokenId: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         price: parseInt(nose[i].price),
-        active: parseInt(nose[i].active),
-      };
-      jsonArray.push(objetoJSON);
-    }
-
-    const jsonString = JSON.stringify(jsonArray);
-    let ventass = [];
-    for (let xl = 0; xl < jsonArray.length; xl++) {
-      const position = jsonArray[xl].tokenId;
-
-      const infoToken = allnfts[position];
-      const newInfo = {
+        active: nose[i].active,
         name: infoToken.name,
         image: infoToken.image,
         id: infoToken.id,
         type: 'venta',
+        description: infoToken.descripcion,
       };
-
-      ventass.push(newInfo);
-      allnfts[position] = newInfo;
+      jsonArray.push(objetoJSON);
+      console.log(objetoJSON);
     }
-    setMyVentas(ventass);
+    setMyVentas(jsonArray);
   };
 
   const subirDatos = async (nft) => {
@@ -950,7 +898,33 @@ const Frenchies: NextPageWithLayout<
   useEffect(() => {
     setTipoM('new');
     getnfts();
+    const fetch = async () => {
+      await getNftAuction();
+      await getMyNftAuction();
+      await getNftOffers();
+      await getNftOwnerOffers();
+      await getNftMyOffers();
+      await getMyNftPuja();
+      await getNftVentas();
+      await getMyNftVentas();
+    };
+    fetch();
   }, []);
+
+  useEffect(() => {
+    getnfts();
+    const fetch = async () => {
+      await getNftAuction();
+      await getMyNftAuction();
+      await getNftOffers();
+      await getNftOwnerOffers();
+      await getNftMyOffers();
+      await getMyNftPuja();
+      await getNftVentas();
+      //  await getMyNftVentas();
+    };
+    fetch();
+  }, [frenchies]);
 
   const [tipoM, setTipoM] = useState('');
 
@@ -959,7 +933,18 @@ const Frenchies: NextPageWithLayout<
   }
   useEffect(() => {
     setCurrentF(inventoryf);
-  }, [inventoryf]);
+    setCurrentF2(inventoryf2);
+  }, [inventoryf, inventoryf2]);
+
+  useEffect(() => {
+    const is = window.localStorage.getItem('wagmi.store');
+    const es = JSON.parse(is);
+
+    const si = es.state.data.account;
+    if (si != undefined && !isConnect) {
+      openModal('WALLET_CONNECT_VIEW');
+    }
+  }, [isConnect]);
 
   return (
     <>
@@ -1033,30 +1018,34 @@ const Frenchies: NextPageWithLayout<
               >
                 <TabPanel className="focus:outline-none">
                   <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                    {currentF?.map((nft) => (
-                      <NFTGrid
-                        key={nft.name}
-                        name={nft.name}
-                        image={nft.image}
-                        price={nft.precio}
-                        number={nft.id}
-                        type={'general'}
-                      />
-                    ))}
-                  </div>
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  {tipoM == 'new' && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {frenchies?.map((nft) => (
+                    {currentF2?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
                         <NFTGrid
                           key={nft.name}
                           name={nft.name}
                           image={nft.image}
                           price={nft.precio}
                           number={nft.id}
-                          type={'oferta'}
+                          type={'general'}
                         />
+                      </div>
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  {tipoM == 'new' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {frenchiess?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={nft.precio}
+                            number={nft.id}
+                            type={nft.type != undefined ? nft.type : 'general'}
+                          />
+                        </div>
                       ))}
                     </div>
                   )}
@@ -1081,14 +1070,16 @@ const Frenchies: NextPageWithLayout<
                   {tipoM == 'has-offers' && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                       {ofertas?.map((nft) => (
-                        <NFTGrid
-                          key={nft.name}
-                          name={nft.name}
-                          image={nft.image}
-                          price={0}
-                          number={nft.id}
-                          type={'oferta'}
-                        />
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={0}
+                            number={nft.id}
+                            type={'general'}
+                          />
+                        </div>
                       ))}
                     </div>
                   )}
@@ -1096,6 +1087,56 @@ const Frenchies: NextPageWithLayout<
                   {tipoM == 'buy-now' && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                       {_ventas?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={0}
+                            number={nft.id}
+                            type={'venta'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {mysubastas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'subasta'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {mypujas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'general'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {myventas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
                         <NFTGrid
                           key={nft.name}
                           name={nft.name}
@@ -1104,77 +1145,39 @@ const Frenchies: NextPageWithLayout<
                           number={nft.id}
                           type={'venta'}
                         />
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                    {mysubastas?.map((nft) => (
-                      <NFTGrid
-                        key={nft.name}
-                        name={nft.name}
-                        image={nft.image}
-                        price={0}
-                        number={nft.id}
-                        type={'subasta'}
-                      />
-                    ))}
-                  </div>
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                    {mypujas?.map((nft) => (
-                      <NFTGrid
-                        key={nft.name}
-                        name={nft.name}
-                        image={nft.image}
-                        price={0}
-                        number={nft.id}
-                        type={'general'}
-                      />
-                    ))}
-                  </div>
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                    {myventas?.map((nft) => (
-                      <NFTGrid
-                        key={nft.name}
-                        name={nft.name}
-                        image={nft.image}
-                        price={0}
-                        number={nft.id}
-                        type={'venta'}
-                      />
+                      </div>
                     ))}
                   </div>
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
                   <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                     {offers?.map((nft) => (
-                      <NFTGrid
-                        key={nft.name}
-                        name={nft.name}
-                        image={nft.image}
-                        price={0}
-                        number={nft.id}
-                        type={'oferta'}
-                      />
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'general'}
+                        />
+                      </div>
                     ))}
                   </div>
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
                   <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                     {myofertas?.map((nft) => (
-                      <NFTGrid
-                        key={nft.name}
-                        name={nft.name}
-                        image={nft.image}
-                        price={0}
-                        number={nft.id}
-                        type={'oferta'}
-                      />
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'general'}
+                        />
+                      </div>
                     ))}
                   </div>
                 </TabPanel>
@@ -1229,7 +1232,7 @@ const Frenchies: NextPageWithLayout<
                       </div>
                     </div>
                     <div className="mb-[80px] flex justify-center align-middle">
-                      <label htmlFor="">Precio: {precio.toFixed(1)}</label>
+                      <label htmlFor="">Precio: {precio.toFixed(3)}</label>
                     </div>
 
                     <div className="flex justify-center align-middle">
@@ -1368,7 +1371,7 @@ const Frenchies: NextPageWithLayout<
                       </div>
                     </div>
                     <div className="mb-[80px] flex justify-center align-middle">
-                      <label htmlFor="">Precio: {precio.toFixed(1)}</label>
+                      <label htmlFor="">Precios: {precio.toFixed(3)}</label>
                     </div>
 
                     <div className="flex justify-center align-middle">

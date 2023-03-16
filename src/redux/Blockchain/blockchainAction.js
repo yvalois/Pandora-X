@@ -8,6 +8,7 @@ import inversionMinterAbi from '../../abi/InversionMinter.json';
 import stakingPAbi from '../../abi/StakingPOL.json';
 import stakingErAbi from '../../abi/StakingETH.json';
 import frenchiesAbi from '../../abi/FrenchiesBlues.json';
+import frenchiesAbi2 from '../../abi/FrenchiesBlues2.json';
 import allFrenchies from '../../abi/ultimateDatos.json';
 import auction from '../../abi/auction.json';
 import ofertas from '../../abi/ofertas.json';
@@ -20,6 +21,7 @@ import { GOERLIClient } from 'wagmi';
 import stakingAbi from '../../abi/staking.json';
 import { setProvider } from '../../NFTROL';
 import accessAbi from '../../abi/NftsRol.json';
+import Alert from '@/components/ui/alert';
 //import WalletLink from 'walletlink'
 
 const router = contract();
@@ -34,6 +36,7 @@ const STAKING_ADDRESS = router.staking;
 const STAKINGE_ADDRESS = router.stakingETH;
 const STAKINGP_ADDRESS = router.stakingPOL;
 const FRENCHIES_ADDRESS = router.frenchies;
+const FRENCHIES_ADDRESS2 = router.frenchies2;
 const AUCTION_ADDRESS = router.auction;
 const VENTA_ADDRESS = router.venta;
 const OFERTAS_ADDRESS = router.offers;
@@ -200,7 +203,7 @@ export const update_sf = (payload) => {
   };
 };
 
-export const uFrench = (address) => async (dispatch) => {
+export const uFrench = (address, frenchies) => async (dispatch) => {
   fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
     method: 'GET',
     headers: {
@@ -243,6 +246,37 @@ export const uFrench = (address) => async (dispatch) => {
         }
       });
     });
+};
+
+export const uFrench2 = (address, frenchies) => async (dispatch) => {
+  const french = await frenchies.getMyInventory(address);
+
+  const getFren = async () => {
+    const inventoryf = [];
+    french.map((item) => {
+      const nft = allFrenchies[parseInt(item)];
+      console.log(nft);
+      console.log(french);
+
+      const prod = {
+        name: nft.name,
+        image: nft.image,
+        precio: 0.3,
+        descripcion: nft.description,
+        id: parseInt(item),
+        attributes: nft.attributes,
+      };
+
+      inventoryf.push(prod);
+    });
+    await dispatch(
+      update_f({
+        inventoryf: inventoryf,
+      })
+    );
+  };
+
+  getFren();
 };
 
 /*export const uProduct = () => async (dispatch) => {
@@ -904,17 +938,17 @@ export const connectWallet =
     try {
       const chainID = provider._network.chainId;
       setProvider(signer);
-
       const rpc_ETH =
         'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
+      const rpc_GOETH =
+        'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
 
       const rpc_MAC =
         'https://polygon-mainnet.g.alchemy.com/v2/XVy5Duyf5VwZzcxJaIlxyQEehwKzosov';
       const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
-      const provider_ETH2 = new ethers.providers.JsonRpcProvider(rpc_ETH);
+      const provider_GOETH = new ethers.providers.JsonRpcProvider(rpc_GOETH);
 
       const provider_MAC = new ethers.providers.JsonRpcProvider(rpc_MAC);
-
       if (1 == 1) {
         const tokenContract = new ethers.Contract(
           TokenPrueba_ADDRESS,
@@ -934,6 +968,12 @@ export const connectWallet =
           provider_ETH
         );
 
+        const frenchiesMinterContract2 = new ethers.Contract(
+          FRENCHIES_ADDRESS2,
+          frenchiesAbi2,
+          provider_GOETH
+        );
+
         const stakingContract = new ethers.Contract(
           STAKING_ADDRESS,
           stakingAbi,
@@ -949,44 +989,26 @@ export const connectWallet =
         const stakingfrenPContract = new ethers.Contract(
           STAKINGP_ADDRESS,
           stakingPAbi,
-          provider_ETH
+          provider_MAC
         );
-
         const stakingContract1 = new ethers.Contract(
           STAKING_ADDRESS,
           stakingAbi,
           signer
         );
-
         const NftAccess = new ethers.Contract(
           ACCESS_ADDRESS,
           accessAbi,
-          provider_ETH2
+          provider_MAC
         );
-
         const NftAccess1 = new ethers.Contract(
           ACCESS_ADDRESS,
           accessAbi,
           signer
         );
-
-        /*const auction = new ethers.Contract(
-          AUCTION_ADDRESS,
-          auction,
-          signer
-        );
-          
-        const ofertas = new ethers.Contract(
-          OFERTAS_ADDRESS,
-          ofertas,
-          signer
-        );
-
-        const ventas = new ethers.Contract(
-          VENTA_ADDRESS,
-          ventas,
-          signer
-        );*/
+        const _auction = new ethers.Contract(AUCTION_ADDRESS, auction, signer);
+        const _ofertas = new ethers.Contract(OFERTAS_ADDRESS, ofertas, signer);
+        const _ventas = new ethers.Contract(VENTA_ADDRESS, ventas, signer);
 
         await getProductos();
         await getInversiones();
@@ -996,7 +1018,8 @@ export const connectWallet =
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
         );
-        const french = await frenchiesMinterContract.getMyInventory(address);
+
+        const french = await frenchiesMinterContract2.getMyInventory(address);
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
@@ -1004,6 +1027,7 @@ export const connectWallet =
         const inventoryi = [];
         const inventorys = [];
         const inventoryf = [];
+        const inventoryf2 = [];
         const inventorysf = [];
 
         let aux = true;
@@ -1142,24 +1166,24 @@ export const connectWallet =
             inventoryi.push(inv);
           }
         });
-        /*const getFren = async () => {
-            for(let i = 43; i < 64; i++){
-              
-              const nft = allFrenchies[i]
+        const getFren2 = async () => {
+          french.map((item) => {
+            const nft = allFrenchies[parseInt(item)];
+            console.log(nft);
+            console.log(french);
 
+            const prod = {
+              name: nft.name,
+              image: nft.image,
+              precio: 0.3,
+              descripcion: nft.description,
+              id: parseInt(item),
+              attributes: nft.attributes,
+            };
 
-              const prod = {
-                name: nft.name,
-                image: nft.image,
-                precio: 0.3,
-                descripcion: nft.description,
-                id: i,
-                attributes: nft.attributes,
-              };
-              inventoryf.push(prod);
-            }
-
-        };*/
+            inventoryf2.push(prod);
+          });
+        };
 
         const getFren = async () => {
           fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
@@ -1197,6 +1221,8 @@ export const connectWallet =
         };
 
         await getFren();
+        await getFren2();
+
         let balancei = [];
         balancei[0] = 0;
         nftiBalance.map(async (item) => {
@@ -1254,6 +1280,9 @@ export const connectWallet =
           signer
         );
 
+        const supp = await frenchiesMinterContract2.totalSupply();
+        let frenchies = allFrenchies.slice(0, supp);
+
         setTimeout(async () => {
           await dispatch(
             dataLoaded({
@@ -1265,9 +1294,9 @@ export const connectWallet =
               frenchiesMinter: frenchiesMinterContract1,
               stakingfrenEContract: stakingfrenEContract1,
               stakingfrenPContract: stakingfrenPContract1,
-              //ventasContract: ventas,
-              //auctionContract: auction,
-              //ofertasContract: ofertas,
+              ventasContract: _ventas,
+              auctionContract: _auction,
+              ofertasContract: _ofertas,
               staking: stakingContract1,
               NftAccessContract: NftAccess1,
               // stakinfETH: stakingfrenEContract,
@@ -1279,10 +1308,12 @@ export const connectWallet =
               inventoryi: inventoryi,
               inventorys: inventorys,
               inventoryf: inventoryf,
+              inventoryf2: inventoryf2,
               inventorysf: inventorysf,
               instance: null,
               balancei: balancei,
               chainId: chainID,
+              frenchies: frenchies,
             })
           );
 

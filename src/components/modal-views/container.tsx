@@ -32,6 +32,9 @@ const Venta = dynamic(() => import('@/components/market-views/modal-venta'));
 const Subasta = dynamic(
   () => import('@/components/market-views/modal-subasta')
 );
+const Oferta = dynamic(() => import('@/components/market-views/modal-oferta'));
+
+const Puja = dynamic(() => import('@/components/market-views/modal-puja'));
 
 const Unstaking = dynamic(
   () => import('@/components/modalCondiciones/modalUnstaking')
@@ -75,6 +78,10 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Subasta />;
     case 'SELL_VIEW':
       return <Venta />;
+    case 'OFFER_VIEW':
+      return <Oferta />;
+    case 'BID_VIEW':
+      return <Puja />;
     default:
       return null;
   }

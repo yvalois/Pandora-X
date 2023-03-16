@@ -409,13 +409,13 @@ const HomePage: NextPageWithLayout<
   };
   useEffect(() => {
     const fetch = async () => {
-      await getPrices();
+      //await getPrices();
     };
     fetch();
   }, []);
 
   setTimeout(async () => {
-    await getPrices();
+    // await getPrices();
   }, 1000);
 
   const setData = async () => {
@@ -461,10 +461,10 @@ const HomePage: NextPageWithLayout<
     setCurrentItems(prod);
     const fetchItems = async () => {
       if (isConnect && Data.length == 0) {
-        await getInvertionTrans();
-        await getProductosTrans();
-        await getStakingsTrans();
-        await getClaimsTrans();
+        //await getInvertionTrans();
+        //await getProductosTrans();
+        //await getStakingsTrans();
+        //await getClaimsTrans();
 
         setTimeout(() => {
           setReady(true);

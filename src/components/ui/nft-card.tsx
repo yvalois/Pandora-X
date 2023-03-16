@@ -172,13 +172,17 @@ export default function NFTGrid({
         </AnchorLink>
       ) : type == 'general' ? (
         <AnchorLink
-          href={`/generalnft/${number}`}
+          href={`/generalnft`}
           className="relative block w-full pb-full"
         >
           <Image src={image} layout="fill" objectFit="cover" alt="" />
         </AnchorLink>
       ) : type == 'subasta' ? (
         <AnchorLink href={`/subasta`} className="relative block w-full pb-full">
+          <Image src={image} layout="fill" objectFit="cover" alt="" />
+        </AnchorLink>
+      ) : type == 'venta' ? (
+        <AnchorLink href={`/venta`} className="relative block w-full pb-full">
           <Image src={image} layout="fill" objectFit="cover" alt="" />
         </AnchorLink>
       ) : (
@@ -221,7 +225,7 @@ export default function NFTGrid({
           </AnchorLink>
         ) : type == 'general' ? (
           <AnchorLink
-            href={`/generalnft/${number}`}
+            href={`/generalnft`}
             className="text-sm font-medium text-black dark:text-white"
           >
             {name}
