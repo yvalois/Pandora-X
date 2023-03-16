@@ -468,7 +468,7 @@ export default function NftDetailsFG() {
                       </div>
                     </div>
 
-                    <div className="block">
+                    {/*<div className="block">
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
                         Dueño
                       </h3>
@@ -478,7 +478,7 @@ export default function NftDetailsFG() {
                           {`@${nombre}`}
                         </span>{' '}
                       </div>
-                    </div>
+                      </div>*/}
                     <div className="block">
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
                         BlockChain
