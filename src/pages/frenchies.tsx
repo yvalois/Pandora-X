@@ -32,6 +32,8 @@ import ActiveLink from '@/components/ui/links/active-link';
 import { ethers } from 'ethers';
 import validator from 'validator';
 import frenchiesAbi2 from '../abi/FrenchiesBlues2.json';
+import frenchiesAbi from '../abi/FrenchiesBlues.json';
+
 import auction from '../abi/auction.json';
 import _ofertas from '../abi/ofertas.json';
 
@@ -39,7 +41,11 @@ import ventas from '../abi/ventas.json';
 
 import allFrenchies from '../abi/ultimateDatos.json';
 
-import { connectWallet, uFrench } from '../redux/Blockchain/blockchainAction';
+import {
+  connectWallet,
+  uFrench,
+  uFrench2,
+} from '../redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useModal as hola } from 'connectkit';
 import { useModal } from '@/components/modal-views/context';
@@ -396,6 +402,7 @@ const Frenchies: NextPageWithLayout<
     tokenContract,
     chainId,
     frenchiess,
+    frenchiesMinter2,
   } = useSelector((state) => state.blockchain);
   const allnfts = allFrenchies;
   const [frenchies, setFrenchies] = useState([{}]);
@@ -416,14 +423,25 @@ const Frenchies: NextPageWithLayout<
     (state: any) => state.blockchain
   );
 
-  const rpc_ETH =
+  const rpc_GOETH =
     'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+  const provider_GOETH = new ethers.providers.JsonRpcProvider(rpc_GOETH);
+
+  const rpc_ETH =
+    'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
     '0x9d78C6BCB757C63D92925983E47994b2164B1eF8',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     frenchiesAbi2,
+    provider_GOETH
+  );
+
+  const frenchiesMinterContract1 = new ethers.Contract(
+    '0x32bfb6790B3536a7269185278B482A0FA0385362',
+    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    frenchiesAbi,
     provider_ETH
   );
 
@@ -449,6 +467,7 @@ const Frenchies: NextPageWithLayout<
   );
 
   const valor = 0.3;
+  const valor2 = 0.001;
 
   const { referidor } = useSelector((state) => state.Usuario);
 
@@ -459,64 +478,128 @@ const Frenchies: NextPageWithLayout<
       setLoading(true);
 
       try {
-        if (count - multiplicador >= 0) {
-          const options = {
-            value: ethers.utils.parseUnits('0', 'ether'),
-          };
+        if (Usuario.rol != 'Admin') {
+          if (count - multiplicador >= 0) {
+            const options = {
+              value: ethers.utils.parseUnits('0', 'ether'),
+            };
 
-          const tx = await frenchiesMinter.buyToken(cantidad, options);
+            const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-          await tx.wait(); //tener en cuenta para los proximos cambios
-          dispatch(uFrench(accountAddress));
-          setStatus(200);
-          setVendido(true);
-          setCantidad(0);
-          setApprovedToken(0);
-          setearSupply();
-          //verifyApprove();
-          setLoading(false);
-          if (count > 0) {
-            setCount(count - multiplicador);
-            setMultiplicador(0);
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench(accountAddress));
+            setStatus(200);
+            setVendido(true);
             setCantidad(0);
-            setPrecio(0);
+            setApprovedToken(0);
+            setearSupply();
+            //verifyApprove();
             setLoading(false);
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
           } else {
-            setMultiplicador(0);
+            const options_ = {
+              value: ethers.utils.parseUnits(
+                (valor * (multiplicador - count)).toString(),
+                'ether'
+              ),
+            };
+
+            const tx = await frenchiesMinter.buyToken(cantidad, options_);
+
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench(accountAddress));
+            setStatus(200);
+            setVendido(true);
             setCantidad(0);
-            setPrecio(0);
+            setApprovedToken(0);
+            setearSupply();
             setLoading(false);
+
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
           }
         } else {
-          const options_ = {
-            value: ethers.utils.parseUnits(
-              (valor * (multiplicador - count)).toString(),
-              'ether'
-            ),
-          };
+          if (count - multiplicador >= 0) {
+            const options = {
+              value: ethers.utils.parseUnits('0', 'ether'),
+            };
 
-          const tx = await frenchiesMinter.buyToken(cantidad, options_);
+            const tx = await frenchiesMinter2.buyToken(cantidad, options);
 
-          await tx.wait(); //tener en cuenta para los proximos cambios
-          dispatch(uFrench(accountAddress));
-          setStatus(200);
-          setVendido(true);
-          setCantidad(0);
-          setApprovedToken(0);
-          setearSupply();
-          setLoading(false);
-
-          if (count > 0) {
-            setCount(count - multiplicador);
-            setMultiplicador(0);
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench2(accountAddress, frenchiesMinter));
+            setStatus(200);
+            setVendido(true);
             setCantidad(0);
-            setPrecio(0);
+            setApprovedToken(0);
+            setearSupply();
+            //verifyApprove();
             setLoading(false);
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
           } else {
-            setMultiplicador(0);
+            const options_ = {
+              value: ethers.utils.parseUnits(
+                (valor2 * (multiplicador - count)).toString(),
+                'ether'
+              ),
+            };
+
+            const tx = await frenchiesMinter2.buyToken(cantidad, options_);
+
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench(accountAddress));
+            setStatus(200);
+            setVendido(true);
             setCantidad(0);
-            setPrecio(0);
+            setApprovedToken(0);
+            setearSupply();
             setLoading(false);
+            dispatch(uFrench2(accountAddress, frenchiesMinter));
+
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
           }
         }
       } catch (err) {
@@ -651,7 +734,7 @@ const Frenchies: NextPageWithLayout<
   const setearSupply = async () => {
     //setLoading(true);
 
-    const supp = await frenchiesMinterContract.totalSupply();
+    const supp = await frenchiesMinterContract1.totalSupply();
     //setLoading(false);
 
     setSupply(parseInt(supp));

@@ -39,7 +39,7 @@ export default function ProfileTabUser() {
     setCurrentInv(inventoryi);
     setCurrentF(inventoryf);
     setCurrentF2(inventoryf2);
-  }, [inventoryp, inventoryi, inventoryf]);
+  }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
 
   return (
     <ParamTab

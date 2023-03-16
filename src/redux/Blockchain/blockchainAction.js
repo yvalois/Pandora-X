@@ -1169,9 +1169,6 @@ export const connectWallet =
         const getFren2 = async () => {
           french.map((item) => {
             const nft = allFrenchies[parseInt(item)];
-            console.log(nft);
-            console.log(french);
-
             const prod = {
               name: nft.name,
               image: nft.image,
@@ -1184,7 +1181,7 @@ export const connectWallet =
             inventoryf2.push(prod);
           });
         };
-
+        console.log(inventoryf2);
         const getFren = async () => {
           fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
             method: 'GET',
@@ -1267,6 +1264,11 @@ export const connectWallet =
           frenchiesAbi,
           signer
         );
+        const frenchiesMinterContract3 = new ethers.Contract(
+          FRENCHIES_ADDRESS2,
+          frenchiesAbi2,
+          signer
+        );
 
         const stakingfrenEContract1 = new ethers.Contract(
           STAKINGE_ADDRESS,
@@ -1292,6 +1294,7 @@ export const connectWallet =
               productoMinter: productoMinterContract1,
               inversionMinter: inversionMinterContract1,
               frenchiesMinter: frenchiesMinterContract1,
+              frenchiesMinter2: frenchiesMinterContract3,
               stakingfrenEContract: stakingfrenEContract1,
               stakingfrenPContract: stakingfrenPContract1,
               ventasContract: _ventas,
