@@ -84,7 +84,7 @@ export default function ModalPuja() {
     if (chainId == 5) {
       setLoading(true);
       try {
-        if (parseFloat(nft.currentPrice) < parseFloat(initPrice)) {
+        if (parseFloat(nft.currentPrice) > parseFloat(initPrice)) {
           const options = {
             value: ethers.utils.parseUnits(initPrice.toString(), 'ether'),
           };
