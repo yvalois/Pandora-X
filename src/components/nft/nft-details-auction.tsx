@@ -123,7 +123,7 @@ function NftFooter({
     const fecha = new Date();
     const dateTime2 = toDateTime(auctionTime);
 
-    if (1 == 1) {
+    if (fecha > dateTime2) {
       setIsFinish(false);
     } else {
       setIsFinish(true);
