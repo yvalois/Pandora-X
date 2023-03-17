@@ -942,7 +942,6 @@ const Frenchies: NextPageWithLayout<
       allnfts[id] = objetoJSON;
     }
     setVentas(jsonArray);
-    setMyVentas(jsonArray);
   };
 
   const getMyNftVentas = async () => {
@@ -1058,7 +1057,7 @@ const Frenchies: NextPageWithLayout<
             </div>
           </div>
           {Usuario.rol === 'Admin' && (
-            <div className=" h-[100%] w-[100%]">
+            <div className=" h-[100%] w-[100%] text-xl">
               <ParamTab
                 tabMenu={[
                   {
@@ -1070,7 +1069,7 @@ const Frenchies: NextPageWithLayout<
                     path: 'coleccion',
                   },
                   {
-                    title: 'Nfts en subasta',
+                    title: 'En subasta',
                     path: 'subastas',
                   },
                   {
@@ -1078,7 +1077,7 @@ const Frenchies: NextPageWithLayout<
                     path: 'Puja',
                   },
                   {
-                    title: 'Nfts en Venta',
+                    title: 'En Venta',
                     path: 'Ventas',
                   },
                   {
