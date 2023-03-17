@@ -227,7 +227,7 @@ function NftFooter({
           </div>
         )}
 
-        {currentBid.currentWinner != accountAddress && (
+        {currentBid.currentWinner == accountAddress && (
           <div className="grid grid-cols-2 gap-3">
             {!loading && (
               <Button
@@ -256,7 +256,7 @@ function NftFooter({
         )}
 
         {currentBid.seller != accountAddress &&
-          currentBid.currentWinner == accountAddress && (
+          currentBid.currentWinner != accountAddress && (
             <div className="grid grid-cols-2 gap-3">
               {!loading && (
                 <Button shape="rounded" onClick={Pujar}>
