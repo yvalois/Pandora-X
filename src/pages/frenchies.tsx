@@ -297,9 +297,6 @@ function Filters({ ontipom }) {
       <Collapse label="Status" initialOpen>
         <Status ontipom={ontipom} />
       </Collapse>
-      <Collapse label="Price Range" initialOpen>
-        <PriceRange />
-      </Collapse>
       <Collapse label="Collection" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} tipo={2} />
       </Collapse>
