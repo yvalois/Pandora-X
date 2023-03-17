@@ -27,7 +27,7 @@ export default function ModalSubasta() {
   const [approvedToken, setApprovedToken] = useState(0);
   const [id, setId] = useState(0);
   const [succes, setSuccess] = useState(false);
-  const { accountAddress, frenchiesMinter, auctionContract, chainId } =
+  const { accountAddress, frenchiesMinter2, auctionContract, chainId } =
     useSelector((state) => state.blockchain);
   const dispatch = useDispatch<AppDispatch>();
   const [statusW, setStatusW] = useState(0);
@@ -47,7 +47,7 @@ export default function ModalSubasta() {
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
-    '0x9d78C6BCB757C63D92925983E47994b2164B1eF8',
+    '0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     frenchiesAbi2,
     provider_ETH
@@ -67,7 +67,7 @@ export default function ModalSubasta() {
     setLoading(true);
     if (chainId == 5) {
       try {
-        let tx = await frenchiesMinter.setApprovalForAll(
+        let tx = await frenchiesMinter2.setApprovalForAll(
           auctionContract.address,
           'true'
         );
@@ -104,15 +104,13 @@ export default function ModalSubasta() {
       try {
         const value = ethers.utils.parseUnits(initPrice.toString(), 'ether');
         const time = 86400 * dias;
-        alert(value);
-        alert(time);
         const tx = await auctionContract.createAuction(id, time, value);
         await tx.wait();
 
         setStatusW(200);
         setLoading(false);
         setAlertMsg('Transaccion completada correctamente');
-        dispatch(uFrench2(accountAddress, frenchiesMinter));
+        dispatch(uFrench2(accountAddress, frenchiesMinter2));
         setSubastado(true);
       } catch (err) {
         setLoading(false);

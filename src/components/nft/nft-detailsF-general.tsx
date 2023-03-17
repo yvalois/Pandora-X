@@ -194,7 +194,7 @@ export default function NftDetailsFG() {
   const { closeModal, openModal } = useModal();
   const [atributos, setAtributos] = useState([]);
   const [aceptada, setAceptada] = useState(false);
-  const { accountAddress, ofertasContract, chainId, frenchiesMinter } =
+  const { accountAddress, ofertasContract, chainId, frenchiesMinter2 } =
     useSelector((state) => state.blockchain);
   const [ap, setAp] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -253,7 +253,7 @@ export default function NftDetailsFG() {
         setStatus(200);
         setLoading(false);
         setAlertMsg('Transaccion completada correctamente');
-        dispatch(uFrench2(accountAddress, frenchiesMinter));
+        dispatch(uFrench2(accountAddress, frenchiesMinter2));
         bidder = [];
         setAceptada(true);
       } catch (err) {
@@ -313,7 +313,7 @@ export default function NftDetailsFG() {
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
-    '0x9d78C6BCB757C63D92925983E47994b2164B1eF8',
+    '0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     frenchiesAbi2,
     provider_ETH
@@ -332,7 +332,7 @@ export default function NftDetailsFG() {
     setLoading(true);
     if (chainId == 5) {
       try {
-        let tx = await frenchiesMinter.setApprovalForAll(
+        let tx = await frenchiesMinter2.setApprovalForAll(
           ofertasContract.address,
           'true'
         );

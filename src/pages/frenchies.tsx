@@ -449,21 +449,21 @@ const Frenchies: NextPageWithLayout<
     '0x11F51e9f0eaBdad5C4ADfBFdaAa79Fd7911A4266',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     auction,
-    provider_ETH
+    provider_GOETH
   );
 
   const OffersMinterContract = new ethers.Contract(
     '0xAd695bB88745F15831b239EdAF2862EA1C402F47',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     _ofertas,
-    provider_ETH
+    provider_GOETH
   );
 
   const VentasMinterContract = new ethers.Contract(
     '0x202FC25b61ad0ae9cd0Ed8F6Cddc7070ACC64845',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     ventas,
-    provider_ETH
+    provider_GOETH
   );
 
   const valor = 0.3;
@@ -802,24 +802,23 @@ const Frenchies: NextPageWithLayout<
     for (let i = 0; i < nose.length; i++) {
       const id = parseInt(nose[i].tokenId);
       const infoToken = allnfts[id];
-      if (nose[i].active == true) {
-        const objetoJSON = {
-          tokenId: parseInt(nose[i].tokenId),
-          seller: nose[i].seller,
-          startBlock: parseInt(nose[i].startBlock),
-          endBlock: parseInt(nose[i].endBlock),
-          startPrice: parseInt(nose[i].startPrice),
-          currentPrice: parseInt(nose[i].currentPrice),
-          currentWinner: nose[i].currentWinner,
-          active: nose[i].active,
-          name: infoToken.name,
-          image: infoToken.image,
-          description: infoToken.descripcion,
-          type: 'subasta',
-        };
 
-        jsonArray.push(objetoJSON);
-      }
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        seller: nose[i].seller,
+        startBlock: parseInt(nose[i].startBlock),
+        endBlock: parseInt(nose[i].endBlock),
+        startPrice: parseInt(nose[i].startPrice),
+        currentPrice: parseInt(nose[i].currentPrice),
+        currentWinner: nose[i].currentWinner,
+        active: nose[i].active,
+        name: infoToken.name,
+        image: infoToken.image,
+        description: infoToken.descripcion,
+        type: 'subasta',
+      };
+
+      jsonArray.push(objetoJSON);
     }
     setMySubastas(jsonArray);
   };
