@@ -662,13 +662,13 @@ const Frenchies: NextPageWithLayout<
   useEffect(() => {
     if (isConnect) {
       setearSupply();
-      //getWhithelist();
+      getWhithelist();
     }
   }, [pan]);
   useEffect(() => {
     if (isConnect) {
       setearSupply();
-      //getWhithelist();
+      getWhithelist();
     } else if (!isConnect) {
       setCount(0);
     }
