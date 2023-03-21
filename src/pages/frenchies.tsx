@@ -642,11 +642,12 @@ const Frenchies: NextPageWithLayout<
   const getWhithelist = async () => {
     setLoading(true);
 
-    const w = await frenchiesMinterContract1.getWhitelist();
+    const w = await frenchiesMinter.getWhitelist();
 
     if (w == true) {
-      const c = await frenchiesMinterContract1.getCountWl();
+      const c = await frenchiesMinter.getCountWl();
       setCount(c);
+      setLoading(false);
     } else {
       setLoading(false);
     }
