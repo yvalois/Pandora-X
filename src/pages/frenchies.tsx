@@ -471,7 +471,7 @@ const Frenchies: NextPageWithLayout<
   const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const buyNft = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
 
       try {
@@ -642,10 +642,10 @@ const Frenchies: NextPageWithLayout<
   const getWhithelist = async () => {
     setLoading(true);
 
-    const w = await frenchiesMinter.getWhitelist();
+    const w = await frenchiesMinterContract1.getWhitelist();
 
     if (w == true) {
-      const c = await frenchiesMinter.getCountWl();
+      const c = await frenchiesMinterContract1.getCountWl();
       setCount(c);
     } else {
       setLoading(false);
