@@ -39,6 +39,9 @@ const RetiroPanelPage: NextPageWithLayout<
     frenchiesMinter,
     chainId,
     inversionMinter,
+    auctionContract,
+    ofertasContract,
+    ventasContract,
   } = useSelector((state) => state.blockchain);
   const [tvl, setTvl] = useState('');
   const [sbalance, setSbalance] = useState(0);
@@ -48,6 +51,9 @@ const RetiroPanelPage: NextPageWithLayout<
   const [alertMsg, setAlertMsg] = useState('');
   const [status, setStatus] = useState(0);
   const { openModal, closeModal } = useModal();
+  const [feeS, setFeeS] = useState(0);
+  const [feeO, setFeeO] = useState(0);
+  const [feeV, setFeeV] = useState(0);
 
   const verifyApprove = async () => {
     try {
@@ -258,6 +264,115 @@ const RetiroPanelPage: NextPageWithLayout<
     }, 3000);
   }, [status]);
 
+  const changeFeeS = async () => {
+    if (chainId == 5) {
+      setLoading(true);
+      try {
+        if (feeS <= 100) {
+          let percentage = parseFloat(feeS) * 10;
+          alert(percentage);
+          const tx = await auctionContract.setPercentage(percentage);
+          await tx.wait();
+          setStatus(200);
+          setLoading(false);
+          setAlertMsg('Transaccion completada correctamente');
+        } else {
+          setStatus(100);
+          setAlertMsg('Valor debe ser igual o menos a 100');
+        }
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        console.log(err);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
+  const changeFeeV = async () => {
+    if (chainId == 5) {
+      setLoading(true);
+      try {
+        if (feeV <= 100) {
+          let percentage = feeV * 10;
+          const tx = await ventasContract.setPercentage(percentage);
+          await tx.wait();
+          setStatus(200);
+          setLoading(false);
+          setAlertMsg('Transaccion completada correctamente');
+        } else {
+          setStatus(100);
+          setAlertMsg('Valor debe ser igual o menos a 100');
+        }
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        console.log(err);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
+  const changeFeeO = async () => {
+    if (chainId == 5) {
+      setLoading(true);
+      try {
+        if (feeO <= 100) {
+          let percentage = feeO * 10;
+          const tx = await ofertasContract.setPercentage(percentage);
+          await tx.wait();
+          setStatus(200);
+          setLoading(false);
+          setAlertMsg('Transaccion completada correctamente');
+        } else {
+          setStatus(100);
+          setAlertMsg('Valor debe ser igual o menos a 100');
+        }
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        console.log(err);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <NextSeo
@@ -267,7 +382,7 @@ const RetiroPanelPage: NextPageWithLayout<
 
       <div className="h-full w-full">
         <div>
-          <div className="mt-[5%] mb-[30px] flex justify-center self-center">
+          <div className=" mb-[30px] flex justify-center self-center">
             <h1>Balance: {balance} ETH</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
@@ -305,14 +420,21 @@ const RetiroPanelPage: NextPageWithLayout<
                 </Transition>
               </Listbox>
             </div>
-            <div className="mb-[20px] self-center">
-              <Button onClick={withdraw}> Retirar</Button>
-            </div>
+            {!loading && (
+              <div className="mb-[20px] self-center">
+                <Button onClick={withdraw}> Retirar</Button>
+              </div>
+            )}
+            {loading && (
+              <div className="mb-[20px] self-center">
+                <Button>Cargando</Button>
+              </div>
+            )}
           </div>
         </div>
 
         <div>
-          <div className="mt-[5%] mb-[30px] flex justify-center self-center">
+          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
             <h1>Cambiar TVL</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
@@ -324,14 +446,22 @@ const RetiroPanelPage: NextPageWithLayout<
                 value={tvl}
               />
             </div>
-            <div className="mb-[20px] self-center">
-              <Button onClick={updateTvl}>Cambiar tvl</Button>
-            </div>
+            {!loading && (
+              <div className="mb-[20px] self-center">
+                <Button onClick={updateTvl}>Cambiar tvl</Button>
+              </div>
+            )}
+
+            {loading && (
+              <div className="mb-[20px] self-center">
+                <Button>Cargando</Button>
+              </div>
+            )}
           </div>
         </div>
 
         <div>
-          <div className="mt-[5%] mb-[30px] flex justify-center self-center">
+          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
             <h1>Depositar balance para staking</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
@@ -353,29 +483,111 @@ const RetiroPanelPage: NextPageWithLayout<
               {loading && <Button>cargando</Button>}
             </div>
           </div>
-          <div className=" mt-10 flex w-full justify-center">
-            {status == 200 && (
-              <div
-                className="mb-4   flex w-[500px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-                role="alert"
-              >
-                <span className="text-center font-medium">
-                  {alertMsg.length < 0
-                    ? 'Transaccion completada correctamente'
-                    : alertMsg}
-                </span>
+        </div>
+
+        <div>
+          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
+            <h1>Cambiar Fee (Subasta)</h1>
+          </div>
+          <div className="space-between flex flex-row justify-center align-middle">
+            <div className="mb-[20px] ml-6 mr-4 w-[30%] self-center">
+              <Input
+                type="text"
+                placeholder="0%"
+                onChange={(e) => setFeeS(e.target.value)}
+                value={feeS}
+              />
+            </div>
+            {!loading && (
+              <div className="mb-[20px] self-center">
+                <Button onClick={changeFeeS}>Cambiar Fee</Button>
               </div>
             )}
 
-            {status == 100 && (
-              <div
-                className="mb-4  flex w-[500px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-                role="alert"
-              >
-                <span className="text-center font-medium">{alertMsg}</span>
+            {loading && (
+              <div className="mb-[20px] self-center">
+                <Button>Cargando</Button>
               </div>
             )}
           </div>
+        </div>
+
+        <div>
+          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
+            <h1>Cambiar Fee (Venta)</h1>
+          </div>
+          <div className="space-between flex flex-row justify-center align-middle">
+            <div className="mb-[20px] ml-6 mr-4 w-[30%] self-center">
+              <Input
+                type="text"
+                placeholder="0%"
+                onChange={(e) => setFeeV(e.target.value)}
+                value={feeV}
+              />
+            </div>
+            {!loading && (
+              <div className="mb-[20px] self-center">
+                <Button onClick={changeFeeV}>Cambiar Fee</Button>
+              </div>
+            )}
+
+            {loading && (
+              <div className="mb-[20px] self-center">
+                <Button>Cargando</Button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <div className="mt-[30px] mb-[20px] mb-[20px] flex justify-center self-center">
+            <h1>Cambiar Fee (Ofertas)</h1>
+          </div>
+          <div className="space-between flex flex-row justify-center align-middle">
+            <div className="mb-[20px] ml-6 mr-4 w-[30%] self-center">
+              <Input
+                type="text"
+                placeholder="0%"
+                onChange={(e) => setFeeO(e.target.value)}
+                value={feeO}
+              />
+            </div>
+            {!loading && (
+              <div className="mb-[20px] self-center">
+                <Button onClick={changeFeeO}>Cambiar Fee</Button>
+              </div>
+            )}
+
+            {loading && (
+              <div className="mb-[20px] self-center">
+                <Button>Cargando</Button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className=" mt-10 flex w-full justify-center">
+          {status == 200 && (
+            <div
+              className="mb-4   flex w-[500px] justify-center self-center rounded-lg bg-green-200 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+              role="alert"
+            >
+              <span className="text-center font-medium">
+                {alertMsg.length < 0
+                  ? 'Transaccion completada correctamente'
+                  : alertMsg}
+              </span>
+            </div>
+          )}
+
+          {status == 100 && (
+            <div
+              className="mb-4  flex w-[500px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+              role="alert"
+            >
+              <span className="text-center font-medium">{alertMsg}</span>
+            </div>
+          )}
         </div>
       </div>
     </>

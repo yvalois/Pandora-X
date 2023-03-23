@@ -443,7 +443,7 @@ const Frenchies: NextPageWithLayout<
   );
 
   const AuctionMinterContract = new ethers.Contract(
-    '0x11F51e9f0eaBdad5C4ADfBFdaAa79Fd7911A4266',
+    '0x03078F96f5D7306EC8f8FC34aeDf4709A1FE5a91',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     auction,
     provider_GOETH

@@ -84,6 +84,7 @@ function NftFooter({
       openModal('NETWORK_VIEW');
       setLoading(false);
     }*/
+
     window.localStorage.setItem('pujaId', currentBid.tokenId);
     openModal('BID_VIEW');
   };
@@ -92,7 +93,46 @@ function NftFooter({
     if (chainId == 5) {
       setLoading(true);
       try {
-        const tx = await auctionContract.claim(currentBid.tokenId);
+        console.log(currentBid);
+        const tx = await auctionContract.claim(
+          currentBid.tokenId,
+          currentBid.seller,
+          currentBid.currentWinner
+        );
+        await tx.wait();
+        setStatus(200);
+        setLoading(false);
+        setAlertMsg('Transaccion completada correctamente');
+        setReclamar(true);
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        const rejected = mess[0].split(' ');
+        console.log(err);
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setAlertMsg('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setAlertMsg('Transacion rechazada');
+        } else {
+          setAlertMsg('Error');
+        }
+        //
+      }
+    } else {
+      openModal('NETWORK_VIEW');
+      setLoading(false);
+    }
+  };
+
+  const Retirar = async () => {
+    if (chainId == 5) {
+      setLoading(true);
+      try {
+        const tx = await auctionContract.withdraw(
+          currentBid.tokenId,
+          currentBid.currentWinner
+        );
         await tx.wait();
         setStatus(200);
         setLoading(false);
@@ -121,9 +161,10 @@ function NftFooter({
 
   useEffect(() => {
     const fecha = new Date();
-    const dateTime2 = toDateTime(auctionTime);
 
-    if (fecha > dateTime2) {
+    var tiempoEnMs = fecha.getTime();
+    var tiempoEnSegundos = tiempoEnMs / 1000;
+    if (tiempoEnSegundos > auctionTime) {
       setIsFinish(false);
     } else {
       setIsFinish(true);
@@ -148,7 +189,7 @@ function NftFooter({
 
   useEffect(() => {
     setTimeout(() => {
-      if (status != 0) {
+      if (status != 0 && status == 200) {
         setStatus(0);
         window.location.href = '/frenchies';
       }
@@ -220,9 +261,9 @@ function NftFooter({
               variant="solid"
               color="gray"
               className="dark:bg-gray-800"
-              onClick={() => openModal('SHARE_VIEW')}
+              onClick={Retirar}
             >
-              SHARE
+              Retirar
             </Button>
           </div>
         )}
@@ -347,22 +388,20 @@ export default function NftDetailsAuction() {
     console.log(storedObject);
   }, []);
 
-  const blockChain = [
-    {
-      id: 1,
-      logo: {
-        src: '/_next/static/media/ethereum.5ddd90e5.svg',
-        height: 32,
-        width: 32,
-      },
-      name: 'Ethereum',
-      slug: '#',
-    },
-  ];
+  const blockChain = {
+    id: 1,
+    logo: { src: '/_next/static/media/ethereum.png', height: 32, width: 32 },
+    name: 'Ethereum',
+    slug: '#',
+  };
 
   const creator = {
     id: 1,
-    logo: { src: '/_next/static/media/favicon.ico', height: 32, width: 32 },
+    logo: {
+      src: '/_next/static/media/Pandora-X-icon-04.6bfef801.svg',
+      height: 32,
+      width: 32,
+    },
     name: '@pandorax',
     slug: '#',
   };
@@ -380,7 +419,11 @@ export default function NftDetailsAuction() {
 
   const owner = {
     id: 1,
-    logo: { src: '/_next/static/media/favicon.ico', height: 32, width: 32 },
+    logo: {
+      src: '/_next/static/media/Pandora-X-icon-04.6bfef801.svg',
+      height: 32,
+      width: 32,
+    },
     name: '@pandorax',
     slug: '#',
   };
@@ -485,7 +528,7 @@ export default function NftDetailsAuction() {
                       <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
                         Owner
                       </h3>
-                      <AnchorLink href={owner?.slug} className="inline-block">
+                      <AnchorLink href="#" className="inline-block">
                         <ListCard
                           item={owner}
                           className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
@@ -497,18 +540,12 @@ export default function NftDetailsAuction() {
                         Block Chain
                       </h3>
                       <div className="flex flex-col gap-2">
-                        {blockChain?.map((item: any) => (
-                          <AnchorLink
-                            href="#"
-                            className="inline-flex"
-                            key={item?.id}
-                          >
-                            <ListCard
-                              item={item}
-                              className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                            />
-                          </AnchorLink>
-                        ))}
+                        <AnchorLink href="#" className="inline-flex">
+                          <ListCard
+                            item={blockChain}
+                            className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                          />
+                        </AnchorLink>
                       </div>
                     </div>
                   </div>
