@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import validator from 'validator';
 import { useAccount, useProvider } from 'wagmi';
 
-import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import { uInvertion } from '../../redux/Blockchain/blockchainAction';
 
 export default function ModalTP() {
   const { closeModal } = useModal();

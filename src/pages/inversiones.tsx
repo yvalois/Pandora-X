@@ -31,7 +31,6 @@ import styled from 'styled-components';
 import ActiveLink from '@/components/ui/links/active-link';
 import { ethers } from 'ethers';
 import {
-  uProduct,
   uInvertion,
   connectWallet,
 } from '../redux/Blockchain/blockchainAction';

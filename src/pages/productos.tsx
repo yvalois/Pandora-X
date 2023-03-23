@@ -31,7 +31,6 @@ import styled from 'styled-components';
 import ActiveLink from '@/components/ui/links/active-link';
 import { ethers } from 'ethers';
 import {
-  uProduct,
   uInvertion,
   connectWallet,
 } from '../redux/Blockchain/blockchainAction';
@@ -578,7 +577,6 @@ const ProductosPage: NextPageWithLayout<
           await tx.wait();
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
         } else {
           const tx = await productoMinter.buyToken(
             tipoN,
@@ -588,7 +586,6 @@ const ProductosPage: NextPageWithLayout<
           await tx.wait(); //tener en cuenta para los proximos cambios
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
         }
       } else if (type == 'inversion') {
         const tx = await inversionMinter.buyToken(tipoN, tokenContract.address);

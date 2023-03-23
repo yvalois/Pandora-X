@@ -17,7 +17,7 @@ import Avatar from '@/components/ui/avatar';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
-import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import { uInvertion } from '../../redux/Blockchain/blockchainAction';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 
 import router from 'next/router';

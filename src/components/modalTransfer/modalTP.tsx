@@ -6,7 +6,7 @@ import { Warning } from '@/components/icons/warning';
 import { useSelector, useDispatch } from 'react-redux';
 import validator from 'validator';
 
-import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import { uInvertion } from '../../redux/Blockchain/blockchainAction';
 
 export default function ModalTP() {
   const { closeModal } = useModal();
@@ -54,7 +54,6 @@ export default function ModalTP() {
     setLoading(true);
     const tx = await productoMinter.transferFrom(accountAddress, value, id);
     await tx.wait();
-    dispatch(uProduct());
     window.localStorage.removeItem('TransferPId');
     setLoading(false);
     setStatus(true);

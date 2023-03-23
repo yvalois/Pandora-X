@@ -17,7 +17,7 @@ import Avatar from '@/components/ui/avatar';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
-import { uProduct, uInvertion } from '../../redux/Blockchain/blockchainAction';
+import { uInvertion } from '../../redux/Blockchain/blockchainAction';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 
 import router from 'next/router';
@@ -167,7 +167,7 @@ function NftFooter({
           await tx.wait();
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
+
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
           setIsBuy(true);
@@ -180,7 +180,7 @@ function NftFooter({
 
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
+
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
           setIsBuy(true);
@@ -529,7 +529,7 @@ export default function NftDetails({ tipo }) {
           await tx.wait();
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
+
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
         } else {
@@ -541,7 +541,7 @@ export default function NftDetails({ tipo }) {
           await tx.wait(); //tener en cuenta para los proximos cambios
           setLoading(false);
           setApprovedToken(0);
-          dispatch(uProduct());
+
           setStatus(true);
           setAlertMsg('Nft comprado exitosamente');
         }
