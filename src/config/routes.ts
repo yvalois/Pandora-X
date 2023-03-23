@@ -44,6 +44,7 @@ const routes = {
   admin: '/AdminPanel',
   stak: '/stake',
   stakingF: '/staking',
+  panel: '/panelretiro',
 };
 
 export default routes;

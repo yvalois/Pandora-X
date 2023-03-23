@@ -164,7 +164,7 @@ export const menuItems = [
   {
     name: 'Panel de retiro',
     icon: <PlusCircle />,
-    href: '/panelretiro',
+    href: routes.panel,
   },
 ];
 
