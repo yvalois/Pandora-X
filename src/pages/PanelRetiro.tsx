@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const RetiroPanelPage: NextPageWithLayout<
+const PanelRetiro: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
   const Contractos = [
@@ -376,7 +376,7 @@ const RetiroPanelPage: NextPageWithLayout<
   return (
     <>
       <NextSeo
-        title="Panel de Retiro  "
+        title="Panel de Retiro"
         description="Administracion de Usuarios"
       />
 
@@ -594,8 +594,8 @@ const RetiroPanelPage: NextPageWithLayout<
   );
 };
 
-RetiroPanelPage.getLayout = function getLayout(page) {
+PanelRetiro.getLayout = function getLayout(page) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
 
-export default RetiroPanelPage;
+export default PanelRetiro;
