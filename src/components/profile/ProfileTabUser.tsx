@@ -24,9 +24,8 @@ export default function ProfileTabUser() {
   const [currentF, setCurrentF] = useState([]);
   const [currentF2, setCurrentF2] = useState([]);
 
-  const { inventoryp, inventoryi, inventoryf, inventoryf2 } = useSelector(
-    (state: any) => state.blockchain
-  );
+  const { inventoryp, inventoryi, inventoryf, inventoryf2, accountAddress } =
+    useSelector((state: any) => state.blockchain);
 
   const { dataloaded, disponibleNftp, disponibleNfti, priceFormat, MintedNft } =
     useSelector((state: any) => state.minted);
@@ -121,30 +120,59 @@ export default function ProfileTabUser() {
         </div>
       </TabPanel>
       <TabPanel className="h-full w-full focus:outline-none">
-        <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-          {currentF2?.map((nft) => (
-            <NFTGrid
-              key={nft.name}
-              name={nft.name}
-              image={nft.image}
-              price={13}
-              number={nft.id}
-              alldata={false}
-              type={'Frenchies Blues'}
-            />
-          ))}
-          {currentF.length == 0 && (
-            <div className="flex h-full w-full  items-center justify-center ">
-              <div className=" h-full w-full">
-                <span>
-                  <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
-                    No tienes Nft's
-                  </h1>
-                </span>
+        {accountAddress !== '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a' && (
+          <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+            {currentF2?.map((nft) => (
+              <NFTGrid
+                key={nft.name}
+                name={nft.name}
+                image={nft.image}
+                price={13}
+                number={nft.id}
+                alldata={false}
+                type={'Frenchies Blues'}
+              />
+            ))}
+            {currentF.length == 0 && (
+              <div className="flex h-full w-full  items-center justify-center ">
+                <div className=" h-full w-full">
+                  <span>
+                    <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                      No tienes Nft's
+                    </h1>
+                  </span>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
+
+        {accountAddress == '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a' && (
+          <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+            {currentF?.map((nft) => (
+              <NFTGrid
+                key={nft.name}
+                name={nft.name}
+                image={nft.image}
+                price={13}
+                number={nft.id}
+                alldata={false}
+                type={'Frenchies Blues'}
+              />
+            ))}
+            {currentF.length == 0 && (
+              <div className="flex h-full w-full  items-center justify-center ">
+                <div className=" h-full w-full">
+                  <span>
+                    <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                      No tienes Nft's
+                    </h1>
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </TabPanel>
 
       <TabPanel className="w-full focus:outline-none  ">

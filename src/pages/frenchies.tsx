@@ -443,21 +443,21 @@ const Frenchies: NextPageWithLayout<
   );
 
   const AuctionMinterContract = new ethers.Contract(
-    '0x03078F96f5D7306EC8f8FC34aeDf4709A1FE5a91',
+    '0xEb580F6623009898369E014B8fbF06e4417daEC9',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     auction,
     provider_GOETH
   );
 
   const OffersMinterContract = new ethers.Contract(
-    '0xAd695bB88745F15831b239EdAF2862EA1C402F47',
+    '0x7590aAf6Bc30704351C6C47E64910b910F81735b',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     _ofertas,
     provider_GOETH
   );
 
   const VentasMinterContract = new ethers.Contract(
-    '0x202FC25b61ad0ae9cd0Ed8F6Cddc7070ACC64845',
+    '0x27423F0f8661F679322C02D2396AC82182846FF3',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     ventas,
     provider_GOETH
@@ -474,6 +474,152 @@ const Frenchies: NextPageWithLayout<
     if (chainId == 1) {
       setLoading(true);
 
+      try {
+        if (Usuario.rol != 'Admin') {
+          if (count - multiplicador >= 0) {
+            const options = {
+              value: ethers.utils.parseUnits('0', 'ether'),
+            };
+
+            const tx = await frenchiesMinter.buyToken(cantidad, options);
+
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench(accountAddress));
+            setStatus(200);
+            setVendido(true);
+            setCantidad(0);
+            setApprovedToken(0);
+            setearSupply();
+            //verifyApprove();
+            setLoading(false);
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
+          } else {
+            const options_ = {
+              value: ethers.utils.parseUnits(
+                (valor * (multiplicador - count)).toString(),
+                'ether'
+              ),
+            };
+
+            const tx = await frenchiesMinter.buyToken(cantidad, options_);
+
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench(accountAddress));
+            setStatus(200);
+            setVendido(true);
+            setCantidad(0);
+            setApprovedToken(0);
+            setearSupply();
+            setLoading(false);
+
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
+          }
+        } else {
+          if (count - multiplicador >= 0) {
+            const options = {
+              value: ethers.utils.parseUnits('0', 'ether'),
+            };
+
+            const tx = await frenchiesMinter2.buyToken(cantidad, options);
+
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench2(accountAddress, frenchiesMinterContract));
+            setStatus(200);
+            setVendido(true);
+            setCantidad(0);
+            setApprovedToken(0);
+            setearSupply();
+            //verifyApprove();
+            setLoading(false);
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
+          } else {
+            const options_ = {
+              value: ethers.utils.parseUnits(
+                (valor2 * (multiplicador - count)).toString(),
+                'ether'
+              ),
+            };
+
+            const tx = await frenchiesMinter2.buyToken(cantidad, options_);
+
+            await tx.wait(); //tener en cuenta para los proximos cambios
+            dispatch(uFrench(accountAddress));
+            setStatus(200);
+            setVendido(true);
+            setCantidad(0);
+            setApprovedToken(0);
+            setearSupply();
+            setLoading(false);
+            dispatch(uFrench2(accountAddress, frenchiesMinterContract));
+
+            if (count > 0) {
+              setCount(count - multiplicador);
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            } else {
+              setMultiplicador(0);
+              setCantidad(0);
+              setPrecio(0);
+              setLoading(false);
+            }
+          }
+        }
+      } catch (err) {
+        setLoading(false);
+        setStatus(100);
+        const mess = err.message.split('[');
+        //const messa = mess[1].split(":")
+        //const messag = messa[3].split(",")
+        //const messag_ = messag[0].split("-")
+        console.log(mess);
+        const rejected = mess[0].split(' ');
+        console.log(rejected);
+
+        if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
+          setErrorMSG('Fondos insuficientes');
+        } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
+          setErrorMSG('Transacion rechazada');
+        } else {
+          setErrorMSG('Error');
+        }
+        //
+      }
+    } else if (chainId !== 137) {
       try {
         if (Usuario.rol != 'Admin') {
           if (count - multiplicador >= 0) {
@@ -642,8 +788,12 @@ const Frenchies: NextPageWithLayout<
   const getWhithelist = async () => {
     setLoading(true);
 
+    if (chainId == 5) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
     const w = await frenchiesMinter.getWhitelist();
-
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
       setCount(c);
@@ -653,19 +803,13 @@ const Frenchies: NextPageWithLayout<
     }
   };
 
-  /*  const { disconnectWallet } = useContext(WalletContext);
-  useEffect(() => {
-    if (!isConnect) {
-      disconnectWallet();
-    }
-  }, []); */
-
   useEffect(() => {
     if (isConnect) {
       setearSupply();
       getWhithelist();
     }
   }, [pan]);
+
   useEffect(() => {
     if (isConnect) {
       setearSupply();
@@ -827,23 +971,21 @@ const Frenchies: NextPageWithLayout<
     for (let i = 0; i < nose.length; i++) {
       const id = parseInt(nose[i].tokenId);
       const infoToken = allnfts[id];
-      if (nose[i].active == true) {
-        const objetoJSON = {
-          tokenId: parseInt(nose[i].tokenId),
-          seller: nose[i].seller,
-          startBlock: parseInt(nose[i].startBlock),
-          endBlock: parseInt(nose[i].endBlock),
-          startPrice: parseInt(nose[i].startPrice),
-          currentPrice: parseInt(nose[i].currentPrice),
-          currentWinner: nose[i].currentWinner,
-          active: nose[i].active,
-          name: infoToken.name,
-          image: infoToken.image,
-          description: infoToken.descripcion,
-          type: 'subasta',
-        };
-        jsonArray.push(objetoJSON);
-      }
+      const objetoJSON = {
+        tokenId: parseInt(nose[i].tokenId),
+        seller: nose[i].seller,
+        startBlock: parseInt(nose[i].startBlock),
+        endBlock: parseInt(nose[i].endBlock),
+        startPrice: parseInt(nose[i].startPrice),
+        currentPrice: parseInt(nose[i].currentPrice),
+        currentWinner: nose[i].currentWinner,
+        active: nose[i].active,
+        name: infoToken.name,
+        image: infoToken.image,
+        description: infoToken.descripcion,
+        type: 'subasta',
+      };
+      jsonArray.push(objetoJSON);
     }
     setMyPujas(jsonArray);
   };
@@ -964,7 +1106,6 @@ const Frenchies: NextPageWithLayout<
         description: infoToken.descripcion,
       };
       jsonArray.push(objetoJSON);
-      console.log(objetoJSON);
     }
     setMyVentas(jsonArray);
   };

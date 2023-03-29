@@ -94,11 +94,7 @@ function NftFooter({
       setLoading(true);
       try {
         console.log(currentBid);
-        const tx = await auctionContract.claim(
-          currentBid.tokenId,
-          currentBid.seller,
-          currentBid.currentWinner
-        );
+        const tx = await auctionContract.claim(currentBid.tokenId);
         await tx.wait();
         setStatus(200);
         setLoading(false);
@@ -129,10 +125,7 @@ function NftFooter({
     if (chainId == 5) {
       setLoading(true);
       try {
-        const tx = await auctionContract.withdraw(
-          currentBid.tokenId,
-          currentBid.currentWinner
-        );
+        const tx = await auctionContract.withdraw(currentBid.tokenId);
         await tx.wait();
         setStatus(200);
         setLoading(false);

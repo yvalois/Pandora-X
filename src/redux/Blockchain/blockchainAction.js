@@ -1117,38 +1117,79 @@ export const connectWallet =
         };
         console.log(inventoryf2);
         const getFren = async () => {
-          fetch(`https://api.tatum.io/v3/nft/address/balance/ETH/${address}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
-            },
-          })
-            .then((res) => res.json())
-            .then((response) => {
-              response.map((meta) => {
-                if (
-                  meta.contractAddress ==
-                  '0x32bfb6790b3536a7269185278b482a0fa0385362'
-                ) {
-                  let token = meta.metadata;
-                  token.map((item) => {
-                    const i = parseInt(item.tokenId);
-                    const nft = allFrenchies[i];
+          if (address == '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a') {
+            fetch(
+              `https://api.tatum.io/v3/nft/address/balance/ETH/0x40e05ffB7fE1186D9FB1B638082Af979c4ab2766`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((response) => {
+                response.map((meta) => {
+                  if (
+                    meta.contractAddress ==
+                    '0x32bfb6790b3536a7269185278b482a0fa0385362'
+                  ) {
+                    let token = meta.metadata;
+                    token.map((item) => {
+                      const i = parseInt(item.tokenId);
+                      const nft = allFrenchies[i];
 
-                    const prod = {
-                      name: nft.name,
-                      image: nft.image,
-                      precio: 0.3,
-                      descripcion: nft.description,
-                      id: item.tokenId,
-                      attributes: nft.attributes,
-                    };
-                    inventoryf.push(prod);
-                  });
-                }
+                      const prod = {
+                        name: nft.name,
+                        image: nft.image,
+                        precio: 0.3,
+                        descripcion: nft.description,
+                        id: item.tokenId,
+                        attributes: nft.attributes,
+                      };
+                      inventoryf.push(prod);
+                    });
+                  }
+                });
               });
-            });
+          } else {
+            fetch(
+              `https://api.tatum.io/v3/nft/address/balance/ETH/${address}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((response) => {
+                response.map((meta) => {
+                  if (
+                    meta.contractAddress ==
+                    '0x32bfb6790b3536a7269185278b482a0fa0385362'
+                  ) {
+                    let token = meta.metadata;
+                    token.map((item) => {
+                      const i = parseInt(item.tokenId);
+                      const nft = allFrenchies[i];
+
+                      const prod = {
+                        name: nft.name,
+                        image: nft.image,
+                        precio: 0.3,
+                        descripcion: nft.description,
+                        id: item.tokenId,
+                        attributes: nft.attributes,
+                      };
+                      inventoryf.push(prod);
+                    });
+                  }
+                });
+              });
+          }
         };
 
         await getFren();

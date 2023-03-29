@@ -225,16 +225,6 @@
                 "internalType": "uint256",
                 "name": "tokenId",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "_seller",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_current",
-                "type": "address"
             }
         ],
         "name": "claim",
@@ -582,11 +572,6 @@
                 "internalType": "uint256",
                 "name": "tokenId",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "_currentWinner",
-                "type": "address"
             }
         ],
         "name": "withdraw",
