@@ -1,4 +1,4 @@
-import Image from '@/components/ui/image';
+import Image from 'next/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { Verified } from '@/components/icons/verified';
 import Avatar from '@/components/ui/avatar';
@@ -147,50 +147,50 @@ export default function NFTGrid({
           href={`/productosbd/nft-detailsP${number}`}
           className="relative block w-full pb-full"
         >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       ) : type == 'compraI' ? (
         <AnchorLink
           href={`/inversionbd/nft-detailsI${number}`}
           className="relative block w-full pb-full"
         >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       ) : type == 'productos' ? (
         <AnchorLink
           href={`/info/${number}`}
           className="relative block w-full pb-full"
         >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       ) : type == 'Frenchies Blues' ? (
         <AnchorLink
           href={`/infoFrenchies/${number}`}
           className="relative block w-full pb-full"
         >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       ) : type == 'general' ? (
         <AnchorLink
           href={`/generalnft`}
           className="relative block w-full pb-full"
         >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       ) : type == 'subasta' ? (
         <AnchorLink href={`/subasta`} className="relative block w-full pb-full">
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       ) : type == 'venta' ? (
         <AnchorLink href={`/venta`} className="relative block w-full pb-full">
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       ) : (
         <AnchorLink
           href={`/infoinv/${number}`}
           className="relative block w-full pb-full"
         >
-          <Image src={image} layout="fill" objectFit="cover" alt="" />
+          <Image src={image} alt={name} width={16} height={9} layout="fill" />
         </AnchorLink>
       )}
 
