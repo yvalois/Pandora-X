@@ -30,7 +30,7 @@ module.exports = withPWA({
         hostname: '**',
       },
     ],
-    domains: ['ipfs.io/ipfs'],
+    domains: ['ipfs.io', 'gateway.pinata.cloud'],
   },
   env: {
     NEXT_PUBLIC_BACKEND_API: process.env.NEXT_PUBLIC_BACKEND_API,
