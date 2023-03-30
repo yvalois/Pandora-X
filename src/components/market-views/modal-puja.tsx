@@ -228,7 +228,7 @@ export default function ModalPuja() {
 
         {!loading && (
           <div className="row flex w-[100%]  justify-center">
-            <Button onClick={Pujar}>Subastar</Button>
+            <Button onClick={Pujar}>Pujar</Button>
           </div>
         )}
 

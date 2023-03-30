@@ -229,7 +229,7 @@ function Status({ ontipom }) {
                 : 'border-gray-200 bg-white text-brand dark:border-gray-700 dark:bg-gray-800 dark:text-white'
             }`}
           >
-            Comprar
+            En venta
           </span>
         )}
       </RadioGroup.Option>
@@ -1211,24 +1211,12 @@ const Frenchies: NextPageWithLayout<
                     path: 'coleccion',
                   },
                   {
-                    title: 'En subasta',
-                    path: 'subastas',
-                  },
-                  {
-                    title: 'Puja',
+                    title: 'Pujas a otros',
                     path: 'Puja',
-                  },
-                  {
-                    title: 'En Venta',
-                    path: 'Ventas',
                   },
                   {
                     title: 'Mis ofertas',
                     path: 'Mis ofertas',
-                  },
-                  {
-                    title: 'Ofertas',
-                    path: 'ofertas',
                   },
                   {
                     title: 'Comprar Frenchies',
@@ -1237,20 +1225,73 @@ const Frenchies: NextPageWithLayout<
                 ]}
               >
                 <TabPanel className="focus:outline-none">
-                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                    {currentF2?.map((nft) => (
-                      <div key={nft.id} onClick={() => subirDatos(nft)}>
-                        <NFTGrid
-                          key={nft.name}
-                          name={nft.name}
-                          image={nft.image}
-                          price={nft.precio}
-                          number={nft.id}
-                          type={'general'}
-                        />
-                      </div>
-                    ))}
-                  </div>
+                  {tipoM == 'new' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {currentF2?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={nft.precio}
+                            number={nft.id}
+                            type={'general'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {mysubastas.length > 0 && tipoM == '' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {mysubastas?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={0}
+                            number={nft.id}
+                            type={'subasta'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {myventas.length > 0 && tipoM == 'buy-now' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {myventas?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={0}
+                            number={nft.id}
+                            type={'venta'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {offers.length > 0 && tipoM == 'has-offers' && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {offers?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={0}
+                            number={nft.id}
+                            type={'general'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
                   {tipoM == 'new' && (
@@ -1322,24 +1363,6 @@ const Frenchies: NextPageWithLayout<
                   )}
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
-                  {mysubastas.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {mysubastas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'subasta'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
                   {mypujas.length > 0 && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                       {mypujas?.map((nft) => (
@@ -1358,45 +1381,9 @@ const Frenchies: NextPageWithLayout<
                   )}
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
-                  {myventas.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {myventas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'venta'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
                   {offers.length > 0 && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                       {offers?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  {myofertas.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {myofertas?.map((nft) => (
                         <div key={nft.id} onClick={() => subirDatos(nft)}>
                           <NFTGrid
                             key={nft.name}

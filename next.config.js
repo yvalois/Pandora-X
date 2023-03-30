@@ -20,17 +20,11 @@ module.exports = withPWA({
     },
   }),
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-      {
-        protocol: 'ipfs',
-        hostname: '**',
-      },
+    domains: [
+      'ipfs.io',
+      'gateway.pinata.cloud',
+      'lime-geographical-angelfish-53.mypinata.cloud',
     ],
-    domains: ['ipfs.io', 'gateway.pinata.cloud'],
   },
   env: {
     NEXT_PUBLIC_BACKEND_API: process.env.NEXT_PUBLIC_BACKEND_API,
