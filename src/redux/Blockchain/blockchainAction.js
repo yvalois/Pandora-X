@@ -1148,7 +1148,7 @@ export const connectWallet =
                         id: item.tokenId,
                         attributes: nft.attributes,
                       };
-                      inventoryf.push(allFrenchies);
+                      inventoryf.push(allFrenchies[i]);
                     });
                   }
                 });
