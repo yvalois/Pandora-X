@@ -24,6 +24,7 @@ module.exports = withPWA({
       'ipfs.io',
       'gateway.pinata.cloud',
       'lime-geographical-angelfish-53.mypinata.cloud',
+      'pandorax_getaway.mypinata.cloud',
     ],
   },
   env: {
