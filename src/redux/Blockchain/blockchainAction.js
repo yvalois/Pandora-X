@@ -1118,7 +1118,9 @@ export const connectWallet =
 
         const getFren = async () => {
           if (address == '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a') {
-            fetch(
+            inventoryf = allFrenchies;
+
+            /*fetch(
               `https://api.tatum.io/v3/nft/address/balance/ETH/0x40e05ffB7fE1186D9FB1B638082Af979c4ab2766`,
               {
                 method: 'GET',
@@ -1152,7 +1154,7 @@ export const connectWallet =
                     });
                   }
                 });
-              });
+              });*/
           } else {
             fetch(
               `https://api.tatum.io/v3/nft/address/balance/ETH/${address}`,
