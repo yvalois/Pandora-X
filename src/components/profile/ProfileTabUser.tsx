@@ -37,7 +37,6 @@ export default function ProfileTabUser() {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
     setCurrentF(inventoryf);
-    setCurrentF2(inventoryf2);
   }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
 
   const fetchMoreItems = () => {
