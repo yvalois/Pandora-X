@@ -47,7 +47,7 @@ export default function ProfileTabUser() {
     setTimeout(() => {
       const newItems = inventoryf.slice(currentF.length, currentF.length + 50);
       setCurrentF([...currentF, ...newItems]);
-    }, 1500);
+    }, 500);
   };
 
   return (

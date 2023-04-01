@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { provider } from '../../NFTROL';
+import Head from 'next/head';
 
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
 import productoMinterAbi from '../../abi/productoMinter.json';
@@ -129,6 +130,9 @@ export default function NFTGrid({
 
   return (
     <div className="relative  w-[140px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xs:w-[220px] sm:w-[260px] md:w-[220px] xl:w-[280px] 2xl:w-[240px] 3xl:w-[340px]">
+      <Head>
+        <link rel="dns-prefetch" href="//pandorax_getaway.mypinata.cloud" />
+      </Head>
       <div className="p-4">
         <div className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
           {
@@ -168,7 +172,14 @@ export default function NFTGrid({
           href={`/infoFrenchies/${number}`}
           className="relative block w-full pb-full"
         >
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+          <Image
+            src={image}
+            alt={name}
+            width={16}
+            height={9}
+            layout="fill"
+            loading="lazy"
+          />
         </AnchorLink>
       ) : type == 'general' ? (
         <AnchorLink
