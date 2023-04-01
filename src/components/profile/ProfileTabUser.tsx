@@ -37,15 +37,13 @@ export default function ProfileTabUser() {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
     setCurrentF(inventoryf);
+    //setCurrentF2(inventoryf2);
   }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
 
   const fetchMoreItems = () => {
     setTimeout(() => {
-      const newItems = inventoryf.slice(
-        currentF2.length,
-        currentF2.length + 50
-      );
-      setCurrentF2([...currentF2, ...newItems]);
+      const newItems = inventoryf.slice(currentF.length, currentF.length + 50);
+      setCurrentF([...currentF, ...newItems]);
     }, 1500);
   };
 
@@ -159,7 +157,7 @@ export default function ProfileTabUser() {
         {accountAddress == '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a' && (
           <div>
             <InfiniteScroll
-              dataLength={currentF2.length}
+              dataLength={currentF.length}
               next={fetchMoreItems}
               hasMore={true}
               loader={<h4>Loading...</h4>}
