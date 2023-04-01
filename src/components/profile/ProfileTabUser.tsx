@@ -36,7 +36,7 @@ export default function ProfileTabUser() {
   useEffect(() => {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
-    setCurrentF(inventoryf);
+    //setCurrentF(inventoryf);
     //setCurrentF2(inventoryf2);
   }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
 
