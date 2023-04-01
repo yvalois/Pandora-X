@@ -11,7 +11,7 @@ import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { provider } from '../../NFTROL';
 import Head from 'next/head';
-
+import LazyLoad from 'react-lazyload';
 import abiErc20 from '../../abi/abiERC20.json'; //Buscar
 import productoMinterAbi from '../../abi/productoMinter.json';
 import inversionMinterAbi from '../../abi/inversionMinter.json';
@@ -170,16 +170,13 @@ export default function NFTGrid({
       ) : type == 'Frenchies Blues' ? (
         <AnchorLink
           href={`/infoFrenchies/${number}`}
-          className="relative block w-full pb-full"
+          className="relative block w-full "
         >
-          <Image
-            src={image}
-            alt={name}
-            width={16}
-            height={9}
-            layout="fill"
-            loading="lazy"
-          />
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       ) : type == 'general' ? (
         <AnchorLink
