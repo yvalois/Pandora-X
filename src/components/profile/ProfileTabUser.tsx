@@ -38,6 +38,9 @@ export default function ProfileTabUser() {
     setCurrentInv(inventoryi);
     //setCurrentF(inventoryf);
     //setCurrentF2(inventoryf2);
+    const newItems = inventoryf.slice(0, 50);
+
+    setCurrentF(newItems);
   }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
 
   const fetchMoreItems = () => {
