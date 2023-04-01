@@ -17,13 +17,13 @@ import {
 import { useEffect, useState } from 'react';
 import { getMintedNftProducts } from '@/redux/Minted/MintedAction';
 import StakingTableF from '../transaction/stakingTableF';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function ProfileTabUser() {
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
   const [currentF, setCurrentF] = useState([]);
   const [currentF2, setCurrentF2] = useState([]);
-
   const { inventoryp, inventoryi, inventoryf, inventoryf2, accountAddress } =
     useSelector((state: any) => state.blockchain);
 
@@ -39,6 +39,16 @@ export default function ProfileTabUser() {
     setCurrentF(inventoryf);
     setCurrentF2(inventoryf2);
   }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
+
+  const fetchMoreItems = () => {
+    setTimeout(() => {
+      const newItems = inventoryf.slice(
+        currentF2.length,
+        currentF2.length + 50
+      );
+      setCurrentF2([...currentF2, ...newItems]);
+    }, 1500);
+  };
 
   return (
     <ParamTab
@@ -148,18 +158,28 @@ export default function ProfileTabUser() {
         )}
 
         {accountAddress == '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a' && (
-          <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-            {currentF?.map((nft) => (
-              <NFTGrid
-                key={nft.name}
-                name={nft.name}
-                image={nft.image}
-                price={13}
-                number={nft.id}
-                alldata={false}
-                type={'Frenchies Blues'}
-              />
-            ))}
+          <div>
+            <InfiniteScroll
+              dataLength={currentF2.length}
+              next={fetchMoreItems}
+              hasMore={true}
+              loader={<h4>Loading...</h4>}
+            >
+              <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                {currentF?.map((nft) => (
+                  <NFTGrid
+                    key={nft.name}
+                    name={nft.name}
+                    image={nft.image}
+                    price={13}
+                    number={nft.id}
+                    alldata={false}
+                    type={'Frenchies Blues'}
+                  />
+                ))}
+              </div>
+            </InfiniteScroll>
+
             {currentF.length == 0 && (
               <div className="flex h-full w-full  items-center justify-center ">
                 <div className=" h-full w-full">
