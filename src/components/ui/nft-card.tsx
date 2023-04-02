@@ -152,7 +152,7 @@ export default function NFTGrid({
           href={`/productosbd/nft-detailsP${number}`}
           className="relative block w-full "
         >
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
@@ -163,7 +163,7 @@ export default function NFTGrid({
           href={`/inversionbd/nft-detailsI${number}`}
           className="relative block w-full "
         >
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
@@ -171,7 +171,7 @@ export default function NFTGrid({
         </AnchorLink>
       ) : type == 'productos' ? (
         <AnchorLink href={`/info/${number}`} className="relative block w-full ">
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
@@ -182,7 +182,7 @@ export default function NFTGrid({
           href={`/infoFrenchies/${number}`}
           className="relative block w-full "
         >
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
@@ -190,7 +190,7 @@ export default function NFTGrid({
         </AnchorLink>
       ) : type == 'general' ? (
         <AnchorLink href={`/generalnft`} className="relative block w-full ">
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
@@ -198,7 +198,7 @@ export default function NFTGrid({
         </AnchorLink>
       ) : type == 'subasta' ? (
         <AnchorLink href={`/subasta`} className="relative block w-full ">
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
@@ -206,7 +206,7 @@ export default function NFTGrid({
         </AnchorLink>
       ) : type == 'venta' ? (
         <AnchorLink href={`/venta`} className="relative block w-full ">
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
@@ -217,7 +217,7 @@ export default function NFTGrid({
           href={`/infoinv/${number}`}
           className="relative block w-full "
         >
-          <LazyLoad offset={700}>
+          <LazyLoad offset={300}>
             <div className='h-["10px"] w-["100%"]'>
               <img src={image} alt={name} />
             </div>
