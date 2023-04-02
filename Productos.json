@@ -5,26 +5,23 @@
     "precio": 0,
     "tipo": "PS",
     "tipoN": 1,
-    "descripcion":
-      "Los contenidos gratuitos de Pandora X, en sus diferntes formatos visuales y audiovisuales estan repletos de ideas importantes para crear riqueza en el mundo criptográfico. Además, será una herramienta poderosa para acercar a potenciales estudiantes, inversores y coleccionistas al ecosistema PX.",
+    "descripcion": "Los contenidos gratuitos de Pandora X, en sus diferntes formatos visuales y audiovisuales estan repletos de ideas importantes para crear riqueza en el mundo criptográfico. Además, será una herramienta poderosa para acercar a potenciales estudiantes, inversores y coleccionistas al ecosistema PX.",
   },
   {
     "Nombre": "Pandora X NFT - Academia X",
-    "img": "https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20AcademiaX%20%281%29.gif",
+    "img": "https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Podcast-Academia%20%281%29.gif",
     "precio": 0,
     "tipo": "PA",
     "tipoN": 2,
-    "descripcion":
-     " Nuestra Academia contará con cursos y capacitaciones desde el nivel básico hasta niveles más avanzados, donde nuestros participantes podrán acceder a estos contenidos que fomentan el conocimiento y aprendizaje sobre el mercado cripto.",
+    "descripcion": " Nuestra Academia contará con cursos y capacitaciones desde el nivel básico hasta niveles más avanzados, donde nuestros participantes podrán acceder a estos contenidos que fomentan el conocimiento y aprendizaje sobre el mercado cripto.",
   },
   {
-    "Nombre":" Pandora X NFT - NFT Studio",
+    "Nombre": " Pandora X NFT - NFT Studio",
     "img": "https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20NFT%20Studio%20%282%29.gif",
     "precio": 0,
-    "tipo":"NS",
+    "tipo": "NS",
     "tipoN": 3,
-    "descripcion":
-      "Nos estamos preparando para el futuro. Pandora X Studios es nuestro brazo dedicado al mundo Web 3.0 y los Tokens no Fungibles, nuestra comunidad podrá tener acceso a nuestras colecciones en preventa y artículos NFT de manera exclusiva. Además de conocer de primera mano los proyectos asociados a nuestro Studio.",
+    "descripcion": "Nos estamos preparando para el futuro. Pandora X Studios es nuestro brazo dedicado al mundo Web 3.0 y los Tokens no Fungibles, nuestra comunidad podrá tener acceso a nuestras colecciones en preventa y artículos NFT de manera exclusiva. Además de conocer de primera mano los proyectos asociados a nuestro Studio.",
   },
   {
     "Nombre": "Pandora X NFT - Investing Value",
@@ -32,36 +29,31 @@
     "precio": 0,
     "tipo": "IV",
     "tipoN": 4,
-    "descripcion":
-      "Nuestra estrategia de inversión se basa en el Investing Value, es donde nuestra comunidad puede de forma individual llevar su portafolio y puede ver de primera mano como estamos manejando nuestro Portafolio para que puedan copiar y pegar nuestros pasos como inversores inteligentes. Puntos de compra y venta a lo largo de los periodos. Donde cada uno asume la responsabilidad de sus acciones nosotros nos convertimos en esa guía para tomar decisiones.",
+    "descripcion": "Nuestra estrategia de inversión se basa en el Investing Value, es donde nuestra comunidad puede de forma individual llevar su portafolio y puede ver de primera mano como estamos manejando nuestro Portafolio para que puedan copiar y pegar nuestros pasos como inversores inteligentes. Puntos de compra y venta a lo largo de los periodos. Donde cada uno asume la responsabilidad de sus acciones nosotros nos convertimos en esa guía para tomar decisiones.",
   },
   {
     "Nombre": "Pandora X NFT - Comunidad Privada",
     "img": "https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Privada.gif",
     "precio": 0,
-   " tipo": "CP",
+    " tipo": "CP",
     "tipoN": 5,
-    "descripcion":
-      "Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.",
+    "descripcion": "Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.",
   },
   {
     "Nombre": "Pandora X NFT - Comunidad Gratuita",
     "img": "https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Comunidad%20Gratuita.gif",
     "precio": 0,
-   " tipo": "CG",
+    " tipo": "CG",
     "tipoN": 6,
-    "descripcion":
-      "Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.",
+    "descripcion": "Ingresa a nuestra comunidad privada de forma gratuita o regresa para hacerte un miembro activo.En la comunidad aprendar mucho de forma gratuita pero si quieres tener contenido explusivo opta por otra de nuestras opciones.",
   },
   {
     "Nombre": "Pandora X NFT - Coaching",
-
     "precio": 0,
     "img": "https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Coaching.gif",
     "tipo": "NC",
     "tipoN": 7,
-    "descripcion":
-      "En este programa de entrenamiento, el inversor o coleccionista puede tener una o más secciones, con una duración de 45 minutos cada una, con alguno de nuestros Coaches acreditados, para iniciar en el mundo cripto, analizar su Portafolio o simplemente hablar sobre algún tema relevante del mercado cripto.",
+    "descripcion": "En este programa de entrenamiento, el inversor o coleccionista puede tener una o más secciones, con una duración de 45 minutos cada una, con alguno de nuestros Coaches acreditados, para iniciar en el mundo cripto, analizar su Portafolio o simplemente hablar sobre algún tema relevante del mercado cripto.",
   },
   {
     "Nombre": "Pandora X NFT - Alpha Report",

@@ -132,6 +132,7 @@ export default function NFTGrid({
     <div className="relative  w-[140px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xs:w-[220px] sm:w-[260px] md:w-[220px] xl:w-[280px] 2xl:w-[240px] 3xl:w-[340px]">
       <Head>
         <link rel="dns-prefetch" href="//pandorax_getaway.mypinata.cloud" />
+        <link rel="dns-prefetch" href="//gateway.pinata.cloud" />
       </Head>
       <div className="p-4">
         <div className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
@@ -149,23 +150,32 @@ export default function NFTGrid({
       {type == 'comprap' ? (
         <AnchorLink
           href={`/productosbd/nft-detailsP${number}`}
-          className="relative block w-full pb-full"
+          className="relative block w-full "
         >
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       ) : type == 'compraI' ? (
         <AnchorLink
           href={`/inversionbd/nft-detailsI${number}`}
-          className="relative block w-full pb-full"
+          className="relative block w-full "
         >
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       ) : type == 'productos' ? (
-        <AnchorLink
-          href={`/info/${number}`}
-          className="relative block w-full pb-full"
-        >
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+        <AnchorLink href={`/info/${number}`} className="relative block w-full ">
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       ) : type == 'Frenchies Blues' ? (
         <AnchorLink
@@ -179,26 +189,39 @@ export default function NFTGrid({
           </LazyLoad>
         </AnchorLink>
       ) : type == 'general' ? (
-        <AnchorLink
-          href={`/generalnft`}
-          className="relative block w-full pb-full"
-        >
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+        <AnchorLink href={`/generalnft`} className="relative block w-full ">
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       ) : type == 'subasta' ? (
-        <AnchorLink href={`/subasta`} className="relative block w-full pb-full">
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+        <AnchorLink href={`/subasta`} className="relative block w-full ">
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       ) : type == 'venta' ? (
-        <AnchorLink href={`/venta`} className="relative block w-full pb-full">
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+        <AnchorLink href={`/venta`} className="relative block w-full ">
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       ) : (
         <AnchorLink
           href={`/infoinv/${number}`}
-          className="relative block w-full pb-full"
+          className="relative block w-full "
         >
-          <Image src={image} alt={name} width={16} height={9} layout="fill" />
+          <LazyLoad offset={700}>
+            <div className='h-["10px"] w-["100%"]'>
+              <img src={image} alt={name} />
+            </div>
+          </LazyLoad>
         </AnchorLink>
       )}
 

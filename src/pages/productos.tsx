@@ -51,7 +51,7 @@ const productos = [
   },
   {
     nombre: 'Pandora X NFT - Academia X',
-    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Academia X%20%281%29.gif',
+    img: 'https://gateway.pinata.cloud/ipfs/QmPhafbTm1y5M9o4kCwkDPorvgzYQK9QwbioNf4X8Jo4Tf/Pandora%20X%20NFT%20-%20Academia%20X%20%281%29.gif',
     precio: 100,
     tipo: 'PA',
     descripcion:
