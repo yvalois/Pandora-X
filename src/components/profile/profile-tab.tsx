@@ -14,6 +14,7 @@ import {
   authorProtocols,
 } from '@/data/static/author-profile';
 import { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function ProfileTab() {
   const [currentItems, setCurrentItems] = useState([]);
@@ -27,10 +28,20 @@ export default function ProfileTab() {
   useEffect(() => {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
-    setCurrentF(inventoryf);
+    //setCurrentF(inventoryf);
+
+    const newItems = inventoryf.slice(0, 100);
+    setCurrentF(newItems);
 
     setTimeout(() => {}, 5000);
   }, [inventoryp, inventoryi, inventoryf]);
+
+  const fetchMoreItems = () => {
+    setTimeout(() => {
+      const newItems = inventoryf.slice(currentF.length, currentF.length + 100);
+      setCurrentF([...currentF, ...newItems]);
+    }, 1500);
+  };
 
   return (
     <ParamTab
@@ -107,18 +118,27 @@ export default function ProfileTab() {
         </div>
           </TabPanel> */}
       <TabPanel className="focus:outline-none">
-        <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-          {currentF?.map((nft) => (
-            <NFTGrid
-              key={nft.name}
-              name={nft.name}
-              image={nft.image}
-              price={13}
-              number={nft.id}
-              alldata={false}
-              type={'Frenchies Blues'}
-            />
-          ))}
+        <div>
+          <InfiniteScroll
+            dataLength={currentF.length}
+            next={fetchMoreItems}
+            hasMore={true}
+            loader={<h4>Loading...</h4>}
+          >
+            <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+              {currentF?.map((nft) => (
+                <NFTGrid
+                  key={nft.name}
+                  name={nft.name}
+                  image={nft.image}
+                  price={13}
+                  number={nft.id}
+                  alldata={false}
+                  type={'Frenchies Blues'}
+                />
+              ))}
+            </div>
+          </InfiniteScroll>
           {currentF.length == 0 && (
             <div className="flex h-full w-full  items-center justify-center ">
               <div className=" h-full w-full">

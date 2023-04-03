@@ -32,6 +32,7 @@ import ActiveLink from '@/components/ui/links/active-link';
 import { ethers } from 'ethers';
 import validator from 'validator';
 import frenchiesAbi2 from '../abi/FrenchiesBlues2.json';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import frenchiesAbi from '../abi/FrenchiesBlues.json';
 
 import auction from '../abi/auction.json';
@@ -403,6 +404,8 @@ const Frenchies: NextPageWithLayout<
   } = useSelector((state) => state.blockchain);
   const allnfts = allFrenchies;
   const [frenchies, setFrenchies] = useState([]);
+  const [frenchies2, setFrenchies2] = useState([]);
+  const [isMoreF, setIsMoreF] = useState(false);
   const [subastas, setSubastas] = useState([]);
   const [ofertas, setOfertas] = useState([]);
   const [_ventas, setVentas] = useState([]);
@@ -787,12 +790,10 @@ const Frenchies: NextPageWithLayout<
 
   const getWhithelist = async () => {
     setLoading(true);
-
-    if (chainId == 5) {
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+    if (chainId != 1) {
+      setLoading(false);
     }
+
     const w = await frenchiesMinter.getWhitelist();
     if (w == true) {
       const c = await frenchiesMinter.getCountWl();
@@ -907,6 +908,25 @@ const Frenchies: NextPageWithLayout<
 
     const nfts = allnfts.slice(0, supp);
     setFrenchies(nfts);
+
+    if (supp >= 100) {
+      const nfts2 = allnfts.slice(0, 100);
+      setFrenchies2(nfts2);
+      setIsMoreF(true);
+    } else {
+      setFrenchies2(nfts);
+      setIsMoreF(false);
+    }
+  };
+
+  const fetchMoreItems = () => {
+    setTimeout(() => {
+      const newItems = frenchies.slice(
+        frenchies2.length,
+        frenchies2.length + 100
+      );
+      setFrenchies2([...frenchies2, ...newItems]);
+    }, 1500);
   };
 
   const getNftAuction = async () => {
@@ -1131,7 +1151,7 @@ const Frenchies: NextPageWithLayout<
     fetch();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     getnfts();
     const fetch = async () => {
       await getNftAuction();
@@ -1144,7 +1164,7 @@ const Frenchies: NextPageWithLayout<
       //  await getMyNftVentas();
     };
     fetch();
-  }, [frenchies]);
+  }, [frenchies]);*/
 
   const [tipoM, setTipoM] = useState('');
 
@@ -1295,20 +1315,29 @@ const Frenchies: NextPageWithLayout<
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
                   {tipoM == 'new' && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {frenchiess?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={nft.precio}
-                            number={nft.id}
-                            type={nft.type != undefined ? nft.type : 'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    <InfiniteScroll
+                      dataLength={frenchies2.length}
+                      next={fetchMoreItems}
+                      hasMore={isMoreF}
+                      loader={<h4>Loading...</h4>}
+                    >
+                      <div className="ml-6 grid h-full  w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                        {frenchies2?.map((nft) => (
+                          <div key={nft.id} onClick={() => subirDatos(nft)}>
+                            <NFTGrid
+                              key={nft.name}
+                              name={nft.name}
+                              image={nft.image}
+                              price={nft.precio}
+                              number={nft.id}
+                              type={
+                                nft.type != undefined ? nft.type : 'general'
+                              }
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </InfiniteScroll>
                   )}
 
                   {tipoM == 'on-auction' && subastas.length > 0 && (

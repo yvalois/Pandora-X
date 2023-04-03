@@ -37,8 +37,8 @@ export default function ProfileTabUser() {
     setCurrentItems(inventoryp);
     setCurrentInv(inventoryi);
     //setCurrentF(inventoryf);
-    const newItems = inventoryf.slice(0, 50);
-    const newItems2 = inventoryf.slice(0, 50);
+    const newItems = inventoryf.slice(0, 100);
+    const newItems2 = inventoryf.slice(0, 100);
 
     setCurrentF(newItems);
     setCurrentF2(newItems2);
@@ -46,16 +46,19 @@ export default function ProfileTabUser() {
 
   const fetchMoreItems = () => {
     setTimeout(() => {
-      const newItems = inventoryf.slice(currentF.length, currentF.length + 50);
+      const newItems = inventoryf.slice(currentF.length, currentF.length + 100);
       setCurrentF([...currentF, ...newItems]);
-    }, 500);
+    }, 1500);
   };
 
   const fetchMoreItems2 = () => {
     setTimeout(() => {
-      const newItems = inventoryf2.slice(currentF.length, currentF.length + 50);
+      const newItems = inventoryf2.slice(
+        currentF.length,
+        currentF.length + 100
+      );
       setCurrentF2([...currentF2, ...newItems]);
-    }, 500);
+    }, 1500);
   };
 
   return (
