@@ -1318,10 +1318,10 @@ const Frenchies: NextPageWithLayout<
                     <InfiniteScroll
                       dataLength={frenchies2.length}
                       next={fetchMoreItems}
-                      hasMore={isMoreF}
+                      hasMore={false}
                       loader={<h4>Loading...</h4>}
                     >
-                      <div className="ml-6 grid h-full  w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      <div className="ml-6 grid h-full  w-[98%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                         {frenchies2?.map((nft) => (
                           <div key={nft.id} onClick={() => subirDatos(nft)}>
                             <NFTGrid

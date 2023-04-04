@@ -279,7 +279,6 @@ export default function NftDetailsF(Nft) {
 
   useEffect(() => {
     setAtributos(Nft.Nft.attributes);
-    console.log(atributos);
   }, [Nft]);
 
   return (

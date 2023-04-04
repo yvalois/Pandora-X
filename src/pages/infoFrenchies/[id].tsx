@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps = async () => {
 const NFTDetailsPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  const { inventoryf, isConnect } = useSelector(
+  const { inventoryf, isConnect, inventoryf2 } = useSelector(
     (state: any) => state.blockchain
   );
 
@@ -53,7 +53,21 @@ const NFTDetailsPage: NextPageWithLayout<
         setNft(nftdata);
       }
     });
-  }, [inventoryf]);
+    inventoryf2.map((inv) => {
+      if (inv.id == id) {
+        const nftdata = {
+          Nombre: inv.name,
+          img: inv.image,
+          precio: inv.precio,
+          descripcion: inv.descripcion,
+          attributes: inv.attributes,
+          id: inv.id,
+        };
+        console.log(nftdata);
+        setNft(nftdata);
+      }
+    });
+  }, [inventoryf, inventoryf2]);
 
   const Usuario = useSelector((state: any) => state.Usuario);
 

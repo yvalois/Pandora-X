@@ -24,6 +24,7 @@ export default function ProfileTabUser() {
   const [currentInv, setCurrentInv] = useState([]);
   const [currentF, setCurrentF] = useState([]);
   const [currentF2, setCurrentF2] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { inventoryp, inventoryi, inventoryf, inventoryf2, accountAddress } =
     useSelector((state: any) => state.blockchain);
 
@@ -38,10 +39,14 @@ export default function ProfileTabUser() {
     setCurrentInv(inventoryi);
     //setCurrentF(inventoryf);
     const newItems = inventoryf.slice(0, 100);
-    const newItems2 = inventoryf.slice(0, 100);
+    const newItems2 = inventoryf2.slice(0, 100);
 
     setCurrentF(newItems);
     setCurrentF2(newItems2);
+
+    if (inventoryf2.length < 100) {
+      setIsLoading(false);
+    }
   }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
 
   const fetchMoreItems = () => {
@@ -53,9 +58,13 @@ export default function ProfileTabUser() {
 
   const fetchMoreItems2 = () => {
     setTimeout(() => {
+      if (currentF2.length + 100 >= inventoryf2.length) {
+        setIsLoading(false);
+      }
+
       const newItems = inventoryf2.slice(
-        currentF.length,
-        currentF.length + 100
+        currentF2.length,
+        currentF2.length + 100
       );
       setCurrentF2([...currentF2, ...newItems]);
     }, 1500);
@@ -116,7 +125,7 @@ export default function ProfileTabUser() {
           </TabPanel> */}
       <TabPanel className="h-full w-full focus:outline-none">
         <div>
-          <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+          <div className="grid h-full   w-full  grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
             {currentInv?.map((nft) => (
               <NFTGrid
                 key={nft.Nombre}
@@ -144,42 +153,42 @@ export default function ProfileTabUser() {
         </div>
       </TabPanel>
       <TabPanel className="h-full w-full focus:outline-none">
-        {accountAddress !== '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a' && (
-          <div>
-            <InfiniteScroll
-              dataLength={currentF2.length}
-              next={fetchMoreItems2}
-              hasMore={true}
-              loader={<h4>Loading...</h4>}
-            >
-              <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                {currentF2?.map((nft) => (
-                  <NFTGrid
-                    key={nft.name}
-                    name={nft.name}
-                    image={nft.image}
-                    price={13}
-                    number={nft.id}
-                    alldata={false}
-                    type={'Frenchies Blues'}
-                  />
-                ))}
+        <div>
+          <InfiniteScroll
+            dataLength={currentF2.length}
+            next={fetchMoreItems2}
+            hasMore={isLoading}
+            loader={<h4>Loading...</h4>}
+          >
+            <div className="grid h-full w-[95%] grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-12  3xl:grid-cols-3 4xl:grid-cols-3">
+              {currentF2?.map((nft) => (
+                <NFTGrid
+                  key={nft.name}
+                  name={nft.name}
+                  image={nft.image}
+                  price={13}
+                  number={nft.id}
+                  alldata={false}
+                  type={'Frenchies Blues'}
+                />
+              ))}
+            </div>
+          </InfiniteScroll>
+
+          {currentF.length == 0 && (
+            <div className="flex h-full w-full  items-center justify-center ">
+              <div className=" h-full w-full">
+                <span>
+                  <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                    No tienes Nft's
+                  </h1>
+                </span>
               </div>
-            </InfiniteScroll>
-            {currentF.length == 0 && (
-              <div className="flex h-full w-full  items-center justify-center ">
-                <div className=" h-full w-full">
-                  <span>
-                    <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
-                      No tienes Nft's
-                    </h1>
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-        {accountAddress == '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a' && (
+            </div>
+          )}
+        </div>
+
+        {/*accountAddress == '0xE7af6Af6a4CBE41270d9aC7Cdf5fedd76dBCE35a' && (
           <div>
             <InfiniteScroll
               dataLength={currentF.length}
@@ -187,7 +196,7 @@ export default function ProfileTabUser() {
               hasMore={true}
               loader={<h4>Loading...</h4>}
             >
-              <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+              <div className="ml-6 grid h-full   w-[98%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                 {currentF?.map((nft) => (
                   <NFTGrid
                     key={nft.name}
@@ -214,7 +223,7 @@ export default function ProfileTabUser() {
               </div>
             )}
           </div>
-        )}
+        )*/}
       </TabPanel>
 
       <TabPanel className="w-full focus:outline-none  ">
