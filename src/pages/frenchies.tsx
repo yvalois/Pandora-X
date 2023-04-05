@@ -11,7 +11,6 @@ import NFTGrid from '@/components/ui/nft-card';
 import { RadioGroup } from '@/components/ui/radio-group';
 import { Listbox } from '@/components/ui/listbox';
 import Collapse from '@/components/ui/collapse';
-import { Transition } from '@/components/ui/transition';
 import { NormalGridIcon } from '@/components/icons/normal-grid';
 import { CompactGridIcon } from '@/components/icons/compact-grid';
 import CollectionSelect from '@/components/ui/collection-select-list';
@@ -34,6 +33,8 @@ import validator from 'validator';
 import frenchiesAbi2 from '../abi/FrenchiesBlues2.json';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import frenchiesAbi from '../abi/FrenchiesBlues.json';
+import { Dialog } from '@/components/ui/dialog';
+import { Transition } from '@/components/ui/transition';
 
 import auction from '../abi/auction.json';
 import _ofertas from '../abi/ofertas.json';
@@ -305,7 +306,7 @@ function Filters({ ontipom }) {
   );
 }
 
-export function DrawerFilters() {
+function DrawerFilters({ ontipom }) {
   const { closeDrawer } = useDrawer();
   return (
     <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80">
@@ -324,7 +325,7 @@ export function DrawerFilters() {
       </div>
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-20 pt-1">
-          <Filters />
+          <Filters ontipom={ontipom} />
         </div>
       </Scrollbar>
       <div className="absolute left-0 bottom-4 z-10 w-full px-6">
@@ -418,7 +419,7 @@ const Frenchies: NextPageWithLayout<
   const [myventas, setMyVentas] = useState([]);
   const [currentF, setCurrentF] = useState([]);
   const [currentF2, setCurrentF2] = useState([]);
-
+  const [drawMenu, setDrawMenu] = useState(false);
   const { inventoryf, inventoryf2 } = useSelector(
     (state: any) => state.blockchain
   );
@@ -1135,21 +1136,23 @@ const Frenchies: NextPageWithLayout<
     window.localStorage.setItem('nft', jsonString);
   };
 
+  const { closeDrawer } = useDrawer();
+
   useEffect(() => {
     setTipoM('new');
     getnfts();
     const fetch = async () => {
+      await getMyNftVentas();
+      await getNftVentas();
       await getNftAuction();
       await getMyNftAuction();
       await getNftOffers();
       await getNftOwnerOffers();
       await getNftMyOffers();
       await getMyNftPuja();
-      await getNftVentas();
-      await getMyNftVentas();
     };
     fetch();
-  }, []);
+  }, [accountAddress]);
 
   /*useEffect(() => {
     getnfts();
@@ -1210,7 +1213,7 @@ const Frenchies: NextPageWithLayout<
                   shape="rounded"
                   size="small"
                   color="gray"
-                  onClick={() => openDrawer('DRAWER_SEARCH')}
+                  onClick={() => setDrawMenu(true)}
                   className="dark:bg-gray-800"
                 >
                   Filters
@@ -1262,7 +1265,7 @@ const Frenchies: NextPageWithLayout<
                     </div>
                   )}
 
-                  {mysubastas.length > 0 && tipoM == '' && (
+                  {mysubastas.length > 0 && tipoM == 'on-auction' && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                       {mysubastas?.map((nft) => (
                         <div key={nft.id} onClick={() => subirDatos(nft)}>
@@ -1296,9 +1299,9 @@ const Frenchies: NextPageWithLayout<
                     </div>
                   )}
 
-                  {offers.length > 0 && tipoM == 'has-offers' && (
+                  {myofertas.length > 0 && tipoM == 'has-offers' && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {offers?.map((nft) => (
+                      {myofertas?.map((nft) => (
                         <div key={nft.id} onClick={() => subirDatos(nft)}>
                           <NFTGrid
                             key={nft.name}
@@ -1688,9 +1691,45 @@ const Frenchies: NextPageWithLayout<
           )}
         </div>
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
-          <Button onClick={() => openDrawer('DRAWER_SEARCH')} fullWidth>
+          <Button onClick={() => setDrawMenu(true)} fullWidth>
             Filters
           </Button>
+        </div>
+        <div>
+          <Transition appear show={drawMenu} as={'true'}>
+            <Dialog
+              as="div"
+              className="fixed inset-0 z-40 overflow-hidden"
+              onClose={() => setDrawMenu(false)}
+              onClick={() => setDrawMenu(false)}
+            >
+              <Transition.Child
+                as={'true'}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+                onClick={() => setDrawMenu(false)}
+              >
+                <Dialog.Overlay className="fixed inset-0 bg-gray-700 bg-opacity-60 backdrop-blur" />
+              </Transition.Child>
+              <Transition.Child
+                as={'true'}
+                enter="transform transition ease-out duration-300"
+                enterFrom="-translate-x-full"
+                enterTo="translate-x-0"
+                leave="transform transition ease-in duration-300"
+                leaveFrom="translate-x-0"
+                leaveTo="-translate-x-full"
+              >
+                <div className="fixed inset-y-0 left-0 flex w-full max-w-full xl:w-auto">
+                  <DrawerFilters ontipom={cambiartipoM} />
+                </div>
+              </Transition.Child>
+            </Dialog>
+          </Transition>
         </div>
       </div>
     </>

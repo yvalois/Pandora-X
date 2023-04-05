@@ -387,9 +387,6 @@ function Filters() {
       <Collapse label="Status" initialOpen>
         <Status />
       </Collapse>
-      <Collapse label="Price Range" initialOpen>
-        <PriceRange />
-      </Collapse>
       <Collapse label="Collection" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} tipo={0} />
       </Collapse>
