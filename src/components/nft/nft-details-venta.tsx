@@ -345,7 +345,7 @@ export default function NftDetailsVenta() {
             <div className="relative aspect-square max-h-full w-full overflow-hidden rounded-lg">
               <Image
                 src={nft.image}
-                //placeholder="blur"
+                //placeholder="blur
                 layout="fill"
                 objectFit="cover"
                 alt=""
