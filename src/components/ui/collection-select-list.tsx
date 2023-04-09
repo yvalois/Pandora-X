@@ -7,6 +7,8 @@ import CollectionImage2 from '@/assets/images/collection/collection-2.jpg';
 import CollectionImage3 from '@/assets/images/collection/collection-3.jpg';
 import CollectionImage4 from '@/assets/images/collection/collection-4.jpg';
 import AnchorLink from './links/anchor-link';
+import validator from 'validator';
+import { useDrawer } from '../drawer-views/context';
 
 export const collectionList = [
   {
@@ -31,12 +33,15 @@ interface CollectionSelectTypes {
   tipo: number;
 }
 
-export default function CollectionSelect({
-  onSelect,
-  tipo,
-}: CollectionSelectTypes) {
+interface CollectionSearchTypes {
+  onSelect: (value: string) => void;
+  searchId: (value: string) => void;
+  tipo: number;
+}
+export function CollectionSelect({ onSelect, tipo }: CollectionSelectTypes) {
   const [link, setLink] = useState('');
   let [searchKeyword, setSearchKeyword] = useState('');
+
   let coinListData = collectionList;
   if (searchKeyword.length > 0) {
     coinListData = collectionList.filter(function (item) {
@@ -87,6 +92,63 @@ export default function CollectionSelect({
           </span>
         </li>
       </ul>
+    </div>
+  );
+}
+
+export function CollectionSearch({
+  onSelect,
+  tipo,
+  searchId,
+}: CollectionSearchTypes) {
+  const [link, setLink] = useState('');
+  let [searchKeyword, setSearchKeyword] = useState('');
+  const [_id, setId] = useState('');
+
+  const { updateTipo, updateSearchId } = useDrawer();
+
+  let coinListData = collectionList;
+  if (searchKeyword.length > 0) {
+    coinListData = collectionList.filter(function (item) {
+      const name = item.name;
+      return (
+        name.match(searchKeyword) ||
+        (name.toLowerCase().match(searchKeyword) && name)
+      );
+    });
+  }
+  function handleSelectedCoin(value: string) {
+    onSelect(value);
+  }
+
+  function search(id) {
+    if (validator.isNumeric(id) || validator.isEmpty(id)) {
+      setId(id);
+      searchId(id);
+      updateSearchId(id);
+    }
+  }
+
+  useEffect(() => {
+    const aux = window.location.href;
+    const a = aux.split('profile');
+    const e = a[0];
+    setLink(e);
+  }, []);
+
+  return (
+    <div className="w-full rounded-lg bg-white text-sm shadow-large dark:bg-light-dark">
+      <div className="relative">
+        <SearchIcon className="absolute left-6 h-full text-gray-700 dark:text-white" />
+        <input
+          type="search"
+          autoFocus={true}
+          onChange={(e) => search(e.target.value)}
+          placeholder="Search..."
+          value={_id}
+          className="w-full border-x-0 border-b border-dashed border-gray-200 py-3.5 pl-14 pr-6 text-sm focus:border-gray-300 focus:ring-0 dark:border-gray-600 dark:bg-light-dark dark:text-white dark:focus:border-gray-500"
+        />
+      </div>
     </div>
   );
 }

@@ -60,7 +60,6 @@ const AdminPanelPage: NextPageWithLayout<
   }, []);
 
   useEffect(() => {
-    console.log(currentUser);
     if (pages.length == 0) {
       for (let i = 1; i <= Math.ceil(userData.length / userPerPage); i++) {
         pages.push(i);

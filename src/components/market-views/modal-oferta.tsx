@@ -92,7 +92,10 @@ export default function ModalOferta() {
     if (chainId == 5) {
       setLoading(true);
       try {
-        if (parseFloat(nft.max) < precio || nft.max == undefined) {
+        if (
+          parseFloat(nft.max).toFixed(3) < parseFloat(precio) ||
+          nft.max == undefined
+        ) {
           const options = {
             value: ethers.utils.parseUnits(precio.toString(), 'ether'),
           };
@@ -214,7 +217,7 @@ export default function ModalOferta() {
         <div className="mb-6">
           <label className="mb-4 block text-sm font-bold text-gray-700 dark:text-white">
             Recuerda que el valor de la oferta debe ser mayor a la antigua
-            oferta ${nft.max}ETH.
+            oferta ${parseFloat(nft?.max / 1000000000000000000).toFixed(3)} ETH.
           </label>
 
           <input

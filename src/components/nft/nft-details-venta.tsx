@@ -276,7 +276,7 @@ export default function NftDetailsVenta() {
     {
       id: 1,
       logo: {
-        src: '/_next/static/media/ethereum.5ddd90e5.svg',
+        src: '/_next/static/media/ethereum.png',
         height: 32,
         width: 32,
       },
@@ -287,11 +287,14 @@ export default function NftDetailsVenta() {
 
   const creator = {
     id: 1,
-    logo: { src: '/_next/static/media/favicon.ico', height: 32, width: 32 },
+    logo: {
+      src: '/_next/static/media/Pandora-X-icon-04.6bfef801.svg',
+      height: 32,
+      width: 32,
+    },
     name: '@pandorax',
     slug: '#',
   };
-
   const collecion = {
     id: 1,
     logo: {
@@ -305,7 +308,11 @@ export default function NftDetailsVenta() {
 
   const owner = {
     id: 1,
-    logo: { src: '/_next/static/media/favicon.ico', height: 32, width: 32 },
+    logo: {
+      src: '/_next/static/media/Pandora-X-icon-04.6bfef801.svg',
+      height: 32,
+      width: 32,
+    },
     name: '@pandorax',
     slug: '#',
   };

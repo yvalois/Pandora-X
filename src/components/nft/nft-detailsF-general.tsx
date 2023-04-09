@@ -218,7 +218,6 @@ export default function NftDetailsFG() {
       const storedJsonString = window.localStorage.getItem('nft');
       const storedObject = JSON.parse(storedJsonString);
       setNft(storedObject);
-      console.log(storedObject);
       setAtributos(nft.attributes);
     };
     fetch();
@@ -328,6 +327,7 @@ export default function NftDetailsFG() {
       setAp(true);
     }
   };
+
   const approve = async () => {
     setLoading(true);
     if (chainId == 5) {
@@ -375,13 +375,20 @@ export default function NftDetailsFG() {
     }, 3000);
   }, [status]);
 
+  const blockChain = {
+    id: 1,
+    logo: { src: '/_next/static/media/ethereum.png', height: 32, width: 32 },
+    name: 'Ethereum',
+    slug: '#',
+  };
+
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
         <div className="rtl:md:t-6 relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
           <div className="flex h-full max-h-full w-full items-center justify-center lg:max-w-[768px]">
             <div className="relative aspect-square max-h-full w-full overflow-hidden rounded-lg">
-              <Image
+              <img
                 src={nft.image}
                 //placeholder="blur"
                 layout="fill"
@@ -486,9 +493,10 @@ export default function NftDetailsFG() {
 
                       <div className="flex flex-col gap-2">
                         <div className="inline-flex">
-                          <span className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                            Ethereum
-                          </span>
+                          <ListCard
+                            item={blockChain}
+                            className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                          />
                         </div>
                       </div>
                     </div>

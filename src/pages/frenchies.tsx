@@ -13,7 +13,10 @@ import { Listbox } from '@/components/ui/listbox';
 import Collapse from '@/components/ui/collapse';
 import { NormalGridIcon } from '@/components/icons/normal-grid';
 import { CompactGridIcon } from '@/components/icons/compact-grid';
-import CollectionSelect from '@/components/ui/collection-select-list';
+import {
+  CollectionSelect,
+  CollectionSearch,
+} from '@/components/ui/collection-select-list';
 import { useDrawer } from '@/components/drawer-views/context';
 import Scrollbar from '@/components/ui/scrollbar';
 import Button from '@/components/ui/button';
@@ -206,9 +209,11 @@ function PriceRange() {
 
 function Status({ ontipom }) {
   let [plan, setPlan] = useState('new');
+  const { updateTipo } = useDrawer();
 
   function handleClick(value) {
     ontipom(value);
+    updateTipo(value);
   }
 
   return (
@@ -293,7 +298,7 @@ function Status({ ontipom }) {
   );
 }
 
-function Filters({ ontipom }) {
+function Filters({ ontipom, searchId }) {
   return (
     <>
       <Collapse label="Status" initialOpen>
@@ -302,12 +307,16 @@ function Filters({ ontipom }) {
       <Collapse label="Collection" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} tipo={2} />
       </Collapse>
+      <Collapse label="Buscar por Id" initialOpen>
+        <CollectionSearch searchId={(value) => searchId(value)} />
+      </Collapse>
     </>
   );
 }
 
-function DrawerFilters({ ontipom }) {
-  const { closeDrawer } = useDrawer();
+export function DrawerFilters() {
+  const { closeDrawer, updateTipo, updateSearchId } = useDrawer();
+
   return (
     <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80">
       <div className="flex h-20 items-center justify-between overflow-hidden px-6 py-4">
@@ -325,7 +334,7 @@ function DrawerFilters({ ontipom }) {
       </div>
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-20 pt-1">
-          <Filters ontipom={ontipom} />
+          <Filters ontipom={updateTipo} searchId={updateSearchId} />
         </div>
       </Scrollbar>
       <div className="absolute left-0 bottom-4 z-10 w-full px-6">
@@ -360,9 +369,6 @@ const BuyButton = styled.button`
   }
 `;
 
-//let inversionI = [];
-//let productoP = [];
-
 const Frenchies: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
@@ -375,7 +381,7 @@ const Frenchies: NextPageWithLayout<
   const pricesP = [];
   const pricesI = [];
   const { isGridCompact } = useGridSwitcher();
-  const { openDrawer } = useDrawer();
+  const { openDrawer, ontipoM, searchId, filter } = useDrawer();
   const dispatch = useDispatch<AppDispatch>();
   const [currentItems, setCurrentItems] = useState([]);
   const [currentInv, setCurrentInv] = useState([]);
@@ -406,6 +412,10 @@ const Frenchies: NextPageWithLayout<
   const allnfts = allFrenchies;
   const [frenchies, setFrenchies] = useState([]);
   const [frenchies2, setFrenchies2] = useState([]);
+  const [frenchies3, setFrenchies3] = useState([]);
+
+  const [showFilterList, setShowFilterList] = useState(false);
+
   const [isMoreF, setIsMoreF] = useState(false);
   const [subastas, setSubastas] = useState([]);
   const [ofertas, setOfertas] = useState([]);
@@ -774,21 +784,6 @@ const Frenchies: NextPageWithLayout<
     }
   };
 
-  const abrir = () => {
-    setOpen(true);
-  };
-
-  const _provider = useProvider();
-
-  /*useEffect(() => {
-    if (!arroz && signer !== undefined) {
-      console.log(signer);
-      dispatch(connectWallet(address, provider, signer));
-
-      setOpen(false);
-    }
-  }, [signer, arroz]);*/
-
   const getWhithelist = async () => {
     setLoading(true);
     if (chainId != 1) {
@@ -892,16 +887,6 @@ const Frenchies: NextPageWithLayout<
     }, 3000);
   }, [status]);
 
-  /*useEffect(() => {
-    const is = window.localStorage.getItem('wagmi.store');
-    const es = JSON.parse(is);
-
-    const si = es.state.data.account;
-    if (si != undefined && !isConnect) {
-      openModal('WALLET_CONNECT_VIEW');
-    }
-  }, [isConnect]);*/
-
   const { frenchs } = useSelector((state) => state.minted);
 
   const getnfts = async () => {
@@ -939,7 +924,7 @@ const Frenchies: NextPageWithLayout<
       const infoToken = allnfts[id];
 
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: parseInt(nose[i].tokenId),
         seller: nose[i].seller,
         startBlock: parseInt(nose[i].startBlock),
         endBlock: parseInt(nose[i].endBlock),
@@ -967,7 +952,7 @@ const Frenchies: NextPageWithLayout<
       const infoToken = allnfts[id];
 
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: parseInt(nose[i].tokenId),
         seller: nose[i].seller,
         startBlock: parseInt(nose[i].startBlock),
         endBlock: parseInt(nose[i].endBlock),
@@ -993,7 +978,7 @@ const Frenchies: NextPageWithLayout<
       const id = parseInt(nose[i].tokenId);
       const infoToken = allnfts[id];
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: parseInt(nose[i].tokenId),
         seller: nose[i].seller,
         startBlock: parseInt(nose[i].startBlock),
         endBlock: parseInt(nose[i].endBlock),
@@ -1020,7 +1005,7 @@ const Frenchies: NextPageWithLayout<
       const infoToken = allnfts[id];
 
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         max: parseInt(nose[i].max),
         active: nose[i].active,
@@ -1042,10 +1027,10 @@ const Frenchies: NextPageWithLayout<
 
     for (let i = 0; i < nose.length; i++) {
       const id = parseInt(nose[i].tokenId);
-      const infoToken = allnfts[id];
 
+      const infoToken = allnfts[id];
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: id,
         owner: nose[i].owner,
         max: parseInt(nose[i].max),
         active: nose[i].active,
@@ -1069,7 +1054,7 @@ const Frenchies: NextPageWithLayout<
       const infoToken = allnfts[id];
 
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         max: parseInt(nose[i].max),
         active: nose[i].active,
@@ -1092,7 +1077,7 @@ const Frenchies: NextPageWithLayout<
       const id = parseInt(nose[i].tokenId);
       const infoToken = allnfts[id];
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         price: parseInt(nose[i].price),
         active: nose[i].active,
@@ -1116,7 +1101,7 @@ const Frenchies: NextPageWithLayout<
       const id = parseInt(nose[i].tokenId);
       const infoToken = allnfts[id];
       const objetoJSON = {
-        tokenId: parseInt(nose[i].tokenId),
+        id: parseInt(nose[i].tokenId),
         owner: nose[i].owner,
         price: parseInt(nose[i].price),
         active: nose[i].active,
@@ -1136,8 +1121,6 @@ const Frenchies: NextPageWithLayout<
     window.localStorage.setItem('nft', jsonString);
   };
 
-  const { closeDrawer } = useDrawer();
-
   useEffect(() => {
     setTipoM('new');
     getnfts();
@@ -1153,21 +1136,6 @@ const Frenchies: NextPageWithLayout<
     };
     fetch();
   }, [accountAddress]);
-
-  /*useEffect(() => {
-    getnfts();
-    const fetch = async () => {
-      await getNftAuction();
-      await getMyNftAuction();
-      await getNftOffers();
-      await getNftOwnerOffers();
-      await getNftMyOffers();
-      await getMyNftPuja();
-      await getNftVentas();
-      //  await getMyNftVentas();
-    };
-    fetch();
-  }, [frenchies]);*/
 
   const [tipoM, setTipoM] = useState('');
 
@@ -1189,6 +1157,63 @@ const Frenchies: NextPageWithLayout<
     }
   }, [isConnect]);
 
+  const filtrar = async (busqueda) => {
+    setCurrentF2(inventoryf2);
+
+    if (validator.isEmpty(busqueda)) {
+      setCurrentF2(inventoryf2);
+      setShowFilterList(false);
+      await getnfts();
+    }
+
+    var resultadoBusquedaAll = frenchies2.filter((elemento2) => {
+      if (
+        (elemento2.id != undefined &&
+          elemento2.id
+            .toString()
+            .toLowerCase()
+            .startsWith(busqueda.toLowerCase()) &&
+          !validator.isEmpty(busqueda)) ||
+        (elemento2.id != undefined &&
+          elemento2.id.toString() == busqueda &&
+          !validator.isEmpty(busqueda))
+      ) {
+        setShowFilterList(true);
+        return elemento2;
+      }
+    });
+    var resultadoBusqueda = currentF2.filter((elemento) => {
+      if (
+        (elemento.id != undefined &&
+          elemento.id
+            .toString()
+            .toLowerCase()
+            .startsWith(busqueda.toLowerCase()) &&
+          !validator.isEmpty(busqueda)) ||
+        (elemento.id != undefined &&
+          elemento.id.toString() == busqueda &&
+          !validator.isEmpty(busqueda))
+      ) {
+        return elemento;
+      }
+    });
+
+    if (!validator.isEmpty(busqueda)) {
+      setCurrentF2(resultadoBusqueda);
+      setFrenchies3(resultadoBusquedaAll);
+      setShowFilterList(true);
+    }
+  };
+
+  useEffect(() => {
+    if (filter) {
+      filtrar(searchId);
+    }
+    if (ontipoM.length > 0 && filter) {
+      cambiartipoM(ontipoM);
+    }
+  }, [ontipoM, searchId]);
+
   return (
     <>
       <NextSeo
@@ -1197,7 +1222,7 @@ const Frenchies: NextPageWithLayout<
       />
       <div className="grid sm:pt-5 2xl:grid-cols-[280px_minmax(auto,_1fr)] 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
         <div className="hidden border-dashed border-gray-200 ltr:border-r ltr:pr-8 rtl:border-l rtl:pl-8 dark:border-gray-700 2xl:block">
-          <Filters ontipom={cambiartipoM} />
+          <Filters ontipom={cambiartipoM} searchId={filtrar} />
         </div>
         <div className="2xl:ltr:pl-10 2xl:rtl:pr-10 4xl:ltr:pl-12 4xl:rtl:pr-12">
           <div className="relative z-10 mb-6 flex items-center justify-between">
@@ -1213,7 +1238,7 @@ const Frenchies: NextPageWithLayout<
                   shape="rounded"
                   size="small"
                   color="gray"
-                  onClick={() => setDrawMenu(true)}
+                  onClick={() => openDrawer('DRAWER_SEARCH')}
                   className="dark:bg-gray-800"
                 >
                   Filters
@@ -1258,7 +1283,7 @@ const Frenchies: NextPageWithLayout<
                             image={nft.image}
                             price={nft.precio}
                             number={nft.id}
-                            type={'general'}
+                            type={nft.type != undefined ? nft.type : 'general'}
                           />
                         </div>
                       ))}
@@ -1309,7 +1334,7 @@ const Frenchies: NextPageWithLayout<
                             image={nft.image}
                             price={0}
                             number={nft.id}
-                            type={'general'}
+                            type={nft.type != undefined ? nft.type : 'general'}
                           />
                         </div>
                       ))}
@@ -1317,14 +1342,14 @@ const Frenchies: NextPageWithLayout<
                   )}
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
-                  {tipoM == 'new' && (
+                  {tipoM == 'new' && !showFilterList && (
                     <InfiniteScroll
                       dataLength={frenchies2.length}
                       next={fetchMoreItems}
                       hasMore={false}
                       loader={<h4>Loading...</h4>}
                     >
-                      <div className="ml-6 grid h-full  w-[98%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      <div className="ml-6 grid h-full  w-[90%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                         {frenchies2?.map((nft) => (
                           <div key={nft.id} onClick={() => subirDatos(nft)}>
                             <NFTGrid
@@ -1341,6 +1366,23 @@ const Frenchies: NextPageWithLayout<
                         ))}
                       </div>
                     </InfiniteScroll>
+                  )}
+
+                  {tipoM == 'new' && showFilterList && (
+                    <div className="ml-6 grid h-full  w-[90%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {frenchies3?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={nft.precio}
+                            number={nft.id}
+                            type={nft.type != undefined ? nft.type : 'general'}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   )}
 
                   {tipoM == 'on-auction' && subastas.length > 0 && (
@@ -1691,46 +1733,11 @@ const Frenchies: NextPageWithLayout<
           )}
         </div>
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
-          <Button onClick={() => setDrawMenu(true)} fullWidth>
+          <Button onClick={() => openDrawer('DRAWER_SEARCH')} fullWidth>
             Filters
           </Button>
         </div>
-        <div>
-          <Transition appear show={drawMenu} as={'true'}>
-            <Dialog
-              as="div"
-              className="fixed inset-0 z-40 overflow-hidden"
-              onClose={() => setDrawMenu(false)}
-              onClick={() => setDrawMenu(false)}
-            >
-              <Transition.Child
-                as={'true'}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-300"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-                onClick={() => setDrawMenu(false)}
-              >
-                <Dialog.Overlay className="fixed inset-0 bg-gray-700 bg-opacity-60 backdrop-blur" />
-              </Transition.Child>
-              <Transition.Child
-                as={'true'}
-                enter="transform transition ease-out duration-300"
-                enterFrom="-translate-x-full"
-                enterTo="translate-x-0"
-                leave="transform transition ease-in duration-300"
-                leaveFrom="translate-x-0"
-                leaveTo="-translate-x-full"
-              >
-                <div className="fixed inset-y-0 left-0 flex w-full max-w-full xl:w-auto">
-                  <DrawerFilters ontipom={cambiartipoM} />
-                </div>
-              </Transition.Child>
-            </Dialog>
-          </Transition>
-        </div>
+        <div></div>
       </div>
     </>
   );
