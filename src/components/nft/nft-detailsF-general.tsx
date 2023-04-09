@@ -377,7 +377,11 @@ export default function NftDetailsFG() {
 
   const blockChain = {
     id: 1,
-    logo: { src: '/_next/static/media/ethereum.png', height: 32, width: 32 },
+    logo: {
+      src: 'https://seeklogo.com/images/E/ethereum-classic-eth-etc-logo-B0094454A6-seeklogo.com.png',
+      height: 32,
+      width: 32,
+    },
     name: 'Ethereum',
     slug: '#',
   };

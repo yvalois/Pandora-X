@@ -276,7 +276,7 @@ export default function NftDetailsVenta() {
     {
       id: 1,
       logo: {
-        src: '/_next/static/media/ethereum.png',
+        src: 'https://seeklogo.com/images/E/ethereum-classic-eth-etc-logo-B0094454A6-seeklogo.com.png',
         height: 32,
         width: 32,
       },

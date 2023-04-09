@@ -26,6 +26,7 @@ module.exports = withPWA({
       'lime-geographical-angelfish-53.mypinata.cloud',
       'pandorax_getaway.mypinata.cloud',
       'i.seadn.io',
+      'seeklogo.com',
     ],
   },
   env: {
