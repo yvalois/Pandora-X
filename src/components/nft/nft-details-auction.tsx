@@ -85,7 +85,7 @@ function NftFooter({
       setLoading(false);
     }*/
 
-    window.localStorage.setItem('pujaId', currentBid.tokenId);
+    window.localStorage.setItem('pujaId', currentBid.id);
     openModal('BID_VIEW');
   };
 
@@ -94,7 +94,7 @@ function NftFooter({
       setLoading(true);
       try {
         console.log(currentBid);
-        const tx = await auctionContract.claim(currentBid.tokenId);
+        const tx = await auctionContract.claim(currentBid.id);
         await tx.wait();
         setStatus(200);
         setLoading(false);
@@ -125,7 +125,7 @@ function NftFooter({
     if (chainId == 5) {
       setLoading(true);
       try {
-        const tx = await auctionContract.withdraw(currentBid.tokenId);
+        const tx = await auctionContract.withdraw(currentBid.id);
         await tx.wait();
         setStatus(200);
         setLoading(false);
@@ -249,15 +249,28 @@ function NftFooter({
                 Cargando
               </Button>
             )}
-            <Button
-              shape="rounded"
-              variant="solid"
-              color="gray"
-              className="dark:bg-gray-800"
-              onClick={Retirar}
-            >
-              Retirar
-            </Button>
+            {!loading && (
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="gray"
+                className="dark:bg-gray-800"
+                onClick={Retirar}
+              >
+                Retirar
+              </Button>
+            )}
+
+            {loading && (
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="gray"
+                className="dark:bg-gray-800"
+              >
+                Cargando
+              </Button>
+            )}
           </div>
         )}
 
@@ -357,7 +370,7 @@ type NftDetailsProps = {
 
 export default function NftDetailsAuction() {
   const nftdata = {
-    tokenId: '',
+    id: '',
     seller: '',
     startBlock: 0,
     endBlock: 0,

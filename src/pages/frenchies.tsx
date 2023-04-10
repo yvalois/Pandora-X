@@ -457,21 +457,21 @@ const Frenchies: NextPageWithLayout<
   );
 
   const AuctionMinterContract = new ethers.Contract(
-    '0xEb580F6623009898369E014B8fbF06e4417daEC9',
+    '0xfa6f96564B9667593b21797F4B1d841CEdFeC21b',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     auction,
     provider_GOETH
   );
 
   const OffersMinterContract = new ethers.Contract(
-    '0x7590aAf6Bc30704351C6C47E64910b910F81735b',
+    '0xdef58Ba1610795F8eF42CE489dfFCbe312f8558A',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     _ofertas,
     provider_GOETH
   );
 
   const VentasMinterContract = new ethers.Contract(
-    '0x27423F0f8661F679322C02D2396AC82182846FF3',
+    '0x80895cB88B6EDcD6CD92ff562c893E2a92eFC97d',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     ventas,
     provider_GOETH
@@ -905,7 +905,15 @@ const Frenchies: NextPageWithLayout<
     }
   };
 
-  const fetchMoreItems = () => {
+  const fetchMoreItems = async () => {
+    await getMyNftVentas();
+    await getNftVentas();
+    await getNftAuction();
+    await getMyNftAuction();
+    await getNftOffers();
+    await getNftOwnerOffers();
+    await getNftMyOffers();
+    await getMyNftPuja();
     setTimeout(() => {
       const newItems = frenchies.slice(
         frenchies2.length,
@@ -938,6 +946,7 @@ const Frenchies: NextPageWithLayout<
         type: 'subasta',
       };
       allnfts[id] = objetoJSON;
+
       jsonArray.push(objetoJSON);
     }
     setSubastas(jsonArray);
@@ -1014,7 +1023,9 @@ const Frenchies: NextPageWithLayout<
         image: infoToken.image,
         type: 'general',
       };
-      allnfts[id] = objetoJSON;
+      if (allnfts[id].type !== 'venta') {
+        allnfts[id] = objetoJSON;
+      }
       jsonArray.push(objetoJSON);
     }
 
@@ -1027,7 +1038,6 @@ const Frenchies: NextPageWithLayout<
 
     for (let i = 0; i < nose.length; i++) {
       const id = parseInt(nose[i].tokenId);
-
       const infoToken = allnfts[id];
       const objetoJSON = {
         id: id,
@@ -1039,9 +1049,14 @@ const Frenchies: NextPageWithLayout<
         image: infoToken.image,
         type: 'general',
       };
+
+      for (let i = 0; inventoryf2.length; i++) {
+        if (inventoryf2[i].id == id) {
+          inventoryf2[i] = objetoJSON;
+        }
+      }
       jsonArray.push(objetoJSON);
     }
-
     setMyOfertas(jsonArray);
   };
 
@@ -1074,7 +1089,7 @@ const Frenchies: NextPageWithLayout<
     const jsonArray = [];
 
     for (let i = 0; i < nose.length; i++) {
-      const id = parseInt(nose[i].tokenId);
+      const id = parseInt(nose[i]);
       const infoToken = allnfts[id];
       const objetoJSON = {
         id: parseInt(nose[i].tokenId),
@@ -1083,12 +1098,11 @@ const Frenchies: NextPageWithLayout<
         active: nose[i].active,
         name: infoToken.name,
         image: infoToken.image,
-        id: infoToken.id,
         type: 'venta',
         description: infoToken.descripcion,
       };
-      jsonArray.push(objetoJSON);
       allnfts[id] = objetoJSON;
+      jsonArray.push(objetoJSON);
     }
     setVentas(jsonArray);
   };
@@ -1123,8 +1137,8 @@ const Frenchies: NextPageWithLayout<
 
   useEffect(() => {
     setTipoM('new');
-    getnfts();
     const fetch = async () => {
+      await getnfts();
       await getMyNftVentas();
       await getNftVentas();
       await getNftAuction();
@@ -1351,7 +1365,12 @@ const Frenchies: NextPageWithLayout<
                     >
                       <div className="ml-6 grid h-full  w-[90%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                         {frenchies2?.map((nft) => (
-                          <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <div
+                            key={nft.id}
+                            onClick={() => {
+                              subirDatos(nft);
+                            }}
+                          >
                             <NFTGrid
                               key={nft.name}
                               name={nft.name}
@@ -1359,7 +1378,9 @@ const Frenchies: NextPageWithLayout<
                               price={nft.precio}
                               number={nft.id}
                               type={
-                                nft.type != undefined ? nft.type : 'general'
+                                frenchies2[nft.id].type != undefined
+                                  ? frenchies2[nft.id].type
+                                  : 'general'
                               }
                             />
                           </div>
@@ -1447,7 +1468,7 @@ const Frenchies: NextPageWithLayout<
                             image={nft.image}
                             price={0}
                             number={nft.id}
-                            type={'general'}
+                            type={nft.type}
                           />
                         </div>
                       ))}

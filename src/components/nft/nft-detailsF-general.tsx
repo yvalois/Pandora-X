@@ -207,7 +207,7 @@ export default function NftDetailsFG() {
     max: 0,
     name: '',
     owner: '',
-    tokenId: 0,
+    id: 0,
     type: '',
   };
 
@@ -247,7 +247,7 @@ export default function NftDetailsFG() {
     if (chainId == 5) {
       setLoading(true);
       try {
-        const tx = await ofertasContract.sellNFT(nft.tokenId);
+        const tx = await ofertasContract.sellNFT(nft.id);
         await tx.wait();
         setStatus(200);
         setLoading(false);
@@ -280,7 +280,7 @@ export default function NftDetailsFG() {
     if (chainId == 5) {
       setLoading(true);
       try {
-        const tx = await ofertasContract.withdraw(nft.tokenId);
+        const tx = await ofertasContract.withdraw(nft.id);
         await tx.wait();
         setStatus(200);
         setLoading(false);

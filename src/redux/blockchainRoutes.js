@@ -18,9 +18,11 @@ export const contract = () => {
       'https://polygon-mainnet.g.alchemy.com/v2/gcYJsxItcYNjfy01aHklipg1J6foSUFn',
     tokenPrueba: '0x52020b93791c0AD281362D6F5825B1Bb226BB6e6', //aqui ponemos el usdt
 
-    auction: '0xEb580F6623009898369E014B8fbF06e4417daEC9',
-    offers: '0x7590aAf6Bc30704351C6C47E64910b910F81735b',
-    venta: '0x27423F0f8661F679322C02D2396AC82182846FF3',
+    auction: '0xfa6f96564B9667593b21797F4B1d841CEdFeC21b',
+    offers: '0xdef58Ba1610795F8eF42CE489dfFCbe312f8558A',
+    venta: '0x80895cB88B6EDcD6CD92ff562c893E2a92eFC97d',
+
+    //venta:0x3ccfcf7dd377f9b1e5c7049b9be6594ad511113b
   };
 };
 

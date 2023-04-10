@@ -45,7 +45,7 @@ function NftFooter({ className = 'md:hidden', currentBid }: NftFooterProps) {
         const options = {
           value: ethers.utils.parseUnits(bid.toString(), 'wei'),
         };
-        const tx = await ventasContract.buyNFT(currentBid.tokenId, options);
+        const tx = await ventasContract.buyNFT(currentBid.id, options);
         await tx.wait();
         setStatus(200);
         setLoading(false);
@@ -75,7 +75,7 @@ function NftFooter({ className = 'md:hidden', currentBid }: NftFooterProps) {
     if (chainId == 5) {
       setLoading(true);
       try {
-        const tx = await ventasContract.cancelSale(currentBid.tokenId);
+        const tx = await ventasContract.cancelSale(currentBid.id);
         await tx.wait();
         setStatus(200);
         setLoading(false);
@@ -248,7 +248,7 @@ type NftDetailsProps = {
 
 export default function NftDetailsVenta() {
   const nftdata = {
-    tokenId: '',
+    id: '',
     seller: '',
     startBlock: 0,
     endBlock: 0,

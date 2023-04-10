@@ -88,9 +88,10 @@ export default function ModalPuja() {
           const options = {
             value: ethers.utils.parseUnits(initPrice.toString(), 'ether'),
           };
-          const tx = await auctionContract.bidApuestas(nft.tokenId, options);
+          const tx = await auctionContract.bidApuestas(nft.id, options);
           await tx.wait();
           setStatusW(200);
+          setSubastado(true);
           setLoading(false);
           setAlertMsg('Transaccion completada correctamente');
         } else {
@@ -172,7 +173,7 @@ export default function ModalPuja() {
 
   useEffect(() => {
     setTimeout(() => {
-      if (statusW != 0 && subastado) {
+      if (statusW == 200 && subastado) {
         window.localStorage.removeItem('SubastaId');
         setStatusW(0);
         window.location.href = '/frenchies';
