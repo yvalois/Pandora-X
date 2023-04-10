@@ -429,6 +429,8 @@ const Frenchies: NextPageWithLayout<
   const [myventas, setMyVentas] = useState([]);
   const [currentF, setCurrentF] = useState([]);
   const [currentF2, setCurrentF2] = useState([]);
+  const [currentF3, setCurrentF3] = useState([]);
+
   const [drawMenu, setDrawMenu] = useState(false);
   const { inventoryf, inventoryf2 } = useSelector(
     (state: any) => state.blockchain
@@ -1173,6 +1175,7 @@ const Frenchies: NextPageWithLayout<
 
   const filtrar = async (busqueda) => {
     setCurrentF2(inventoryf2);
+    const apuntador = busqueda - 1;
 
     if (validator.isEmpty(busqueda)) {
       setCurrentF2(inventoryf2);
@@ -1187,15 +1190,17 @@ const Frenchies: NextPageWithLayout<
             .toString()
             .toLowerCase()
             .startsWith(busqueda.toLowerCase()) &&
-          !validator.isEmpty(busqueda)) ||
+          !validator.isEmpty(apuntador.toString()) &&
+          elemento2.id.toString().toLowerCase() != busqueda.toLowerCase()) ||
         (elemento2.id != undefined &&
-          elemento2.id.toString() == busqueda &&
-          !validator.isEmpty(busqueda))
+          elemento2.id.toString() == apuntador &&
+          !validator.isEmpty(apuntador.toString()))
       ) {
         setShowFilterList(true);
         return elemento2;
       }
     });
+
     var resultadoBusqueda = currentF2.filter((elemento) => {
       if (
         (elemento.id != undefined &&
@@ -1203,17 +1208,18 @@ const Frenchies: NextPageWithLayout<
             .toString()
             .toLowerCase()
             .startsWith(busqueda.toLowerCase()) &&
-          !validator.isEmpty(busqueda)) ||
+          !validator.isEmpty(apuntador.toString()) &&
+          elemento.id.toString().toLowerCase() != busqueda.toLowerCase()) ||
         (elemento.id != undefined &&
-          elemento.id.toString() == busqueda &&
-          !validator.isEmpty(busqueda))
+          elemento.id.toString() == apuntador &&
+          !validator.isEmpty(apuntador.toString()))
       ) {
         return elemento;
       }
     });
 
     if (!validator.isEmpty(busqueda)) {
-      setCurrentF2(resultadoBusqueda);
+      setCurrentF3(resultadoBusqueda);
       setFrenchies3(resultadoBusquedaAll);
       setShowFilterList(true);
     }
@@ -1287,9 +1293,26 @@ const Frenchies: NextPageWithLayout<
                 ]}
               >
                 <TabPanel className="focus:outline-none">
-                  {tipoM == 'new' && (
+                  {tipoM == 'new' && !showFilterList && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
                       {currentF2?.map((nft) => (
+                        <div key={nft.id} onClick={() => subirDatos(nft)}>
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={nft.precio}
+                            number={nft.id}
+                            type={nft.type != undefined ? nft.type : 'general'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {tipoM == 'new' && showFilterList && (
+                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {currentF3?.map((nft) => (
                         <div key={nft.id} onClick={() => subirDatos(nft)}>
                           <NFTGrid
                             key={nft.name}
