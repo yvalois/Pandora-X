@@ -497,10 +497,9 @@ export default function NftDetailsFG() {
 
                       <div className="flex flex-col gap-2">
                         <div className="inline-flex">
-                          <ListCard
-                            item={blockChain}
-                            className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                          />
+                          <span className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                            Ethereum
+                          </span>
                         </div>
                       </div>
                     </div>
