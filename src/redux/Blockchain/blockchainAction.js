@@ -760,6 +760,9 @@ const conectar = (accountAddress, stakingContract) => async (dispatch) => {
     .then((response) => {
       if (response !== null) {
         if (response.Categoria == 'Agente X') {
+          let lista = [];
+          const listaFiltrada = lista.filter(a == b);
+
           dispatch(
             connectSuccessToMongo({
               rol: response.Rol,
@@ -868,7 +871,6 @@ function stringify(obj) {
 export const connectWallet =
   (address, provider, signer) => async (dispatch) => {
     dispatch(loading());
-
     try {
       const chainID = provider._network.chainId;
       setProvider(signer);

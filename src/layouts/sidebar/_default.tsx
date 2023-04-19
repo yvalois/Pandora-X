@@ -138,13 +138,11 @@ export const menuItems = [
     href: '#',
     dropdownItems: [
       {
-        name: 'Frenchies',
-        icon: <PlusCircle />,
+        name: 'Stakear Frenchies',
         href: routes.stak,
       },
       {
-        name: 'Staking Inversion',
-        icon: <PlusCircle />,
+        name: 'Stakear Inversion',
         href: '/profile?view=staking',
       },
     ],
@@ -155,8 +153,7 @@ export const menuItems = [
     href: '#',
     dropdownItems: [
       {
-        name: 'Frenchies',
-        icon: <PlusCircle />,
+        name: 'Frenchies en Staking',
         href: routes.staking,
       },
     ],
