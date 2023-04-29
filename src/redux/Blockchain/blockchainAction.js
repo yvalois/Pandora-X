@@ -208,7 +208,7 @@ export const uFrench = (address, frenchies) => async (dispatch) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+      'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441',
     },
   })
     .then((res) => res.json())
@@ -1123,7 +1123,7 @@ export const connectWallet =
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441_100',
+              'x-api-key': 'cc513a94-c5a2-4d2b-b28e-e0451fac5441',
             },
           })
             .then((res) => res.json())
