@@ -436,9 +436,9 @@ const Frenchies: NextPageWithLayout<
     (state: any) => state.blockchain
   );
 
-  const rpc_GOETH =
-    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
-  const provider_GOETH = new ethers.providers.JsonRpcProvider(rpc_GOETH);
+  // const rpc_GOETH =
+  //   'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+  // const provider_GOETH = new ethers.providers.JsonRpcProvider(rpc_GOETH);
 
   const rpc_ETH =
     'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
@@ -448,7 +448,7 @@ const Frenchies: NextPageWithLayout<
     '0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     frenchiesAbi2,
-    provider_GOETH
+    provider_ETH
   );
 
   const frenchiesMinterContract1 = new ethers.Contract(
@@ -459,24 +459,24 @@ const Frenchies: NextPageWithLayout<
   );
 
   const AuctionMinterContract = new ethers.Contract(
-    '0xfa6f96564B9667593b21797F4B1d841CEdFeC21b',
+    '0x6F06DaaDdCE983B34c834AaEc4cE2E5b79883f6b',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     auction,
-    provider_GOETH
+    provider_ETH
   );
 
   const OffersMinterContract = new ethers.Contract(
-    '0xdef58Ba1610795F8eF42CE489dfFCbe312f8558A',
+    '0x117b158f54141a5656Dc67F58b44908a6050718d',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     _ofertas,
-    provider_GOETH
+    provider_ETH
   );
 
   const VentasMinterContract = new ethers.Contract(
-    '0x80895cB88B6EDcD6CD92ff562c893E2a92eFC97d',
+    '0x39518EC5369c0DfCeB1C4BD30e5B10d6FeAB1ddD',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
     ventas,
-    provider_GOETH
+    provider_ETH
   );
 
   const valor = 0.3;

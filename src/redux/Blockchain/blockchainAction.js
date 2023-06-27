@@ -907,7 +907,7 @@ export const connectWallet =
         const frenchiesMinterContract2 = new ethers.Contract(
           FRENCHIES_ADDRESS2,
           frenchiesAbi2,
-          provider_GOETH
+          provider_ETH
         );
 
         const stakingContract = new ethers.Contract(
