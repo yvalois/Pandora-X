@@ -3,12 +3,12 @@
   "version": "1.4.0",
   "private": true,
   "engines": {
-    "node": "16.13.1"
+    "node": "18.16.1"
   },
   "scripts": {
     "clean": "rimraf \"{node_modules,.next,out.cache}\"",
     "dev": "next dev ",
-    "build": "next build",
+    "build": "next build ",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install"
@@ -85,7 +85,7 @@
     "uuid": "^9.0.0",
     "validator": "^13.7.0",
     "viem": "^1.2.1",
-    "wagmi": "0.12.13",
+    "wagmi": "^0.12.13",
     "yup": "^0.32.11"
   },
   "devDependencies": {
