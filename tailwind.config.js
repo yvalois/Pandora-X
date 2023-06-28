@@ -3,12 +3,10 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}',
     './src/layouts/**/*.{js,ts,jsx,tsx}',
-    './public/index.html',
   ],
   darkMode: 'class',
   theme: {
     screens: {
-      xxs: '400px',
       xs: '500px',
       sm: '640px',
       md: '768px',
