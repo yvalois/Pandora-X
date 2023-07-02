@@ -2,9 +2,6 @@
   "name": "Pandorax",
   "version": "1.4.0",
   "private": true,
-  "engines": {
-    "node": "18.16.1"
-  },
   "scripts": {
     "clean": "rimraf \"{node_modules,.next,out.cache}\"",
     "dev": "next dev ",
