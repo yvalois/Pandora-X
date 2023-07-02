@@ -871,9 +871,11 @@ function stringify(obj) {
 export const connectWallet =
   (address, provider, signer) => async (dispatch) => {
     dispatch(loading());
+
     try {
       const chainID = provider._network.chainId;
       setProvider(signer);
+
       const rpc_ETH =
         'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
       const rpc_GOETH =
@@ -942,6 +944,7 @@ export const connectWallet =
           accessAbi,
           signer
         );
+
         const _auction = new ethers.Contract(AUCTION_ADDRESS, auction, signer);
         const _ofertas = new ethers.Contract(OFERTAS_ADDRESS, ofertas, signer);
         const _ventas = new ethers.Contract(VENTA_ADDRESS, ventas, signer);
@@ -950,15 +953,14 @@ export const connectWallet =
         await getInversiones();
 
         const nftStaking = await stakingContract.getNftsInStaking(address);
-
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
           address
         );
-
-        const french = await frenchiesMinterContract2.getMyInventory(address);
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
         );
+        const french = await frenchiesMinterContract.getMyInventory(address);
+
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
@@ -1218,7 +1220,7 @@ export const connectWallet =
           signer
         );
 
-        const supp = await frenchiesMinterContract2.totalSupply();
+        const supp = await frenchiesMinterContract.totalSupply();
         let frenchies = allFrenchies.slice(0, supp);
 
         setTimeout(async () => {
