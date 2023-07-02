@@ -38,10 +38,6 @@ export default function SelectWallet({ ...props }) {
     }
   }, [signer, arroz]);
 
-  useEffect(() => {
-    disconnectWallet();
-  }, []);
-
   const { chain } = useNetwork();
 
   useEffect(() => {
