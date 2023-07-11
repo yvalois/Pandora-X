@@ -31,7 +31,7 @@ export default function ModalVenta() {
     staking,
     tokenContract,
     accountAddress,
-    frenchiesMinter2,
+    frenchiesMinter,
     ventasContract,
     chainId,
   } = useSelector((state) => state.blockchain);
@@ -72,7 +72,7 @@ export default function ModalVenta() {
     setLoading(true);
     if (chainId == 5) {
       try {
-        let tx = await frenchiesMinter2.setApprovalForAll(
+        let tx = await frenchiesMinter.setApprovalForAll(
           ventasContract.address,
           'true'
         );
@@ -117,7 +117,7 @@ export default function ModalVenta() {
           setStatusW(200);
           setLoading(false);
           setAlertMsg('Transaccion completada correctamente');
-          dispatch(uFrench2(accountAddress, frenchiesMinter2));
+          dispatch(uFrench2(accountAddress, frenchiesMinter));
           setVenta(true);
         } catch (err) {
           setLoading(false);
@@ -214,7 +214,7 @@ export default function ModalVenta() {
 
           <input
             onChange={(e) => changeCantidadM(e)}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Precio"

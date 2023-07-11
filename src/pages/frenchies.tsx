@@ -487,128 +487,64 @@ const Frenchies: NextPageWithLayout<
       setLoading(true);
 
       try {
-        if (Usuario.rol != 'Admin') {
-          if (count - multiplicador >= 0) {
-            const options = {
-              value: ethers.utils.parseUnits('0', 'ether'),
-            };
+        if (count - multiplicador >= 0) {
+          const options = {
+            value: ethers.utils.parseUnits('0', 'ether'),
+          };
 
-            const tx = await frenchiesMinter.buyToken(cantidad, options);
+          const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress));
-            setStatus(200);
-            setVendido(true);
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          dispatch(uFrench(accountAddress));
+          setStatus(200);
+          setVendido(true);
+          setCantidad(0);
+          setApprovedToken(0);
+          setearSupply();
+          //verifyApprove();
+          setLoading(false);
+          if (count > 0) {
+            setCount(count - multiplicador);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
-            //verifyApprove();
+            setPrecio(0);
             setLoading(false);
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           } else {
-            const options_ = {
-              value: ethers.utils.parseUnits(
-                (valor * (multiplicador - count)).toString(),
-                'ether'
-              ),
-            };
-
-            const tx = await frenchiesMinter.buyToken(cantidad, options_);
-
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress));
-            setStatus(200);
-            setVendido(true);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
+            setPrecio(0);
             setLoading(false);
-
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           }
         } else {
-          if (count - multiplicador >= 0) {
-            const options = {
-              value: ethers.utils.parseUnits('0', 'ether'),
-            };
+          const options_ = {
+            value: ethers.utils.parseUnits(
+              (valor * (multiplicador - count)).toString(),
+              'ether'
+            ),
+          };
 
-            const tx = await frenchiesMinter2.buyToken(cantidad, options);
+          const tx = await frenchiesMinter.buyToken(cantidad, options_);
 
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress, frenchiesMinterContract));
-            setStatus(200);
-            setVendido(true);
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          dispatch(uFrench(accountAddress));
+          setStatus(200);
+          setVendido(true);
+          setCantidad(0);
+          setApprovedToken(0);
+          setearSupply();
+          setLoading(false);
+
+          if (count > 0) {
+            setCount(count - multiplicador);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
-            //verifyApprove();
+            setPrecio(0);
             setLoading(false);
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           } else {
-            const options_ = {
-              value: ethers.utils.parseUnits(
-                (valor2 * (multiplicador - count)).toString(),
-                'ether'
-              ),
-            };
-
-            const tx = await frenchiesMinter2.buyToken(cantidad, options_);
-
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress));
-            setStatus(200);
-            setVendido(true);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
+            setPrecio(0);
             setLoading(false);
-            dispatch(uFrench(accountAddress, frenchiesMinterContract));
-
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           }
         }
       } catch (err) {
@@ -633,128 +569,64 @@ const Frenchies: NextPageWithLayout<
       }
     } else if (chainId !== 137) {
       try {
-        if (Usuario.rol != 'Admin') {
-          if (count - multiplicador >= 0) {
-            const options = {
-              value: ethers.utils.parseUnits('0', 'ether'),
-            };
+        if (count - multiplicador >= 0) {
+          const options = {
+            value: ethers.utils.parseUnits('0', 'ether'),
+          };
 
-            const tx = await frenchiesMinter.buyToken(cantidad, options);
+          const tx = await frenchiesMinter.buyToken(cantidad, options);
 
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress));
-            setStatus(200);
-            setVendido(true);
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          dispatch(uFrench(accountAddress));
+          setStatus(200);
+          setVendido(true);
+          setCantidad(0);
+          setApprovedToken(0);
+          setearSupply();
+          //verifyApprove();
+          setLoading(false);
+          if (count > 0) {
+            setCount(count - multiplicador);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
-            //verifyApprove();
+            setPrecio(0);
             setLoading(false);
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           } else {
-            const options_ = {
-              value: ethers.utils.parseUnits(
-                (valor * (multiplicador - count)).toString(),
-                'ether'
-              ),
-            };
-
-            const tx = await frenchiesMinter.buyToken(cantidad, options_);
-
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress));
-            setStatus(200);
-            setVendido(true);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
+            setPrecio(0);
             setLoading(false);
-
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           }
         } else {
-          if (count - multiplicador >= 0) {
-            const options = {
-              value: ethers.utils.parseUnits('0', 'ether'),
-            };
+          const options_ = {
+            value: ethers.utils.parseUnits(
+              (valor * (multiplicador - count)).toString(),
+              'ether'
+            ),
+          };
 
-            const tx = await frenchiesMinter2.buyToken(cantidad, options);
+          const tx = await frenchiesMinter.buyToken(cantidad, options_);
 
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress, frenchiesMinterContract));
-            setStatus(200);
-            setVendido(true);
+          await tx.wait(); //tener en cuenta para los proximos cambios
+          dispatch(uFrench(accountAddress));
+          setStatus(200);
+          setVendido(true);
+          setCantidad(0);
+          setApprovedToken(0);
+          setearSupply();
+          setLoading(false);
+
+          if (count > 0) {
+            setCount(count - multiplicador);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
-            //verifyApprove();
+            setPrecio(0);
             setLoading(false);
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           } else {
-            const options_ = {
-              value: ethers.utils.parseUnits(
-                (valor2 * (multiplicador - count)).toString(),
-                'ether'
-              ),
-            };
-
-            const tx = await frenchiesMinter2.buyToken(cantidad, options_);
-
-            await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench(accountAddress));
-            setStatus(200);
-            setVendido(true);
+            setMultiplicador(0);
             setCantidad(0);
-            setApprovedToken(0);
-            setearSupply();
+            setPrecio(0);
             setLoading(false);
-            dispatch(uFrench(accountAddress, frenchiesMinterContract));
-
-            if (count > 0) {
-              setCount(count - multiplicador);
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            } else {
-              setMultiplicador(0);
-              setCantidad(0);
-              setPrecio(0);
-              setLoading(false);
-            }
           }
         }
       } catch (err) {
@@ -1261,515 +1133,373 @@ const Frenchies: NextPageWithLayout<
               </div>
             </div>
           </div>
-          {Usuario.rol === 'Admin' && (
-            <div className=" h-[100%] w-[100%] text-xl">
-              <ParamTab
-                tabMenu={[
-                  {
-                    title: 'Mis nfts',
-                    path: 'Mis nfts',
-                  },
-                  {
-                    title: 'Todos',
-                    path: 'coleccion',
-                  },
-                  {
-                    title: 'Pujas a otros',
-                    path: 'Puja',
-                  },
-                  {
-                    title: 'Mis ofertas',
-                    path: 'Mis ofertas',
-                  },
-                  {
-                    title: 'Comprar Frenchies',
-                    path: 'buy',
-                  },
-                ]}
-              >
-                <TabPanel className="focus:outline-none">
-                  {tipoM == 'new' && !showFilterList && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {currentF?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={nft.precio}
-                            number={nft.id}
-                            type={nft.type != undefined ? nft.type : 'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
 
-                  {tipoM == 'new' && showFilterList && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {currentF3?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={nft.precio}
-                            number={nft.id}
-                            type={nft.type != undefined ? nft.type : 'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {mysubastas.length > 0 && tipoM == 'on-auction' && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {mysubastas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'subasta'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {myventas.length > 0 && tipoM == 'buy-now' && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {myventas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'venta'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {myofertas.length > 0 && tipoM == 'has-offers' && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {myofertas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={nft.type != undefined ? nft.type : 'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  {tipoM == 'new' && !showFilterList && (
-                    <InfiniteScroll
-                      dataLength={frenchies2.length}
-                      next={fetchMoreItems}
-                      hasMore={false}
-                      loader={<h4>Loading...</h4>}
-                    >
-                      <div className="ml-6 grid h-full  w-[90%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                        {frenchies2?.map((nft) => (
-                          <div
-                            key={nft.id}
-                            onClick={() => {
-                              subirDatos(nft);
-                            }}
-                          >
-                            <NFTGrid
-                              key={nft.name}
-                              name={nft.name}
-                              image={nft.image}
-                              price={nft.precio}
-                              number={nft.id}
-                              type={
-                                frenchies2[nft.id].type != undefined
-                                  ? frenchies2[nft.id].type
-                                  : 'general'
-                              }
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </InfiniteScroll>
-                  )}
-
-                  {tipoM == 'new' && showFilterList && (
-                    <div className="ml-6 grid h-full  w-[90%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {frenchies3?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={nft.precio}
-                            number={nft.id}
-                            type={nft.type != undefined ? nft.type : 'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {tipoM == 'on-auction' && subastas.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {subastas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'subasta'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {tipoM == 'has-offers' && ofertas.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {ofertas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {tipoM == 'buy-now' && _ventas.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {_ventas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'venta'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  {mypujas.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {mypujas?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={nft.type}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="focus:outline-none">
-                  {offers.length > 0 && (
-                    <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {offers?.map((nft) => (
-                        <div key={nft.id} onClick={() => subirDatos(nft)}>
-                          <NFTGrid
-                            key={nft.name}
-                            name={nft.name}
-                            image={nft.image}
-                            price={0}
-                            number={nft.id}
-                            type={'general'}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </TabPanel>
-                <TabPanel className="h-full focus:outline-none">
-                  <div className="h-full flex-col justify-between">
-                    <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
-                      Frenchies Blue
-                    </h1>
-                    <p className="mb-[15px] flex justify-center align-middle">
-                      PRECIO DE VENTA: 0.30 ETH
-                    </p>
-                    <div className=" mb-[10px] flex  justify-center align-middle">
-                      <Image
-                        src={Back}
-                        alt="wallet"
-                        width={300}
-                        height={300}
-                        className="rounded-none"
-                      />
-                    </div>
-
-                    <div className="mb-[30px] flex justify-center align-middle">
-                      <div className="h-10 w-32 focus:outline-0">
-                        <label
-                          for="custom-input-number"
-                          className="flex w-full justify-center self-center text-sm font-semibold text-gray-700"
-                        >
-                          Cantidad
-                        </label>
-                        <div className="relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent">
-                          <button
-                            onClick={() => changeCantidad('-')}
-                            data-action="decrement"
-                            className=" h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-gray-400 hover:text-gray-700"
-                          >
-                            <span className="m-auto text-2xl font-thin">−</span>
-                          </button>
-                          <input
-                            onChange={(e) => changeCantidadM(e)}
-                            className="text-md md:text-basecursor-default flex w-full items-center bg-gray-300 text-center font-semibold text-gray-700  outline-none outline-0 hover:text-black focus:text-black  focus:outline-none"
-                            name="custom-input-number"
-                            value={cantidad}
-                          />
-                          <button
-                            onClick={() => changeCantidad('+')}
-                            data-action="increment"
-                            className="h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
-                          >
-                            <span className="m-auto text-2xl font-thin">+</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-[80px] flex justify-center align-middle">
-                      <label htmlFor="">Precio: {precio.toFixed(3)}</label>
-                    </div>
-
-                    <div className="flex justify-center align-middle">
-                      {/*isConnect &&
-                      approvedToken < precio * cantidad - precio * count &&
-                      !loading &&
-                      cantidad > count &&
-                      approvedToken < precio * cantidad - precio * count &&
-                    !loading && <Button onClick={approve}>Aprobar</Button>*/}
-
-                      {isConnect && loading && <Button>Cargando...</Button>}
-
-                      {isConnect && !loading && (
-                        /*approvedToken >= precio * cantidad - precio * count && */ <Button
-                          disabled={cantidad == 0}
-                          onClick={buyNft}
-                        >
-                          Comprar
-                        </Button>
-                      )}
-
-                      {!isConnect && (
-                        <Button
-                          onClick={() => openModal('WALLET_CONNECT_VIEW')}
-                        >
-                          Conectar
-                        </Button>
-                      )}
-                    </div>
-                    <div className="mt-4 flex justify-center align-middle">
-                      {vendido && (
-                        <AnchorLink href={'/profile'}>
-                          <Button>ver mis nfts</Button>
-                        </AnchorLink>
-                      )}
-                    </div>
-
-                    <h1 className="flex  justify-center align-middle font-bold">
-                      {supply}/10010
-                    </h1>
-                    <div className="mt-10 flex w-full justify-center align-middle">
-                      {status == 200 && (
-                        <div
-                          className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-                          role="alert"
-                        >
-                          <span className="text-center font-medium">
-                            Frenchie obtenido de manera exitosa
-                          </span>
-                        </div>
-                      )}
-
-                      {status == 100 && (
-                        <div
-                          className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-                          role="alert"
-                        >
-                          <span className="text-center font-medium">
-                            {errormsg}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </TabPanel>
-              </ParamTab>
-            </div>
-          )}
-          {Usuario.rol === 'cliente' && (
-            <div className=" h-[100%] w-[100%]">
-              <ParamTab
-                tabMenu={[
-                  {
-                    title: 'MarketPlace',
-                    path: 'MarketPlace',
-                  },
-                  {
-                    title: 'Comprar Frenchies',
-                    path: 'buy',
-                  },
-                ]}
-              >
-                <TabPanel className="focus:outline-none">
+          <div className=" h-[100%] w-[100%] text-xl">
+            <ParamTab
+              tabMenu={[
+                {
+                  title: 'Mis nfts',
+                  path: 'Mis nfts',
+                },
+                {
+                  title: 'Todos',
+                  path: 'coleccion',
+                },
+                {
+                  title: 'Pujas a otros',
+                  path: 'Puja',
+                },
+                {
+                  title: 'Mis ofertas',
+                  path: 'Mis ofertas',
+                },
+                {
+                  title: 'Comprar Frenchies',
+                  path: 'buy',
+                },
+              ]}
+            >
+              <TabPanel className="focus:outline-none">
+                {tipoM == 'new' && !showFilterList && (
                   <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                    Prontamente
+                    {currentF?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={nft.precio}
+                          number={nft.id}
+                          type={nft.type != undefined ? nft.type : 'general'}
+                        />
+                      </div>
+                    ))}
                   </div>
-                </TabPanel>
-                <TabPanel className="h-full focus:outline-none">
-                  <div className="h-full flex-col justify-between">
-                    <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
-                      Frenchies Blue
-                    </h1>
-                    <p className="mb-[15px] flex justify-center align-middle">
-                      PRECIO DE VENTA: 0.30 ETH
-                    </p>
-                    <div className=" mb-[10px] flex  justify-center align-middle">
-                      <Image
-                        src={Back}
-                        alt="wallet"
-                        width={300}
-                        height={300}
-                        className="rounded-none"
-                      />
-                    </div>
+                )}
 
-                    <div className="mb-[30px] flex justify-center align-middle">
-                      <div className="h-10 w-32 focus:outline-0">
-                        <label
-                          for="custom-input-number"
-                          className="flex w-full justify-center self-center text-sm font-semibold text-gray-700"
+                {tipoM == 'new' && showFilterList && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {currentF3?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={nft.precio}
+                          number={nft.id}
+                          type={nft.type != undefined ? nft.type : 'general'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {mysubastas.length > 0 && tipoM == 'on-auction' && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {mysubastas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'subasta'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {myventas.length > 0 && tipoM == 'buy-now' && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {myventas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'venta'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {myofertas.length > 0 && tipoM == 'has-offers' && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {myofertas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={nft.type != undefined ? nft.type : 'general'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel className="focus:outline-none">
+                {tipoM == 'new' && !showFilterList && (
+                  <InfiniteScroll
+                    dataLength={frenchies2.length}
+                    next={fetchMoreItems}
+                    hasMore={false}
+                    loader={<h4>Loading...</h4>}
+                  >
+                    <div className="ml-6 grid h-full  w-[90%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                      {frenchies2?.map((nft) => (
+                        <div
+                          key={nft.id}
+                          onClick={() => {
+                            subirDatos(nft);
+                          }}
                         >
-                          Cantidad
-                        </label>
-                        <div className="relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent">
-                          <button
-                            onClick={() => changeCantidad('-')}
-                            data-action="decrement"
-                            className=" h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-gray-400 hover:text-gray-700"
-                          >
-                            <span className="m-auto text-2xl font-thin">−</span>
-                          </button>
-                          <input
-                            onChange={(e) => changeCantidadM(e)}
-                            className="text-md md:text-basecursor-default flex w-full items-center bg-gray-300 text-center font-semibold text-gray-700  outline-none outline-0 hover:text-black focus:text-black  focus:outline-none"
-                            name="custom-input-number"
-                            value={cantidad}
+                          <NFTGrid
+                            key={nft.name}
+                            name={nft.name}
+                            image={nft.image}
+                            price={nft.precio}
+                            number={nft.id}
+                            type={
+                              frenchies2[nft.id].type != undefined
+                                ? frenchies2[nft.id].type
+                                : 'general'
+                            }
                           />
-                          <button
-                            onClick={() => changeCantidad('+')}
-                            data-action="increment"
-                            className="h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
-                          >
-                            <span className="m-auto text-2xl font-thin">+</span>
-                          </button>
                         </div>
+                      ))}
+                    </div>
+                  </InfiniteScroll>
+                )}
+
+                {tipoM == 'new' && showFilterList && (
+                  <div className="ml-6 grid h-full  w-[90%]  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {frenchies3?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={nft.precio}
+                          number={nft.id}
+                          type={nft.type != undefined ? nft.type : 'general'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {tipoM == 'on-auction' && subastas.length > 0 && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {subastas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'subasta'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {tipoM == 'has-offers' && ofertas.length > 0 && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {ofertas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'general'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {tipoM == 'buy-now' && _ventas.length > 0 && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {_ventas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'venta'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel className="focus:outline-none">
+                {mypujas.length > 0 && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {mypujas?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={nft.type}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel className="focus:outline-none">
+                {offers.length > 0 && (
+                  <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
+                    {offers?.map((nft) => (
+                      <div key={nft.id} onClick={() => subirDatos(nft)}>
+                        <NFTGrid
+                          key={nft.name}
+                          name={nft.name}
+                          image={nft.image}
+                          price={0}
+                          number={nft.id}
+                          type={'general'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel className="h-full focus:outline-none">
+                <div className="h-full flex-col justify-between">
+                  <h1 className="mb-[15px] flex justify-center   align-middle text-2xl font-bold">
+                    Frenchies Blue
+                  </h1>
+                  <p className="mb-[15px] flex justify-center align-middle">
+                    PRECIO DE VENTA: 0.30 ETH
+                  </p>
+                  <div className=" mb-[10px] flex  justify-center align-middle">
+                    <Image
+                      src={Back}
+                      alt="wallet"
+                      width={300}
+                      height={300}
+                      className="rounded-none"
+                    />
+                  </div>
+
+                  <div className="mb-[30px] flex justify-center align-middle">
+                    <div className="h-10 w-32 focus:outline-0">
+                      <label
+                        for="custom-input-number"
+                        className="flex w-full justify-center self-center text-sm font-semibold text-gray-700"
+                      >
+                        Cantidad
+                      </label>
+                      <div className="relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent">
+                        <button
+                          onClick={() => changeCantidad('-')}
+                          data-action="decrement"
+                          className=" h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-gray-400 hover:text-gray-700"
+                        >
+                          <span className="m-auto text-2xl font-thin">−</span>
+                        </button>
+                        <input
+                          onChange={(e) => changeCantidadM(e)}
+                          className="text-md md:text-basecursor-default flex w-full items-center bg-gray-300 text-center font-semibold text-gray-700  outline-none outline-0 hover:text-black focus:text-black  focus:outline-none"
+                          name="custom-input-number"
+                          value={cantidad}
+                        />
+                        <button
+                          onClick={() => changeCantidad('+')}
+                          data-action="increment"
+                          className="h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
+                        >
+                          <span className="m-auto text-2xl font-thin">+</span>
+                        </button>
                       </div>
                     </div>
-                    <div className="mb-[80px] flex justify-center align-middle">
-                      <label htmlFor="">Precios: {precio.toFixed(3)}</label>
-                    </div>
+                  </div>
+                  <div className="mb-[80px] flex justify-center align-middle">
+                    <label htmlFor="">Precio: {precio.toFixed(3)}</label>
+                  </div>
 
-                    <div className="flex justify-center align-middle">
-                      {/*isConnect &&
+                  <div className="flex justify-center align-middle">
+                    {/*isConnect &&
                       approvedToken < precio * cantidad - precio * count &&
                       !loading &&
                       cantidad > count &&
                       approvedToken < precio * cantidad - precio * count &&
                     !loading && <Button onClick={approve}>Aprobar</Button>*/}
 
-                      {isConnect && loading && <Button>Cargando...</Button>}
+                    {isConnect && loading && <Button>Cargando...</Button>}
 
-                      {isConnect && !loading && (
-                        /*approvedToken >= precio * cantidad - precio * count && */ <Button
-                          disabled={cantidad == 0}
-                          onClick={buyNft}
-                        >
-                          Comprar
-                        </Button>
-                      )}
+                    {isConnect && !loading && (
+                      /*approvedToken >= precio * cantidad - precio * count && */ <Button
+                        disabled={cantidad == 0}
+                        onClick={buyNft}
+                      >
+                        Comprar
+                      </Button>
+                    )}
 
-                      {!isConnect && (
-                        <Button
-                          onClick={() => openModal('WALLET_CONNECT_VIEW')}
-                        >
-                          Conectar
-                        </Button>
-                      )}
-                    </div>
-                    <div className="mt-4 flex justify-center align-middle">
-                      {vendido && (
-                        <AnchorLink href={'/profile'}>
-                          <Button>ver mis nfts</Button>
-                        </AnchorLink>
-                      )}
-                    </div>
-
-                    <h1 className="flex  justify-center align-middle font-bold">
-                      {supply}/10010
-                    </h1>
-                    <div className="mt-10 flex w-full justify-center align-middle">
-                      {status == 200 && (
-                        <div
-                          className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
-                          role="alert"
-                        >
-                          <span className="text-center font-medium">
-                            Frenchie obtenido de manera exitosa
-                          </span>
-                        </div>
-                      )}
-
-                      {status == 100 && (
-                        <div
-                          className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
-                          role="alert"
-                        >
-                          <span className="text-center font-medium">
-                            {errormsg}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                    {!isConnect && (
+                      <Button onClick={() => openModal('WALLET_CONNECT_VIEW')}>
+                        Conectar
+                      </Button>
+                    )}
                   </div>
-                </TabPanel>
-              </ParamTab>
-            </div>
-          )}
+                  <div className="mt-4 flex justify-center align-middle">
+                    {vendido && (
+                      <AnchorLink href={'/profile'}>
+                        <Button>ver mis nfts</Button>
+                      </AnchorLink>
+                    )}
+                  </div>
+
+                  <h1 className="flex  justify-center align-middle font-bold">
+                    {supply}/10010
+                  </h1>
+                  <div className="mt-10 flex w-full justify-center align-middle">
+                    {status == 200 && (
+                      <div
+                        className="flex w-[400px] justify-center rounded-lg bg-green-200 p-4 align-middle text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+                        role="alert"
+                      >
+                        <span className="text-center font-medium">
+                          Frenchie obtenido de manera exitosa
+                        </span>
+                      </div>
+                    )}
+
+                    {status == 100 && (
+                      <div
+                        className="flex w-[400px] justify-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+                        role="alert"
+                      >
+                        <span className="text-center font-medium">
+                          {errormsg}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TabPanel>
+            </ParamTab>
+          </div>
         </div>
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
           <Button onClick={() => openDrawer('DRAWER_SEARCH')} fullWidth>
