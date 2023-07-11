@@ -46,11 +46,7 @@ import ventas from '../abi/ventas.json';
 
 import allFrenchies from '../abi/ultimateDatos.json';
 
-import {
-  connectWallet,
-  uFrench,
-  uFrench2,
-} from '../redux/Blockchain/blockchainAction';
+import { connectWallet, uFrench } from '../redux/Blockchain/blockchainAction';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useModal as hola } from 'connectkit';
 import { useModal } from '@/components/modal-views/context';
@@ -80,7 +76,7 @@ function GridSwitcher() {
       >
         {!isGridCompact && (
           <motion.span
-            className="absolute left-0 right-0 bottom-0 h-full w-full bg-brand shadow-large"
+            className="absolute bottom-0 left-0 right-0 h-full w-full bg-brand shadow-large"
             layoutId="gridSwitchIndicator"
           />
         )}
@@ -95,7 +91,7 @@ function GridSwitcher() {
       >
         {isGridCompact && (
           <motion.span
-            className="absolute left-0 right-0 bottom-0 h-full w-full  bg-brand shadow-large"
+            className="absolute bottom-0 left-0 right-0 h-full w-full  bg-brand shadow-large"
             layoutId="gridSwitchIndicator"
           />
         )}
@@ -337,7 +333,7 @@ export function DrawerFilters() {
           <Filters ontipom={updateTipo} searchId={updateSearchId} />
         </div>
       </Scrollbar>
-      <div className="absolute left-0 bottom-4 z-10 w-full px-6">
+      <div className="absolute bottom-4 left-0 z-10 w-full px-6">
         <Button fullWidth onClick={closeDrawer}>
           DONE
         </Button>
@@ -445,8 +441,8 @@ const Frenchies: NextPageWithLayout<
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
-    '0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
-    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    //'0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
+    '0x32bfb6790B3536a7269185278B482A0FA0385362',
     frenchiesAbi2,
     provider_ETH
   );
@@ -561,7 +557,7 @@ const Frenchies: NextPageWithLayout<
             const tx = await frenchiesMinter2.buyToken(cantidad, options);
 
             await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench2(accountAddress, frenchiesMinterContract));
+            dispatch(uFrench(accountAddress, frenchiesMinterContract));
             setStatus(200);
             setVendido(true);
             setCantidad(0);
@@ -599,7 +595,7 @@ const Frenchies: NextPageWithLayout<
             setApprovedToken(0);
             setearSupply();
             setLoading(false);
-            dispatch(uFrench2(accountAddress, frenchiesMinterContract));
+            dispatch(uFrench(accountAddress, frenchiesMinterContract));
 
             if (count > 0) {
               setCount(count - multiplicador);
@@ -707,7 +703,7 @@ const Frenchies: NextPageWithLayout<
             const tx = await frenchiesMinter2.buyToken(cantidad, options);
 
             await tx.wait(); //tener en cuenta para los proximos cambios
-            dispatch(uFrench2(accountAddress, frenchiesMinterContract));
+            dispatch(uFrench(accountAddress, frenchiesMinterContract));
             setStatus(200);
             setVendido(true);
             setCantidad(0);
@@ -745,7 +741,7 @@ const Frenchies: NextPageWithLayout<
             setApprovedToken(0);
             setearSupply();
             setLoading(false);
-            dispatch(uFrench2(accountAddress, frenchiesMinterContract));
+            dispatch(uFrench(accountAddress, frenchiesMinterContract));
 
             if (count > 0) {
               setCount(count - multiplicador);
@@ -877,7 +873,6 @@ const Frenchies: NextPageWithLayout<
 
     const supp = await frenchiesMinterContract1.totalSupply();
     //setLoading(false);
-
     setSupply(parseInt(supp));
   };
 
@@ -1295,7 +1290,7 @@ const Frenchies: NextPageWithLayout<
                 <TabPanel className="focus:outline-none">
                   {tipoM == 'new' && !showFilterList && (
                     <div className="ml-6 grid h-full   w-full  grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-6  3xl:grid-cols-3 4xl:grid-cols-3">
-                      {currentF2?.map((nft) => (
+                      {currentF?.map((nft) => (
                         <div key={nft.id} onClick={() => subirDatos(nft)}>
                           <NFTGrid
                             key={nft.name}

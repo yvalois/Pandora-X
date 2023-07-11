@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import {
   disconectWallet,
-  uFrench2,
+  uFrench,
 } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,7 +27,7 @@ export default function ModalSubasta() {
   const [approvedToken, setApprovedToken] = useState(0);
   const [id, setId] = useState(0);
   const [succes, setSuccess] = useState(false);
-  const { accountAddress, frenchiesMinter2, auctionContract, chainId } =
+  const { accountAddress, frenchiesMinter, auctionContract, chainId } =
     useSelector((state) => state.blockchain);
   const dispatch = useDispatch<AppDispatch>();
   const [statusW, setStatusW] = useState(0);
@@ -43,7 +43,7 @@ export default function ModalSubasta() {
   };
 
   const rpc_ETH =
-    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+    'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
@@ -67,7 +67,7 @@ export default function ModalSubasta() {
     setLoading(true);
     if (chainId == 5) {
       try {
-        let tx = await frenchiesMinter2.setApprovalForAll(
+        let tx = await frenchiesMinter.setApprovalForAll(
           auctionContract.address,
           'true'
         );
@@ -110,7 +110,7 @@ export default function ModalSubasta() {
         setStatusW(200);
         setLoading(false);
         setAlertMsg('Transaccion completada correctamente');
-        dispatch(uFrench2(accountAddress, frenchiesMinter2));
+        dispatch(uFrench(accountAddress, frenchiesMinter));
         setSubastado(true);
       } catch (err) {
         setLoading(false);
@@ -215,7 +215,7 @@ export default function ModalSubasta() {
 
           <input
             onChange={(e) => changeCantidadM(e)}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Precio"

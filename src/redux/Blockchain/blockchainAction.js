@@ -960,7 +960,6 @@ export const connectWallet =
           address
         );
         const french = await frenchiesMinterContract.getMyInventory(address);
-
         const inventoryp = [];
         const inventoryi = [];
         const inventorys = [];
@@ -1139,7 +1138,6 @@ export const connectWallet =
                   token.map((item) => {
                     const i = parseInt(item.tokenId);
                     const nft = allFrenchies[i];
-
                     const prod = {
                       name: nft.name,
                       image: nft.image,

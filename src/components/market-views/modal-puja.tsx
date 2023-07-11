@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useModal } from '@/components/modal-views/context';
 import {
   disconectWallet,
-  uFrench2,
+  uFrench,
 } from '../../redux/Blockchain/blockchainAction';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -204,7 +204,7 @@ export default function ModalPuja() {
 
           <input
             onChange={(e) => changeCantidadM(e)}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Precio"

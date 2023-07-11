@@ -42,12 +42,12 @@ export default function ProfileTabUser() {
     const newItems2 = inventoryf2.slice(0, 100);
 
     setCurrentF(newItems);
-    setCurrentF2(newItems2);
+    //setCurrentF2(newItems2);
 
-    if (inventoryf2.length < 100) {
+    if (inventoryf.length < 100) {
       setIsLoading(false);
     }
-  }, [inventoryp, inventoryi, inventoryf, inventoryf2]);
+  }, [inventoryp, inventoryi, inventoryf]);
 
   const fetchMoreItems = () => {
     setTimeout(() => {
@@ -155,13 +155,13 @@ export default function ProfileTabUser() {
       <TabPanel className="h-full w-full focus:outline-none">
         <div>
           <InfiniteScroll
-            dataLength={currentF2.length}
-            next={fetchMoreItems2}
+            dataLength={currentF.length}
+            next={fetchMoreItems}
             hasMore={isLoading}
             loader={<h4>Loading...</h4>}
           >
             <div className="grid h-full w-[95%] grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:gap-12  3xl:grid-cols-3 4xl:grid-cols-3">
-              {currentF2?.map((nft) => (
+              {currentF?.map((nft) => (
                 <NFTGrid
                   key={nft.name}
                   name={nft.name}
