@@ -70,7 +70,7 @@ export default function ModalVenta() {
 
   const approve = async () => {
     setLoading(true);
-    if (chainId == 5) {
+    if (chainId == 1) {
       try {
         let tx = await frenchiesMinter.setApprovalForAll(
           ventasContract.address,
@@ -104,7 +104,7 @@ export default function ModalVenta() {
   const { address } = useAccount();
 
   const vender = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       if (precio > parseFloat(0)) {
         try {

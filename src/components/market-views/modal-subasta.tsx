@@ -65,7 +65,7 @@ export default function ModalSubasta() {
 
   const approve = async () => {
     setLoading(true);
-    if (chainId == 5) {
+    if (chainId == 1) {
       try {
         let tx = await frenchiesMinter.setApprovalForAll(
           auctionContract.address,
@@ -99,7 +99,7 @@ export default function ModalSubasta() {
   const { address } = useAccount();
 
   const subastar = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         const value = ethers.utils.parseUnits(initPrice.toString(), 'ether');

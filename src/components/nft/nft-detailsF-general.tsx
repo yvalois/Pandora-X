@@ -244,7 +244,7 @@ export default function NftDetailsFG() {
   ];
 
   const Aceptar = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         const tx = await ofertasContract.sellNFT(nft.id);
@@ -277,7 +277,7 @@ export default function NftDetailsFG() {
   };
 
   const Retirar = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         const tx = await ofertasContract.withdraw(nft.id);
@@ -330,7 +330,7 @@ export default function NftDetailsFG() {
 
   const approve = async () => {
     setLoading(true);
-    if (chainId == 5) {
+    if (chainId == 1) {
       try {
         let tx = await frenchiesMinter.setApprovalForAll(
           ofertasContract.address,

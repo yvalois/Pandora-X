@@ -81,7 +81,7 @@ export default function ModalPuja() {
   const { address } = useAccount();
 
   const Pujar = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         if (parseFloat(nft.currentPrice) > parseFloat(initPrice)) {

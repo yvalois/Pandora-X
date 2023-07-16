@@ -48,7 +48,7 @@ export default function ModalOferta() {
 
   const approve = async () => {
     setLoading(true);
-    if (chainId == 5) {
+    if (chainId == 1) {
       try {
         let tx = await frenchiesMinter.setApprovalForAll(
           ofertasContract.address,
@@ -82,7 +82,7 @@ export default function ModalOferta() {
   const { address } = useAccount();
 
   const ofertar = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         if (

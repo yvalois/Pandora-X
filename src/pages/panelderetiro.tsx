@@ -265,7 +265,7 @@ const PanelRetiro: NextPageWithLayout<
   }, [status]);
 
   const changeFeeS = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         if (feeS <= 100) {
@@ -302,7 +302,7 @@ const PanelRetiro: NextPageWithLayout<
   };
 
   const changeFeeV = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         if (feeV <= 100) {
@@ -338,7 +338,7 @@ const PanelRetiro: NextPageWithLayout<
   };
 
   const changeFeeO = async () => {
-    if (chainId == 5) {
+    if (chainId == 1) {
       setLoading(true);
       try {
         if (feeO <= 100) {
@@ -434,7 +434,7 @@ const PanelRetiro: NextPageWithLayout<
         </div>
 
         <div>
-          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
+          <div className="mb-[20px] mt-[30px] flex justify-center self-center">
             <h1>Cambiar TVL</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
@@ -461,7 +461,7 @@ const PanelRetiro: NextPageWithLayout<
         </div>
 
         <div>
-          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
+          <div className="mb-[20px] mt-[30px] flex justify-center self-center">
             <h1>Depositar balance para staking</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
@@ -486,7 +486,7 @@ const PanelRetiro: NextPageWithLayout<
         </div>
 
         <div>
-          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
+          <div className="mb-[20px] mt-[30px] flex justify-center self-center">
             <h1>Cambiar Fee (Subasta)</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
@@ -513,7 +513,7 @@ const PanelRetiro: NextPageWithLayout<
         </div>
 
         <div>
-          <div className="mt-[30px] mb-[20px] flex justify-center self-center">
+          <div className="mb-[20px] mt-[30px] flex justify-center self-center">
             <h1>Cambiar Fee (Venta)</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
@@ -540,7 +540,7 @@ const PanelRetiro: NextPageWithLayout<
         </div>
 
         <div>
-          <div className="mt-[30px] mb-[20px] mb-[20px] flex justify-center self-center">
+          <div className="mb-[20px] mb-[20px] mt-[30px] flex justify-center self-center">
             <h1>Cambiar Fee (Ofertas)</h1>
           </div>
           <div className="space-between flex flex-row justify-center align-middle">
