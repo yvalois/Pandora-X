@@ -240,7 +240,7 @@ export default function NftDetailsFG() {
   ];
   const verifyOwner = async () => {
     if (!loading) {
-      const owner = await frenchiesMinterContract.ownerOf(1761);
+      const owner = await frenchiesMinterContract.ownerOf(nft.id);
       if (owner.toLowerCase() == accountAddress.toLowerCase()) {
         setIsOwner(true);
       } else {
