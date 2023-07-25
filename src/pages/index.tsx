@@ -389,34 +389,30 @@ const HomePage: NextPageWithLayout<
       });
   };
 
-  // const getPrices = async () => {
-  //   fetch(
-  //     `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false`,
-  //     {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     }
-  //   )
-  //     .then((res) => res.json())
-  //     .then((response) => {
-  //       coinSlideData[0].balance = response[0].current_price;
-  //       coinSlideData[1].balance = response[1].current_price;
-  //       coinSlideData[2].balance = response[2].current_price;
-  //       coinSlideData[3].balance = response[4].current_price;
-  //     });
-  // };
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     await getPrices();
-  //   };
-  //   fetch();
-  // }, []);
-
-  // setTimeout(async () => {
-  //   await getPrices();
-  // }, 1000);
+  const getPrices = async () => {
+    fetch(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        coinSlideData[0].balance = response[0].current_price;
+        coinSlideData[1].balance = response[1].current_price;
+        coinSlideData[2].balance = response[2].current_price;
+        coinSlideData[3].balance = response[4].current_price;
+      });
+  };
+  useEffect(() => {
+    const fetch = async () => {
+      await getPrices();
+    };
+    fetch();
+  }, []);
 
   const setData = async () => {
     dispatch(

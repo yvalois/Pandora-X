@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { uInvertion, uFrench } from '../../redux/Blockchain/blockchainAction';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
-import frenchiesAbi2 from '../../abi/FrenchiesBlues2.json';
+import frenchiesAbi from '../../abi/FrenchiesBlues.json';
 
 import router from 'next/router';
 import { useAccount, useProvider } from 'wagmi';
@@ -40,7 +40,14 @@ type Avatar = {
   logo: StaticImageData;
 };
 
-function NftFooter({ className = 'md:hidden', price, id, _status, _alertMsg }) {
+function NftFooter({
+  className = 'md:hidden',
+  price,
+  id,
+  _status,
+  _alertMsg,
+  isOwner,
+}) {
   const { openModal } = useModal();
   const [loading, setLoading] = useState(false);
   const [cuenta, setCuenta] = useState('');
@@ -50,7 +57,6 @@ function NftFooter({ className = 'md:hidden', price, id, _status, _alertMsg }) {
   const [alertMsg, setAlertMsg] = useState('');
   const [alertMsg2, setAlertMsg2] = useState('');
   const { perfil, nombre } = useSelector((state) => state.Usuario);
-  const [isOwner, setIsOwner] = useState(false);
   const { accountAddress } = useSelector((state) => state.blockchain);
 
   const Usuario = useSelector((state) => state.Usuario);
@@ -79,29 +85,15 @@ function NftFooter({ className = 'md:hidden', price, id, _status, _alertMsg }) {
   };
 
   const rpc_ETH =
-    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+    'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
     '0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
     //'0x32bfb6790B3536a7269185278B482A0FA0385362',
-    frenchiesAbi2,
+    frenchiesAbi,
     provider_ETH
   );
-
-  const verifyOwner = async () => {
-    const _id = id;
-    const owner = await frenchiesMinterContract.ownerOf(_id);
-    if (owner == accountAddress) {
-      setIsOwner(true);
-    } else {
-      setIsOwner(false);
-    }
-  };
-
-  useEffect(() => {
-    verifyOwner();
-  }, [id]);
 
   return (
     <div
@@ -194,6 +186,8 @@ export default function NftDetailsFG() {
   const { closeModal, openModal } = useModal();
   const [atributos, setAtributos] = useState([]);
   const [aceptada, setAceptada] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+
   const { accountAddress, ofertasContract, chainId, frenchiesMinter } =
     useSelector((state) => state.blockchain);
   const [ap, setAp] = useState(false);
@@ -215,10 +209,12 @@ export default function NftDetailsFG() {
 
   useEffect(() => {
     const fetch = async () => {
+      setLoading(true);
       const storedJsonString = window.localStorage.getItem('nft');
       const storedObject = JSON.parse(storedJsonString);
       setNft(storedObject);
       setAtributos(nft.attributes);
+      setLoading(false);
     };
     fetch();
   }, []);
@@ -242,6 +238,20 @@ export default function NftDetailsFG() {
       transactionUrl: '#',
     },
   ];
+  const verifyOwner = async () => {
+    if (!loading) {
+      const owner = await frenchiesMinterContract.ownerOf(1761);
+      if (owner.toLowerCase() == accountAddress.toLowerCase()) {
+        setIsOwner(true);
+      } else {
+        setIsOwner(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    verifyOwner();
+  }, [nft, loading]);
 
   const Aceptar = async () => {
     if (chainId == 1) {
@@ -308,13 +318,12 @@ export default function NftDetailsFG() {
   };
 
   const rpc_ETH =
-    'https://eth-goerli.g.alchemy.com/v2/vMRJQCaauogYOxluxt-rWvqPPemy_fzG';
+    'https://eth-mainnet.g.alchemy.com/v2/q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ';
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
-    '0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
-    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
-    frenchiesAbi2,
+    '0x32bfb6790B3536a7269185278B482A0FA0385362',
+    frenchiesAbi,
     provider_ETH
   );
 
@@ -602,12 +611,14 @@ export default function NftDetailsFG() {
             id={nft.id}
             _status={status}
             _alertMsg={alertMsg}
+            isOwner={isOwner}
           />
           <NftFooter
             price={nft.precio}
             id={nft.id}
             _status={status}
             _alertMsg={alertMsg}
+            isOwner={isOwner}
           />
         </div>
       </div>

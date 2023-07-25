@@ -1050,7 +1050,7 @@ const Frenchies: NextPageWithLayout<
       await getnfts();
     }
 
-    var resultadoBusquedaAll = frenchies2.filter((elemento2) => {
+    var resultadoBusquedaAll = frenchies.filter((elemento2) => {
       if (
         (elemento2.id != undefined &&
           elemento2.id
@@ -1068,7 +1068,7 @@ const Frenchies: NextPageWithLayout<
       }
     });
 
-    var resultadoBusqueda = currentF2.filter((elemento) => {
+    var resultadoBusqueda = currentF.filter((elemento) => {
       if (
         (elemento.id != undefined &&
           elemento.id
