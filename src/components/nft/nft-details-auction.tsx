@@ -17,7 +17,8 @@ import Avatar from '@/components/ui/avatar';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ethers } from 'ethers';
-
+import { useAccount, useProvider, useSigner } from 'wagmi';
+s;
 interface NftFooterProps {
   className?: string;
   currentBid: any;

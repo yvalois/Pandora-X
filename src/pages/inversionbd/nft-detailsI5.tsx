@@ -23,7 +23,7 @@ import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 import type { NextPageWithLayout } from '@/types';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import inversionesAbi from '../../abi/InversionMinter.json';
-
+import { useAccount, useProvider, useSigner } from 'wagmi';
 import router from 'next/router';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
 import { NextSeo } from 'next-seo';
