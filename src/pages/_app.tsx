@@ -25,53 +25,29 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, goerli } from 'wagmi/chains';
-
-/*type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
-};*/
+import {
+  EthereumClient,
+  w3mConnectors,
+  w3mProvider,
+} from '@web3modal/ethereum';
+import { Web3Modal } from '@web3modal/react';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { arbitrum, mainnet, polygon, bsc } from 'wagmi/chains';
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
 
-  const { chains, provider, webSocketProvider } = configureChains(
-    [mainnet, polygon],
-    [alchemyProvider({ apiKey: 'q9zvspHI6cAhD0JzaaxHQDdJp_GqXNMJ' })]
-  );
-  const client = createClient({
+  const chains = [mainnet, polygon];
+  const projectId = 'a43b1f2218c49988d0eef7c3863010e2';
+  const { publicClient } = configureChains(chains, [
+    w3mProvider({ projectId }),
+  ]);
+  const wagmiConfig = createConfig({
     autoConnect: true,
-    connectors: [
-      new MetaMaskConnector({
-        chains,
-        options: {
-          UNSTABLE_shimOnConnectSelectAccount: true,
-        },
-      }),
-      /*  new CoinbaseWalletConnector({
-        chains,
-        options: {
-          appName: 'wagmi',
-          headlessMode: true,
-        },
-      }),
-      new WalletConnectConnector({
-        chains,
-        options: {
-          qrcode: true,
-        },
-      }),
-      new InjectedConnector({
-        chains,
-        options: {
-          name: 'Injected',
-          shimDisconnect: true,
-        },
-      }), */
-    ],
-    provider,
-    webSocketProvider,
+    connectors: w3mConnectors({ projectId, chains }),
+    publicClient,
   });
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
   useEffect(() => {
     setDomLoaded(true);
@@ -89,41 +65,31 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
           content="width=device-width, initial-scale=1 maximum-scale=1"
         />
       </Head>
-      <WagmiConfig client={client}>
+      <WagmiConfig config={wagmiConfig}>
         <Provider store={store}>
-          <ConnectKitProvider
-            customTheme={{
-              '--ck-connectbutton-background': 'rgba(211, 211, 211 )',
-              '--ck-connectbutton-hover-background': 'rgba(175, 174, 174  )',
-              '--ck-connectbutton-border-radius': ' 30PX ',
-              '--ck-connectbutton-color': 'rgba(88, 88, 88  )',
-              '--ck-connectbutton-active-color': 'rgba(88, 88, 88 )',
-              '--ck-connectbutton-hover-color': 'rgba(88, 88, 88 )',
-              //"--ck-connectbutton-font-size" :"rgba(2136, 52, 52 )",
-            }}
-          >
-            <QueryClientProvider client={queryClient}>
-              <Hydrate state={pageProps.dehydratedState}>
-                <ThemeProvider
-                  attribute="class"
-                  enableSystem={false}
-                  defaultTheme="light"
-                >
-                  <WalletProvider>
-                    {getLayout(<Component {...pageProps} />)}
-                    <SettingsButton />
-                    <SettingsDrawer />
-                    <ModalsContainer />
-                    <DrawersContainer />
-                  </WalletProvider>
-                </ThemeProvider>
-              </Hydrate>
-              <ReactQueryDevtools
-                initialIsOpen={false}
-                position="bottom-right"
-              />
-            </QueryClientProvider>
-          </ConnectKitProvider>
+          <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+              <ThemeProvider
+                attribute="class"
+                enableSystem={false}
+                defaultTheme="light"
+              >
+                <WalletProvider>
+                  <Web3Modal
+                    projectId={projectId}
+                    ethereumClient={ethereumClient}
+                  />
+
+                  {getLayout(<Component {...pageProps} />)}
+                  <SettingsButton />
+                  <SettingsDrawer />
+                  <ModalsContainer />
+                  <DrawersContainer />
+                </WalletProvider>
+              </ThemeProvider>
+            </Hydrate>
+            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+          </QueryClientProvider>
         </Provider>
       </WagmiConfig>
     </>

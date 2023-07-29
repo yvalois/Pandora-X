@@ -26,7 +26,7 @@ import {
   uFrench,
 } from '../../redux/Blockchain/blockchainAction';
 import { useWindowScroll } from 'react-use';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 export default function StakingTableF() {
   const { inversionMinter } = useSelector((state) => state.blockchain);
@@ -57,7 +57,6 @@ export default function StakingTableF() {
     accountAddress,
   } = useSelector((state) => state.blockchain);
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const Usuario = useSelector((state) => state.Usuario);
@@ -446,7 +445,7 @@ export default function StakingTableF() {
       </div>
       {loading && (
         <div
-          className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
+          className="absolute right-[50px] top-[250px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-gray-200 p-4 text-sm text-gray-700 dark:bg-gray-200 dark:text-gray-800"
           role="alert"
         >
           <span className="self-center font-medium">Loading...</span>
@@ -455,7 +454,7 @@ export default function StakingTableF() {
 
       {statusC == 200 && !loading && (
         <div
-          className="absolute top-[250px] right-[50px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute right-[50px] top-[250px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="text-center font-medium">{alertMsg}</span>
@@ -464,7 +463,7 @@ export default function StakingTableF() {
 
       {statusW == 200 && !loading && (
         <div
-          className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute right-[50px] top-[250px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="text-center font-medium">{alertMsg}</span>
@@ -473,7 +472,7 @@ export default function StakingTableF() {
 
       {statusC == 100 && !loading && (
         <div
-          className="absolute top-[250px] right-[50px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          className="absolute right-[50px] top-[250px]  mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <span className="text-center font-medium">{alertMsg}</span>
@@ -482,7 +481,7 @@ export default function StakingTableF() {
 
       {statusW == 100 && !loading && (
         <div
-          className="absolute top-[250px] right-[50px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          className="absolute right-[50px] top-[250px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg  bg-red-200  p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <span className="text-center font-medium">{alertMsg}</span>

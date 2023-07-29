@@ -22,12 +22,13 @@ import DashboardLayout from '@/layouts/_dashboard';
 
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 
 import router from 'next/router';
 
 import { GetStaticProps } from 'next';
 import { isCancel } from 'axios';
+import { getEthersProvider } from '@/utils/ethers';
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
@@ -66,7 +67,7 @@ function NftFooter({
         className
       )}
     >
-      <div className="-mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
+      <div className="-mx-4 border-t-2 border-gray-900 px-4 pb-5 pt-4 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pb-7 lg:pt-6">
         <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
           <div className="block w-1/2 shrink-0 md:w-2/5">
             <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
@@ -130,7 +131,9 @@ function NftDetails1Page() {
     url: '',
   };
 
-  const provider = useProvider();
+  const { chain } = useNetwork();
+
+  const provider = getEthersProvider(chain?.id);
 
   const productoMinterContract = new ethers.Contract(
     '0x8fA9365bCcc4C554FE1D7c004ff46b7A05d4de2C',
@@ -185,7 +188,7 @@ function NftDetails1Page() {
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
-        <div className="rtl:md:t-6 relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
+        <div className="rtl:md:t-6 relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pl-[340px] ltr:xl:pr-12 rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
           <div className="flex h-full max-h-full w-full items-center justify-center lg:max-w-[768px]">
             <div className="relative aspect-square max-h-full w-full overflow-hidden rounded-lg">
               <Image

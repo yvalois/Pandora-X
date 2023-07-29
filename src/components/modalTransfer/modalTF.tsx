@@ -5,7 +5,7 @@ import Button from '../ui/button';
 import { Warning } from '@/components/icons/warning';
 import { useSelector, useDispatch } from 'react-redux';
 import validator from 'validator';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 import { uInvertion } from '../../redux/Blockchain/blockchainAction';
 
@@ -50,7 +50,6 @@ export default function ModalTP() {
       setError('Wallet incorrecta');
     }
   };
-  const provider = useProvider();
   const { address } = useAccount();
 
   const transfer = async () => {
@@ -97,7 +96,7 @@ export default function ModalTP() {
             Id
           </label>
           <input
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Name"
@@ -111,7 +110,7 @@ export default function ModalTP() {
           </label>
           {error.length == 0 ? (
             <input
-              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               id="username"
               type="text"
               placeholder="0x"
@@ -122,7 +121,7 @@ export default function ModalTP() {
             />
           ) : (
             <input
-              className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+              className="focus:shadow-outline w-full appearance-none rounded border border-red-500 px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               id="username"
               type="text"
               placeholder="0x"

@@ -36,7 +36,7 @@ import {
 } from '../redux/Blockchain/blockchainAction';
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useModal } from '@/components/modal-views/context';
 
 const productos = [
@@ -188,7 +188,7 @@ function GridSwitcher() {
       >
         {!isGridCompact && (
           <motion.span
-            className="absolute left-0 right-0 bottom-0 h-full w-full bg-brand shadow-large"
+            className="absolute bottom-0 left-0 right-0 h-full w-full bg-brand shadow-large"
             layoutId="gridSwitchIndicator"
           />
         )}
@@ -203,7 +203,7 @@ function GridSwitcher() {
       >
         {isGridCompact && (
           <motion.span
-            className="absolute left-0 right-0 bottom-0 h-full w-full  bg-brand shadow-large"
+            className="absolute bottom-0 left-0 right-0 h-full w-full  bg-brand shadow-large"
             layoutId="gridSwitchIndicator"
           />
         )}
@@ -418,7 +418,7 @@ export function DrawerFilters() {
           <Filters />
         </div>
       </Scrollbar>
-      <div className="absolute left-0 bottom-4 z-10 w-full px-6">
+      <div className="absolute bottom-4 left-0 z-10 w-full px-6">
         <Button fullWidth onClick={closeDrawer}>
           DONE
         </Button>
@@ -477,7 +477,6 @@ const InversionesPage: NextPageWithLayout<
     (state: any) => state.minted
   );
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const {
@@ -688,8 +687,8 @@ const InversionesPage: NextPageWithLayout<
                 <div
                   className={
                     isGridCompact
-                      ? 'grid w-full gap-5 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
-                      : 'grid w-full gap-6 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
+                      ? 'xxs:grid-cols-2 grid w-full gap-5 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
+                      : 'xxs:grid-cols-2 grid w-full gap-6 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
                   }
                 >
                   {inversiones.map((inversion) => (

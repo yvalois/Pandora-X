@@ -35,7 +35,7 @@ import { setISODay } from 'date-fns';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { useModal } from '@/components/modal-views/context';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -133,7 +133,6 @@ const StakingPage: NextPageWithLayout = () => {
     id: 0,
   };
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const [type, setType] = useState('');
@@ -309,7 +308,7 @@ const StakingPage: NextPageWithLayout = () => {
     <>
       <NextSeo title="Staking" description="Nft-Sudio powered by Pandorax" />
 
-      <div className="mx-auto w-full px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
+      <div className="mx-auto w-full px-4 pb-14 pt-8 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
         <div className="w-full flex-col md:hidden  ">
           {/* NFT preview */}
           <InputLabel title="Preview" />

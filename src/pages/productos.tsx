@@ -37,8 +37,9 @@ import {
 import productoMinterAbi from '../abi/ProductoMinter.json'; //Buscar
 import inversionMinterAbi from '../abi/InversionMinter.json';
 import { WalletContext } from '@/lib/hooks/use-connect';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { useModal } from '@/components/modal-views/context';
+import { getEthersProvider } from '@/utils/ethers';
 
 const productos = [
   {
@@ -189,7 +190,7 @@ function GridSwitcher() {
       >
         {!isGridCompact && (
           <motion.span
-            className="absolute left-0 right-0 bottom-0 h-full w-full bg-brand shadow-large"
+            className="absolute bottom-0 left-0 right-0 h-full w-full bg-brand shadow-large"
             layoutId="gridSwitchIndicator"
           />
         )}
@@ -204,7 +205,7 @@ function GridSwitcher() {
       >
         {isGridCompact && (
           <motion.span
-            className="absolute left-0 right-0 bottom-0 h-full w-full  bg-brand shadow-large"
+            className="absolute bottom-0 left-0 right-0 h-full w-full  bg-brand shadow-large"
             layoutId="gridSwitchIndicator"
           />
         )}
@@ -416,7 +417,7 @@ export function DrawerFilters() {
           <Filters />
         </div>
       </Scrollbar>
-      <div className="absolute left-0 bottom-4 z-10 w-full px-6">
+      <div className="absolute bottom-4 left-0 z-10 w-full px-6">
         <Button fullWidth onClick={closeDrawer}>
           DONE
         </Button>
@@ -475,7 +476,9 @@ const ProductosPage: NextPageWithLayout<
     (state: any) => state.minted
   );
 
-  const provider = useProvider();
+  const { chain } = useNetwork();
+
+  const provider = getEthersProvider(chain?.id);
   const { address } = useAccount();
 
   const {
@@ -634,9 +637,6 @@ const ProductosPage: NextPageWithLayout<
     fetchItems();
   },[inversionI]);*/
 
-  const _provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
-
   const { openModal, closeModal } = useModal();
 
   useEffect(() => {
@@ -700,8 +700,8 @@ const ProductosPage: NextPageWithLayout<
                 <div
                   className={
                     isGridCompact
-                      ? 'grid w-full gap-5 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
-                      : 'grid w-full gap-6 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
+                      ? 'xxs:grid-cols-2 grid w-full gap-5 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
+                      : 'xxs:grid-cols-2 grid w-full gap-6 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5'
                   }
                 >
                   {currentItems.map((producto) => (

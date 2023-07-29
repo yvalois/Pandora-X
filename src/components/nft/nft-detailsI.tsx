@@ -21,7 +21,8 @@ import { uInvertion } from '../../redux/Blockchain/blockchainAction';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 
 import router from 'next/router';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
+import { getEthersProvider } from '@/utils/ethers';
 
 interface NftFooterProps {
   className?: string;
@@ -73,7 +74,9 @@ function NftFooter({
   const { referidor } = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
 
-  const provider = useProvider();
+  const { chain } = useNetwork();
+
+  const provider = getEthersProvider(chain?.id);
   const { address } = useAccount();
 
   const { perfil, nombre } = useSelector((state) => state.Usuario);
@@ -164,7 +167,7 @@ function NftFooter({
         className
       )}
     >
-      <div className="-mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
+      <div className="-mx-4 border-t-2 border-gray-900 px-4 pb-5 pt-4 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pb-7 lg:pt-6">
         <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
           <div className="block w-1/2 shrink-0 md:w-2/5">
             <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
@@ -213,7 +216,7 @@ function NftFooter({
       </div>
       {status && (
         <div
-          className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute right-[100px] top-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-green-200  p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="text-center font-medium">{alertMsg}</span>
@@ -222,7 +225,7 @@ function NftFooter({
 
       {status2 && (
         <div
-          className="absolute top-[200px] right-[100px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute right-[100px] top-[200px] mb-4 mt-[0px] w-[300px] justify-center self-center rounded-lg bg-red-200  p-4 text-sm text-red-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="text-center font-medium">{alertMsg2}</span>
@@ -259,7 +262,9 @@ export default function NftDetails({ tipo }) {
     (state: any) => state.blockchain
   );
 
-  const provider = useProvider();
+  const { chain } = useNetwork();
+
+  const provider = getEthersProvider(chain?.id);
   const { address } = useAccount();
 
   const { perfil, nombre } = useSelector((state) => state.Usuario);
@@ -340,7 +345,7 @@ export default function NftDetails({ tipo }) {
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
-        <div className="rtl:md:t-6 relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
+        <div className="rtl:md:t-6 relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pl-[340px] ltr:xl:pr-12 rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
           <div className="flex h-full max-h-full w-full items-center justify-center lg:max-w-[768px]">
             <div className="relative aspect-square max-h-full w-full overflow-hidden rounded-lg">
               <Image

@@ -22,7 +22,7 @@ import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 import frenchiesAbi from '../../abi/FrenchiesBlues.json';
 
 import router from 'next/router';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 interface NftFooterProps {
   className?: string;
@@ -66,7 +66,6 @@ function NftFooter({
   const { referidor } = useSelector((state) => state.Usuario);
   const dispatch = useDispatch<AppDispatch>();
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const openVenta = () => {

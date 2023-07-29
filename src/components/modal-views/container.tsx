@@ -100,15 +100,15 @@ export default function ModalContainer() {
   }, []);
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 z-50 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12"
-        onClose={() => {
+      <div
+        className="fixed inset-0 z-10 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12"
+        onClick={() => {
           if (
             view &&
             view !== 'REGISTER_VIEW' &&
             view !== 'STAKING_VIEW' &&
-            view !== 'BAN_VIEW'
+            view !== 'BAN_VIEW' &&
+            view !== 'WALLET_CONNECT_VIEW'
           ) {
             closeModal();
           }
@@ -123,7 +123,7 @@ export default function ModalContainer() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Overlay className="fixed inset-0 z-40 cursor-pointer bg-gray-700 bg-opacity-60 backdrop-blur" />
+          <div className="fixed inset-0  bg-gray-700 bg-opacity-60 backdrop-blur" />
         </Transition.Child>
 
         {/* This element is to trick the browser into centering the modal contents. */}
@@ -155,11 +155,11 @@ export default function ModalContainer() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-105"
         >
-          <div className="relative z-50 inline-block w-full text-left align-middle xs:w-auto">
+          <div className="relative inline-block w-full text-left align-middle xs:w-auto">
             {view && renderModalContent(view)}
           </div>
         </Transition.Child>
-      </Dialog>
+      </div>
     </Transition>
   );
 }

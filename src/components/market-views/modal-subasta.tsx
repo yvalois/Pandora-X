@@ -16,7 +16,7 @@ import { ethers } from 'ethers';
 import { setISODay } from 'date-fns';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import { useWindowScroll } from 'react-use';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 import validator from 'validator';
 import frenchiesAbi2 from '../../abi/FrenchiesBlues2.json';
 
@@ -95,7 +95,6 @@ export default function ModalSubasta() {
     }
   };
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const subastar = async () => {

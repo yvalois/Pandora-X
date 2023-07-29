@@ -21,7 +21,7 @@ import { useModal } from '@/components/modal-views/context';
 import { useSelector, useDispatch } from 'react-redux';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import { useWindowScroll } from 'react-use';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 export default function StakingTable() {
   const { inversionMinter } = useSelector((state) => state.blockchain);
@@ -47,7 +47,6 @@ export default function StakingTable() {
     (state) => state.blockchain
   );
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const Usuario = useSelector((state) => state.Usuario);

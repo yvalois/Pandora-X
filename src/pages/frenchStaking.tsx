@@ -37,7 +37,7 @@ import { useModal } from '@/components/modal-views/context';
 import dotenv from 'dotenv';
 import NFTGrids from '@/components/ui/nft-card-s';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 const StakeFPage: NextPageWithLayout = () => {
   const nftInfo = {
@@ -365,8 +365,6 @@ const StakeFPage: NextPageWithLayout = () => {
     }, 3000);
   }, [status]);
 
-  const _provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
   const { address } = useAccount();
 
   useEffect(() => {
@@ -481,7 +479,7 @@ const StakeFPage: NextPageWithLayout = () => {
 
       <div className="mt-[-60px] flex w-full justify-center">
         <div className="flex-column w-full  justify-between  md:w-[80%] lg:flex">
-          <div className="w-auto px-4 pt-8 pb-14 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
+          <div className="w-auto px-4 pb-14 pt-8 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8 xl:px-10 2xl:px-0">
             <div className="flex-column w-full justify-center  md:flex ">
               <div className="column flex w-full justify-center lg:col-span-2 ">
                 <div className="mb-8 mr-2 w-[80%]">

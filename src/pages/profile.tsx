@@ -29,7 +29,7 @@ import {
   uStakingF,
 } from '@/redux/Blockchain/blockchainAction';
 import { WalletContext } from '@/lib/hooks/use-connect';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { provider } from '@/NFTROL';
 
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
@@ -117,9 +117,6 @@ const AuthorProfilePage: NextPageWithLayout<
       setPrevBanner('');
     }
   };
-
-  const _provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const { address } = useAccount();
 
@@ -688,7 +685,7 @@ const AuthorProfilePage: NextPageWithLayout<
       </div>
       {copiado && (
         <div
-          className="absolute top-[60px] left-[685px] mb-4 ml-[60px] mt-[30px] flex w-[200px] justify-center self-center rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
+          className="absolute left-[685px] top-[60px] mb-4 ml-[60px] mt-[30px] flex w-[200px] justify-center self-center rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-200 dark:text-green-800"
           role="alert"
         >
           <span className="text-center font-medium">Link copiado</span>

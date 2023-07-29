@@ -9,7 +9,7 @@ import router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { ethers } from 'ethers';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useModal } from '@/components/modal-views/context';
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -57,8 +57,6 @@ const NFTDetailsPage: NextPageWithLayout<
 
   const Usuario = useSelector((state: any) => state.Usuario);
 
-  const _provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
   const { address } = useAccount();
   const dispatch = useDispatch<AppDispatch>();
 

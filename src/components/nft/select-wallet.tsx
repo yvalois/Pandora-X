@@ -3,65 +3,107 @@ import metamaskLogo from '@/assets/images/metamask.svg';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect, useState } from 'react';
-import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 import { useDispatch, useSelector } from 'react-redux';
 import { connectWallet } from '../../redux/Blockchain/blockchainAction';
-
+import { useWeb3Modal } from '@web3modal/react';
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useNetwork,
+  useSignMessage,
+} from 'wagmi';
+import { getEthersProvider, getEthersSigner } from '@/utils/ethers.js';
 import { ConnectKitButton, useModal as hola } from 'connectkit';
+import Button from '../ui/button';
+import { getPublicClient, getWalletClient } from '@wagmi/core';
 
 export default function SelectWallet({ ...props }) {
   const { disconnectWallet } = useContext(WalletContext);
   const dispatch = useDispatch<AppDispatch>();
   const error = false;
-  const { setOpen, open } = hola();
   const { address } = useAccount();
   const [Id, setId] = useState(0);
   const { isConnect, accountAddress } = useSelector(
     (state) => state.blockchain
   );
 
-  const { closeModal } = useModal();
+  const [is, setIs] = useState(false);
 
-  const provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
+  const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
+  const {
+    address: account,
+    isConnecting,
+    isDisconnected,
+    isConnected,
+  } = useAccount();
+
+  const { connect, connectors, isLoading, pendingConnector } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { closeModal, openModal } = useModal();
+
+  const getSign = async (id) => {
+    //openModal('WALLET_CONNECT_VIEW')
+    const signer = await getEthersSigner(id);
+    const provider = getEthersProvider(id);
+    await dispatch(connectWallet(address, provider, signer));
+    window.localStorage.removeItem('wc@2:core:0.3//keychain');
+    closeModal();
+  };
+  const { chain } = useNetwork();
 
   const abrir = () => {
-    setOpen(true);
-    window.localStorage.removeItem('ChainId');
+    if (!isConnected) {
+      open();
+      window.localStorage.removeItem('ChainId');
+    }
+  };
+
+  const switchChain = async () => {
+    setTimeout(async () => {
+      const walletClient = await getWalletClient(chain?.id);
+      await walletClient?.switchChain({ id: 1 });
+    }, 2000);
   };
 
   useEffect(() => {
-    if (!arroz && signer !== undefined) {
-      dispatch(connectWallet(address, provider, signer));
-      setOpen(false);
+    if (
+      isConnected &&
+      accountAddress.length === 0 &&
+      is === false &&
+      chain?.unsupported !== undefined &&
+      chain.unsupported === false
+    ) {
+      getSign(chain?.id);
+      setIs(true);
+    } else if (
+      isConnected &&
+      accountAddress.length === 0 &&
+      chain?.unsupported !== undefined &&
+      chain.unsupported === true
+    ) {
+      setIs(false);
+      switchChain();
+    } else if (!isConnected) {
+      setIs(false);
     }
-  }, [signer, arroz]);
-
-  const { chain } = useNetwork();
-
-  useEffect(() => {
-    if (isConnect && !chain?.unsupported) {
-      closeModal();
-    }
-  }, [isConnect, chain]);
-
-  useEffect(() => {
-    const id = window.localStorage.getItem('ChainId');
-    setId(id);
-  }, []);
-
-  const _provider = useProvider();
+  }, [isConnected, accountAddress, account, chain, is]);
 
   return (
     <>
       <div
-        className="relative z-50 mx-auto w-[440px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark"
+        className="relative  mx-auto w-[440px] max-w-full rounded-lg bg-white px-9 py-16 dark:bg-light-dark"
         {...props}
       >
-        <h2
-          // onClick={connectToWallet}
-          className="mb-4 text-center text-2xl font-medium uppercase text-gray-900 dark:text-white"
+        <button
+          className="absolute right-[25px] top-[25px] mb-2 flex h-[30px] w-[30px] items-center justify-center rounded-[50%] bg-black text-center   text-2xl font-medium uppercase dark:text-white"
+          onClick={() => closeModal()}
         >
+          <span className="blockbg-transparent text-sm text-white outline-none focus:outline-none">
+            X
+          </span>
+        </button>
+        <h2 className="mb-4 text-center text-2xl font-medium uppercase text-gray-900 dark:text-white">
           Connect Wallet
         </h2>
         <div className="text-center text-sm leading-loose tracking-tight text-gray-600 dark:text-gray-400">
@@ -85,7 +127,7 @@ export default function SelectWallet({ ...props }) {
             Privacy Policy
           </a>
           .
-          {Id != 0 && Id != undefined && (
+          {chain?.id != 0 && chain?.id != undefined && (
             <p className="font-bold">
               <bold>
                 Recuerda cambiar la red a {Id == 1 ? 'Ethereum' : 'Polygon'}
@@ -93,16 +135,23 @@ export default function SelectWallet({ ...props }) {
             </p>
           )}
         </div>
-
-        <div
-          className="mt-12 flex h-14 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l "
-          onClick={abrir}
-        >
-          {/*<span>Conectar con metamask</span>
-          <span className="h-auto w-9">
-            <Image src={metamaskLogo} alt="metamask" />
-          </span> */}
-          <ConnectKitButton />
+        <div className="flex w-full justify-center">
+          <Button
+            className="mt-12 flex h-14 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l "
+            onClick={abrir}
+          >
+            {isConnected && accountAddress.length === 0 ? (
+              'Conectando...'
+            ) : isConnected && accountAddress.length > 0 ? (
+              <p>
+                {accountAddress?.slice(0, 6)}
+                {'...'}
+                {accountAddress?.slice(accountAddress?.length - 6)}
+              </p>
+            ) : (
+              'Conectar'
+            )}
+          </Button>
         </div>
 
         {/* <MobileView>

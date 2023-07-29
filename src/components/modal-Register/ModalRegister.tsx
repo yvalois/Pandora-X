@@ -11,7 +11,16 @@ import Button from '@/components/ui/button';
 import { getType, getRange, exist } from '@/NFTROL';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+
+import { useWeb3Modal } from '@web3modal/react';
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useNetwork,
+  useSignMessage,
+} from 'wagmi';
+import { getEthersProvider, getEthersSigner } from '@/utils/ethers.js';
 
 export default function ModalRegister() {
   const tiempoTranscurrido = Date.now();
@@ -51,14 +60,21 @@ export default function ModalRegister() {
   const [tipo, setTipo] = useState('');
   const [rango, setRango] = useState('');
   const [value1, setValue1] = useState('');
-  const { data: signer, isError, isLoading: arroz } = useSigner();
   const { closeModal } = useModal();
-  const provider = useProvider();
 
   const dispatch = useDispatch<AppDispatch>();
   const { disconnectWallet } = useContext(WalletContext);
 
   //const Usuario = useSelector((state: any) => state.Usuario);
+  const { address, isConnecting, isDisconnected, isConnected } = useAccount();
+
+  const { chain } = useNetwork();
+
+  const getSign = async () => {
+    const signer = await getEthersSigner(chain?.id);
+    const provider = getEthersProvider(chain?.id);
+    dispatch(connectWallet(address, signer, provider));
+  };
 
   const ChangeInfo = (Dato: string, valor: string) => {
     if (Dato == 'Nombre') {
@@ -94,7 +110,7 @@ export default function ModalRegister() {
         .then(() => {
           //ver posibilidad de que primero se mande un alert que diga usuario creado y 5 segundos despues en un timeout se llame esta funcion
           setTimeout(() => {
-            dispatch(connectWallet(address, provider, signer));
+            getSign();
             setStatus(0);
             window.localStorage.removeItem('Wallet');
           }, 3000);
@@ -286,7 +302,7 @@ export default function ModalRegister() {
         {errorMsg.ErrNombre.length == 0 ? (
           <input
             onChange={(e) => ChangeInfo('Nombre', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Nombre"
@@ -294,7 +310,7 @@ export default function ModalRegister() {
         ) : (
           <input
             onChange={(e) => ChangeInfo('Nombre', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Nombre"
@@ -302,7 +318,7 @@ export default function ModalRegister() {
         )}
 
         {error == true && errorMsg.ErrNombre.length > 0 && (
-          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+          <span className="ml-1 mt-1 flex items-center text-xs font-medium tracking-wide text-red-500">
             {errorMsg.ErrNombre}
           </span>
         )}
@@ -314,7 +330,7 @@ export default function ModalRegister() {
         {errorMsg.ErrApellido.length == 0 ? (
           <input
             onChange={(e) => ChangeInfo('Apellido', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Apellido"
@@ -322,7 +338,7 @@ export default function ModalRegister() {
         ) : (
           <input
             onChange={(e) => ChangeInfo('Apellido', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Apellido"
@@ -330,7 +346,7 @@ export default function ModalRegister() {
         )}
 
         {error == true && errorMsg.ErrApellido.length > 0 && (
-          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+          <span className="ml-1 mt-1 flex items-center text-xs font-medium tracking-wide text-red-500">
             {errorMsg.ErrApellido}
           </span>
         )}
@@ -342,7 +358,7 @@ export default function ModalRegister() {
         {errorMsg.ErrCorreo.length == 0 ? (
           <input
             onChange={(e) => ChangeInfo('Correo', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Correo"
@@ -350,7 +366,7 @@ export default function ModalRegister() {
         ) : (
           <input
             onChange={(e) => ChangeInfo('Correo', e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Correo"
@@ -358,7 +374,7 @@ export default function ModalRegister() {
         )}
 
         {error == true && errorMsg.ErrCorreo.length > 0 && (
-          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+          <span className="ml-1 mt-1 flex items-center text-xs font-medium tracking-wide text-red-500">
             {errorMsg.ErrCorreo}
           </span>
         )}
@@ -371,7 +387,7 @@ export default function ModalRegister() {
           <PhoneInput
             onChange={setValue1}
             value={value1}
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Numero"
@@ -380,7 +396,7 @@ export default function ModalRegister() {
           <PhoneInput
             onChange={setValue1}
             value={value1}
-            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border border-red-500 px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Numero"
@@ -388,7 +404,7 @@ export default function ModalRegister() {
         )}
 
         {errorMsg.ErrTelefono.length > 0 && (
-          <span className="mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500">
+          <span className="ml-1 mt-1 flex items-center text-xs font-medium tracking-wide text-red-500">
             {errorMsg.ErrTelefono}
           </span>
         )}

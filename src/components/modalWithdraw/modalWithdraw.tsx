@@ -13,7 +13,7 @@ import { ethers } from 'ethers';
 import { setISODay } from 'date-fns';
 import { uStaking, uInvertion } from '../../redux/Blockchain/blockchainAction';
 import { useWindowScroll } from 'react-use';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 export default function ModalWithdraw() {
   const { closeModal } = useModal();
@@ -84,7 +84,6 @@ export default function ModalWithdraw() {
     }
   };
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const withdraw = async () => {
@@ -158,7 +157,7 @@ export default function ModalWithdraw() {
           </label>
 
           <input
-            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             id="username"
             type="text"
             placeholder="Name"

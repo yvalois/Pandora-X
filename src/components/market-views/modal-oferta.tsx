@@ -7,7 +7,7 @@ import Button from '@/components/ui/button';
 
 import { ethers } from 'ethers';
 
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 export default function ModalOferta() {
   const { closeModal, openModal } = useModal();
@@ -78,7 +78,6 @@ export default function ModalOferta() {
     }
   };
 
-  const provider = useProvider();
   const { address } = useAccount();
 
   const ofertar = async () => {

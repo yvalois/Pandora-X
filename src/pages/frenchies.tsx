@@ -47,7 +47,7 @@ import ventas from '../abi/ventas.json';
 import allFrenchies from '../abi/ultimateDatos.json';
 
 import { connectWallet, uFrench } from '../redux/Blockchain/blockchainAction';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useModal as hola } from 'connectkit';
 import { useModal } from '@/components/modal-views/context';
 import { WalletContext } from '@/lib/hooks/use-connect';
@@ -370,9 +370,7 @@ const Frenchies: NextPageWithLayout<
 > = () => {
   const { openModal } = useModal();
 
-  const provider = useProvider();
   const { address } = useAccount();
-  const { setOpen } = hola();
 
   const pricesP = [];
   const pricesI = [];
@@ -479,8 +477,6 @@ const Frenchies: NextPageWithLayout<
   const valor2 = 0.001;
 
   const { referidor } = useSelector((state) => state.Usuario);
-
-  const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const buyNft = async () => {
     if (chainId == 1) {

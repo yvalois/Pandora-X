@@ -12,7 +12,7 @@ import { Copy } from '@/components/icons/copy';
 import { Check } from '@/components/icons/check';
 import { useDispatch } from 'react-redux';
 import AnchorLink from '../ui/links/anchor-link';
-
+import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
 
@@ -22,7 +22,7 @@ export default function WalletConnect() {
   const { accountAddress, isUser, isConnect } = useSelector(
     (state: any) => state.blockchain
   );
-
+  const { address, isConnecting, isDisconnected, isConnected } = useAccount();
   const dispatch = useDispatch<AppDispatch>();
   const [link, setLink] = useState('');
   let [copyButtonStatus, setCopyButtonStatus] = useState(false);
@@ -65,6 +65,14 @@ export default function WalletConnect() {
     }
   }, [ban]);
 
+  // const abrirModal=()=>{
+  //   if(isConnected && accountAddress.length === 0){
+  //     console.log("no")
+  //   }else{
+  //     openModal('WALLET_CONNECT_VIEW')
+  //   }
+  // }
+
   return (
     <>
       {accountAddress !== '' ? (
@@ -85,7 +93,7 @@ export default function WalletConnect() {
                     <div className="border-b border-dashed border-gray-200 p-3 dark:border-gray-700">
                       <ActiveLink
                         href="/profile"
-                        className="flex items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
                       >
                         <span className="h-8 w-8 rounded-full border-2 border-solid border-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:border-gray-700"></span>
                         <AnchorLink href="/profile">
@@ -152,7 +160,7 @@ export default function WalletConnect() {
 
           <div className="p-3">
             <div
-              className="flex cursor-pointer items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
+              className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
               onClick={() => desconect()}
             >
               <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
@@ -173,7 +181,9 @@ export default function WalletConnect() {
             onClick={() => openModal('WALLET_CONNECT_VIEW')}
             className="shadow-main hover:shadow-large"
           >
-            CONNECT
+            {isConnected && accountAddress.length === 0
+              ? 'Conectando...'
+              : 'Conectar'}
           </Button>
           <div></div>
         </>

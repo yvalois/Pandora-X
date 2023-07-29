@@ -10,7 +10,7 @@ import router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { ethers } from 'ethers';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useModal } from '@/components/modal-views/context';
 export const getStaticProps: GetStaticProps = async () => {
   return {

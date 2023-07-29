@@ -36,7 +36,7 @@ import { uFrench, uStakingF } from '@/redux/Blockchain/blockchainAction';
 import { useModal } from '@/components/modal-views/context';
 import NFTGrids from '@/components/ui/nft-card-s';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { ethers } from 'ethers';
 import frenchiesAbi from '../abi/FrenchiesBlues.json';
 const StakePage: NextPageWithLayout = () => {
@@ -418,8 +418,7 @@ const StakePage: NextPageWithLayout = () => {
       }
     }, 3000);
   }, [status]);
-  const _provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
+
   const { address } = useAccount();
 
   useEffect(() => {
@@ -520,7 +519,7 @@ const StakePage: NextPageWithLayout = () => {
                 </Button>
               </div>
 
-              <div className="mt-2 mb-2 flex self-center pl-8">
+              <div className="mb-2 mt-2 flex self-center pl-8">
                 <span>Maximo 150 nfts</span>
               </div>
             </div>
@@ -533,7 +532,7 @@ const StakePage: NextPageWithLayout = () => {
               </Button>
             </div>
 
-            <div className="mt-2 mb-2 flex self-center pl-8">
+            <div className="mb-2 mt-2 flex self-center pl-8">
               <span>Maximo 150 nfts</span>
             </div>
           </div>

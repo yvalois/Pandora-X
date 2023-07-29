@@ -5,7 +5,6 @@ import Button from '../ui/button';
 import { Warning } from '@/components/icons/warning';
 import { useDispatch, useSelector } from 'react-redux';
 import { uInvertion, uStaking } from '@/redux/Blockchain/blockchainAction';
-import { useProvider } from 'wagmi';
 
 export default function ModalWithdraw() {
   const { closeModal, openModal } = useModal();

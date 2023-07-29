@@ -37,7 +37,7 @@ import Generic from '@/assets/images/profile/GENERIC.jpg';
 import { transations } from '../redux/Transactions/TransactionsActions';
 import AvatarP from '@/components/ui/AvatarP';
 import { WalletContext } from '@/lib/hooks/use-connect';
-import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
 import { useModal } from '@/components/modal-views/context';
@@ -143,8 +143,6 @@ const HomePage: NextPageWithLayout<
 
   const { address } = useAccount();
   const { openModal, closeModal } = useModal();
-  const _provider = useProvider();
-  const { data: signer, isError, isLoading: arroz } = useSigner();
 
   const getInvertionTrans = async () => {
     fetch(
