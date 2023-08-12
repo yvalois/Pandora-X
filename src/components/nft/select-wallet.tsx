@@ -42,13 +42,15 @@ export default function SelectWallet({ ...props }) {
   const { disconnect } = useDisconnect();
   const { closeModal, openModal } = useModal();
 
-  const getSign = async (id) => {
+  const getSign = async () => {
     //openModal('WALLET_CONNECT_VIEW')
-    const signer = await getEthersSigner(id);
-    const provider = getEthersProvider(id);
-    await dispatch(connectWallet(address, provider, signer));
-    window.localStorage.removeItem('wc@2:core:0.3//keychain');
-    closeModal();
+    setTimeout(async () => {
+      const signer = await getEthersSigner(chain?.id);
+      const provider = getEthersProvider(chain?.id);
+      await dispatch(connectWallet(address, provider, signer));
+      window.localStorage.removeItem('wc@2:core:0.3//keychain');
+      closeModal();
+    }, 500);
   };
   const { chain } = useNetwork();
 
@@ -74,7 +76,7 @@ export default function SelectWallet({ ...props }) {
       chain?.unsupported !== undefined &&
       chain.unsupported === false
     ) {
-      getSign(chain?.id);
+      getSign();
       setIs(true);
     } else if (
       isConnected &&
@@ -84,8 +86,6 @@ export default function SelectWallet({ ...props }) {
     ) {
       setIs(false);
       switchChain();
-    } else if (!isConnected) {
-      setIs(false);
     }
   }, [isConnected, accountAddress, account, chain, is]);
 

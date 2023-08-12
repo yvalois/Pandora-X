@@ -108,7 +108,10 @@ export default function ModalContainer() {
             view !== 'REGISTER_VIEW' &&
             view !== 'STAKING_VIEW' &&
             view !== 'BAN_VIEW' &&
-            view !== 'WALLET_CONNECT_VIEW'
+            view !== 'WALLET_CONNECT_VIEW' &&
+            view !== 'OFFER_VIEW' &&
+            view !== 'BID_VIEW' &&
+            view !== 'SELL_VIEW'
           ) {
             closeModal();
           }

@@ -73,7 +73,7 @@ export default function ModalRegister() {
   const getSign = async () => {
     const signer = await getEthersSigner(chain?.id);
     const provider = getEthersProvider(chain?.id);
-    dispatch(connectWallet(address, signer, provider));
+    dispatch(connectWallet(address, provider, signer));
   };
 
   const ChangeInfo = (Dato: string, valor: string) => {

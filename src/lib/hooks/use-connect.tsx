@@ -177,7 +177,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       //checkIfExtensionIsAvailable();
-      await dispatch(connectWallet());
+      //await dispatch(connectWallet());
       setLoading(false);
       setAddress(accountAddress);
       //conectar()

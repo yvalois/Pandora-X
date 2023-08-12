@@ -36,8 +36,8 @@ import { arbitrum, mainnet, polygon, bsc } from 'wagmi/chains';
 
 function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   const [domLoaded, setDomLoaded] = useState(false);
-
   const chains = [mainnet, polygon];
+
   const projectId = 'a43b1f2218c49988d0eef7c3863010e2';
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),

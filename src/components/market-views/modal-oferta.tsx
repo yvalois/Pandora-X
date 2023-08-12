@@ -107,7 +107,6 @@ export default function ModalOferta() {
         setStatusW(100);
         const mess = err.message.split('[');
         const rejected = mess[0].split(' ');
-        console.log(err);
         if (mess[0] == 'insufficient funds for intrinsic transaction cost ') {
           setAlertMsg('Fondos insuficientes');
         } else if (rejected[0] == 'user' && rejected[1] == 'rejected') {
