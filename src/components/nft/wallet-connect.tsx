@@ -12,7 +12,15 @@ import { Copy } from '@/components/icons/copy';
 import { Check } from '@/components/icons/check';
 import { useDispatch } from 'react-redux';
 import AnchorLink from '../ui/links/anchor-link';
-import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useSignMessage,
+  useNetwork,
+  useSwitchNetwork,
+} from 'wagmi';
+import { getConfig } from '@wagmi/core';
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
 
@@ -48,6 +56,13 @@ export default function WalletConnect() {
   useEffect(() => {
     setDomLoaded(true);
   }, []);
+
+  const { disconnectAsync, disconnect } = useDisconnect({
+    onError(error) {
+      console.log('Error', error);
+    },
+  });
+  const config = getConfig();
 
   const desconect = async () => {
     disconnectWallet();

@@ -46,7 +46,11 @@ export default function SelectWallet({ ...props }) {
     //openModal('WALLET_CONNECT_VIEW')
     setTimeout(async () => {
       const signer = await getEthersSigner(chain?.id);
+
       const provider = getEthersProvider(chain?.id);
+      provider.on('display_uri', async (uri: string) => {
+        console.log('Disconenct');
+      });
       await dispatch(connectWallet(address, provider, signer));
       window.localStorage.removeItem('wc@2:core:0.3//keychain');
       closeModal();

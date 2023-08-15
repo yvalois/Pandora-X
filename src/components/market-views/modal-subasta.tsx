@@ -47,8 +47,8 @@ export default function ModalSubasta() {
   const provider_ETH = new ethers.providers.JsonRpcProvider(rpc_ETH);
 
   const frenchiesMinterContract = new ethers.Contract(
-    '0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
-    //'0x32bfb6790B3536a7269185278B482A0FA0385362',
+    //'0x18bdD7A20134d0e3eF544aD57513bEDC0728Ca61',
+    '0x32bfb6790B3536a7269185278B482A0FA0385362',
     frenchiesAbi2,
     provider_ETH
   );
