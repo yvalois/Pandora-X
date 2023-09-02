@@ -14,9 +14,9 @@ import {
   useSignMessage,
 } from 'wagmi';
 import { getEthersProvider, getEthersSigner } from '@/utils/ethers.js';
-import { ConnectKitButton, useModal as hola } from 'connectkit';
 import Button from '../ui/button';
 import { getPublicClient, getWalletClient } from '@wagmi/core';
+import { ConnectKitButton } from 'connectkit';
 
 export default function SelectWallet({ ...props }) {
   const { disconnectWallet } = useContext(WalletContext);
@@ -27,7 +27,6 @@ export default function SelectWallet({ ...props }) {
   const { isConnect, accountAddress } = useSelector(
     (state) => state.blockchain
   );
-
   const [is, setIs] = useState(false);
 
   const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
@@ -46,7 +45,6 @@ export default function SelectWallet({ ...props }) {
     //openModal('WALLET_CONNECT_VIEW')
     setTimeout(async () => {
       const signer = await getEthersSigner(chain?.id);
-
       const provider = getEthersProvider(chain?.id);
       await dispatch(connectWallet(address, provider, signer));
       window.localStorage.removeItem('wc@2:core:0.3//keychain');
@@ -54,13 +52,6 @@ export default function SelectWallet({ ...props }) {
     }, 500);
   };
   const { chain } = useNetwork();
-
-  const abrir = () => {
-    if (!isConnected) {
-      open();
-      window.localStorage.removeItem('ChainId');
-    }
-  };
 
   const switchChain = async () => {
     setTimeout(async () => {
@@ -85,10 +76,13 @@ export default function SelectWallet({ ...props }) {
       chain?.unsupported !== undefined &&
       chain.unsupported === true
     ) {
+      console.log('puta vida2');
+
       setIs(false);
       switchChain();
     }
-  }, [isConnected, accountAddress, account, chain, is]);
+    setIs(false);
+  }, [isConnected, accountAddress, account, chain, is, address]);
 
   return (
     <>
@@ -137,22 +131,28 @@ export default function SelectWallet({ ...props }) {
           )}
         </div>
         <div className="flex w-full justify-center">
-          <Button
-            className="mt-12 flex h-14 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l "
-            onClick={abrir}
-          >
-            {isConnected && accountAddress.length === 0 ? (
-              'Conectando...'
-            ) : isConnected && accountAddress.length > 0 ? (
-              <p>
-                {accountAddress?.slice(0, 6)}
-                {'...'}
-                {accountAddress?.slice(accountAddress?.length - 6)}
-              </p>
-            ) : (
-              'Conectar'
-            )}
-          </Button>
+          <ConnectKitButton.Custom>
+            {({ isConnected, show, truncatedAddress, ensName }) => {
+              return (
+                <Button
+                  className="mt-12 flex h-14 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l "
+                  onClick={show}
+                >
+                  {isConnected && accountAddress.length === 0 ? (
+                    'Conectando...'
+                  ) : isConnected && accountAddress.length > 0 ? (
+                    <p>
+                      {accountAddress?.slice(0, 6)}
+                      {'...'}
+                      {accountAddress?.slice(accountAddress?.length - 6)}
+                    </p>
+                  ) : (
+                    'Conectar'
+                  )}
+                </Button>
+              );
+            }}
+          </ConnectKitButton.Custom>
         </div>
 
         {/* <MobileView>

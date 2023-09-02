@@ -20,7 +20,6 @@ import {
   useNetwork,
   useSwitchNetwork,
 } from 'wagmi';
-import { getConfig } from '@wagmi/core';
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
 
@@ -62,7 +61,6 @@ export default function WalletConnect() {
       console.log('Error', error);
     },
   });
-  const config = getConfig();
 
   const desconect = async () => {
     disconnectWallet();
