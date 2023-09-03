@@ -57,15 +57,14 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
   //could remove this if you don't need to page level layout
   return (
     <>
+      <Head>
+        {/* maximum-scale 1 meta tag need to prevent ios input focus auto zooming */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1 maximum-scale=1"
+        />
+      </Head>
       <WagmiConfig config={config}>
-        <Head>
-          {/* maximum-scale 1 meta tag need to prevent ios input focus auto zooming */}
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1 maximum-scale=1"
-          />
-        </Head>
-
         <Provider store={store}>
           <ConnectKitProvider>
             <QueryClientProvider client={queryClient}>
