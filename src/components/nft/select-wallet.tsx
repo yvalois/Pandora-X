@@ -72,15 +72,17 @@ export default function SelectWallet({ ...props }) {
     ) {
       getSign();
       setIs(true);
-    } else if (
-      isConnected &&
-      accountAddress.length === 0 &&
-      chain?.unsupported !== undefined &&
-      chain.unsupported === true
-    ) {
-      setIs(false);
-      switchChain();
-    } else if (!isConnected && accountAddress.length > 0) {
+    }
+    // else if (
+    //   isConnected &&
+    //   accountAddress.length === 0 &&
+    //   chain?.unsupported !== undefined &&
+    //   chain.unsupported === true
+    // ) {
+    //   setIs(false);
+    //   switchChain();
+    // }
+    else if (!isConnected && accountAddress.length > 0) {
       window.localStorage.removeItem('wc@2:core:0.3//keychain');
       setIs(false);
     }
