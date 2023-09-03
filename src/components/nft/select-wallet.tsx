@@ -80,6 +80,8 @@ export default function SelectWallet({ ...props }) {
     ) {
       setIs(false);
       switchChain();
+    } else if (!isConnected) {
+      setIs(true);
     }
   }, [isConnected, accountAddress, account, chain, is]);
 
