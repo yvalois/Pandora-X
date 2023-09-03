@@ -141,6 +141,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     disconnect();
     await dispatch(disconectWallet());
     window.localStorage.removeItem('wc@2:core:0.3//keychain');
+    window.localStorage.removeItem('connectKit.lastConnectorId');
+    window.localStorage.removeItem('wagmi.connected');
+    window.localStorage.removeItem('wagmi.wallet');
+    window.localStorage.removeItem('wagmi.metaMask.shimDisconnect');
+    window.localStorage.removeItem('wagmi.store');
 
     if (
       window.location.href != 'https://app.pandorax.co' &&
@@ -160,7 +165,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       setError(true);
       web3Modal && web3Modal.toggleModal();
     }
-    
+
   };*/
   // seteamos el provider
   const connectToWallet = async () => {
