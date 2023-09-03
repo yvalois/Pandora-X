@@ -80,9 +80,6 @@ export default function SelectWallet({ ...props }) {
     ) {
       setIs(false);
       switchChain();
-    } else if (!isConnected && accountAddress.length > 0) {
-      window.localStorage.removeItem('wc@2:core:0.3//keychain');
-      setIs(false);
     }
   }, [isConnected, accountAddress, account, chain, is]);
 
