@@ -54,10 +54,12 @@ export default function SelectWallet({ ...props }) {
   const { chain } = useNetwork();
 
   const switchChain = async () => {
-    setTimeout(async () => {
-      const walletClient = await getWalletClient(chain?.id);
-      await walletClient?.switchChain({ id: 1 });
-    }, 2000);
+    if (isConnected) {
+      setTimeout(async () => {
+        const walletClient = await getWalletClient(chain?.id);
+        await walletClient?.switchChain({ id: 1 });
+      }, 2000);
+    }
   };
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export default function SelectWallet({ ...props }) {
       window.localStorage.removeItem('wc@2:core:0.3//keychain');
       setIs(false);
     }
-  }, [isConnected, accountAddress, account, chain, is, address]);
+  }, [isConnected, accountAddress, account, chain, is]);
 
   return (
     <>
