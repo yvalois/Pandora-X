@@ -160,6 +160,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       setError(true);
       web3Modal && web3Modal.toggleModal();
     }
+    
   };*/
   // seteamos el provider
   const connectToWallet = async () => {
