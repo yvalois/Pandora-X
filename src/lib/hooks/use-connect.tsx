@@ -138,15 +138,10 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const { disconnect } = useDisconnect();
 
   const disconnectWallet = async () => {
-    //setAddress('');
     disconnect();
-    /*  window.localStorage.removeItem('wagmi.cache');
-    window.localStorage.removeItem('wagmi.wallet');
-    window.localStorage.removeItem('wagmi.store');
-    window.localStorage.removeItem('wagmi.connected');
-    window.localStorage.removeItem('wagmi.injected.shimDisconnect');    */
-
     await dispatch(disconectWallet());
+    window.localStorage.removeItem('wc@2:core:0.3//keychain');
+
     if (
       window.location.href != 'https://app.pandorax.co' &&
       window.location.href != 'http://localhost:3000/'

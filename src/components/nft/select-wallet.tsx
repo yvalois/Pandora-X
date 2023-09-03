@@ -76,12 +76,12 @@ export default function SelectWallet({ ...props }) {
       chain?.unsupported !== undefined &&
       chain.unsupported === true
     ) {
-      console.log('puta vida2');
-
       setIs(false);
       switchChain();
+    } else if (!isConnected && accountAddress.length > 0) {
+      window.localStorage.removeItem('wc@2:core:0.3//keychain');
+      setIs(false);
     }
-    setIs(false);
   }, [isConnected, accountAddress, account, chain, is, address]);
 
   return (
