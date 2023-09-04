@@ -138,9 +138,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const { disconnect } = useDisconnect();
 
   const disconnectWallet = async () => {
-    disconnect();
     await dispatch(disconectWallet());
-    window.localStorage.removeItem('wc@2:core:0.3//keychain');
+    disconnect();
 
     if (
       window.location.href != 'https://app.pandorax.co' &&
