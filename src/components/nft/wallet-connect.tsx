@@ -89,7 +89,7 @@ export default function WalletConnect() {
   // }
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected && accountAddress.length > 0) {
       desconect();
     }
   }, [isConnected]);
