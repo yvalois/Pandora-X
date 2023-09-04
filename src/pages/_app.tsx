@@ -66,9 +66,9 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
       </Head>
       <WagmiConfig config={config}>
         <Provider store={store}>
-          <ConnectKitProvider>
-            <QueryClientProvider client={queryClient}>
-              <Hydrate state={pageProps.dehydratedState}>
+          <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+              <ConnectKitProvider>
                 <ThemeProvider
                   attribute="class"
                   enableSystem={false}
@@ -82,13 +82,10 @@ function CustomApp({ Component, pageProps } /*: AppPropsWithLayout*/) {
                     <DrawersContainer />
                   </WalletProvider>
                 </ThemeProvider>
-              </Hydrate>
-              <ReactQueryDevtools
-                initialIsOpen={false}
-                position="bottom-right"
-              />
-            </QueryClientProvider>
-          </ConnectKitProvider>
+              </ConnectKitProvider>
+            </Hydrate>
+            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+          </QueryClientProvider>
         </Provider>
       </WagmiConfig>
     </>
