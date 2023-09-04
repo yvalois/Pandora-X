@@ -20,7 +20,7 @@ import {
   useNetwork,
   useSwitchNetwork,
 } from 'wagmi';
-import { disconectWallet } from '@/redux/Blockchain/blockchainAction';
+import { ConnectKitButton } from 'connectkit';
 
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
@@ -57,17 +57,15 @@ export default function WalletConnect() {
   useEffect(() => {
     setDomLoaded(true);
   }, []);
-  const { disconnect } = useDisconnect();
+
+  const { disconnectAsync, disconnect } = useDisconnect({
+    onError(error) {
+      console.log('Error', error);
+    },
+  });
 
   const desconect = async () => {
-    await dispatch(disconectWallet());
-    disconnect();
-    if (
-      window.location.href != 'https://app.pandorax.co' &&
-      window.location.href != 'http://localhost:3000/'
-    ) {
-      window.location.href = '/';
-    }
+    disconnectWallet();
   };
 
   useEffect(() => {
@@ -89,6 +87,12 @@ export default function WalletConnect() {
   //     openModal('WALLET_CONNECT_VIEW')
   //   }
   // }
+
+  useEffect(() => {
+    if (!isConnected) {
+      desconect();
+    }
+  }, [isConnected]);
 
   return (
     <>
@@ -176,20 +180,26 @@ export default function WalletConnect() {
           </div>
 
           <div className="p-3">
-            <div
-              className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
-              onClick={desconect}
-            >
-              <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
-                {accountAddress?.slice(0, 6)}
-                {'...'}
-                {accountAddress?.slice(accountAddress?.length - 6)}
-              </span>
-              <PowerIcon />
-              <div className="hidden md:block">
-                <span className="grow uppercase">Disconnect</span>
-              </div>
-            </div>
+            <ConnectKitButton.Custom>
+              {({ show, truncatedAddress, ensName }) => {
+                return (
+                  <div
+                    className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
+                    onClick={show}
+                  >
+                    <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
+                      {accountAddress?.slice(0, 6)}
+                      {'...'}
+                      {accountAddress?.slice(accountAddress?.length - 6)}
+                    </span>
+                    <PowerIcon />
+                    <div className="hidden md:block">
+                      <span className="grow uppercase">Disconnect</span>
+                    </div>
+                  </div>
+                );
+              }}
+            </ConnectKitButton.Custom>
           </div>
         </div>
       ) : (

@@ -9,6 +9,7 @@ import {
   connectWallet,
   disconectWallet,
 } from '../../redux/Blockchain/blockchainAction';
+import { useDisconnect } from 'wagmi';
 
 const web3modalStorageKey = 'WEB3_CONNECT_CACHED_PROVIDER';
 
@@ -134,7 +135,19 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     setBalance(balanceInEth);
   };*/
 
+  const { disconnect } = useDisconnect();
+
   const disconnectWallet = async () => {
+    await dispatch(disconectWallet());
+    disconnect();
+
+    if (
+      window.location.href != 'https://app.pandorax.co' &&
+      window.location.href != 'http://localhost:3000/'
+    ) {
+      window.location.href = '/';
+    }
+
     //disconect();
   };
 
