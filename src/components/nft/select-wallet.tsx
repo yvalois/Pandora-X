@@ -69,14 +69,6 @@ export default function SelectWallet({ ...props }) {
     ) {
       getSign();
       setIs(true);
-    } else if (
-      isConnected &&
-      accountAddress.length === 0 &&
-      chain?.unsupported !== undefined &&
-      chain.unsupported === true
-    ) {
-      setIs(false);
-      switchChain();
     }
   }, [isConnected, accountAddress, account, chain, is, address]);
 
