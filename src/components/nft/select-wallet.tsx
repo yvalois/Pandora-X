@@ -120,7 +120,7 @@ export default function SelectWallet({ ...props }) {
         </div>
         <div className="flex w-full justify-center">
           <ConnectKitButton.Custom>
-            {({ isConnected, show, truncatedAddress, ensName }) => {
+            {({ show, truncatedAddress, ensName }) => {
               return (
                 <Button
                   className="mt-12 flex h-14 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-l "
