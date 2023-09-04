@@ -20,6 +20,7 @@ import {
   useNetwork,
   useSwitchNetwork,
 } from 'wagmi';
+import { disconectWallet } from '@/redux/Blockchain/blockchainAction';
 
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
@@ -59,8 +60,15 @@ export default function WalletConnect() {
   const { disconnect } = useDisconnect();
 
   const desconect = async () => {
-    disconnectWallet();
     disconnect();
+    await dispatch(disconectWallet());
+
+    if (
+      window.location.href != 'https://app.pandorax.co' &&
+      window.location.href != 'http://localhost:3000/'
+    ) {
+      window.location.href = '/';
+    }
   };
 
   useEffect(() => {
