@@ -20,6 +20,7 @@ import {
   useNetwork,
   useSwitchNetwork,
 } from 'wagmi';
+
 export default function WalletConnect() {
   const { openModal, closeModal } = useModal();
 
@@ -55,9 +56,11 @@ export default function WalletConnect() {
   useEffect(() => {
     setDomLoaded(true);
   }, []);
+  const { disconnect } = useDisconnect();
 
   const desconect = async () => {
     disconnectWallet();
+    disconnect();
   };
 
   useEffect(() => {
@@ -168,7 +171,7 @@ export default function WalletConnect() {
           <div className="p-3">
             <div
               className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
-              onClick={disconnectWallet}
+              onClick={desconect}
             >
               <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
                 {accountAddress?.slice(0, 6)}
