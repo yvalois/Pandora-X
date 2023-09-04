@@ -56,12 +56,6 @@ export default function WalletConnect() {
     setDomLoaded(true);
   }, []);
 
-  const { disconnectAsync, disconnect } = useDisconnect({
-    onError(error) {
-      console.log('Error', error);
-    },
-  });
-
   const desconect = async () => {
     disconnectWallet();
   };
@@ -174,7 +168,7 @@ export default function WalletConnect() {
           <div className="p-3">
             <div
               className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
-              onClick={() => desconect()}
+              onClick={disconnectWallet}
             >
               <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
                 {accountAddress?.slice(0, 6)}

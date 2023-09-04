@@ -135,8 +135,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     setBalance(balanceInEth);
   };*/
 
-  const { disconnect } = useDisconnect();
-
   const disconnectWallet = async () => {
     await dispatch(disconectWallet());
     disconnect();
@@ -150,6 +148,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
     //disconect();
   };
+  const { disconnect } = useDisconnect();
 
   /*const checkIfExtensionIsAvailable = () => {
     if (
