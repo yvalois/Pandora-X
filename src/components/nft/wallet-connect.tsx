@@ -60,9 +60,8 @@ export default function WalletConnect() {
   const { disconnect } = useDisconnect();
 
   const desconect = async () => {
-    disconnect();
     await dispatch(disconectWallet());
-
+    disconnect();
     if (
       window.location.href != 'https://app.pandorax.co' &&
       window.location.href != 'http://localhost:3000/'
