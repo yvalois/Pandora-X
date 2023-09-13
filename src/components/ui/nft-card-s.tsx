@@ -20,6 +20,7 @@ import Button from '@/components/ui/button';
 import pandorax from '@/assets/images/Pandora-X-icon-04.svg';
 import { BsCheckLg } from 'react-icons/bs';
 import { MdAdd } from 'react-icons/md';
+import LazyLoad from 'react-lazyload';
 
 type NFTGridProps = {
   image: StaticImageData;
@@ -135,7 +136,7 @@ export default function NFTGrids({
   let iconStylesc = { color: '#fffff', fontSize: '20px', fontWeight: 'bold' };
 
   return (
-    <div className="relative w-[120px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xxs:w-[160px] xs:w-[220px] sm:w-[260px] md:w-[220px] xl:w-[280px] 2xl:w-[240px] 3xl:w-[340px]">
+    <div className="xxs:w-[160px] relative w-[120px] overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark xs:w-[220px] sm:w-[260px] md:w-[220px] xl:w-[280px] 2xl:w-[240px] 3xl:w-[340px]">
       <div className="p-4">
         <div className="flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
           {
@@ -143,7 +144,7 @@ export default function NFTGrids({
               image={pandorax}
               alt={name}
               size="xs"
-              className="self-center text-ellipsis rtl:mr-3  rtl:ml-3 dark:border-gray-500"
+              className="self-center text-ellipsis rtl:ml-3  rtl:mr-3 dark:border-gray-500"
             />
           }
           <span className="overflow-hidden text-ellipsis">@PandoraX</span>
@@ -157,7 +158,7 @@ export default function NFTGrids({
         className="relative block w-full pb-full"
       >
         {!isSelect ? (
-          <div className="absolute top-[5px] right-[5px] z-10 h-[40px]  w-[40px] cursor-pointer   rounded-3xl bg-[#d2ad67] xs:h-[50px] xs:w-[50px] ">
+          <div className="absolute right-[5px] top-[5px] z-10 h-[40px]  w-[40px] cursor-pointer   rounded-3xl bg-[#d2ad67] xs:h-[50px] xs:w-[50px] ">
             <div className="flex h-full w-full items-center justify-center">
               <span className='bg-["#3B5998"]'>
                 <MdAdd style={iconStyles} />
@@ -165,7 +166,7 @@ export default function NFTGrids({
             </div>
           </div>
         ) : (
-          <div className="absolute top-[5px] right-[5px] z-10  h-[40px] w-[40px] cursor-pointer   rounded-3xl bg-[#b9bba5] xs:h-[50px] xs:w-[50px] ">
+          <div className="absolute right-[5px] top-[5px] z-10  h-[40px] w-[40px] cursor-pointer   rounded-3xl bg-[#b9bba5] xs:h-[50px] xs:w-[50px] ">
             <div className="flex h-full w-full items-center justify-center">
               <span className='bg-["#3B5998"]'>
                 <BsCheckLg style={iconStylesc} />
@@ -173,7 +174,11 @@ export default function NFTGrids({
             </div>
           </div>
         )}
-        <Image src={image} layout="fill" objectFit="cover" alt="" />
+        <LazyLoad offset={300}>
+          <div className='mb-[-350px] w-["100%"]'>
+            <img src={image} alt="" />
+          </div>
+        </LazyLoad>
       </div>
 
       <div className="p-5">

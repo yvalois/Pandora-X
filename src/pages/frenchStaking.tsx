@@ -84,8 +84,8 @@ const StakeFPage: NextPageWithLayout = () => {
   const setNftSelect = (nfts) => {
     let auxNFT1 = [];
     let i = 0;
-    if (currentF.length != 0) {
-      currentF.map((item) => {
+    if (currentF2.length != 0) {
+      currentF2.map((item) => {
         if (nfts == item.id) {
           if (item.select == false) {
             const nftInfo = {
@@ -127,9 +127,9 @@ const StakeFPage: NextPageWithLayout = () => {
           auxNFT1.push(nftInfo);
         }
 
-        if (i == currentF.length - 1) {
+        if (i == currentF2.length - 1) {
           let auxSelect = [];
-          setCurrentF(auxNFT1);
+          setCurrentF2(auxNFT1);
           let i = 0;
           auxNFT1.map((item) => {
             if (item.select == true) {
