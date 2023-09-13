@@ -38,6 +38,7 @@ import dotenv from 'dotenv';
 import NFTGrids from '@/components/ui/nft-card-s';
 import { connectWallet } from '@/redux/Blockchain/blockchainAction';
 import { useAccount } from 'wagmi';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const StakeFPage: NextPageWithLayout = () => {
   const nftInfo = {
@@ -68,7 +69,9 @@ const StakeFPage: NextPageWithLayout = () => {
   const [profile, setProfile] = useState(false);
   const [id, setID] = useState(0);
   const [errorMSG, setErrorMSG] = useState('');
-  const [currentF, setCurrentF] = useState([]);
+  const [currentF, setCurrentF] = useState([]); //El que tendra todos los nfts.
+  const [currentF2, setCurrentF2] = useState([]); //El que tendra los nfts a mostrar.
+
   const [cant, setCant] = useState(0);
   const [stak, setStak] = useState(true);
   const [nftSelects, setNftSelects] = useState([]);
@@ -394,19 +397,6 @@ const StakeFPage: NextPageWithLayout = () => {
     let i = 0;
     inventorysf.map((item) => {
       const now = new Date();
-
-      const fecha = new Date(item.fechaPago.fecha);
-      if (fecha <= now) {
-        i++;
-        setCantC(i);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    let i = 0;
-    inventorysf.map((item) => {
-      const now = new Date();
       const fecha = new Date(item.fechaPago.fecha);
       if (fecha <= now) {
         i++;
@@ -431,37 +421,23 @@ const StakeFPage: NextPageWithLayout = () => {
         auxNFT.push(nftInfo);
         if (i == inventorysf.length - 1) {
           setCurrentF(auxNFT);
+          const nfts = auxNFT.slice(0, 20);
+          setCurrentF2(nfts);
         }
         i++;
       });
     } else {
       setCurrentF([]);
+      setCurrentF2([]);
     }
   }, [inventorysf]);
 
-  useEffect(() => {
-    let i = 0;
-    auxNFT = [];
-    if (inventorysf.length != 0) {
-      inventorysf.map((item) => {
-        const nftInfo = {
-          nombre: item.Nombre,
-          image: item.image,
-          precio: item.precio,
-          descripcion: item.descripcion,
-          id: item.id,
-          select: false,
-        };
-        auxNFT.push(nftInfo);
-        if (i == inventorysf.length - 1) {
-          setCurrentF(auxNFT);
-        }
-        i++;
-      });
-    } else {
-      setCurrentF([]);
-    }
-  }, []);
+  const fetchMoreItems = async () => {
+    setTimeout(() => {
+      const newItems = currentF.slice(currentF2.length, currentF2.length + 20);
+      setCurrentF2([...currentF2, ...newItems]);
+    }, 1500);
+  };
 
   useEffect(() => {
     const is = window.localStorage.getItem('wagmi.store');
@@ -565,32 +541,40 @@ const StakeFPage: NextPageWithLayout = () => {
           </div>
         )}
       </div>
-
-      <div className="ml-4 mr-2 grid h-full w-full   grid-cols-2  gap-4 xs:grid-cols-2 md:ml-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-5 xl:gap-6  3xl:grid-cols-4 4xl:grid-cols-5">
-        {currentF?.map((nft) => (
-          <NFTGrids
-            key={nft.nombre}
-            name={nft.nombre}
-            image={nft.image}
-            price={nft.precio}
-            number={nft.id}
-            alldata={false}
-            type={'staking'}
-            setNftSelect={setNftSelect}
-            isSelect={nft.select}
-          />
-        ))}
-        {currentF.length == 0 && (
-          <div className="flex h-full w-full  items-center justify-center ">
-            <div className=" h-full w-full">
-              <span>
-                <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
-                  No tienes Nft's Stakeados
-                </h1>
-              </span>
-            </div>
+      <div className="focus:outline-none">
+        <InfiniteScroll
+          dataLength={currentF2.length}
+          next={fetchMoreItems}
+          hasMore={true}
+          loader={currentF2.length < currentF.length && <h4>Cargando...</h4>}
+        >
+          <div className="ml-4 mr-2 grid h-full w-[95%]    grid-cols-2  gap-4 xs:grid-cols-2 md:ml-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-5 xl:gap-6  3xl:grid-cols-4 4xl:grid-cols-5">
+            {currentF2?.map((nft) => (
+              <NFTGrids
+                key={nft.nombre}
+                name={nft.nombre}
+                image={nft.image}
+                price={nft.precio}
+                number={nft.id}
+                alldata={false}
+                type={'staking'}
+                setNftSelect={setNftSelect}
+                isSelect={nft.select}
+              />
+            ))}
+            {currentF2.length == 0 && (
+              <div className="flex h-full w-full  items-center justify-center ">
+                <div className=" h-full w-full">
+                  <span>
+                    <h1 className="md:text-md text-gray-600 md:w-[500px] xl:w-[700px] xl:text-lg">
+                      No tienes Nft's Stakeados
+                    </h1>
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </InfiniteScroll>
       </div>
     </>
   );
