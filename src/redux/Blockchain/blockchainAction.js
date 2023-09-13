@@ -954,7 +954,7 @@ export const connectWallet =
 
         const nftStaking = await stakingContract.getNftsInStaking(address);
         const nftStakingF = await stakingfrenEContract.getNftsInStaking(
-          address
+          '0x5CE96Ea9178B2e3b71BeB5B81820593B89aC0E6c'
         );
         const nftiBalance = await inversionMinterContract.getMyInventory(
           address
@@ -1031,7 +1031,10 @@ export const connectWallet =
         });
 
         nftStakingF.map(async (item) => {
-          const is = await stakingfrenEContract.nftIsStaking(address, item);
+          const is = await stakingfrenEContract.nftIsStaking(
+            '0x5CE96Ea9178B2e3b71BeB5B81820593B89aC0E6c',
+            item
+          );
           if (is == true) {
             fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/getStaking/${item}`, {
               method: 'GET',
